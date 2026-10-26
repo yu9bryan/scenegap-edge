@@ -234,6 +234,14 @@ def video_src(scene):
             filt = filt.replace("[v]", "[b]") + (f";[1:v]scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},fps={FPS},"
                                                  f"loop=loop=-1:size=9999,trim=0:{D},setpts=PTS-STARTPTS[i];[b][i]overlay={x}:{y}[v]")
         return ins, filt
+    if k == "seq":                                 # a still card, then a rendered clip, joined with a short cross-fade
+        png, card_s, mp4 = scene["png"], scene["card_s"], os.path.join(WORK, "rec", scene["clip"])
+        ins = ["-loop", "1", "-t", str(card_s + 0.5), "-i", png, "-i", mp4]
+        filt = (f"[0:v]scale={W}:{H},setsar=1,format=yuv420p,settb=AVTB,fps={FPS}[s0];"
+                f"[1:v]scale={W}:{H},setsar=1,format=yuv420p,setpts=PTS-STARTPTS,settb=AVTB,fps={FPS}[s1];"
+                f"[s0][s1]xfade=transition=fade:duration=0.5:offset={card_s},tpad=stop_mode=clone:stop_duration=10,"
+                f"trim=0:{D},setpts=PTS-STARTPTS[v]")
+        return ins, filt
     if k == "rec":
         src = os.path.join(WORK, "rec", scene["rec"])
         ins = ["-i", src]
@@ -304,7 +312,7 @@ def main():
         {"id": "08", "kind": "rec", "rec": "08_sh05.mp4", "pieces": [(0, 29.8, 1.75)], "tag": "Live app · review (×1.75)"},
         {"id": "09", "kind": "rec", "rec": "09_reshoot.mp4", "pieces": [(0, 32.8, 2.2)], "tag": "Live app · reshoot list (×2.2)"},
         {"id": "10", "kind": "rec", "rec": "10_new_clip.mp4", "pieces": [(0, 12.0, 3.0), (12.0, 17.5, 2.0), (17.5, 28.0, 1.5), (28.0, 32.7, 1.6)], "tag": "Live app · new clip (sped up)"},
-        {"id": "11", "kind": "still", "png": card_results()},
+        {"id": "11", "kind": "seq", "png": card_results(), "card_s": round(LEAD + TIMING["11"][1]["start"] - 0.25, 2), "clip": "11_chart.mp4"},
         {"id": "12", "kind": "still", "png": card_arch(), "zoom": 0.05},
         {"id": "13", "kind": "still", "png": card_end(credits)},
     ]
