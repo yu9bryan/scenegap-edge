@@ -390,8 +390,20 @@ class SceneGap:
         run = self.latest_run(pid)
         reqs = self.requirements(pid)
         cur_revs = {r.requirement_id: r.revision for r in reqs}
-        if not run:
-            return {"run": None, "outdated": True, "requirements": [], "coverage": None}
+        if not run:                                               # no analysis yet: human state is still known
+            shas = {a["sha256"]: a["capture_id"] for a in self.assets(pid) if a["status"] != "excluded"}
+            decisions = self.decisions(pid)
+            rows = []
+            for r in reqs:
+                hc, exc = human_confirmed(r, decisions, shas)
+                rows.append({"requirement": req_to_dict(r), "auto": None, "auto_outdated": True,
+                             "human_confirmed": hc, "human_exception": exc})
+            active = [r for r in reqs if r.active_required]
+            denom = sum(r.weight for r in active)
+            hc_w = sum(r.weight for r in active if human_confirmed(r, decisions, shas)[0])
+            cov = {"human_confirmed": hc_w / denom if denom else None, "ai_candidate": None, "analysis_progress": None,
+                   "denominator_weight": denom, "unknown_count": None}
+            return {"run": None, "outdated": True, "requirements": rows, "coverage": cov}
         res = json.loads(run["result"])
         revs = json.loads(run["requirement_revisions"])
         scope = json.loads(run["scope"])

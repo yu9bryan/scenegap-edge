@@ -9,6 +9,7 @@ from __future__ import annotations
 import io
 import json
 import os
+import re
 import secrets
 import uuid
 
@@ -25,9 +26,16 @@ WEB = os.path.join(os.path.dirname(__file__), "..", "..", "web")
 _STATUS = {"NOT_FOUND": 404, "ROOT_NOT_FOUND": 404, "PATH_NOT_ALLOWED": 403}
 
 
+MEDIA_PATH = re.compile(r"^/api/v1/assets/[A-Za-z0-9_]+/(media|frame)$")
+
+
 def err(status: int, code: str, message: str, recoverable=True, stage=None, asset_id=None):
     return JSONResponse({"code": code, "message": message, "recoverable": recoverable, "stage": stage,
                          "asset_id": asset_id, "request_id": uuid.uuid4().hex[:12]}, status_code=status)
+
+
+class ExcludeIn(BaseModel):
+    reason: str
 
 
 class ProjectIn(BaseModel):
@@ -93,7 +101,10 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
             origin = request.headers.get("origin")
             if origin and origin not in origins:
                 return err(403, "ORIGIN_REJECTED", "cross-origin requests are not allowed", recoverable=False)
-            if not secrets.compare_digest(request.headers.get("x-sg-token", ""), token):
+            sent = request.headers.get("x-sg-token", "")
+            if not sent and request.method == "GET" and MEDIA_PATH.match(path):
+                sent = request.cookies.get("sg_media", "")      # <video>/<img> cannot send headers; SameSite=Strict cookie
+            if not secrets.compare_digest(sent, token):
                 return err(401, "UNAUTHORIZED", "missing or wrong session token", recoverable=False)
         return await call_next(request)
 
@@ -120,6 +131,10 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
         return {"device": dev, "active_backend": be.name if be else "not loaded",
                 "manifest": be.manifest.to_dict() if be else None,
                 "note": "NPU results are reported only when a UGen300 answered the scan and a validated HEF ran."}
+
+    @app.get("/api/v1/projects")
+    def list_projects():
+        return svc.db.all("SELECT * FROM projects ORDER BY created_at DESC")
 
     @app.post("/api/v1/projects")
     def create_project(p: ProjectIn):
@@ -175,13 +190,42 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
         _ = svc.backend                                            # load (and fail early) before queueing
         return {"job_id": runner.submit(pid), "backend": svc.backend.name, "model_fingerprint": svc.backend.manifest.fingerprint}
 
+    def _job_out(j):
+        j = dict(j)
+        j["payload"] = json.loads(j["payload"] or "{}")
+        if j.get("error"):                                         # the traceback stays in the local database
+            lines = [x for x in j["error"].strip().splitlines() if x.strip()]
+            j["error"] = lines[-1][:300] if lines else "error"
+        return j
+
     @app.get("/api/v1/jobs/{jid}")
     def job(jid: str):
         j = runner.get(jid)
         if not j:
             return err(404, "NOT_FOUND", "job not found")
-        j["payload"] = json.loads(j["payload"] or "{}")
-        return j
+        return _job_out(j)
+
+    @app.get("/api/v1/projects/{pid}/jobs")
+    def jobs(pid: str, active: int = 0):
+        svc.project(pid)
+        q = "SELECT * FROM jobs WHERE project_id=?" + (" AND state IN ('queued','running')" if active else "") + " ORDER BY created_at DESC LIMIT 50"
+        return [_job_out(j) for j in svc.db.all(q, (pid,))]
+
+    @app.get("/api/v1/projects/{pid}/decisions")
+    def decisions(pid: str):
+        svc.project(pid)
+        return svc.db.all("SELECT * FROM decisions WHERE project_id=? ORDER BY ts, rowid", (pid,))
+
+    @app.post("/api/v1/projects/{pid}/assets/{aid}/exclude")
+    def exclude(pid: str, aid: str, body: ExcludeIn):
+        svc.project(pid)
+        if not body.reason.strip():
+            return err(422, "REASON_REQUIRED", "excluding an asset needs a reason")
+        a = svc.db.one("SELECT project_id FROM assets WHERE asset_id=?", (aid,))
+        if not a or a["project_id"] != pid:
+            return err(404, "NOT_FOUND", "asset not in this project", asset_id=aid)
+        svc.exclude_asset(aid, body.reason)
+        return {"asset_id": aid, "status": "excluded"}
 
     @app.post("/api/v1/jobs/{jid}/cancel")
     def cancel(jid: str):
@@ -283,7 +327,9 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
     @app.get("/")
     def index():
         page = open(os.path.join(WEB, "index.html"), encoding="utf8").read()
-        return HTMLResponse(page.replace("__SG_TOKEN__", token))
+        resp = HTMLResponse(page.replace("__SG_TOKEN__", token))
+        resp.set_cookie("sg_media", token, httponly=True, samesite="strict", path="/api/v1/assets")
+        return resp
 
     @app.get("/static/{name}")
     def static(name: str):

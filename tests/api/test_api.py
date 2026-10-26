@@ -94,3 +94,22 @@ def test_dns_rebinding_host_rejected(tmp_path):
     with TestClient(app, base_url="http://evil.example:8765") as c:
         r = c.get("/api/v1/projects/x", headers={"X-SG-Token": TOKEN})
         assert r.status_code == 403 and r.json()["code"] == "HOST_REJECTED"
+
+
+def test_media_cookie_projects_list_and_exclude(tmp_path):
+    app = create_app(str(tmp_path / "work"), MockColorBackend, {"semantic_threshold": 0.95}, token=TOKEN)
+    with TestClient(app, base_url="http://127.0.0.1:8765") as c:
+        assert c.get("/api/v1/assets/a_x/media").status_code == 401           # no header, no cookie
+        page = c.get("/")
+        assert page.status_code == 200 and "sg_media" in page.headers.get("set-cookie", "")
+        assert "samesite=strict" in page.headers["set-cookie"].lower() and "httponly" in page.headers["set-cookie"].lower()
+        assert c.get("/api/v1/assets/a_x/media").status_code == 404           # cookie accepted for media only
+        assert c.get("/api/v1/projects").status_code == 401                    # cookie is not enough elsewhere
+        H = {"X-SG-Token": TOKEN}
+        pid = c.post("/api/v1/projects", json={"name": "p"}, headers=H).json()["project_id"]
+        assert [p["id"] if "id" in p else p.get("project_id") for p in c.get("/api/v1/projects", headers=H).json()]
+        cov = c.get(f"/api/v1/projects/{pid}/coverage", headers=H).json()
+        assert cov["run"] is None and cov["coverage"]["human_confirmed"] is None   # no requirements: N/A
+        r = c.post(f"/api/v1/projects/{pid}/assets/a_nope/exclude", json={"reason": "x"}, headers=H)
+        assert r.status_code == 404
+        assert c.get(f"/api/v1/projects/{pid}/jobs?active=1", headers=H).json() == []
