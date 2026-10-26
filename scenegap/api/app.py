@@ -192,7 +192,8 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
     @app.post("/api/v1/projects/{pid}/search")
     def search(pid: str, body: SearchIn):
         svc.project(pid)
-        if svc.cfg["semantic_threshold"] is None:
+        tau = svc.tau()
+        if tau is None:
             return err(422, "UNCALIBRATED", "semantic threshold not calibrated")
         assets, _ = svc._asset_indexes(pid, [body.query_en])
         hits = []
@@ -205,7 +206,7 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
             for shot, (v, t) in best.items():
                 sh = a.shots[shot]
                 hits.append({"asset_id": a.asset_id, "shot": shot, "best_ms": t, "shot_start_ms": sh.start_ms, "shot_end_ms": sh.end_ms,
-                             "ranking_score": round(v, 4), "above_threshold": v >= svc.cfg["semantic_threshold"]})
+                             "ranking_score": round(v, 4), "above_threshold": v >= tau})
         hits.sort(key=lambda h: -h["ranking_score"])
         return {"query_en": body.query_en, "results": hits[: body.top_k], "note": "ranking_score is a similarity, not a probability"}
 

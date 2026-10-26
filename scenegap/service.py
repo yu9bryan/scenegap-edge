@@ -85,6 +85,13 @@ class SceneGap:
         keep = {k: self.cfg[k] for k in ("sample_every_ms", "densify_step_ms", "top_k", "semantic_threshold")}
         return hashlib.sha256(json.dumps(keep, sort_keys=True).encode()).hexdigest()[:12]
 
+    def tau(self) -> float | None:
+        """Semantic threshold for the current backend; a dict is keyed by model fingerprint (calibrated per backend)."""
+        t = self.cfg["semantic_threshold"]
+        if isinstance(t, dict):
+            t = t.get(self.backend.manifest.fingerprint)
+        return t
+
     # ---------- projects and requirements ----------
     def create_project(self, name: str, purpose: str = "", aspect: str = "16:9", target_len_s: float | None = None, language: str = "zh-TW") -> str:
         pid = new_id("p")
@@ -323,7 +330,7 @@ class SceneGap:
         return changed
 
     def compute_run(self, pid: str) -> dict:
-        tau = self.cfg["semantic_threshold"]
+        tau = self.tau()
         if tau is None:
             raise Invalid("UNCALIBRATED", "semantic_threshold is not set; calibrate on the dev split first")
         reqs = self.requirements(pid)
@@ -385,7 +392,8 @@ class SceneGap:
         revs = json.loads(run["requirement_revisions"])
         scope = json.loads(run["scope"])
         cur_scope = {a["asset_id"]: a["status"] for a in self.assets(pid)}
-        outdated = revs != cur_revs or scope != cur_scope or run["model_fingerprint"] != self.backend.manifest.fingerprint
+        outdated = revs != cur_revs or scope != cur_scope or run["model_fingerprint"] != self.backend.manifest.fingerprint \
+            or run["config_hash"] != self.config_hash()
         decisions = self.decisions(pid)
         shas = {a["sha256"] for a in self.assets(pid) if a["status"] != "excluded"}
         rows = []

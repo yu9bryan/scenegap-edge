@@ -208,3 +208,21 @@ def test_uncalibrated_threshold_refuses(tmp_path):
     pid = svc.create_project("x")
     with pytest.raises(Invalid):
         svc.compute_run(pid)
+
+
+def test_config_change_marks_run_outdated_and_tau_is_per_fingerprint(tmp_path, media):
+    svc, be = make(tmp_path)
+    pid = svc.create_project("cfg")
+    rid = svc.add_root(pid, str(media))
+    svc.set_requirement(pid, RED)
+    svc.import_assets(pid, rid, ["two_shots.mp4"])
+    svc.analyze_assets(pid)
+    svc.compute_run(pid)
+    assert svc.coverage_view(pid)["outdated"] is False
+    svc.cfg["semantic_threshold"] = 0.9                       # threshold change: old snapshot is no longer current
+    assert svc.coverage_view(pid)["outdated"] is True
+    svc.cfg["semantic_threshold"] = {"some-other-fingerprint": 0.95}
+    with pytest.raises(Invalid):                              # no tau for this backend's fingerprint
+        svc.compute_run(pid)
+    svc.cfg["semantic_threshold"] = {be.manifest.fingerprint: 0.95}
+    assert svc.compute_run(pid)["outcomes"]["SH-101"]["status"] == "candidate"

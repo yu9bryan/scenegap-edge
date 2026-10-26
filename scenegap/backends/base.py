@@ -28,7 +28,7 @@ class ModelManifest:
 
     @property
     def fingerprint(self) -> str:
-        key = {k: getattr(self, k) for k in ("model_id", "version", "paired_text_encoder", "preprocess_id", "quantization", "embedding_dimension")}
+        key = {k: getattr(self, k) for k in ("model_id", "version", "paired_text_encoder", "preprocess_id", "quantization", "embedding_dimension", "artifact_sha256")}
         return hashlib.sha256(json.dumps(key, sort_keys=True).encode()).hexdigest()[:16]
 
     def to_dict(self):

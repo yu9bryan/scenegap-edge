@@ -43,3 +43,14 @@ Follows PRD ch. 21–24. Everything here is fixed before labels are produced and
   `cpu-reference` / `cuda-reference`. No UGen300 numbers exist; they are `not_run`.
 - Search: p50/p95 latency for a text query over 10,000 indexed segments (text encode + similarity + ranking).
 - New clip to first result (60 s clip).
+
+## Threshold calibration (added 2026-10-26, still before any label exists)
+- One global τ per model fingerprint (`semantic_threshold: {fingerprint: τ}`), chosen on **dev** only.
+- Objective: sample-level F1 over every (dev sample, requirement) pair, where a sample is positive when its time
+  falls inside a gold interval of that requirement. Grid 0.150–0.400, step 0.005; ties go to the higher τ.
+- Prompts: `query_en` is written once per requirement before labelling ("a photo of …" style) and not edited after
+  dev scores are seen. Any prompt change after that would need a new dev pass and is reported.
+- Top-K stays 5, sampling 1 s, densify 250 ms, cut threshold 0.45: the shipped defaults, not tuned.
+- Matching a candidate to gold: the candidate's interval is its conservative lower-bound interval, widened to at
+  least one sampling period (1 s) around its start, because a single passing sample has a lower bound of ~0 ms.
+  A match needs ≥ 0.5 s overlap with a gold interval of the same requirement in the same clip.
