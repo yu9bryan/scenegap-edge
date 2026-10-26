@@ -143,3 +143,21 @@ Test-3 (new held-out footage):
 - Success criteria (unchanged from Stage 1.5): wrong reshoot ≤ 5% **and** missing shots caught ≥ 30%. Reported
   whatever the outcome. If they are missed, the next change is again chosen on all scored data and judged on a
   new test set; test-3 is never re-scored.
+
+### Stage 1.6 results (test-3 scored once, 2026-10-27 07:38)
+- Frozen on earlier data (`eval/results/verify16_dev.json`): check question + conditions, every 1 s sample, run of 2,
+  θ 0.5. Earlier data pooled: 80/218 missing shots caught, 6/222 wrong reshoots.
+- Test-3 (`eval/results/test3_metrics.json`, 20 projects × 8 of 39 clips): missing shots caught **76/152 (50%)**,
+  target met; wrong reshoot **8/68 (11.8%, 95% CI 6.1–21.5%)**, target **not met**. The 8 are borderline frames
+  (P(yes) 0.3–0.6): café interiors in an old black-and-white film and a cat café (SH-02 ×5), a K-cup pod as a
+  coffee package (SH-10 ×2), a mug on a drip tray (SH-06 ×1).
+- Leave-one-set-out over the four scored sets (`eval/verify_loso.json` via `eval/verify16.py loso`; selection on
+  three, report on the fourth, same rule): held-out pooled 110/370 caught, 12/290 wrong reshoots (4.1%), but the
+  test-3 fold alone is 8/68. The choice does not transfer reliably from set to set.
+- Post hoc, defined after test-3 was scored (`eval/verify16_evidence.py`): each missing-shot alert now shows the 3
+  frames the verifier found most likely, one per clip. In 12 of the 14 wrong reshoots over all four sets one of
+  those frames is a gold frame; on test-3, 2/68 (2.9%) would survive a person's look at the 3 frames. This assumes the
+  person recognises the shot and needs a prospective test on new footage.
+- Next: Wikimedia Commons has no further coffee footage (a search with 12 more terms returned mostly unrelated
+  clips), so a test-4 needs footage from elsewhere (a real shoot, or another openly licensed source used within its
+  terms). Test-3 is not re-scored.

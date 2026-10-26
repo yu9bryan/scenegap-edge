@@ -159,11 +159,19 @@ class SceneGap:
                     run = []
                 if len(run) >= vc["run"] and found is None:
                     found = {"asset_id": a.asset_id, "start_ms": run[0].t_ms, "end_ms": x.t_ms + step}
+        # the frames the verifier found most likely, one per clip: shown with a missing-shot alert so a person can
+        # rule them out before reshooting (eval/PROTOCOL.md, Stage 1.6 results)
+        top = {}
+        for a, x in look:
+            p = cache[(a.sha256, x.t_ms, tuple(qs))]
+            if a.asset_id not in top or p > top[a.asset_id]["p"]:
+                top[a.asset_id] = {"asset_id": a.asset_id, "t_ms": x.t_ms, "p": round(p, 4)}
+        evidence = sorted(top.values(), key=lambda e: -e["p"])[:3]
         o.verify_p = [round(best[0], 4)]
-        o.verify_found = found
+        o.verify_found, o.verify_evidence = found, evidence
         if found is None and o.status != AutoStatus.NOT_FOUND:
             n = RequirementOutcome(r, AutoStatus.NOT_FOUND, o.candidates, ["VERIFIER_NO"], o.scope_complete)
-            n.verify_p, n.verify_found = o.verify_p, None
+            n.verify_p, n.verify_found, n.verify_evidence = o.verify_p, None, evidence
             return n
         return o
 
@@ -501,7 +509,7 @@ class SceneGap:
         st = o.status.value if hasattr(o.status, "value") else o.status
         vp = getattr(o, "verify_p", None)
         return {"status": st, "status_zh": STATUS_TEXT_ZH.get(st, st), "reasons": o.reasons, "scope_complete": o.scope_complete, "verify_p": vp,
-                "verify_found": getattr(o, "verify_found", None),
+                "verify_found": getattr(o, "verify_found", None), "verify_evidence": getattr(o, "verify_evidence", None),
                 "revision": o.requirement.revision,
                 "candidates": [{"asset_id": c.segment.asset_id, "asset_sha256": c.segment.asset_sha256, "shot": c.segment.shot_index,
                                 "start_ms": c.segment.interval.start_ms, "end_ms": c.segment.interval.end_ms,
@@ -613,6 +621,8 @@ class SceneGap:
                                               for x in mine))
             d["candidates_total"], d["candidates_reviewed"] = len(best), seen
             d["review_incomplete"] = c.kind == "reshoot_requested" and seen < len(best)
+            if "VERIFIER_NO" in res["outcomes"][c.requirement_id]["reasons"]:
+                d["check_evidence"] = res["outcomes"][c.requirement_id].get("verify_evidence") or []
             if best:
                 b = best[0]
                 d["best_candidate"] = {"asset_id": b["asset_id"], "start_ms": b["start_ms"], "end_ms": b["end_ms"],

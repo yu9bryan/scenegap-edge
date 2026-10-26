@@ -209,9 +209,56 @@ def choose(rows):
     return max(ok, key=lambda r: (r["pooled"]["gap_recall"]["p"], -r["pooled"]["verifier_calls"], r["theta"])) if ok else None
 
 
+def all_sources(dense_dir):
+    """Every scored set, test-3 included (after its single scoring): name -> (dense, sims, gold, projects, status)."""
+    src = sources()
+    data = {n: (load(os.path.join(dense_dir, d)), int_keys(load(os.path.join(dense_dir, "sims_" + ("test2" if n == "test2" else "commons") + ".json"))), load(g), pr, st)
+            for n, (_, d, g, pr, st) in src.items()}
+    t3 = load(os.path.join(RES, "test3_metrics.json"))
+    sp = os.path.join(RES, "test3_system_status.json")          # the system's statuses on the same 20 projects
+    if not os.path.exists(sp):
+        json.dump(system_status("F:/sg_data/_eval2", "F:/sg_data/commons3/mp4", t3["projects_clips"]), open(sp, "w", encoding="utf8"))
+    st3 = load(sp)
+    data["test3"] = (load(os.path.join(dense_dir, "test3.json")), int_keys(load(os.path.join(dense_dir, "sims_test3.json"))),
+                     load(os.path.join(HERE, "labels", "test3", "gold.json")), t3["projects_clips"], st3)
+    return data
+
+
+def loso(a, caps=(0.03, 0.02, 0.01, 0.0)):
+    """Leave one scored set out: choose on the other three with the Stage 1.6 rule (pooled cap, every set <= 5%),
+    report the chosen setting on the left-out set. Repeated for stricter pooled caps."""
+    data = all_sources(a.dense)
+    grid = [(q, t, m, th) for q in QSETS for t in TOPN for m in MRULE for th in THETAS]
+    table = {}
+    for q, t, m, th in grid:
+        table[(q, t, m, th)] = {n: score_source(dn, sm, g, pr, st, q, t, th, m) for n, (dn, sm, g, pr, st) in data.items()}
+    out = {"caps": {}}
+    for cap in caps:
+        folds = {}
+        for held in data:
+            train = [n for n in data if n != held]
+            ok = [(k, v) for k, v in table.items()
+                  if pooled([v[n] for n in train])["wrong_reshoot"]["p"] <= cap and all(v[n]["wrong_reshoot"]["p"] <= 0.05 for n in train)]
+            if not ok:
+                folds[held] = None
+                continue
+            k, v = max(ok, key=lambda kv: (pooled([kv[1][n] for n in train])["gap_recall"]["p"], -pooled([kv[1][n] for n in train])["verifier_calls"], kv[0][3]))
+            folds[held] = {"setting": dict(zip(("qset", "topn", "m", "theta"), k)), "train": pooled([v[n] for n in train]), "held_out": v[held]}
+        tot = [f["held_out"] for f in folds.values() if f]
+        out["caps"][str(cap)] = {"folds": folds, "held_out_pooled": pooled(tot) if len(tot) == len(data) else None}
+        print("cap", cap, {n: (f and (f["setting"]["qset"], f["setting"]["topn"], f["setting"]["m"], f["setting"]["theta"],
+                                       f["held_out"]["gap_recall"]["k"], f["held_out"]["gap_recall"]["n"],
+                                       f["held_out"]["wrong_reshoot"]["k"], f["held_out"]["wrong_reshoot"]["n"])) for n, f in folds.items()}, flush=True)
+        if out["caps"][str(cap)]["held_out_pooled"]:
+            hp = out["caps"][str(cap)]["held_out_pooled"]
+            print("   held-out pooled: caught", hp["gap_recall"]["k"], "/", hp["gap_recall"]["n"], "wrong", hp["wrong_reshoot"]["k"], "/", hp["wrong_reshoot"]["n"], flush=True)
+    out["all_four"] = {f"{q}|{t}|{m}|{th}": {"pooled": pooled(list(v.values())), "by_source": v} for (q, t, m, th), v in table.items()}
+    json.dump(out, open(os.path.join(RES, "verify_loso.json"), "w", encoding="utf8"), indent=1)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["sims", "dev", "test3"])
+    ap.add_argument("mode", choices=["sims", "dev", "test3", "loso"])
     ap.add_argument("--dense", default="F:/sg_data/_dense")
     ap.add_argument("--work", default="F:/sg_data/_eval2")
     ap.add_argument("--device", default="cuda")
@@ -252,6 +299,9 @@ def main():
         else:
             print("no setting meets the wrong-reshoot cap")
         return
+    if a.mode == "loso":
+        loso(a)
+        return
     out_p = os.path.join(RES, "test3_metrics.json")
     if os.path.exists(out_p):
         sys.exit("test3 already scored once; results are frozen")
@@ -268,7 +318,7 @@ def main():
            "frozen": {k: fz[k] for k in ("qset", "topn", "m", "theta")}, "result": res, "system_only": base,
            "targets": {"wrong_reshoot_max": 0.05, "gap_recall_min": 0.30},
            "met": res["wrong_reshoot"]["p"] <= 0.05 and res["gap_recall"]["p"] >= 0.30,
-           "scored_at": time.strftime("%Y-%m-%d %H:%M:%S"), "projects_clips": projects}
+           "scored_at": time.strftime("%Y-%m-%d %H:%M:%S"), "projects_clips": projects, "system_status": status}
     json.dump(out, open(out_p, "w", encoding="utf8"), indent=1)
     print(json.dumps({k: out[k] for k in ("frozen", "result", "met")}, indent=1))
 

@@ -1668,6 +1668,10 @@
         '已檢查 ' + c.candidates_reviewed + '／' + c.candidates_total + ' 個候選',
         c.review_incomplete ? h('span', { class: 'reason', style: 'margin-left:8px' }, icon('alert'),
           '還有 ' + (c.candidates_total - c.candidates_reviewed) + ' 個候選沒看，先看完再決定補拍') : null) : null,
+      c.check_evidence && c.check_evidence.length ? h('div', { class: 'small', style: 'margin:6px 0' },
+        h('div', null, icon('eye'), ' 補拍前先看這 ' + c.check_evidence.length + ' 格：AI 確認層覺得最像的畫面（每支素材一格）。只要有一格其實就是這個鏡頭，就不用補拍。'),
+        h('div', { class: 'chips', style: 'margin-top:4px' }, c.check_evidence.map((e) => h('a', { href: '#/evidence/' + encodeURIComponent(c.requirement_id), title: '確認分數 ' + e.p.toFixed(2) + '（僅供排序）' },
+          thumb(e.asset_id, e.t_ms, c.source_text + ' 最像的畫面'))))) : null,
       b ? h('div', { class: 'best' }, thumb(b.asset_id, b.start_ms, c.source_text + ' 的最佳候選'),
         h('div', null, h('div', { class: 'small' }, '最佳候選 ', h('span', { class: 'mono' }, fmtTime(b.start_ms) + '–' + fmtTime(b.end_ms))),
           b.shortfalls && b.shortfalls.length ? h('ul', { class: 'shortfalls' }, b.shortfalls.map((s) => h('li', null, s))) : h('div', { class: 'faint small' }, 'AI 判斷條件都通過。')))

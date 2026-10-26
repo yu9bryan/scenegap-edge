@@ -397,3 +397,7 @@ def test_check_mode_needs_a_run_of_confirmed_samples(tmp_path, media):
             assert o["verify_found"] and o["verify_found"]["end_ms"] > o["verify_found"]["start_ms"]
         else:
             assert o["reasons"] == ["VERIFIER_NO"] and o["verify_found"] is None
+            ev = o["verify_evidence"]
+            assert 1 <= len(ev) <= 3 and len({e["asset_id"] for e in ev}) == len(ev)     # at most one frame per clip
+            card = next(c for c in svc.reshoot_cards(pid) if c["requirement_id"] == "SH-101")
+            assert card["check_evidence"] == ev
