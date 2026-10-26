@@ -1,6 +1,6 @@
 """Combine two independent label sets into gold (eval/PROTOCOL.md, eval/LABEL_GUIDE.md).
 
-  python eval/adjudicate.py diff  A.json B.json sheets/index.json  > eval/labels/disagreements.json
+  python eval/adjudicate.py diff  A.json B.json sheets/index.json  [out.json, default eval/labels/disagreements.json]
   python eval/adjudicate.py merge A.json B.json sheets/index.json eval/labels/adjudication.json
 
 `diff` lists every (clip, requirement, sample time) where the annotators disagree, for a third pass.
@@ -118,7 +118,10 @@ def merge(A, B, index, adj):
 if __name__ == "__main__":
     mode = sys.argv[1]
     A, B, index = (json.load(open(p, encoding="utf8")) for p in sys.argv[2:5])
-    if mode == "diff":
-        print(json.dumps(diff(A, B, index), ensure_ascii=False, indent=0))
+    if mode == "diff":                                   # written as UTF-8 (clip names are not ASCII; consoles may not be)
+        d = diff(A, B, index)
+        out = sys.argv[5] if len(sys.argv) > 5 else os.path.join(HERE, "labels", "disagreements.json")
+        json.dump(d, open(out, "w", encoding="utf8"), ensure_ascii=False, indent=0)
+        print(len(d), "disagreements ->", out)
     else:
         merge(A, B, index, json.load(open(sys.argv[5], encoding="utf8")))
