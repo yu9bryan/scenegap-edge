@@ -1,5 +1,5 @@
 {
- "measured_at": "2026-10-26 19:14:23",
+ "measured_at": "2026-10-26 19:18:45",
  "playback": "1080p30 H.264, decode + RGB convert at real-time pace",
  "load": "SceneGap analyse loop over 8 clips in a separate process",
  "cpu": 24,
@@ -13,7 +13,13 @@
    "frames": 900,
    "late": 0,
    "late_share": 0.0,
-   "worst_lag_ms": 0.0
+   "worst_lag_ms": 0.0,
+   "frame_work_ms_p50": 3.77,
+   "frame_work_ms_p95": 5.72,
+   "frame_work_ms_max": 18.93,
+   "budget_ms": 33.3,
+   "playback_s": 30.1,
+   "load_clips_finished_during_run": 0
   },
   {
    "round": 0,
@@ -21,7 +27,13 @@
    "frames": 900,
    "late": 0,
    "late_share": 0.0,
-   "worst_lag_ms": 0.0
+   "worst_lag_ms": 0.0,
+   "frame_work_ms_p50": 3.79,
+   "frame_work_ms_p95": 5.68,
+   "frame_work_ms_max": 21.73,
+   "budget_ms": 33.3,
+   "playback_s": 30.0,
+   "load_clips_finished_during_run": 2
   },
   {
    "round": 0,
@@ -29,7 +41,13 @@
    "frames": 900,
    "late": 0,
    "late_share": 0.0,
-   "worst_lag_ms": 0.0
+   "worst_lag_ms": 0.0,
+   "frame_work_ms_p50": 4.73,
+   "frame_work_ms_p95": 6.24,
+   "frame_work_ms_max": 20.52,
+   "budget_ms": 33.3,
+   "playback_s": 30.0,
+   "load_clips_finished_during_run": 26
   },
   {
    "round": 1,
@@ -37,7 +55,13 @@
    "frames": 900,
    "late": 0,
    "late_share": 0.0,
-   "worst_lag_ms": 0.0
+   "worst_lag_ms": 0.0,
+   "frame_work_ms_p50": 4.66,
+   "frame_work_ms_p95": 6.09,
+   "frame_work_ms_max": 20.77,
+   "budget_ms": 33.3,
+   "playback_s": 30.0,
+   "load_clips_finished_during_run": 26
   },
   {
    "round": 1,
@@ -45,7 +69,13 @@
    "frames": 900,
    "late": 0,
    "late_share": 0.0,
-   "worst_lag_ms": 0.0
+   "worst_lag_ms": 0.0,
+   "frame_work_ms_p50": 5.24,
+   "frame_work_ms_p95": 7.54,
+   "frame_work_ms_max": 29.8,
+   "budget_ms": 33.3,
+   "playback_s": 30.0,
+   "load_clips_finished_during_run": 20
   },
   {
    "round": 1,
@@ -53,21 +83,34 @@
    "frames": 900,
    "late": 0,
    "late_share": 0.0,
-   "worst_lag_ms": 0.0
+   "worst_lag_ms": 0.0,
+   "frame_work_ms_p50": 3.95,
+   "frame_work_ms_p95": 5.56,
+   "frame_work_ms_max": 17.23,
+   "budget_ms": 33.3,
+   "playback_s": 30.0,
+   "load_clips_finished_during_run": 0
   }
  ],
  "summary": {
   "none": {
    "late_share_mean": 0.0,
-   "worst_lag_ms_max": 0.0
+   "worst_lag_ms_max": 0.0,
+   "frame_work_ms_p95_max": 5.72,
+   "load_clips_finished": 0
   },
   "cpu": {
    "late_share_mean": 0.0,
-   "worst_lag_ms_max": 0.0
+   "worst_lag_ms_max": 0.0,
+   "frame_work_ms_p95_max": 7.54,
+   "load_clips_finished": 22
   },
   "cuda": {
    "late_share_mean": 0.0,
-   "worst_lag_ms_max": 0.0
+   "worst_lag_ms_max": 0.0,
+   "frame_work_ms_p95_max": 6.24,
+   "load_clips_finished": 52
   }
- }
+ },
+ "reading_note": "worst_lag_ms is measured against the first frame's clock, so 0.0 means no frame was ever behind schedule; use late frames and frame_work_ms (decode + RGB convert per frame) against the 33.3 ms budget. load_clips_finished shows the analysis really ran during playback."
 }

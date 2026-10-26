@@ -67,10 +67,10 @@ def main():
         L.append("")
     if inter:
         L += ["## Playback interference (proxy for PRD 24.3)", "", f"{inter['playback']}; load: {inter['load']}. {inter['note']}", "",
-              "| Analysis running | Late frames (mean share) | Worst lag |", "|---|---|---|"]
+              "| Analysis running | Late frames | Frame work p95 (budget 33.3 ms) | Clips analysed during playback |", "|---|---|---|---|"]
         for k, v in inter["summary"].items():
-            L.append(f"| {k} | {v['late_share_mean'] * 100:.1f}% | {v['worst_lag_ms_max']} ms |")
-        L += ["| UGen300 | not_run | not_run |", ""]
+            L.append(f"| {k} | {v['late_share_mean'] * 100:.1f}% | {v['frame_work_ms_p95_max']} ms | {v['load_clips_finished']} |")
+        L += ["| UGen300 | not_run | not_run | not_run |", ""]
     L += ["## Not measured yet", "", "- Any UGen300 / Hailo-10H number (G1 gate needs the device).", "- Power (no meter used).",
           "- User study (PRD 22): no participants yet; time-saving is a hypothesis.", "- NLE timeline interference (the proxy above is not an NLE)."]
     open(os.path.join(RES, "REPORT.md"), "w", encoding="utf8").write("\n".join(L) + "\n")
