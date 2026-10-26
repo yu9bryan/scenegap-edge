@@ -1,0 +1,434 @@
+{
+ "crop": "center-crop",
+ "fingerprint": "14cc0f0204114234",
+ "backend": "cuda-reference",
+ "model": {
+  "model_id": "openai/clip-vit-base-patch32",
+  "version": "unknown",
+  "purpose": "image-text retrieval",
+  "target_arch": "cuda",
+  "interface": "transformers",
+  "input_size": 224,
+  "embedding_dimension": 512,
+  "paired_text_encoder": "openai/clip-vit-base-patch32",
+  "preprocess_id": "clip-processor-default+center-crop",
+  "quantization": "fp32",
+  "artifact_sha256": null,
+  "license_reference": "MIT (OpenAI CLIP)",
+  "runtime_version": "torch 2.14.1+cu126; transformers 5.20.2",
+  "compatibility_verified": false,
+  "fingerprint": "14cc0f0204114234"
+ },
+ "pairs": 7282,
+ "positives": 432,
+ "chosen": {
+  "tau": 0.225,
+  "tp": 310,
+  "fp": 1837,
+  "fn": 122,
+  "f1": 0.2404
+ },
+ "grid": [
+  {
+   "tau": 0.15,
+   "tp": 432,
+   "fp": 5935,
+   "fn": 0,
+   "f1": 0.1271
+  },
+  {
+   "tau": 0.155,
+   "tp": 432,
+   "fp": 5712,
+   "fn": 0,
+   "f1": 0.1314
+  },
+  {
+   "tau": 0.16,
+   "tp": 429,
+   "fp": 5417,
+   "fn": 3,
+   "f1": 0.1367
+  },
+  {
+   "tau": 0.165,
+   "tp": 423,
+   "fp": 5059,
+   "fn": 9,
+   "f1": 0.1431
+  },
+  {
+   "tau": 0.17,
+   "tp": 416,
+   "fp": 4707,
+   "fn": 16,
+   "f1": 0.1498
+  },
+  {
+   "tau": 0.175,
+   "tp": 402,
+   "fp": 4378,
+   "fn": 30,
+   "f1": 0.1543
+  },
+  {
+   "tau": 0.18,
+   "tp": 397,
+   "fp": 4066,
+   "fn": 35,
+   "f1": 0.1622
+  },
+  {
+   "tau": 0.185,
+   "tp": 394,
+   "fp": 3787,
+   "fn": 38,
+   "f1": 0.1708
+  },
+  {
+   "tau": 0.19,
+   "tp": 387,
+   "fp": 3496,
+   "fn": 45,
+   "f1": 0.1794
+  },
+  {
+   "tau": 0.195,
+   "tp": 372,
+   "fp": 3201,
+   "fn": 60,
+   "f1": 0.1858
+  },
+  {
+   "tau": 0.2,
+   "tp": 361,
+   "fp": 2902,
+   "fn": 71,
+   "f1": 0.1954
+  },
+  {
+   "tau": 0.205,
+   "tp": 356,
+   "fp": 2627,
+   "fn": 76,
+   "f1": 0.2085
+  },
+  {
+   "tau": 0.21,
+   "tp": 351,
+   "fp": 2374,
+   "fn": 81,
+   "f1": 0.2224
+  },
+  {
+   "tau": 0.215,
+   "tp": 342,
+   "fp": 2160,
+   "fn": 90,
+   "f1": 0.2331
+  },
+  {
+   "tau": 0.22,
+   "tp": 331,
+   "fp": 1992,
+   "fn": 101,
+   "f1": 0.2403
+  },
+  {
+   "tau": 0.225,
+   "tp": 310,
+   "fp": 1837,
+   "fn": 122,
+   "f1": 0.2404
+  },
+  {
+   "tau": 0.23,
+   "tp": 280,
+   "fp": 1671,
+   "fn": 152,
+   "f1": 0.235
+  },
+  {
+   "tau": 0.235,
+   "tp": 262,
+   "fp": 1511,
+   "fn": 170,
+   "f1": 0.2376
+  },
+  {
+   "tau": 0.24,
+   "tp": 239,
+   "fp": 1370,
+   "fn": 193,
+   "f1": 0.2342
+  },
+  {
+   "tau": 0.245,
+   "tp": 218,
+   "fp": 1247,
+   "fn": 214,
+   "f1": 0.2298
+  },
+  {
+   "tau": 0.25,
+   "tp": 196,
+   "fp": 1115,
+   "fn": 236,
+   "f1": 0.2249
+  },
+  {
+   "tau": 0.255,
+   "tp": 171,
+   "fp": 1004,
+   "fn": 261,
+   "f1": 0.2128
+  },
+  {
+   "tau": 0.26,
+   "tp": 160,
+   "fp": 893,
+   "fn": 272,
+   "f1": 0.2155
+  },
+  {
+   "tau": 0.265,
+   "tp": 139,
+   "fp": 776,
+   "fn": 293,
+   "f1": 0.2064
+  },
+  {
+   "tau": 0.27,
+   "tp": 114,
+   "fp": 663,
+   "fn": 318,
+   "f1": 0.1886
+  },
+  {
+   "tau": 0.275,
+   "tp": 87,
+   "fp": 561,
+   "fn": 345,
+   "f1": 0.1611
+  },
+  {
+   "tau": 0.28,
+   "tp": 80,
+   "fp": 463,
+   "fn": 352,
+   "f1": 0.1641
+  },
+  {
+   "tau": 0.285,
+   "tp": 71,
+   "fp": 368,
+   "fn": 361,
+   "f1": 0.163
+  },
+  {
+   "tau": 0.29,
+   "tp": 69,
+   "fp": 294,
+   "fn": 363,
+   "f1": 0.1736
+  },
+  {
+   "tau": 0.295,
+   "tp": 65,
+   "fp": 225,
+   "fn": 367,
+   "f1": 0.1801
+  },
+  {
+   "tau": 0.3,
+   "tp": 55,
+   "fp": 160,
+   "fn": 377,
+   "f1": 0.17
+  },
+  {
+   "tau": 0.305,
+   "tp": 44,
+   "fp": 116,
+   "fn": 388,
+   "f1": 0.1486
+  },
+  {
+   "tau": 0.31,
+   "tp": 38,
+   "fp": 77,
+   "fn": 394,
+   "f1": 0.1389
+  },
+  {
+   "tau": 0.315,
+   "tp": 26,
+   "fp": 56,
+   "fn": 406,
+   "f1": 0.1012
+  },
+  {
+   "tau": 0.32,
+   "tp": 21,
+   "fp": 34,
+   "fn": 411,
+   "f1": 0.0862
+  },
+  {
+   "tau": 0.325,
+   "tp": 11,
+   "fp": 21,
+   "fn": 421,
+   "f1": 0.0474
+  },
+  {
+   "tau": 0.33,
+   "tp": 5,
+   "fp": 7,
+   "fn": 427,
+   "f1": 0.0225
+  },
+  {
+   "tau": 0.335,
+   "tp": 4,
+   "fp": 3,
+   "fn": 428,
+   "f1": 0.0182
+  },
+  {
+   "tau": 0.34,
+   "tp": 1,
+   "fp": 2,
+   "fn": 431,
+   "f1": 0.0046
+  },
+  {
+   "tau": 0.345,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.35,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.355,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.36,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.365,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.37,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.375,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.38,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.385,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.39,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.395,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  },
+  {
+   "tau": 0.4,
+   "tp": 0,
+   "fp": 0,
+   "fn": 432,
+   "f1": 0.0
+  }
+ ],
+ "analyse_s": 0.18,
+ "dev_clips": [
+  "000_Cadaques_cafe_de_la_habana_2008_august_converted_YAN3.ogv.mp4",
+  "002_Merry_X-mas_at_Kranzler.webm.mp4",
+  "003_Times_Cafe_inflatable_waving_character.webm.mp4",
+  "006_Interior_Paragon_Caf\u00e9_Katoomba.ogv.mp4",
+  "008_Operation_Ghost_Stories_-_Video_01.webm.mp4",
+  "010__\u8d70\u7ebf\u5ba2_\u8fc7\u5883\u58a8\u897f\u54e5_\u4e0d\u5fd8\u6765\u676f\u661f\u5df4\u514b.webm.mp4",
+  "012_Kaffe_-_Ystad-2024.ogg.mp4",
+  "016_Lions_Almelo_zamelt_koffie_in_voor_Voedselbank.webm.mp4",
+  "022_Der_perfekte_Espresso_aus_dem_Siebtr\u00e4ger.ogv.mp4",
+  "024_Use_of_a_coffee_press.ogv.mp4",
+  "028_Nespresso_machine.ogv.mp4",
+  "029_A_man_pours_Arabic_coffee.ogv.mp4",
+  "030_Servido_tradicional_de_caf\u00e9_et\u00edope.webm.mp4",
+  "035_Latte_salute.webm.mp4",
+  "038_Turkovich_Family_Wines_-_June_2019_-_Stierch_03.ogv.mp4",
+  "039_Drinking_glass_symphony.ogv.mp4",
+  "040_Thermochromic_mug.webm.mp4",
+  "043_Couple_holding_hands.webm.mp4"
+ ],
+ "alternatives": [
+  {
+   "crop": "center-crop",
+   "chosen": {
+    "tau": 0.225,
+    "tp": 310,
+    "fp": 1837,
+    "fn": 122,
+    "f1": 0.2404
+   }
+  },
+  {
+   "crop": "pad-square",
+   "chosen": {
+    "tau": 0.225,
+    "tp": 332,
+    "fp": 2039,
+    "fn": 100,
+    "f1": 0.2369
+   }
+  }
+ ],
+ "frozen_at": "2026-10-26 19:21:51"
+}
