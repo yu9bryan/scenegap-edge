@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-26 22:54:39",
+ "run_at": "2026-10-26 23:24:21",
  "base": "frozen calibration (eval/results/calibration.json)",
  "correct": 10,
  "cases": 12,
@@ -187,7 +187,6 @@
    "passed": false,
    "correct": true,
    "reasons": [
-    "DURATION_SHORT",
     "TAKES_SHORT"
    ],
    "best_candidate_s": 4.0,
@@ -213,7 +212,6 @@
    "passed": false,
    "correct": true,
    "reasons": [
-    "DURATION_SHORT",
     "TAKES_SHORT"
    ],
    "best_candidate_s": 4.0,

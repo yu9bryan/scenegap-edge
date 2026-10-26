@@ -152,6 +152,15 @@ def test_duplicate_is_not_two_takes_TC013():
     assert requirement_status(r, [a, b], candidates_for(r, [a, b], 0.5)).status == AutoStatus.CANDIDATE
 
 
+def test_takes_short_reason_ignores_weaker_clips():
+    # one clip passes every rule, a second (other capture) is too short: the reason is takes, not length
+    a = asset("a1", [0.9] * 6)
+    b = asset("a2", [0.9, 0.9, 0.1, 0.1, 0.1, 0.1])
+    r = req(min_ms=3000, takes=2)
+    o = requirement_status(r, [a, b], candidates_for(r, [a, b], 0.5))
+    assert o.status == AutoStatus.PARTIAL and o.reasons == ["TAKES_SHORT"]
+
+
 def test_exception_is_traceable_TC025():
     r = req()
     d = ReviewDecision("SH-001", 1, "sha_a1", Interval(0, 1000), Decision.OVERRIDDEN, reason="刻意的短鏡頭")

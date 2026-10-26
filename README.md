@@ -388,7 +388,7 @@ feed the same preprocessed 224×224 dev frames to the fp32 reference and to the 
 | G1a per-frame cosine, fp32 vs HEF | median ≥ 0.98, 5th percentile ≥ 0.95 |
 | G1b Spearman ρ per query over all dev frames | median ≥ 0.95, worst query ≥ 0.85 |
 | G1c top-K overlap per query | mean ≥ 0.80 (K = 5), ≥ 0.85 (K = 10) |
-| G1d dev Recall@5 / Precision@5, each backend with its own τ | within 3 / 5 points of fp32 |
+| G1d dev Recall@5 / Precision@5, each backend with its own τ | no dev shot lost from the top 5; Precision@5 within 5 points of fp32 |
 | G1e status agreement on the dev project simulation | ≥ 90% same status, no new false `candidate` on a true gap |
 | G1f throughput over USB, batch 1 and 8, and a 60 s clip end to end | reported as measured, never replaced by vendor figures |
 

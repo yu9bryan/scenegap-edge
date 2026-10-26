@@ -85,8 +85,8 @@ False-ready rate: N/A. The system never marks a requirement done; a person confi
 | two people at a café table, same frame | SH-08 | pass | pass (candidate) | — | yes |
 | two people, but outdoors (not in a café) | SH-08 | not pass | not pass (not_found) | NO_CANDIDATE | yes |
 | two people, then a café interior: separate shots | SH-08 | not pass | not pass (not_found) | NO_CANDIDATE | yes |
-| one barista clip (rule: 2 takes) | SH-11 | not pass | not pass (partial) | DURATION_SHORT, TAKES_SHORT | yes |
-| the same clip copied byte for byte | SH-11 | not pass | not pass (partial) | DURATION_SHORT, TAKES_SHORT | yes |
+| one barista clip (rule: 2 takes) | SH-11 | not pass | not pass (partial) | TAKES_SHORT | yes |
+| the same clip copied byte for byte | SH-11 | not pass | not pass (partial) | TAKES_SHORT | yes |
 | the same clip re-encoded (still one take) | SH-11 | not pass | pass (candidate) | — | **no** |
 | two different barista clips | SH-11 | pass | pass (candidate) | — | yes |
 

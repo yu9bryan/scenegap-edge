@@ -163,7 +163,8 @@ def requirement_status(req: Requirement, assets: list[AssetIndex], cands: list[C
             reasons.append("SCOPE_INCOMPLETE")
         return RequirementOutcome(req, AutoStatus.CANDIDATE, cands, reasons, complete)
     if cands:
-        for c in cands:
+        # when some clip passes every rule, the only thing missing is takes; the weaker clips' failures are not the reason
+        for c in ([] if full else cands):
             for r in c.results:
                 if r.verdict is F:
                     reasons.append({"duration": "DURATION_SHORT", "quality": "QUALITY_WARNING"}.get(r.constraint.kind, "CONSTRAINT_FAILED"))
