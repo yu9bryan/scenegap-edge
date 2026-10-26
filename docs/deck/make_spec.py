@@ -248,11 +248,14 @@ S.append({"type": "timeline", "section": "Appendix", "title": "A3 · Stage II or
                     {"date": "Wk 4–6", "head": "UGen300", "body": "G1 on the device; editing-app load with CPU, GPU or UGen300 analysis."},
                     {"date": "Wk 6+", "head": "Chinese queries", "body": "A multilingual model (SigLIP 2), adopted only if it finds as many dev shots."}]})
 if man:
-    rows = [[c["clip"][:3], (c.get("title") or "").replace("File:", ""), c.get("attribution") or c.get("artist") or c.get("credit") or "", c.get("license") or ""] for c in man["clips"]]
-    per = 11
-    for i in range(0, len(rows), per):
-        S.append({"type": "table", "section": "Appendix", "title": f"A{4 + i // per} · Footage credits ({i // per + 1} of {(len(rows) + per - 1) // per})",
-                  "header": ["#", "Wikimedia Commons file", "Author", "Licence"], "rows": rows[i:i + per], "colW": [0.6, 6.6, 3.1, 1.8], "fontSize": 9, "boldFirst": False, "fontFace": "Microsoft JhengHei"})
+    # only the clips that appear in this deck (live-app screenshots and cover frames); all 44 are in docs/CREDITS.md
+    shown = ("001", "007", "012", "016", "019", "020", "026", "032", "041")
+    rows = [[c["clip"][:3], (c.get("title") or "").replace("File:", ""), c.get("attribution") or c.get("artist") or c.get("credit") or "", c.get("license") or ""]
+            for c in man["clips"] if c["clip"][:3] in shown]
+    S.append({"type": "table", "section": "Appendix", "title": "A4 · Footage shown in this deck",
+              "header": ["#", "Wikimedia Commons file", "Author", "Licence"], "rows": rows, "colW": [0.6, 6.6, 3.1, 1.8], "fontSize": 10,
+              "boldFirst": False, "fontFace": "Microsoft JhengHei",
+              "note": f"Screenshots and cover frames come from these {len(rows)} clips. All {len(man["clips"])} clips used in the evaluation, with links: docs/CREDITS.md in the repository."})
 
 spec = {"title": "SceneGap Edge – Stage I proposal", "short": "SceneGap Edge · Stage I", "team": "[Team name]", "slides": S}
 json.dump(spec, open(OUT, "w", encoding="utf8"), ensure_ascii=False, indent=1)
