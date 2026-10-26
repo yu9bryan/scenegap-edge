@@ -1,0 +1,738 @@
+{
+ "source": "Wikimedia Commons",
+ "built": "2026-10-26",
+ "transcode": "H.264 yuv420p CRF23, <=1280 px, no audio",
+ "clips": [
+  {
+   "clip": "000_Cadaques_cafe_de_la_habana_2008_august_converted_YAN3.ogv.mp4",
+   "title": "File:Cadaques cafe de la habana 2008 august converted YAN3.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Cadaques_cafe_de_la_habana_2008_august_converted_YAN3.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Cadaques_cafe_de_la_habana_2008_august_converted_YAN3.ogv",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "Cliché Online ( talk ) (Yan.)",
+   "credit": "Own work ( Original text: I ( Cliché Online ( talk )) created this work entirely by myself. )",
+   "source_sha256": "466b7793040e75cd4c810158e915a326287a991acc4fa895c032303557a8c728",
+   "mp4_sha256": "64dfdea51948a9b67877e2516440eb335449e0064726d27cd8d62dca1e5daf19",
+   "tags_from_metadata": [
+    "exterior"
+   ],
+   "duration_s_metadata": 9.323
+  },
+  {
+   "clip": "001_Vichy_-_Grand_Café__terrasse_sous_la_grêle.ogv.mp4",
+   "title": "File:Vichy - Grand Café, terrasse sous la grêle.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Vichy_-_Grand_Caf%C3%A9,_terrasse_sous_la_gr%C3%AAle.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Vichy_-_Grand_Caf%C3%A9%2C_terrasse_sous_la_gr%C3%AAle.ogv",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "artist": "Romainbehar",
+   "credit": "Own work",
+   "source_sha256": "76be241759873d55e7719e1a64e9620f922ff0510d7449c3727b65907426a439",
+   "mp4_sha256": "c1ab7e810049afc70b957d9fdfe4650cc774d806ebf767127546c460ea52e837",
+   "tags_from_metadata": [
+    "exterior"
+   ],
+   "duration_s_metadata": 10.113
+  },
+  {
+   "clip": "002_Merry_X-mas_at_Kranzler.webm.mp4",
+   "title": "File:Merry X-mas at Kranzler.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Merry_X-mas_at_Kranzler.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Merry_X-mas_at_Kranzler.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "This video is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reusing, credit me as described in the Licensing information below. I would appreciate being notified ( wikimail , talk page , email , Social Media ) if you use my work outside Wikimedia. Do not copy this image illegally by ignoring the terms of the license below, as it is not in the public domain. If you would like special permission to use, license, or purchase the image please contact me to negotiate terms. If you want to extract a still image from this video, you can do so, but I would prefer, if you ask me for a still, as I have the mp4-file of the original recording to extract the still from, while the video online is a transcoding to webm format with generational quality loss. More of my work can be found in my personal gallery or at my Peertube channel . A prepared attribution especially for use in Social Media and Print (newspapers, flyers, books, murals, mousepads, mugs, posters, t-shirts) can be copied here",
+   "credit": "Own work (IPTC Unique Object Name: CS-xmaskranzlr)",
+   "source_sha256": "4b4817d05f2fe5f7d4aaf8f887189cdfe4273feee8a0c8e13e0a24bdcfb18dfa",
+   "mp4_sha256": "d2a4d6ff3179af6bdff768094191b1763930fc2132c4fe6e2d3f7e2d0f533be0",
+   "tags_from_metadata": [
+    "exterior"
+   ],
+   "duration_s_metadata": 23.048
+  },
+  {
+   "clip": "003_Times_Cafe_inflatable_waving_character.webm.mp4",
+   "title": "File:Times Cafe inflatable waving character.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Times_Cafe_inflatable_waving_character.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/5/54/Times_Cafe_inflatable_waving_character.webm",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "artist": "Andy Li",
+   "credit": "Own work",
+   "source_sha256": "836e1a868bbf039acc04708d9e48e31c67015ecad53dc23bc0d9dda8b8daf143",
+   "mp4_sha256": "a8aecc23720ee64932da59201056e03a0d521188b2de76667270ad682df8c6c4",
+   "tags_from_metadata": [
+    "exterior"
+   ],
+   "duration_s_metadata": 5.833
+  },
+  {
+   "clip": "004_Rateel_cafe_music2.webm.mp4",
+   "title": "File:Rateel cafe music2.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Rateel_cafe_music2.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Rateel_cafe_music2.webm",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "artist": "Iainsimpsonstewart",
+   "credit": "Own work",
+   "source_sha256": "fafb5e4f3cfe473d3a3c2a28f75f9c82b6f95e79bbbb6b6f3143825f00d4343e",
+   "mp4_sha256": "c8c656da60cdc8cbbcad5b192307994314f96e4bb1dac7d2d6c1c788e199552b",
+   "tags_from_metadata": [
+    "exterior",
+    "two_people"
+   ],
+   "duration_s_metadata": 25.828
+  },
+  {
+   "clip": "005_Starbucks_en_la_aĉetcentro_Kristall__Tjumeno_.webm.mp4",
+   "title": "File:Starbucks en la aĉetcentro Kristall (Tjumeno).webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Starbucks_en_la_a%C4%89etcentro_Kristall_(Tjumeno).webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Starbucks_en_la_a%C4%89etcentro_Kristall_%28Tjumeno%29.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "RG72",
+   "credit": "Own work",
+   "source_sha256": "d7480cb12fc6e868e2712328ca974b03d7d8c2a821d43995fcd0049562177cae",
+   "mp4_sha256": "86338cd7c5107a29d03c0e4802df691c51b92e4c638624aa356741bff52a54fc",
+   "tags_from_metadata": [
+    "exterior"
+   ],
+   "duration_s_metadata": 11.103
+  },
+  {
+   "clip": "006_Interior_Paragon_Café_Katoomba.ogv.mp4",
+   "title": "File:Interior Paragon Café Katoomba.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Interior_Paragon_Caf%C3%A9_Katoomba.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Interior_Paragon_Caf%C3%A9_Katoomba.ogv",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "artist": "Bluedawe",
+   "credit": "Own work",
+   "source_sha256": "86eb4879513f14ad8d4bfa2fb67ccca8dfc1d8ea8cc63992112ac56cf51fb025",
+   "mp4_sha256": "64ab88d961a4228f2c4691da1ff2371b82ebf47da097e8022e86cf4c09088d22",
+   "tags_from_metadata": [
+    "interior"
+   ],
+   "duration_s_metadata": 64.32
+  },
+  {
+   "clip": "007_Café_Lomi__Paris_-_Vimeo.webm.mp4",
+   "title": "File:Café Lomi, Paris - Vimeo.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Caf%C3%A9_Lomi,_Paris_-_Vimeo.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/0/02/Caf%C3%A9_Lomi%2C_Paris_-_Vimeo.webm",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "ideafarm films",
+   "credit": "Vimeo : Café Lomi, Paris ( view archived source )",
+   "source_sha256": "628cdfaf5abab1c0c0d32d9f197c2f86814218ef9397dbaec5df793f870d0950",
+   "mp4_sha256": "6b1bf9376b4450e44185f3e6ada14c12696075995189012d1fc2bcd805ac7042",
+   "tags_from_metadata": [
+    "interior",
+    "pouring",
+    "beans",
+    "two_people"
+   ],
+   "duration_s_metadata": 78.728
+  },
+  {
+   "clip": "008_Operation_Ghost_Stories_-_Video_01.webm.mp4",
+   "title": "File:Operation Ghost Stories - Video 01.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Operation_Ghost_Stories_-_Video_01.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/4/43/Operation_Ghost_Stories_-_Video_01.webm",
+   "license": "Public domain",
+   "license_url": null,
+   "artist": "FBI – Federal Bureau of Investigation",
+   "credit": "YouTube : Operation Ghost Stories: Video 1 – View/save archived versions on archive.org",
+   "source_sha256": "19de6badcaecf1ffa841e258bf09829cd99ec2108c9904fce3338009e627d28d",
+   "mp4_sha256": "609a0f88731acee64cac23d43d193cd9eeb6a6be6d15d211ddb5f7109748becb",
+   "tags_from_metadata": [
+    "interior",
+    "two_people",
+    "person_cup"
+   ],
+   "duration_s_metadata": 85.281
+  },
+  {
+   "clip": "009_Coffee_Bean___Tea_Leaf_Process.webm.mp4",
+   "title": "File:Coffee Bean & Tea Leaf Process.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Coffee_Bean_%26_Tea_Leaf_Process.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/3/34/Coffee_Bean_%26_Tea_Leaf_Process.webm",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "artist": "Kelliks",
+   "credit": "Own work",
+   "source_sha256": "8639b40667ea34819a036a8be93d9b5682395344ab0803a92bf26fc1882b63cf",
+   "mp4_sha256": "6ceeafacecdca1c77aa3c0d51d992c3583e6e7b8d918aed4e27f055ea247f6ce",
+   "tags_from_metadata": [
+    "interior",
+    "pouring"
+   ],
+   "duration_s_metadata": 44.477
+  },
+  {
+   "clip": "010__走线客_过境墨西哥_不忘来杯星巴克.webm.mp4",
+   "title": "File:“走线客”过境墨西哥 不忘来杯星巴克.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:%E2%80%9C%E8%B5%B0%E7%BA%BF%E5%AE%A2%E2%80%9D%E8%BF%87%E5%A2%83%E5%A2%A8%E8%A5%BF%E5%93%A5_%E4%B8%8D%E5%BF%98%E6%9D%A5%E6%9D%AF%E6%98%9F%E5%B7%B4%E5%85%8B.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/1/1a/%E2%80%9C%E8%B5%B0%E7%BA%BF%E5%AE%A2%E2%80%9D%E8%BF%87%E5%A2%83%E5%A2%A8%E8%A5%BF%E5%93%A5_%E4%B8%8D%E5%BF%98%E6%9D%A5%E6%9D%AF%E6%98%9F%E5%B7%B4%E5%85%8B.webm",
+   "license": "Public domain",
+   "license_url": null,
+   "artist": "美国之音中文网",
+   "credit": "YouTube : “走线客”过境墨西哥 不忘来杯星巴克 – View/save archived versions on archive.org",
+   "source_sha256": "f7e3d93e601add097e5c1f9903718f85b9a182d734994b71d7fb9d268a2cb920",
+   "mp4_sha256": "e10d8ba4fe8dbd6e5f197aa32fa612e54ba17a1f8c1298786f360491542447d7",
+   "tags_from_metadata": [
+    "interior",
+    "exterior",
+    "person_cup",
+    "two_people"
+   ],
+   "duration_s_metadata": 80.381
+  },
+  {
+   "clip": "011_Color_sorter_coffeebeans.webm.mp4",
+   "title": "File:Color sorter coffeebeans.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Color_sorter_coffeebeans.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/0/05/Color_sorter_coffeebeans.webm",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "artist": "AlexanderKlink",
+   "credit": "Own work",
+   "source_sha256": "a31d4d6178f524f6240c9d3392b92753eb99e0ec486b9f9c0e6e6c66babb2588",
+   "mp4_sha256": "4fd6c5ed88efa2fc880a0b8daec88728a14fd5b6fdf7bd931da94c4c1043ccfa",
+   "tags_from_metadata": [
+    "beans"
+   ],
+   "duration_s_metadata": 15.494
+  },
+  {
+   "clip": "012_Kaffe_-_Ystad-2024.ogg.mp4",
+   "title": "File:Kaffe - Ystad-2024.ogg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Kaffe_-_Ystad-2024.ogg",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Kaffe_-_Ystad-2024.ogg",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "Foto: Jonn Leffmann",
+   "credit": "Own work",
+   "source_sha256": "1c46d6d922874ed511cffe02f6f603fb2b0aaa02229513b253ce8905bec65aa8",
+   "mp4_sha256": "6d50a99711dfb64e679df10ee2d2202c6b9049e06f5c3e0b6a885f016c334be4",
+   "tags_from_metadata": [
+    "beans"
+   ],
+   "duration_s_metadata": 9.033
+  },
+  {
+   "clip": "013_Coffee_from_dan_2.webm.mp4",
+   "title": "File:Coffee from dan 2.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Coffee_from_dan_2.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Coffee_from_dan_2.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Denis kasozi",
+   "credit": "Own work",
+   "source_sha256": "a8542009ddfd8877a12b32c6561d023a92f601384fcd7c72d89699f0eb6c4cd5",
+   "mp4_sha256": "f782dad800569ab3ae87d38dce46bab0c4f7584e29c3023c518a96dbd0fee960",
+   "tags_from_metadata": [
+    "beans"
+   ],
+   "duration_s_metadata": 12.933
+  },
+  {
+   "clip": "014_Traditional_Ethiopian_Coffee_Roasting_Ceremony.webm.mp4",
+   "title": "File:Traditional Ethiopian Coffee Roasting Ceremony.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Traditional_Ethiopian_Coffee_Roasting_Ceremony.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/9/95/Traditional_Ethiopian_Coffee_Roasting_Ceremony.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Keria T",
+   "credit": "Own work",
+   "source_sha256": "d2e7783750d688838e83e79a24b865e2e7789d2357353ce9b749467d52a9af2d",
+   "mp4_sha256": "0a94e460eb1bbbc12eb32a95a30df733d1051dd244498e9545b8dd08bc7b7f74",
+   "tags_from_metadata": [
+    "beans"
+   ],
+   "duration_s_metadata": 30.066
+  },
+  {
+   "clip": "015_Despulpadora.ogg.mp4",
+   "title": "File:Despulpadora.ogg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Despulpadora.ogg",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Despulpadora.ogg",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Jhonespe150102",
+   "credit": "Own work",
+   "source_sha256": "b6c7e70a04ea992708c4f4868f1e7b7b82bfa6cf3af5e519624fc0f5f7aeddda",
+   "mp4_sha256": "0c4ade22dce02bd746142917796ee088f913fdc0671924b6b4ec0a090f4bc8de",
+   "tags_from_metadata": [
+    "beans"
+   ],
+   "duration_s_metadata": 41.073
+  },
+  {
+   "clip": "016_Lions_Almelo_zamelt_koffie_in_voor_Voedselbank.webm.mp4",
+   "title": "File:Lions Almelo zamelt koffie in voor Voedselbank.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Lions_Almelo_zamelt_koffie_in_voor_Voedselbank.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Lions_Almelo_zamelt_koffie_in_voor_Voedselbank.webm",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "AAVISIE",
+   "credit": "YouTube : Lions Almelo zamelt koffie in voor Voedselbank – View/save archived versions on archive.org",
+   "source_sha256": "3469d070495dede6f775620224387b71f45ee5181554b3ac2fbb994b0ae6be8e",
+   "mp4_sha256": "76251a35882dc82b2a266b7dbe0152aabcb3292ec03be413e5fc615da26d2835",
+   "tags_from_metadata": [
+    "package"
+   ],
+   "duration_s_metadata": 89.376
+  },
+  {
+   "clip": "017_Sunday_Morning_Espresso_Routine_-_Grind___distribute___tamp___extraction__15-Sec.mp4",
+   "title": "File:Sunday Morning Espresso Routine - Grind + distribute + tamp + extraction (15-Second Abridged Version).webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Sunday_Morning_Espresso_Routine_-_Grind_%2B_distribute_%2B_tamp_%2B_extraction_(15-Second_Abridged_Version).webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Sunday_Morning_Espresso_Routine_-_Grind_%2B_distribute_%2B_tamp_%2B_extraction_%2815-Second_Abridged_Version%29.webm",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0",
+   "artist": "Scott Schiller from San Francisco, CA, USA",
+   "credit": "Sunday Morning Espresso Routine: Grind + distribute + tamp + extraction (15-Second Abridged Version)",
+   "source_sha256": "6834a4d56758f17c4c16e9523b17087635eb5883a933de08d4b08e47da7e390c",
+   "mp4_sha256": "6fac1a2ebbbdbc82569edc5ee3e3d5f5ded5996434fc3124b18e33bc08b0c15f",
+   "tags_from_metadata": [
+    "grinding",
+    "pouring",
+    "beans"
+   ],
+   "duration_s_metadata": 16.119
+  },
+  {
+   "clip": "018_Кофемельница_JURA_43.webm.mp4",
+   "title": "File:Кофемельница JURA 43.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%BE%D1%84%D0%B5%D0%BC%D0%B5%D0%BB%D1%8C%D0%BD%D0%B8%D1%86%D0%B0_JURA_43.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/62/%D0%9A%D0%BE%D1%84%D0%B5%D0%BC%D0%B5%D0%BB%D1%8C%D0%BD%D0%B8%D1%86%D0%B0_JURA_43.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Gontcharik.petr",
+   "credit": "Own work",
+   "source_sha256": "3077e5751ecbf0d3cf486ab86cf0b7e8355d8cfc17ac386a9c1499dd4e8aa9a8",
+   "mp4_sha256": "a66fb146d0c996032836b3ac1f208a2185b95a7d62c61c0c6de79078ff65106e",
+   "tags_from_metadata": [
+    "grinding"
+   ],
+   "duration_s_metadata": 99.917
+  },
+  {
+   "clip": "019_MoliendoCafeEnLicuadora_ohs02.webm.mp4",
+   "title": "File:MoliendoCafeEnLicuadora ohs02.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:MoliendoCafeEnLicuadora_ohs02.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/66/MoliendoCafeEnLicuadora_ohs02.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "PetrohsW",
+   "credit": "Own work",
+   "source_sha256": "44d8eece4b5874f6b0e5fff5e8212ad649a6f0968afcf2503efe06e48b2fab67",
+   "mp4_sha256": "5adb60bfe2de59772935c316b4098a7d4e721591753d3489003c10275357218b",
+   "tags_from_metadata": [
+    "grinding",
+    "beans"
+   ],
+   "duration_s_metadata": 19.506
+  },
+  {
+   "clip": "020_Espresso_video.ogv.mp4",
+   "title": "File:Espresso video.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Espresso_video.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/4/43/Espresso_video.ogv",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "artist": "Rosatrieu",
+   "credit": "I asked for permission from a coffee shop to make the video. I shot it using a Canon T2i and edited with FCP7. Previously published: http://www.rosatrieu.com",
+   "source_sha256": "1853f8dce07b802dc9ba4ce8a9e217baf53aed62b55dc53c7f21b07a876c860c",
+   "mp4_sha256": "748ac05c3feafce5b96c9fda08b66ef3ec4d34e1d268530410cd792e9f8058ff",
+   "tags_from_metadata": [
+    "pouring",
+    "grinding",
+    "interior"
+   ],
+   "duration_s_metadata": 54.336
+  },
+  {
+   "clip": "021_Macro_Espresso_Process.webm.mp4",
+   "title": "File:Macro Espresso Process.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Macro_Espresso_Process.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/66/Macro_Espresso_Process.webm",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0",
+   "artist": "Scott Schiller from San Francisco, CA, USA",
+   "credit": "Macro Espresso Process",
+   "source_sha256": "86a047248b8d61968150fdc9afc4295fafbec2245d1ea5dc7cf3b6d577fe86f1",
+   "mp4_sha256": "ea7122416d07eb3161267c3c4adba5049d05ce3669a9c9da82fce41656d390fe",
+   "tags_from_metadata": [
+    "pouring",
+    "drink",
+    "hero"
+   ],
+   "duration_s_metadata": 37.938
+  },
+  {
+   "clip": "022_Der_perfekte_Espresso_aus_dem_Siebträger.ogv.mp4",
+   "title": "File:Der perfekte Espresso aus dem Siebträger.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Der_perfekte_Espresso_aus_dem_Siebtr%C3%A4ger.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Der_perfekte_Espresso_aus_dem_Siebtr%C3%A4ger.ogv",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "Max Duchardt, Katrin Engel",
+   "credit": "http://www.coffeecircle.com/kaffeewissen/zubereitung-ratgeber-tipps-siebtraeger/",
+   "source_sha256": "db7e1a408e05170e963be24fcabae84c417baa17d6a84c7bc15181183c43e157",
+   "mp4_sha256": "e21a9d68b7e387ef239bafadee46a0421c88db333d98e981ad071f6cb0eb9f76",
+   "tags_from_metadata": [
+    "pouring",
+    "grinding"
+   ],
+   "duration_s_metadata": 88.672
+  },
+  {
+   "clip": "023_Pour_Over.ogv.mp4",
+   "title": "File:Pour Over.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Pour_Over.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/63/Pour_Over.ogv",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Lev Lazinskiy",
+   "credit": "Own work",
+   "source_sha256": "09cf3b07e338d1271f3aabb7843753c0adecd1a3853ee337b59030c6ea54af33",
+   "mp4_sha256": "b6ab69c1934c20eafc4a150275563272e5a748792fe0968315083019307d5f87",
+   "tags_from_metadata": [
+    "pouring"
+   ],
+   "duration_s_metadata": 58.901
+  },
+  {
+   "clip": "024_Use_of_a_coffee_press.ogv.mp4",
+   "title": "File:Use of a coffee press.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Use_of_a_coffee_press.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Use_of_a_coffee_press.ogv",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "artist": "Produced, directed and edited by Daniel Case . Videography by my son.",
+   "credit": "Own work",
+   "source_sha256": "76e827adfc504f76e8d63792c4bdf21ef2ce4126d1261174bb94f86dd6d237b0",
+   "mp4_sha256": "49f12139aa8de6281c3726feb0d4c4d4d038611f8eb1a8d66a1f3110a1f777d3",
+   "tags_from_metadata": [
+    "pouring"
+   ],
+   "duration_s_metadata": 68.864
+  },
+  {
+   "clip": "025_Schritt_für_Schritt_-_Kaffeezubereitung_mit_der_Chemex.ogv.mp4",
+   "title": "File:Schritt für Schritt - Kaffeezubereitung mit der Chemex.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Schritt_f%C3%BCr_Schritt_-_Kaffeezubereitung_mit_der_Chemex.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Schritt_f%C3%BCr_Schritt_-_Kaffeezubereitung_mit_der_Chemex.ogv",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "Max Duchardt , Katrin Engel",
+   "credit": "http://www.coffeecircle.com/kaffeewissen/zubereitung-ratgeber-tipps-chemex/",
+   "source_sha256": "72bf36462033904614db3edb7c5a5bf3bd47a2d06a26c1aa4076cf8cc674d292",
+   "mp4_sha256": "9f2d7b562bd1ce4031e67543be4b2c6c058bda23f8cfd0d655911cf2d22958ae",
+   "tags_from_metadata": [
+    "pouring"
+   ],
+   "duration_s_metadata": 35.36
+  },
+  {
+   "clip": "026_Latte_art_flower_-_01.ogv.mp4",
+   "title": "File:Latte art flower - 01.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Latte_art_flower_-_01.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/88/Latte_art_flower_-_01.ogv",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "artist": "Anna Frodesiak",
+   "credit": "Own work",
+   "source_sha256": "3abb75b69003b4f0a049e368873129e81ef46462bce0b88d543413c530365345",
+   "mp4_sha256": "22e1e7893da2758b0be56ebcab80197682f8cf050329959ef6e064f06bf74eb3",
+   "tags_from_metadata": [
+    "pouring",
+    "drink"
+   ],
+   "duration_s_metadata": 24.384
+  },
+  {
+   "clip": "027_Latte_art_leaf_-_01.ogv.mp4",
+   "title": "File:Latte art leaf - 01.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Latte_art_leaf_-_01.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Latte_art_leaf_-_01.ogv",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "artist": "Anna Frodesiak",
+   "credit": "Own work",
+   "source_sha256": "5264612475e44b9654369d4aa7b3dd1e2b20f555f01f93a5c867f4f16bfe2a34",
+   "mp4_sha256": "e35bc4eb5711273fa9c3d60fd24c19ec49b03d1c4a32c3a7d905a3f4479264e2",
+   "tags_from_metadata": [
+    "pouring",
+    "drink"
+   ],
+   "duration_s_metadata": 14.048
+  },
+  {
+   "clip": "028_Nespresso_machine.ogv.mp4",
+   "title": "File:Nespresso machine.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Nespresso_machine.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/80/Nespresso_machine.ogv",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "artist": "Kjetil Ree",
+   "credit": "Own work",
+   "source_sha256": "5e3701e9a1d0caa489016d208cc66270048eddbc5bb2d0ccb0a3b26a419ce3b9",
+   "mp4_sha256": "c49864bf50b93d86ae57fef9d493db056dd2ebdd9045a32afdfd0d14e003afbd",
+   "tags_from_metadata": [
+    "pouring"
+   ],
+   "duration_s_metadata": 44.68
+  },
+  {
+   "clip": "029_A_man_pours_Arabic_coffee.ogv.mp4",
+   "title": "File:A man pours Arabic coffee.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:A_man_pours_Arabic_coffee.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/2/22/A_man_pours_Arabic_coffee.ogv",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Sarah Canbel",
+   "credit": "Own work",
+   "source_sha256": "529bfc00f3d43a2333099217e77d5ed47a48e480018edab10964d4d3811a60bc",
+   "mp4_sha256": "79bf5bd5fe73343434ee31a04c75bc4fae7e8485a9c07ad683fee97f50ed5d71",
+   "tags_from_metadata": [
+    "pouring",
+    "person_cup"
+   ],
+   "duration_s_metadata": 4.204
+  },
+  {
+   "clip": "030_Servido_tradicional_de_café_etíope.webm.mp4",
+   "title": "File:Servido tradicional de café etíope.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Servido_tradicional_de_caf%C3%A9_et%C3%ADope.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Servido_tradicional_de_caf%C3%A9_et%C3%ADope.webm",
+   "license": "CC BY 4.0",
+   "license_url": "https://creativecommons.org/licenses/by/4.0",
+   "artist": "ProtoplasmaKid",
+   "credit": "Own work",
+   "source_sha256": "fc8f69ea5255590445aeeb0255343d9a385f6976befcefd578c0b46941622276",
+   "mp4_sha256": "5bc712017f201945d88497c06c5f10f98f64ae82e7ee4d64ac3174046b96ff7d",
+   "tags_from_metadata": [
+    "pouring",
+    "drink",
+    "person_cup"
+   ],
+   "duration_s_metadata": 5.52
+  },
+  {
+   "clip": "031_How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.we.mp4",
+   "title": "File:How to brew Coffee using the laws of physics - with the Hario Syphon Technica.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.webm",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "Coffee Circle",
+   "credit": "YouTube : How to brew Coffee using the laws of physics - with the Hario Syphon Technica – View/save archived versions on archive.org",
+   "source_sha256": "85c49f236372084fbe95400b8e6686dc76bcab3946bc2907419132196dc61bd5",
+   "mp4_sha256": "59f11ea2a8bb52dffb048f2dd4a1acf8ec2563fde72adab624ab0baa8b4d4608",
+   "tags_from_metadata": [
+    "pouring"
+   ],
+   "duration_s_metadata": 67.061
+  },
+  {
+   "clip": "032_Sugar_falling_into_coffee.webm.mp4",
+   "title": "File:Sugar falling into coffee.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Sugar_falling_into_coffee.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Sugar_falling_into_coffee.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Anselm Schüler",
+   "credit": "Own work",
+   "source_sha256": "960f5eff9d1f7b4f67ce8490b4851414f4ae8d9f03a40c2a4707f0cd1d9970eb",
+   "mp4_sha256": "4909f9e5f80986d84a983ce3d36013ecd3010a7566744f3083acbac373ab5a75",
+   "tags_from_metadata": [
+    "drink",
+    "hero"
+   ],
+   "duration_s_metadata": 17.634
+  },
+  {
+   "clip": "033_Bosnian_coffee_with_rahat_lokum__Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_a.mp4",
+   "title": "File:Bosnian coffee with rahat lokum, Kujundziluk and Old Bridge in Mostar - Bosnia and Herzegovina (2026)-bs.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Bosnian_coffee_with_rahat_lokum,_Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_and_Herzegovina_(2026)-bs.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/82/Bosnian_coffee_with_rahat_lokum%2C_Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_and_Herzegovina_%282026%29-bs.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Minja Klarić",
+   "credit": "Own work",
+   "source_sha256": "951d4e3890e98209525472b9938ced807c931f74629a15fa27a348d06d8aeea7",
+   "mp4_sha256": "60bc85ed40ead12d3e82591ff8051b90fb99c8f8b4417d5b18d4e5dd4ba5153a",
+   "tags_from_metadata": [
+    "drink",
+    "hero",
+    "exterior"
+   ],
+   "duration_s_metadata": 22.666
+  },
+  {
+   "clip": "034_A_cup_of_Kenyan_Coffee.webm.mp4",
+   "title": "File:A cup of Kenyan Coffee.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:A_cup_of_Kenyan_Coffee.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/A_cup_of_Kenyan_Coffee.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Queen Asali",
+   "credit": "Own work",
+   "source_sha256": "8ec9c0b030f6df28fcf48f615b3e89086fd490342f5f1b350f5d61c8e23d3b5c",
+   "mp4_sha256": "fae24314d40df3403c332c01311eacb413afc4a085a4cf4fcc4c8bc3badd66c4",
+   "tags_from_metadata": [
+    "drink",
+    "hero"
+   ],
+   "duration_s_metadata": 4.346
+  },
+  {
+   "clip": "035_Latte_salute.webm.mp4",
+   "title": "File:Latte salute.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Latte_salute.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Latte_salute.webm",
+   "license": "Public domain",
+   "license_url": null,
+   "artist": "Unidentified. Released by the White House.",
+   "credit": "Video posted on the official White House Instagram page",
+   "source_sha256": "7b339f9decba66c0c62f735dcbf36ec9151eab5b8ee858ae230d56679c12844f",
+   "mp4_sha256": "5095fb8bfa3e74e80c41563bd3ff66cd06f4b9d795e330c900b7e28563ea5668",
+   "tags_from_metadata": [
+    "person_cup"
+   ],
+   "duration_s_metadata": 6.571
+  },
+  {
+   "clip": "036_Turkish_tea_2015.webm.mp4",
+   "title": "File:Turkish tea 2015.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Turkish_tea_2015.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/61/Turkish_tea_2015.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Klapi",
+   "credit": "Own work",
+   "source_sha256": "543e11e091325e7ccd868377d9ddebfe81b08167ef0514387a970612609157f1",
+   "mp4_sha256": "6472be1edfd1167939dca55a67c4d4f9cdab09fc2784061dd68d33f67cddf0ee",
+   "tags_from_metadata": [
+    "negative:tea"
+   ],
+   "duration_s_metadata": 12.68
+  },
+  {
+   "clip": "037_Jane_pouring_beer_fast.webm.mp4",
+   "title": "File:Jane pouring beer fast.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Jane_pouring_beer_fast.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Jane_pouring_beer_fast.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "Angulidayaaluta",
+   "credit": "Vimeo : Jane pouring beer fast ( view archived source )",
+   "source_sha256": "65c47e7c65ea76f13a821d5dbdb2379918e043a21a4a4b6a798ef94fe2df18e9",
+   "mp4_sha256": "3d4dd082d116d0c5d1db93b65898711cc4ebec8da9e114330a590d7190ac81d2",
+   "tags_from_metadata": [
+    "negative:beer_pouring"
+   ],
+   "duration_s_metadata": 13.78
+  },
+  {
+   "clip": "038_Turkovich_Family_Wines_-_June_2019_-_Stierch_03.ogv.mp4",
+   "title": "File:Turkovich Family Wines - June 2019 - Stierch 03.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Turkovich_Family_Wines_-_June_2019_-_Stierch_03.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Turkovich_Family_Wines_-_June_2019_-_Stierch_03.ogv",
+   "license": "CC BY 4.0",
+   "license_url": "https://creativecommons.org/licenses/by/4.0",
+   "artist": "Missvain",
+   "credit": "Own work",
+   "source_sha256": "f11ced867aeda0d9594e1f0cb7c3bb1d1565ac34a61ef968890a7ca51911a272",
+   "mp4_sha256": "5b27b3abd1f09b9192ad583563b5d7496c8965e40fafbcf0d4ddac362b4f5301",
+   "tags_from_metadata": [
+    "negative:wine_pouring"
+   ],
+   "duration_s_metadata": 7.43
+  },
+  {
+   "clip": "039_Drinking_glass_symphony.ogv.mp4",
+   "title": "File:Drinking glass symphony.ogv",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Drinking_glass_symphony.ogv",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Drinking_glass_symphony.ogv",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "artist": "IMG 4512",
+   "credit": "Own work",
+   "source_sha256": "3f954b29cdd326129cf98c9d0a86753ab4ba76ecd5c2f618f7e7f80cbaf4d46d",
+   "mp4_sha256": "6cfa644ab4b4dea57feaf63761004ddecc12b2efb14ea537202b4d0a4f2801f7",
+   "tags_from_metadata": [
+    "negative:cups_no_pouring"
+   ],
+   "duration_s_metadata": 25.633
+  },
+  {
+   "clip": "040_Thermochromic_mug.webm.mp4",
+   "title": "File:Thermochromic mug.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Thermochromic_mug.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/89/Thermochromic_mug.webm",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "artist": "The wub",
+   "credit": "Own work",
+   "source_sha256": "c1b76373380d7796697bc9b6db4481c9f24a8aebf2022087a6fa04613942cc10",
+   "mp4_sha256": "fe205893169bd77337eccb90dfc308cfa8f42091818c0d7ac4ef7c70c8fc97d6",
+   "tags_from_metadata": [
+    "negative:hot_water_mug_not_coffee"
+   ],
+   "duration_s_metadata": 34.929
+  },
+  {
+   "clip": "041_Empty_Streets_of_Paris_COVID19.webm.mp4",
+   "title": "File:Empty Streets of Paris COVID19.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Empty_Streets_of_Paris_COVID19.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/88/Empty_Streets_of_Paris_COVID19.webm",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "CreatorsCloud",
+   "credit": "YouTube : https://www.youtube.com/watch?v=pqlFgwSdjW4 – View/save archived versions on archive.org",
+   "source_sha256": "2371d1581171a6e4a886da6fb65637de79caeee3f0183339c81f2a3eaec17089",
+   "mp4_sha256": "bf768c6f19fd6c35e4ae2206b64dd9a92d272a965e5bf58acd950bec6448fcbe",
+   "tags_from_metadata": [
+    "negative:empty_street"
+   ],
+   "duration_s_metadata": 52.619
+  },
+  {
+   "clip": "042_IrishTraditionalMusic-IrishPub-Tokyo-2016-2-24.webm.mp4",
+   "title": "File:IrishTraditionalMusic-IrishPub-Tokyo-2016-2-24.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:IrishTraditionalMusic-IrishPub-Tokyo-2016-2-24.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/IrishTraditionalMusic-IrishPub-Tokyo-2016-2-24.webm",
+   "license": "CC BY 4.0",
+   "license_url": "https://creativecommons.org/licenses/by/4.0",
+   "artist": "Nesnad",
+   "credit": "Own work",
+   "source_sha256": "1f501fd15863be30587c768427dc2957b99247ebe901a36c49abcaaec3f23699",
+   "mp4_sha256": "a337559269bb9496c10b83bbc752728601913e984e2a28103c4ca70fb3b310e7",
+   "tags_from_metadata": [
+    "negative:pub_not_cafe"
+   ],
+   "duration_s_metadata": 20.526
+  },
+  {
+   "clip": "043_Couple_holding_hands.webm.mp4",
+   "title": "File:Couple holding hands.webm",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Couple_holding_hands.webm",
+   "download_url": "https://upload.wikimedia.org/wikipedia/commons/0/00/Couple_holding_hands.webm",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "artist": "https://www.youtube.com/user/Editor",
+   "credit": "YouTube : https://www.youtube.com/watch?v=MhTLFTMdPT0 – View/save archived versions on archive.org",
+   "source_sha256": "726fa7efba143027486bddfbb2420f40284088cfa744df1993f17d7dbeb68b5f",
+   "mp4_sha256": "7f12f48201c578df6a5da71654e854cbb550904ce8b2a947c9822a88f500433d",
+   "tags_from_metadata": [
+    "negative:people_outdoors"
+   ],
+   "duration_s_metadata": 25.104
+  }
+ ]
+}

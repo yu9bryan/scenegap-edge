@@ -40,6 +40,12 @@ def main(base):
         bad += not ok
         rows.append({"clip": fn, "orig_s": round(d0, 2), "mp4_s": round(pr.duration_ms / 1000, 2), "codec": pr.codec,
                      "size": f"{pr.width}x{pr.height}", "ok": ok})
+    old = os.path.join(ROOT, "datasets", "manifests", "transcode_check.json")
+    if os.path.exists(old):                              # keep hand-written explanations for known failures
+        notes = {r["clip"]: r["note"] for r in json.load(open(old, encoding="utf8"))["rows"] if r.get("note")}
+        for r in rows:
+            if r["clip"] in notes:
+                r["note"] = notes[r["clip"]]
     out = {"clips": len(rows), "failed": bad, "rows": rows}
     json.dump(out, open(os.path.join(ROOT, "datasets", "manifests", "transcode_check.json"), "w", encoding="utf8"), ensure_ascii=False, indent=1)
     print(f"{len(rows)} clips, {bad} failed")

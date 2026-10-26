@@ -1,0 +1,359 @@
+{
+ "clips": 44,
+ "failed": 1,
+ "rows": [
+  {
+   "clip": "000_Cadaques_cafe_de_la_habana_2008_august_converted_YAN3.ogv.mp4",
+   "orig_s": 9.32,
+   "mp4_s": 9.3,
+   "codec": "h264",
+   "size": "640x480",
+   "ok": true
+  },
+  {
+   "clip": "001_Vichy_-_Grand_Café__terrasse_sous_la_grêle.ogv.mp4",
+   "orig_s": 10.11,
+   "mp4_s": 10.11,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "002_Merry_X-mas_at_Kranzler.webm.mp4",
+   "orig_s": 23.05,
+   "mp4_s": 23.03,
+   "codec": "h264",
+   "size": "1280x2276",
+   "ok": true
+  },
+  {
+   "clip": "003_Times_Cafe_inflatable_waving_character.webm.mp4",
+   "orig_s": 5.83,
+   "mp4_s": 5.83,
+   "codec": "h264",
+   "size": "1080x1080",
+   "ok": true
+  },
+  {
+   "clip": "004_Rateel_cafe_music2.webm.mp4",
+   "orig_s": 25.83,
+   "mp4_s": 25.8,
+   "codec": "h264",
+   "size": "640x360",
+   "ok": true
+  },
+  {
+   "clip": "005_Starbucks_en_la_aĉetcentro_Kristall__Tjumeno_.webm.mp4",
+   "orig_s": 11.1,
+   "mp4_s": 11.1,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "006_Interior_Paragon_Café_Katoomba.ogv.mp4",
+   "orig_s": 64.32,
+   "mp4_s": 64.32,
+   "codec": "h264",
+   "size": "352x282",
+   "ok": true
+  },
+  {
+   "clip": "007_Café_Lomi__Paris_-_Vimeo.webm.mp4",
+   "orig_s": 78.73,
+   "mp4_s": 78.7,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "008_Operation_Ghost_Stories_-_Video_01.webm.mp4",
+   "orig_s": 85.28,
+   "mp4_s": 85.25,
+   "codec": "h264",
+   "size": "654x480",
+   "ok": true
+  },
+  {
+   "clip": "009_Coffee_Bean___Tea_Leaf_Process.webm.mp4",
+   "orig_s": 44.48,
+   "mp4_s": 44.48,
+   "codec": "h264",
+   "size": "960x540",
+   "ok": true
+  },
+  {
+   "clip": "010__走线客_过境墨西哥_不忘来杯星巴克.webm.mp4",
+   "orig_s": 80.38,
+   "mp4_s": 80.35,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "011_Color_sorter_coffeebeans.webm.mp4",
+   "orig_s": 15.49,
+   "mp4_s": 15.45,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "012_Kaffe_-_Ystad-2024.ogg.mp4",
+   "orig_s": 9.03,
+   "mp4_s": 9.03,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "013_Coffee_from_dan_2.webm.mp4",
+   "orig_s": 12.93,
+   "mp4_s": 12.93,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "014_Traditional_Ethiopian_Coffee_Roasting_Ceremony.webm.mp4",
+   "orig_s": 30.07,
+   "mp4_s": 30.07,
+   "codec": "h264",
+   "size": "576x1024",
+   "ok": true
+  },
+  {
+   "clip": "015_Despulpadora.ogg.mp4",
+   "orig_s": 41.07,
+   "mp4_s": 40.14,
+   "codec": "h264",
+   "size": "1280x726",
+   "ok": true
+  },
+  {
+   "clip": "016_Lions_Almelo_zamelt_koffie_in_voor_Voedselbank.webm.mp4",
+   "orig_s": 89.38,
+   "mp4_s": 89.28,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "017_Sunday_Morning_Espresso_Routine_-_Grind___distribute___tamp___extraction__15-Sec.mp4",
+   "orig_s": 16.12,
+   "mp4_s": 16.08,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "018_Кофемельница_JURA_43.webm.mp4",
+   "orig_s": 99.92,
+   "mp4_s": 99.93,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "019_MoliendoCafeEnLicuadora_ohs02.webm.mp4",
+   "orig_s": 19.51,
+   "mp4_s": 19.45,
+   "codec": "h264",
+   "size": "720x1280",
+   "ok": true
+  },
+  {
+   "clip": "020_Espresso_video.ogv.mp4",
+   "orig_s": 54.34,
+   "mp4_s": 53.79,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "021_Macro_Espresso_Process.webm.mp4",
+   "orig_s": 37.94,
+   "mp4_s": 37.94,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "022_Der_perfekte_Espresso_aus_dem_Siebträger.ogv.mp4",
+   "orig_s": 88.67,
+   "mp4_s": 88.42,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "023_Pour_Over.ogv.mp4",
+   "orig_s": 58.9,
+   "mp4_s": 58.39,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "024_Use_of_a_coffee_press.ogv.mp4",
+   "orig_s": 68.86,
+   "mp4_s": 68.83,
+   "codec": "h264",
+   "size": "480x360",
+   "ok": true
+  },
+  {
+   "clip": "025_Schritt_für_Schritt_-_Kaffeezubereitung_mit_der_Chemex.ogv.mp4",
+   "orig_s": 35.36,
+   "mp4_s": 34.96,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "026_Latte_art_flower_-_01.ogv.mp4",
+   "orig_s": 24.38,
+   "mp4_s": 24.36,
+   "codec": "h264",
+   "size": "720x480",
+   "ok": true
+  },
+  {
+   "clip": "027_Latte_art_leaf_-_01.ogv.mp4",
+   "orig_s": 14.05,
+   "mp4_s": 14.05,
+   "codec": "h264",
+   "size": "720x480",
+   "ok": true
+  },
+  {
+   "clip": "028_Nespresso_machine.ogv.mp4",
+   "orig_s": 44.68,
+   "mp4_s": 41.0,
+   "codec": "h264",
+   "size": "1280x726",
+   "ok": false,
+   "note": "source Theora file has corrupt packets (PyAV: avcodec_send_packet() returned 22); ffmpeg skipped them, so the transcode is 41.0 of 44.7 s with irregular frame times. Labels and evaluation both use this transcode; kept, not counted as ok."
+  },
+  {
+   "clip": "029_A_man_pours_Arabic_coffee.ogv.mp4",
+   "orig_s": 4.2,
+   "mp4_s": 4.2,
+   "codec": "h264",
+   "size": "640x640",
+   "ok": true
+  },
+  {
+   "clip": "030_Servido_tradicional_de_café_etíope.webm.mp4",
+   "orig_s": 5.52,
+   "mp4_s": 5.5,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "031_How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.we.mp4",
+   "orig_s": 67.06,
+   "mp4_s": 67.04,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "032_Sugar_falling_into_coffee.webm.mp4",
+   "orig_s": 17.63,
+   "mp4_s": 17.63,
+   "codec": "h264",
+   "size": "1280x952",
+   "ok": true
+  },
+  {
+   "clip": "033_Bosnian_coffee_with_rahat_lokum__Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_a.mp4",
+   "orig_s": 22.67,
+   "mp4_s": 22.67,
+   "codec": "h264",
+   "size": "478x850",
+   "ok": true
+  },
+  {
+   "clip": "034_A_cup_of_Kenyan_Coffee.webm.mp4",
+   "orig_s": 4.35,
+   "mp4_s": 4.37,
+   "codec": "h264",
+   "size": "1080x1920",
+   "ok": true
+  },
+  {
+   "clip": "035_Latte_salute.webm.mp4",
+   "orig_s": 6.57,
+   "mp4_s": 6.51,
+   "codec": "h264",
+   "size": "640x640",
+   "ok": true
+  },
+  {
+   "clip": "036_Turkish_tea_2015.webm.mp4",
+   "orig_s": 12.68,
+   "mp4_s": 12.68,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "037_Jane_pouring_beer_fast.webm.mp4",
+   "orig_s": 13.78,
+   "mp4_s": 13.67,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "038_Turkovich_Family_Wines_-_June_2019_-_Stierch_03.ogv.mp4",
+   "orig_s": 7.43,
+   "mp4_s": 7.42,
+   "codec": "h264",
+   "size": "1080x1920",
+   "ok": true
+  },
+  {
+   "clip": "039_Drinking_glass_symphony.ogv.mp4",
+   "orig_s": 25.63,
+   "mp4_s": 25.63,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "040_Thermochromic_mug.webm.mp4",
+   "orig_s": 34.93,
+   "mp4_s": 34.92,
+   "codec": "h264",
+   "size": "1080x1080",
+   "ok": true
+  },
+  {
+   "clip": "041_Empty_Streets_of_Paris_COVID19.webm.mp4",
+   "orig_s": 52.62,
+   "mp4_s": 52.56,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "042_IrishTraditionalMusic-IrishPub-Tokyo-2016-2-24.webm.mp4",
+   "orig_s": 20.53,
+   "mp4_s": 20.52,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  },
+  {
+   "clip": "043_Couple_holding_hands.webm.mp4",
+   "orig_s": 25.1,
+   "mp4_s": 25.1,
+   "codec": "h264",
+   "size": "1280x720",
+   "ok": true
+  }
+ ]
+}
