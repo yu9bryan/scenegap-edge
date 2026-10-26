@@ -1,0 +1,74 @@
+{
+ "note": "author-isolation sensitivity: simulated test projects that contain 025 (same authors as dev clip 022) removed; computed from the stored statuses, no rescoring",
+ "projects_kept": 6,
+ "projects_total": 8,
+ "keyword": {
+  "gap_recall": {
+   "k": 27,
+   "n": 31,
+   "p": 0.871,
+   "lo": 0.7115,
+   "hi": 0.9487
+  },
+  "wrong_reshoot": {
+   "k": 13,
+   "n": 35,
+   "p": 0.3714,
+   "lo": 0.2317,
+   "hi": 0.5366
+  },
+  "false_candidate": {
+   "k": 4,
+   "n": 31,
+   "p": 0.129,
+   "lo": 0.0513,
+   "hi": 0.2885
+  }
+ },
+ "single_frame": {
+  "gap_recall": {
+   "k": 0,
+   "n": 31,
+   "p": 0.0,
+   "lo": 0.0,
+   "hi": 0.1103
+  },
+  "wrong_reshoot": {
+   "k": 0,
+   "n": 35,
+   "p": 0.0,
+   "lo": 0.0,
+   "hi": 0.0989
+  },
+  "false_candidate": {
+   "k": 31,
+   "n": 31,
+   "p": 1.0,
+   "lo": 0.8897,
+   "hi": 1.0
+  }
+ },
+ "full": {
+  "gap_recall": {
+   "k": 0,
+   "n": 31,
+   "p": 0.0,
+   "lo": 0.0,
+   "hi": 0.1103
+  },
+  "wrong_reshoot": {
+   "k": 0,
+   "n": 35,
+   "p": 0.0,
+   "lo": 0.0,
+   "hi": 0.0989
+  },
+  "false_candidate": {
+   "k": 24,
+   "n": 31,
+   "p": 0.7742,
+   "lo": 0.6019,
+   "hi": 0.8861
+  }
+ }
+}

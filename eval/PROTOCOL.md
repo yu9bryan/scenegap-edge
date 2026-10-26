@@ -78,3 +78,33 @@ labelling (consistency pass, 19:17) is marked.
   rule R3). Because this applies a stricter reading than the annotators were given, both are reported:
   **primary gold** = agreed + third pass + consistency pass (`gold.json`), used for dev calibration and test;
   **sensitivity gold** = agreed + third pass only (`gold_lenient.json`), scored in the same single test run.
+
+## Stage 1.5: missing-shot verifier and test-2 (added 2026-10-27 00:14, before any test-2 label or score)
+
+Why: on test, missing-shot detection caught 0 of 38 (the CLIP threshold lets almost every shot find something).
+The first test split has been scored and its missing shots are known to us, so it cannot judge a new method.
+
+Method (frozen now, chosen on dev only by `eval/verify_eval.py dev`):
+- The full system runs unchanged. For each shot, its top K = 3 candidates go to a verifier,
+  Qwen2-VL-2B-Instruct (fingerprint `50c2f0ae4c535c51`), which answers "Does this image show <query>?
+  Answer yes or no." for the 3 best-matching frames of each candidate; P(yes) is read from the
+  next-token logits and a candidate's score is the maximum over its frames.
+- A shot is reported `not_found` when no top-K candidate reaches θ = 0.35; otherwise the system's status stays.
+- The question is built from the person-confirmed English query; no per-shot prompt tuning.
+- Dev (20 projects × 8 clips): system alone 5/89 missing shots
+  caught, 0/131 wrong reshoots; with the verifier
+  37/89 caught, 6/131 wrong reshoots.
+  Selection rule: most missing shots caught with wrong reshoots ≤ 5% on dev; ties → higher θ, then smaller K.
+
+Test-2 (new held-out footage):
+- 24 Wikimedia Commons videos not in the first dataset, chosen by `scripts/search_commons.py` from metadata only
+  (search rank over 12 coffee/café terms, licence, 5–120 s, ≤ 80 MB), never from frames.
+- Labels: the same 11 shots and `eval/LABEL_GUIDE.md` rules (including the third-pass rules R1–R8 and the brand
+  rule), two independent AI annotator passes on 1 fps contact sheets, a third pass on every disagreement.
+  Labels are made without access to any system or verifier output. Stored in `eval/labels/test2/`.
+- Scoring: 12 simulated projects × 8 clips (seeds `test2-0` … `test2-11`), run once by
+  `eval/verify_eval.py test2`, which refuses a second run. Same metrics as the first test (missing shots caught,
+  wrong reshoot, couldn't decide, 'found' when absent), plus Hit@5 on the whole test-2 library as ranked by the
+  system and as re-ranked by the verifier.
+- Success criteria, fixed now: wrong reshoot ≤ 5% (PRD 21.5, point estimate) **and** missing shots caught ≥ 30%
+  (at least five times the system alone on dev). Both are reported whatever the outcome.
