@@ -22,6 +22,8 @@ def main():
     ap.add_argument("--host", default="127.0.0.1", help="keep the default; the service is meant for this computer only")
     a = ap.parse_args()
     os.environ["SG_PORT"] = str(a.port)
+    import faulthandler
+    faulthandler.enable()                                    # a native crash (decoder, driver) prints its Python stack
 
     from .api.app import create_app
     from .backends.cpu_clip import ClipReference
