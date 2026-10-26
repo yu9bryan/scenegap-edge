@@ -129,50 +129,68 @@ S.append({"type": "twocol", "section": "Problem", "title": "What works today, an
           "left": {"head": "Shown today (live app, real footage)", "bullets": [
               "Shot list in the crew's words, with rules: length, takes, same frame",
               "Candidate clips with playable evidence on the original timecode",
-              f"Rule checks: {n_rule} controlled cases judged right (slide 11)",
+              f"Rule checks: {n_rule} controlled cases judged right (slide 12)",
               "A person accepts, rejects, or adds the shot to the reshoot list",
               "Demo: 9 Commons clips (5.9 min) analysed in 22 s on a desktop GPU; new footage re-checked file by file"]},
           "right": {"head": "Not shown yet", "bullets": [
-              f"Automatic missing-shot detection: {test['simulation']['full']['gap_recall']['k']} of {test['simulation']['full']['gap_recall']['n']} caught on test (slide 14)",
+              f"Automatic missing-shot detection: {test['simulation']['full']['gap_recall']['k']} of {test['simulation']['full']['gap_recall']['n']} caught on test (slide 15)",
               f"Time saved: no user study yet. Proxy: {rl['candidate_seconds_to_review']:.0f} s of candidate clips to play vs {rl['library_seconds']:.0f} s of footage ({rl['candidate_seconds_to_review'] / rl['library_seconds'] * 100:.0f}%)",
               "UGen300 speed and quality: not run on the device yet",
               "Human-checked labels: current labels are AI-assisted"]},
           "verdict": "SceneGap Edge today is a review assistant that keeps evidence and a person's decision; automation grows only as it is proven."})
-# 5 flow
-S.append({"type": "flow", "section": "Solution", "title": "From your shot list to a decision you can play back",
-          "steps": [{"head": "Write the shot list", "body": "In Chinese, as the crew speaks. A person checks the English search phrase and adds rules.\n\nTest list: 11 shots, each with a minimum length; 1 same-frame, 1 two-takes, 1 manual brand check.", "where": "PC"},
-                    {"head": "Index footage locally", "body": f"Camera cuts, one frame per second on the original timecode, CLIP vectors.\n\nDesktop: {P_GPU[2]:.1f} s per minute of video (GPU), {P_CPU[2]:.1f} s (CPU); decoding is {P_CPU[0] / P_CPU[2] * 100:.0f}–{P_GPU[0] / P_GPU[2] * 100:.0f}%.", "where": "PC today → UGen300"},
-                    {"head": "Check each rule", "body": f"Each rule shows pass, fail or can't tell; failing clips stay visible.\n\nThreshold τ {cal['chosen']['tau']} set on dev; text search over 10,000 segments p95 {P_CPU[4]['search_ms']['p95']:.0f} ms (target ≤ 2 s).", "where": "PC"},
-                    {"head": "A person decides", "body": "Accept, reject with a reason, or add the shot to the reshoot list.\n\nDemo: AI candidate for 10 of 11 shots; a person accepted 5 and sent 3 to reshoot.", "where": "PC"}]})
-# 6 states
+# 5 flow + the four answers
 st_full = Counter(r["status"] for r in test["per_requirement"])
-S.append({"type": "cards", "section": "Solution", "title": "Four AI answers; only a person can mark a shot done",
-          "lead": f"On the 26-clip test library: candidate {st_full.get('candidate', 0)} of 11 shots, partial {st_full.get('partial', 0)}, not found {st_full.get('not_found', 0)}. "
-                  f"In 8 simulated projects, {full_on_gap.get('candidate', 0)} of {sum(gaps.values())} missing shots still got 'candidate'.",
-          "cols": 3, "cards": [
-              {"icon": "FaCheckCircle", "head": "Candidate", "body": "Every rule passes on at least one clip. Still needs a person to accept."},
-              {"icon": "FaAdjust", "head": "Partial", "body": "Something matched but a rule failed or can't be decided: too short, one take of two, a manual check left (SH-10 on test)."},
-              {"icon": "FaSearch", "head": "Not found", "body": "Nothing reached the threshold in the analysed files. Not proof of absence; a reshoot card is suggested."},
-              {"icon": "FaQuestionCircle", "head": "Unverifiable", "body": "Files failed to decode or are missing, so absence cannot be claimed. Fix the scope first."},
-              {"icon": "FaUserCheck", "head": "Person: accepted / rejected", "body": "Bound to the shot's version. Edit the shot and the old decision no longer counts."},
-              {"icon": "FaHistory", "head": "Outdated", "body": "Shot, footage, model or threshold changed since the run. The old answer is hidden, not reused."}]})
-# 7-9 live app
-S.append({"type": "image", "section": "Solution", "title": "Before leaving, the crew sees which shots are confirmed and which need a look",
-          "image": os.path.join(REPO, "docs", "screenshots", "04_coverage.png"),
-          "caption": "Live app on 9 Commons clips (5.9 min, analysed in 22 s on GPU). Decisions were entered as a scripted demo review, not timed.",
-          "side": {"head": "This demo project", "bullets": ["AI candidate: 10 of 11 shots (91%)", "Accepted by a person: 5 of 11 (45%); SH-11 still needs a second take",
-                                                          "Partial: SH-10, the brand check is manual", "Reshoot list: grinder, someone drinking, coffee bag",
-                                                          "Coverage counts only shots a person accepted"]}})
-S.append({"type": "image", "section": "Solution", "title": "Every answer plays its clip, and a person decides",
-          "image": os.path.join(REPO, "docs", "screenshots", "05_evidence.png"),
-          "caption": "SH-05 「咖啡倒入杯中或拉花，連續 3 秒」 (coffee or latte art poured into a cup, 3 s): espresso stream with no cup rejected; latte-art pour accepted. The person checks the action.",
-          "side": {"head": "On this screen", "bullets": ["Ranking score 0.314: orders clips, not a probability", "Length check 24.0 s ≥ 3 s: how long frames stay close to the query",
-                                                       "Reject with a reason; reshoot needs one", "Every decision is logged and can be undone", "Original files are never touched"]}})
-S.append({"type": "image", "section": "Solution", "title": "Shots without a usable clip go on a reshoot list before the crew leaves",
-          "image": os.path.join(REPO, "docs", "screenshots", "06_reshoots.png"),
-          "caption": "The AI still offered candidates for the grinder and someone drinking; a person rejected them and put both, with the coffee bag, on the list.",
-          "side": {"head": "What the crew gets", "bullets": ["3 cards: why it is missing, the closest clip, minimum length", "Status: to decide → reshoot → shooting → done",
-                                                           "Video demo: the reshot clip was analysed alone in 2.5 s and the grinder shot left the list"]}})
+steps = [("1 · Write the shot list", "In Chinese, as the crew speaks; a person checks the English search phrase and adds rules. Test list: 11 shots, each with a minimum length; 1 same-frame, 1 two-takes, 1 manual brand check."),
+         ("2 · Index footage locally", f"Camera cuts, one frame per second on the original timecode, CLIP vectors. Desktop: {P_GPU[2]:.1f} s per minute of video (GPU), {P_CPU[2]:.1f} s (CPU). UGen300 next."),
+         ("3 · Check each rule", f"Pass, fail or can't tell per rule; failing clips stay visible. Threshold τ {cal['chosen']['tau']} set on dev; search over 10,000 segments p95 {P_CPU[4]['search_ms']['p95']:.0f} ms."),
+         ("4 · A person decides", "Accept, reject with a reason, or add to the reshoot list. Only the person's decision counts as done; it is bound to the shot's version.")]
+S.append({"type": "blocks", "section": "Solution", "title": "From your shot list to a decision you can play back",
+          "blocks": [{"kind": "text", "x": i * 3.025, "y": 0, "w": 2.85, "h": 2.3, "head": h_, "text": t_, "fontSize": 12} for i, (h_, t_) in enumerate(steps)]
+                    + [{"kind": "table", "x": 0, "y": 2.5, "w": 11.9, "h": 2.3, "head": "The AI's four answers (a person's decision is stored separately)", "colW": [1.6, 7.0, 3.3], "fontSize": 10.5, "maxRowH": 0.4,
+                        "header": ["AI answer", "Meaning", "On the 26-clip test library"],
+                        "rows": [["Candidate", "Every rule passes on at least one clip; still needs a person to accept", f"{st_full.get('candidate', 0)} of 11 shots"],
+                                 ["Partial", "Something matched but a rule failed or can't be decided (too short, one take of two, a manual check)", f"{st_full.get('partial', 0)} (SH-10, manual brand check)"],
+                                 ["Not found", "Nothing reached the threshold in the analysed files; not proof of absence", f"{st_full.get('not_found', 0)}; {full_on_gap.get('candidate', 0)} of {sum(gaps.values())} missing shots still got 'candidate' (slide 15)"],
+                                 ["Unverifiable", "Files failed to decode or are missing, so absence cannot be claimed", "0"]]}]})
+# 6-8 live app, large
+S.append({"type": "blocks", "section": "Solution", "title": "Before leaving, the crew sees which shots are confirmed",
+          "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 8.75, "h": 4.55, "path": img("shot_cov.png")},
+                     {"kind": "text", "x": 9.0, "y": 0, "w": 2.9, "h": 4.65, "dark": True, "head": "This demo project", "fontSize": 11,
+                      "bullets": ["9 Commons clips, 5.9 min, analysed in 22 s on a desktop GPU", "AI candidate: 10 of 11 shots", "Accepted by a person: 5 of 11 (SH-11 needs a second take)",
+                                  "Partial: SH-10 (manual brand check)", "Reshoot list: grinder, drinking, coffee bag", "Decisions entered as a scripted demo review, not timed"]}],
+          "source": "Live app (Coverage page, cropped). Columns: shot · AI answer · person's decision · reason · clip."})
+S.append({"type": "blocks", "section": "Solution", "title": "Every answer plays its clip, and a person decides",
+          "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 8.4, "h": 4.65, "path": img("shot_evi.png")},
+                     {"kind": "text", "x": 8.65, "y": 0, "w": 3.25, "h": 4.75, "dark": True, "head": "SH-05 on this screen", "fontSize": 11,
+                      "bullets": ["Shot 「咖啡倒入杯中或拉花，連續 3 秒」: coffee or latte art poured, 3 s", "Filmstrip and clip ranges on the original timecode",
+                                  "Ranking score 0.314: orders clips, not a probability", "Length check 24.0 s ≥ 3 s: how long frames stay close to the query",
+                                  "Log: espresso stream with no cup rejected with a reason; latte-art pour accepted; each can be undone"]}],
+          "source": "Live app (clip view, cropped). Original files are never touched."})
+S.append({"type": "blocks", "section": "Solution", "title": "Shots without a usable clip go on the reshoot list",
+          "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 6.0, "h": 4.65, "path": img("shot_res.png")},
+                     {"kind": "text", "x": 6.3, "y": 0, "w": 5.6, "h": 4.75, "dark": True, "head": "What the crew gets", "fontSize": 12,
+                      "bullets": ["One card per shot: why it is missing, the closest clip, minimum length, how it will be checked",
+                                  "The card shows the AI's rules passed; the person decided the clip shows tamping, not grinding",
+                                  "Status: to decide → reshoot → shooting → done / not reshooting",
+                                  "Video demo: the reshot clip was analysed alone in 2.5 s and the grinder shot left the list",
+                                  "In this demo the review stopped at the top 3; the 4th candidate was a valid grinding clip (next page)"]}],
+          "source": "Live app (reshoot list, SH-04 card). Export: CSV / HTML."})
+# 9-10 what the model returns
+S.append({"type": "blocks", "section": "Evidence", "title": "What the model returns: top 5 per shot, checked against labels",
+          "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 9.35, "h": 4.75, "path": img("fig_top5.png")},
+                     {"kind": "text", "x": 9.6, "y": 0, "w": 2.3, "h": 4.8, "head": "Read it as", "fontSize": 10.5,
+                      "bullets": ["SH-05: right clips are in the list, but #1 is wrong", "SH-08: same-frame rule works here (4 of 5)",
+                                  "SH-04: the right clip is 4th; ranking by peak is the fix", "SH-07: nothing to find, yet 5 clips pass: why missing shots go undetected"]}],
+          "source": "Demo project (9 clips); candidates and scores from the live app; right / wrong from eval/labels/gold.json (≥ 0.5 s overlap). decks/scenegap/fig_top5.py."})
+S.append({"type": "blocks", "section": "Evidence", "title": "How the length rule reads the model's scores",
+          "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 7.1, "h": 4.75, "path": img("fig_curves.png")},
+                     {"kind": "text", "x": 7.35, "y": 0, "w": 4.55, "h": 4.8, "head": "What the curves show", "fontSize": 11,
+                      "bullets": ["Street frames score about 0.18; the pour about 0.33, well above τ 0.225",
+                                  "SceneGap samples 1 frame per second: a 4 s pour gives 4 samples, a lower bound of 3.0 s, so it passes the 3 s rule",
+                                  "A 2 s pour gives 1.0 s: too short, correctly",
+                                  "A finished latte scores 0.30 with nothing poured: CLIP sees the result, not the action, so a person checks it",
+                                  "Stage II: denser sampling near the edges and an action check for pour-type shots"]}],
+          "source": "Rule-check cases cut from real Commons footage (eval/rule_check.py); similarity from the same CLIP model at 4 frames/s. decks/scenegap/fig_curves.py."})
 # 10 what each rule checks
 p4 = by_rc.get("pour_4s", {}).get("best_candidate_s")
 S.append({"type": "table", "section": "Evidence", "title": "What each rule actually measures, and what it cannot tell",
@@ -227,7 +245,7 @@ S.append({"type": "blocks", "section": "Evidence", "title": "Right clip in the t
                "bullets": ["Lost SH-03 and SH-04, gained SH-06.",
                            (f"Clip 019 is the right answer for both. On its own it passes every rule ({d3['len_s']:.0f} s and {d4['len_s']:.0f} s runs): the rules did not reject it." if d3 else "Diagnosis pending."),
                            "Runs are ranked by average similarity; single-frame search uses the peak frame. Stage II ranks by peak.",
-                           "A hit needs 0.5 s overlap, so this layer does not test the length rule (slide 11 does)."]},
+                           "A hit needs 0.5 s overlap, so this layer does not test the length rule (slide 12 does)."]},
               {"kind": "chart", "x": 6.5, "y": 0, "w": 5.4, "h": 4.4, "head": "Correct clips in the top 5, per shot (of 5)", "chartType": "BAR", "barDir": "col",
                "labels": [r["requirement_id"] for r in per], "max": 5,
                "series": [{"name": "Single-frame search", "values": [r["single_frame"]["correct"] for r in per]},
@@ -283,18 +301,6 @@ S.append({"type": "blocks", "section": "Hardware", "title": f"Decoding is {dg:.1
                         ["GPU", "0 / 1,800", f"{si['cuda']['frame_work_ms_p95_max']:.1f} ms", str(si['cuda']['load_clips_finished'])]]}],
           "note": f"The model is {mc / tc * 100:.0f}% of the CPU run and {mg / tg * 100:.0f}% of the GPU run. Stage II measures an editing app alone vs with CPU, GPU or UGen300 analysis.",
           "source": "eval/results/perf.json (six short clips, 85 s, ≤ 1280 px, warm model; import and hashing not timed), interference.json (synthetic test pattern, not an editing app)."})
-# 17 engineering
-S.append({"type": "cards", "section": "Engineering", "title": f"{n_tests} automated tests; {tc_status.get('pass', 0)} of {len(tc_rows)} acceptance cases pass",
-          "lead": f"These show the software is reliable, not that the AI is accurate. Other {len(tc_rows) - tc_status.get('pass', 0)}: "
-                  + ", ".join(f"{v} {k.replace('_', ' ')}" for k, v in tc_status.items() if k != "pass") + " (needs a UGen300, a detector, or users).",
-          "cols": 3, "cards": [
-              {"icon": "FaVial", "head": "Media edge cases", "body": "Rotation, 29.97 fps, VFR, start offsets, corrupt and unsupported codecs, files still copying, moved files found again by hash."},
-              {"icon": "FaBalanceScale", "head": "Logic", "body": "'Can't tell' stays 'can't tell'; two short clips never count as one long one; duplicates are not two takes; editing a shot voids old decisions."},
-              {"icon": "FaShieldAlt", "head": "Security", "body": "127.0.0.1 only, per-run token, Origin + Host checks, authorised folders, CSV formula guard, escaped HTML, errors never expose internals."},
-              {"icon": "FaPlug", "head": "Offline", "body": "Core flow tested with outbound sockets blocked. Footage never leaves the computer."},
-              {"icon": "FaHdd", "head": "Failure", "body": "Disk full stops safely and resumes; interrupted jobs resume; originals' hashes unchanged."},
-              {"icon": "FaBoxOpen", "head": "Rebuild", "body": "A fresh venv from the public index passes the test suite; Dockerfile and CI included; Apache-2.0."}],
-          "source": "eval/results/ACCEPTANCE.md lists all 36 cases with the test that covers each (A9)."})
 # 18 market
 S.append({"type": "blocks", "section": "Business", "title": "Who pays first: 1–3 person crews and freelance editors",
           "blocks": [
@@ -343,7 +349,8 @@ S.append({"type": "blocks", "section": "Plan", "title": "Shown today, proven nex
                         ["3 · People", "no study; proxy 38% of footage to play", "3–5 interviews, then 8–12 crews; median task time −30%", "PRD 22.1"],
                         ["4 · UGen300", f"not run; PC harness cos {g1m.get('G1a_median_cos', 0):.4f}, ρ {g1m.get('G1b_median_rho', 0):.5f}",
                          "G1a cos ≥ 0.98, G1b ρ ≥ 0.95, G1e status ≥ 90%; USB speed, power, editing-app load", "MODEL_PLAN §4"],
-                        ["5 · Speed", "search p95 13–14 ms; 2.3 s per minute (GPU)", "first result for a 60 s clip ≤ 45 s, timed end to end", "PRD NFR-05"]]}],
+                        ["5 · Speed", "search p95 13–14 ms; 2.3 s per minute (GPU)", "first result for a 60 s clip ≤ 45 s, timed end to end", "PRD NFR-05"],
+                        ["6 · Software", f"{n_tests} automated tests; {tc_status.get('pass', 0)} of {len(tc_rows)} acceptance cases pass; clean rebuild passes", "the device and user cases (TC-017, 018, 033, 034)", "A9, A12"]]}],
           "note": "Fewer surprises in the edit: a reshoot list made before the crew leaves, with the evidence a person checked."})
 # ---------- appendix ----------
 S.append({"type": "table", "section": "Appendix", "title": "A1 · G1: six checks before the UGen300 replaces the PC model",
@@ -484,6 +491,19 @@ S.append({"type": "table", "section": "Appendix", "title": "A11 · Market and pr
                    ["Creators worldwide", "~50M, ~4% professional", "Goldman Sachs", "partial"]],
           "colW": [3.4, 3.3, 3.6, 1.8], "fontSize": 10,
           "source": "docs/research/BUSINESS_FACTS.md (URLs, access dates and verified flags for every row)."})
+
+# 17 engineering
+S.append({"type": "cards", "section": "Appendix", "title": f"A12 · Engineering: {n_tests} tests; {tc_status.get('pass', 0)} of {len(tc_rows)} acceptance cases pass",
+          "lead": f"These show the software is reliable, not that the AI is accurate. Other {len(tc_rows) - tc_status.get('pass', 0)}: "
+                  + ", ".join(f"{v} {k.replace('_', ' ')}" for k, v in tc_status.items() if k != "pass") + " (needs a UGen300, a detector, or users).",
+          "cols": 3, "cards": [
+              {"icon": "FaVial", "head": "Media edge cases", "body": "Rotation, 29.97 fps, VFR, start offsets, corrupt and unsupported codecs, files still copying, moved files found again by hash."},
+              {"icon": "FaBalanceScale", "head": "Logic", "body": "'Can't tell' stays 'can't tell'; two short clips never count as one long one; duplicates are not two takes; editing a shot voids old decisions."},
+              {"icon": "FaShieldAlt", "head": "Security", "body": "127.0.0.1 only, per-run token, Origin + Host checks, authorised folders, CSV formula guard, escaped HTML, errors never expose internals."},
+              {"icon": "FaPlug", "head": "Offline", "body": "Core flow tested with outbound sockets blocked. Footage never leaves the computer."},
+              {"icon": "FaHdd", "head": "Failure", "body": "Disk full stops safely and resumes; interrupted jobs resume; originals' hashes unchanged."},
+              {"icon": "FaBoxOpen", "head": "Rebuild", "body": "A fresh venv from the public index passes the test suite; Dockerfile and CI included; Apache-2.0."}],
+          "source": "eval/results/ACCEPTANCE.md lists all 36 cases with the test that covers each (A9)."})
 
 spec = {"title": "SceneGap Edge – Stage I proposal", "short": "SceneGap Edge · Stage I", "team": "[Team name]", "slides": S}
 json.dump(spec, open(OUT, "w", encoding="utf8"), ensure_ascii=False, indent=1)

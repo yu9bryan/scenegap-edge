@@ -1,5 +1,5 @@
 """Full-resolution screenshots of the live SceneGap app on the real Commons demo project."""
-import json, sys, time
+import json, os, sys, time
 from playwright.sync_api import sync_playwright
 OUT = sys.argv[1]; PID = json.load(open("F:/sg_data/_demo/demo_project.json"))["pid"]
 W, H = (int(sys.argv[2]), int(sys.argv[3])) if len(sys.argv) > 3 else (1440, 900)
@@ -8,7 +8,7 @@ SHOTS = [("01_home", "#/home", 0), ("02_shotlist", "#/requirements/SH-05", 0), (
          ("05_evidence", "#/evidence/SH-05/1", 0), ("05b_evidence_history", "#/evidence/SH-05/1", "決定紀錄"), ("06_reshoots", "#/board", 0), ("07_device", "#/device", 0)]
 with sync_playwright() as p:
     b = p.chromium.launch(channel="msedge")
-    pg = b.new_page(viewport={"width": W, "height": H})
+    pg = b.new_page(viewport={"width": W, "height": H}, device_scale_factor=float(os.environ.get("SG_DSF", "1")))
     pg.goto("http://127.0.0.1:8765/")
     pg.evaluate(f"localStorage.setItem('sg.pid', JSON.stringify('{PID}'))")
     pg.reload(); pg.wait_for_load_state('networkidle'); time.sleep(3)
