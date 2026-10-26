@@ -17,7 +17,7 @@ from dataclasses import asdict
 
 import numpy as np
 
-from .domain.coverage import AssetIndex, Sample, candidates_for, coverage, human_confirmed, requirement_status
+from .domain.coverage import AssetIndex, RequirementOutcome, Sample, candidates_for, coverage, human_confirmed, requirement_status
 from .domain.models import AutoStatus, Capability, Constraint, Decision, Interval, Requirement, ReviewDecision, STATUS_TEXT_ZH, Verdict
 from .domain.reshoot import cards
 from .media.probe import MediaError, is_stable, probe, sha256_file
@@ -32,6 +32,8 @@ DEFAULTS = {
     "top_k": 5,
     "semantic_threshold": None,   # must be calibrated on the dev split; None refuses to run (PRD 13.4)
     "stable_wait_s": 0.5,
+    # second-stage check of the top candidates (eval/PROTOCOL.md, Stage 1.5); off unless enabled
+    "verifier": {"enabled": False, "k": 3, "theta": 0.35, "frames": 3},
 }
 
 
@@ -60,13 +62,15 @@ def req_from_dict(d: dict) -> Requirement:
 
 
 class SceneGap:
-    def __init__(self, workdir: str, backend_factory=None, config: dict | None = None):
+    def __init__(self, workdir: str, backend_factory=None, config: dict | None = None, verifier_factory=None):
         self.workdir = os.path.abspath(workdir)
         self.db = DB(os.path.join(self.workdir, "scenegap.db"))
         self.cache = os.path.join(self.workdir, "cache")
         self.cfg = {**DEFAULTS, **(config or {})}
         self._backend_factory = backend_factory
         self._backend = None
+        self._verifier_factory = verifier_factory
+        self._verifier = None
         self._lock = threading.Lock()
         self.cancel_flags: set[str] = set()
 
@@ -82,8 +86,43 @@ class SceneGap:
                     self._backend = self._backend_factory()
             return self._backend
 
+    @property
+    def verifier(self):
+        """The candidate verifier, or None when it is switched off."""
+        if not self.cfg["verifier"].get("enabled"):
+            return None
+        with self._lock:
+            if self._verifier is None:
+                if self._verifier_factory is None:
+                    from .backends.vlm_verify import VlmVerifier
+                    self._verifier = VlmVerifier()
+                else:
+                    self._verifier = self._verifier_factory()
+            return self._verifier
+
+    def _verify(self, r, o, assets):
+        """P(yes) for the top-k candidates; a shot with none confirmed becomes not_found (reason VERIFIER_NO)."""
+        from .backends.vlm_verify import frame_at, question_for
+        v, vc = self.verifier, self.cfg["verifier"]
+        by_id = {a.asset_id: a for a in assets}
+        q = question_for(r.query_en)
+        qs = [x for x in self._queries(r)]
+        ps = []
+        for c in o.candidates[:vc["k"]]:
+            seg, ai = c.segment, by_id.get(c.segment.asset_id)
+            inside = [x for x in (ai.samples if ai else []) if seg.interval.start_ms <= x.t_ms < seg.interval.end_ms and x.shot_index == seg.shot_index]
+            inside = inside or (sorted(ai.samples, key=lambda x: abs(x.t_ms - seg.interval.start_ms))[:1] if ai else [])
+            best = sorted(inside, key=lambda x: -min(x.sims.get(k, 0.0) for k in qs))[:vc["frames"]]
+            path = self.asset_path(seg.asset_id)
+            ps.append(max((v.p_yes(frame_at(path, x.t_ms) if path else (seg.asset_id, x.t_ms), q) for x in best), default=0.0))
+        o.verify_p = [round(x, 4) for x in ps]
+        if o.status in (AutoStatus.CANDIDATE, AutoStatus.PARTIAL) and ps and max(ps) < vc["theta"]:
+            o = RequirementOutcome(r, AutoStatus.NOT_FOUND, o.candidates, ["VERIFIER_NO"], o.scope_complete)
+            o.verify_p = [round(x, 4) for x in ps]
+        return o
+
     def config_hash(self) -> str:
-        keep = {k: self.cfg[k] for k in ("sample_every_ms", "densify_step_ms", "top_k", "semantic_threshold")}
+        keep = {k: self.cfg[k] for k in ("sample_every_ms", "densify_step_ms", "top_k", "semantic_threshold", "verifier")}
         return hashlib.sha256(json.dumps(keep, sort_keys=True).encode()).hexdigest()[:12]
 
     def tau(self) -> float | None:
@@ -384,6 +423,9 @@ class SceneGap:
                 break
             assets, _ = self._asset_indexes(pid, queries)
         outcomes = {r.requirement_id: requirement_status(r, assets, candidates_for(r, assets, tau, self.cfg["top_k"])) for r in reqs}
+        if self.verifier is not None:
+            outcomes = {rid: (self._verify(next(r for r in reqs if r.requirement_id == rid), o, assets) if o.candidates else o)
+                        for rid, o in outcomes.items()}
         decisions = self.decisions(pid)
         cov = coverage(reqs, outcomes, decisions, assets)
         result = {"outcomes": {k: self._outcome_dict(o) for k, o in outcomes.items()},
@@ -408,7 +450,8 @@ class SceneGap:
     @staticmethod
     def _outcome_dict(o) -> dict:
         st = o.status.value if hasattr(o.status, "value") else o.status
-        return {"status": st, "status_zh": STATUS_TEXT_ZH.get(st, st), "reasons": o.reasons, "scope_complete": o.scope_complete,
+        vp = getattr(o, "verify_p", None)
+        return {"status": st, "status_zh": STATUS_TEXT_ZH.get(st, st), "reasons": o.reasons, "scope_complete": o.scope_complete, "verify_p": vp,
                 "revision": o.requirement.revision,
                 "candidates": [{"asset_id": c.segment.asset_id, "asset_sha256": c.segment.asset_sha256, "shot": c.segment.shot_index,
                                 "start_ms": c.segment.interval.start_ms, "end_ms": c.segment.interval.end_ms,
@@ -509,10 +552,17 @@ class SceneGap:
             outs.append(RequirementOutcome(r, AutoStatus(st) if st != "draft" else st, [], o["reasons"], o["scope_complete"]))
         req_rows = self.db.all("SELECT requirement_id, revision, reason FROM reshoot_requests WHERE project_id=?", (pid,))
         human = {x["requirement_id"]: x["reason"] for x in req_rows if reqs.get(x["requirement_id"]) and reqs[x["requirement_id"]].revision == x["revision"]}
+        decs = self.decisions(pid)
         out = []
         for c in cards(outs, confirmed, human):
             d = c.to_dict()
             best = res["outcomes"][c.requirement_id]["candidates"]
+            # how many candidates a person has looked at: a reshoot asked for before all are checked may be premature
+            mine = [x for x in decs if x.requirement_id == c.requirement_id and x.requirement_revision == c.requirement_revision]
+            seen = sum(1 for b in best if any(x.asset_sha256 == b["asset_sha256"] and x.interval.overlaps(Interval(b["start_ms"], max(b["end_ms"], b["start_ms"] + 1)))
+                                              for x in mine))
+            d["candidates_total"], d["candidates_reviewed"] = len(best), seen
+            d["review_incomplete"] = c.kind == "reshoot_requested" and seen < len(best)
             if best:
                 b = best[0]
                 d["best_candidate"] = {"asset_id": b["asset_id"], "start_ms": b["start_ms"], "end_ms": b["end_ms"],

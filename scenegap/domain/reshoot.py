@@ -12,6 +12,7 @@ REASON_ZH = {
     "QUALITY_WARNING": "畫面偏模糊", "NEEDS_MANUAL": "有條件要人工確認", "EVIDENCE_UNKNOWN": "片段不足",
     "TAKES_SHORT": "Take 數不夠", "SCOPE_INCOMPLETE": "還有素材沒分析完", "UNSUPPORTED_CORE": "這個版本還不支援此條件",
     "ANALYSIS_FAILED": "分析失敗", "NOT_ANALYZED": "尚未分析", "NO_ASSETS": "還沒加入素材", "CONSTRAINT_FAILED": "條件不符",
+    "VERIFIER_NO": "前幾名候選都沒被確認（AI 確認層），可能沒拍到",
 }
 
 

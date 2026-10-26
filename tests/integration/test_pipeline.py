@@ -329,6 +329,13 @@ def test_person_can_request_reshoot_for_a_candidate(tmp_path, media):
     svc.request_reshoot(pid, "SH-101", 1, "畫面太暗，品牌看不清")
     cards = svc.reshoot_cards(pid)
     assert [c["kind"] for c in cards] == ["reshoot_requested"] and "HUMAN_REQUESTED" in cards[0]["reasons"]
+    # asked before looking at any candidate: the card says the review is not finished
+    total = cards[0]["candidates_total"]
+    assert total >= 1 and cards[0]["candidates_reviewed"] == 0 and cards[0]["review_incomplete"]
+    for c in svc.compute_run(pid)["outcomes"]["SH-101"]["candidates"]:
+        svc.review(pid, "SH-101", 1, c["asset_id"], c["start_ms"], c["end_ms"], "rejected", "not usable")
+    card = svc.reshoot_cards(pid)[0]
+    assert card["candidates_reviewed"] == total and not card["review_incomplete"]
     svc.set_requirement(pid, {**RED, "min_duration_ms": 2500}, expected_revision=1)
     svc.compute_run(pid)
     assert svc.reshoot_cards(pid) == []                       # the request was bound to revision 1
@@ -343,3 +350,21 @@ def test_concurrent_reads_do_not_mix_rows(tmp_path, media):
     with ThreadPoolExecutor(16) as ex:
         paths = list(ex.map(lambda i: svc.asset_path(ids[i % len(ids)]), range(600)))
     assert all(p and os.path.isfile(p) for p in paths)
+
+
+def test_verifier_turns_unconfirmed_candidates_into_not_found(tmp_path, media):
+    from scenegap.backends.vlm_verify import MockVerifier
+    for p, want in ((0.9, "candidate"), (0.1, "not_found")):
+        be = MockColorBackend()
+        svc = SceneGap(str(tmp_path / f"v{p}"), lambda: be, {"semantic_threshold": {be.manifest.fingerprint: 0.5},
+                                                            "verifier": {"enabled": True, "k": 3, "theta": 0.35, "frames": 3}},
+                       verifier_factory=lambda: MockVerifier(p))
+        pid = svc.create_project("verify")
+        rid = svc.add_root(pid, str(media))
+        svc.set_requirement(pid, RED)
+        svc.import_assets(pid, rid, ["two_shots.mp4"])
+        svc.analyze_assets(pid)
+        o = svc.compute_run(pid)["outcomes"]["SH-101"]
+        assert o["status"] == want and o["verify_p"] and len(o["verify_p"]) <= 3
+        if want == "not_found":
+            assert o["reasons"] == ["VERIFIER_NO"] and o["candidates"]      # candidates stay visible for a person

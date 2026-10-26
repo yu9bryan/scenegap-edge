@@ -128,7 +128,7 @@
     NO_CANDIDATE: '已分析的素材裡沒找到', DURATION_SHORT: '長度不夠', DURATION_UNKNOWN: '長度無法確認',
     QUALITY_WARNING: '品質警示', NEEDS_MANUAL: '有條件要人工確認', EVIDENCE_UNKNOWN: '證據不足',
     TAKES_SHORT: 'Take 數不夠', SCOPE_INCOMPLETE: '還有素材沒分析完', UNSUPPORTED_CORE: '目前版本還不支援這個條件',
-    ANALYSIS_FAILED: '分析失敗', NOT_ANALYZED: '尚未分析', NO_ASSETS: '尚未加入素材', CONSTRAINT_FAILED: '條件不符',
+    ANALYSIS_FAILED: '分析失敗', NOT_ANALYZED: '尚未分析', NO_ASSETS: '尚未加入素材', CONSTRAINT_FAILED: '條件不符', VERIFIER_NO: '前幾名候選都沒被確認（AI 確認層），可能沒拍到',
   };
   const ASSET_ST = {
     pending: { zh: '待分析', icon: 'dashed', tone: 'slate' },
@@ -1530,6 +1530,13 @@
       cand ? h('div', { class: 'score', title: '僅供排序，不是機率' },
         h('div', null, h('div', { class: 's-l' }, '排序分數'), h('div', { class: 'faint small' }, '僅供排序，不是機率')),
         h('div', { class: 's-v num' }, Number(cand.ranking_score).toFixed(3))) : null,
+      (() => {                                             // second-stage check, when it ran for this candidate
+        const vp = row.auto && row.auto.verify_p, i = cand && row.auto ? (row.auto.candidates || []).indexOf(cand) : -1;
+        if (!vp || i < 0 || i >= vp.length) return null;
+        return h('div', { class: 'score', title: 'AI 確認層：小型視覺語言模型回答「畫面裡是不是這個鏡頭」' },
+          h('div', null, h('div', { class: 's-l' }, 'AI 確認層'), h('div', { class: 'faint small' }, '回答「是」的機率，前 ' + vp.length + ' 名候選會被檢查')),
+          h('div', { class: 's-v num' }, Number(vp[i]).toFixed(2)));
+      })(),
       conds.length ? h('div', null, conds.map((x) => {
         const v = VERDICT[x.verdict] || VERDICT.unknown;
         return h('div', { class: 'cond' }, icon(v.icon, v.cls), h('div', null,
@@ -1657,6 +1664,10 @@
     return h('article', { class: 'card', 'aria-label': c.requirement_id + ' ' + c.source_text },
       h('div', { class: 'card-top' }, h('span', { class: 'id mono faint' }, c.requirement_id), h('span', { class: 'src' }, c.source_text), stBox),
       h('div', { class: 'chips' }, (c.reasons || []).map((code, i) => h('span', { class: 'reason', title: code }, icon('info'), (c.reasons_zh && c.reasons_zh[i]) || REASON_ZH[code] || code))),
+      c.candidates_total != null ? h('div', { class: 'small', style: 'margin:6px 0' },
+        '已檢查 ' + c.candidates_reviewed + '／' + c.candidates_total + ' 個候選',
+        c.review_incomplete ? h('span', { class: 'reason', style: 'margin-left:8px' }, icon('alert'),
+          '還有 ' + (c.candidates_total - c.candidates_reviewed) + ' 個候選沒看，先看完再決定補拍') : null) : null,
       b ? h('div', { class: 'best' }, thumb(b.asset_id, b.start_ms, c.source_text + ' 的最佳候選'),
         h('div', null, h('div', { class: 'small' }, '最佳候選 ', h('span', { class: 'mono' }, fmtTime(b.start_ms) + '–' + fmtTime(b.end_ms))),
           b.shortfalls && b.shortfalls.length ? h('ul', { class: 'shortfalls' }, b.shortfalls.map((s) => h('li', null, s))) : h('div', { class: 'faint small' }, 'AI 判斷條件都通過。')))

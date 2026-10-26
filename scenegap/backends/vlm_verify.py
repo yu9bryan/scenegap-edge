@@ -52,15 +52,29 @@ class VlmVerifier:
         return float(self.torch.sigmoid(y - n))
 
 
+def frame_at(path: str, t_ms: int):
+    """One RGB frame at t_ms (original timestamps), decoded with PyAV."""
+    import av
+    with av.open(path) as c:
+        st = c.streams.video[0]
+        c.seek(int(t_ms / 1000 / st.time_base), stream=st, backward=True)
+        last = None
+        for f in c.decode(st):
+            last = f
+            if f.time is not None and f.time * 1000 >= t_ms - 1:
+                break
+        return last.to_image() if last is not None else None
+
+
 class MockVerifier:
-    """Test double: answers from a dict {(asset_or_path, t_ms): p}, default 0."""
+    """Test double: the same P(yes) for every frame."""
     name = "mock-verifier"
     fingerprint = "mock"
 
-    def __init__(self, table=None):
-        self.table = table or {}
+    def __init__(self, p: float = 0.0):
+        self.p = p
         self.calls = 0
 
     def p_yes(self, image, question: str) -> float:
         self.calls += 1
-        return float(self.table.get(image, 0.0))
+        return self.p
