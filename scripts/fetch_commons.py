@@ -65,6 +65,24 @@ def safe_name(title: str) -> str:
     return keep[:80]
 
 
+def transcode(ff, src, dst, tmp_dir, tries=2):
+    """Transcode through ASCII temp names (ffmpeg crashed on one non-ASCII path) and rename only on success,
+    so a crash never leaves a half-written clip behind."""
+    import shutil
+    os.makedirs(tmp_dir, exist_ok=True)
+    t_in, t_out = os.path.join(tmp_dir, "in" + os.path.splitext(src)[1]), os.path.join(tmp_dir, "out.mp4")
+    shutil.copyfile(src, t_in)
+    for _ in range(tries):
+        r = subprocess.run([ff, "-hide_banner", "-loglevel", "error", "-y", "-i", t_in, "-an", "-vf", "scale='min(1280,iw)':-2",
+                            "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p", "-movflags", "+faststart", t_out],
+                           timeout=900, shell=False)
+        if r.returncode == 0 and os.path.getsize(t_out) > 0:
+            os.replace(t_out, dst)
+            os.remove(t_in)
+            return True
+    return False
+
+
 def write_manifest(path, clips):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     json.dump({"source": "Wikimedia Commons", "built": time.strftime("%Y-%m-%d"), "transcode": "H.264 yuv420p CRF23, <=1280 px, no audio",
@@ -83,7 +101,7 @@ def main():
     os.makedirs(orig_dir, exist_ok=True)
     os.makedirs(mp4_dir, exist_ok=True)
     ff = ffmpeg_exe()
-    out, total = [], 0
+    out, total, failed = [], 0, []
     for i, c in enumerate(cands):
         if not license_ok(c.get("license")):
             print("skip licence", c["title"], c.get("license"))
@@ -99,10 +117,10 @@ def main():
             time.sleep(8)                         # be polite to the Commons servers
         total += os.path.getsize(src) / 1e6
         dst = os.path.join(mp4_dir, name + ".mp4")
-        if not os.path.exists(dst):
-            subprocess.run([ff, "-hide_banner", "-loglevel", "error", "-y", "-i", src, "-an", "-vf", "scale='min(1280,iw)':-2",
-                            "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p", "-movflags", "+faststart", dst],
-                           check=True, timeout=600, shell=False)
+        if not os.path.exists(dst) and not transcode(ff, src, dst, os.path.join(a.out_dir, "_tmp")):
+            print("skip transcode failed", c["title"], flush=True)
+            failed.append(c["title"])
+            continue
         out.append({"clip": name + ".mp4", "title": c["title"], "page_url": c["page_url"], "download_url": c["download_url"],
                     "license": c.get("license"), "license_url": c.get("license_url"), "artist": c.get("artist"), "credit": c.get("credit"),
                     "source_sha256": sha256(src), "mp4_sha256": sha256(dst), "tags_from_metadata": c.get("tags", []),
@@ -110,6 +128,8 @@ def main():
         print(f"{len(out):02d} {name} {os.path.getsize(src)/1e6:.1f} MB", flush=True)
         write_manifest(a.manifest, out)                  # after every clip, so an interrupted run keeps its record
     write_manifest(a.manifest, out)
+    if failed:
+        print("transcode failed:", failed)
     print("clips", len(out), "MB", round(total, 1))
 
 
