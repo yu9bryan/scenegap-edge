@@ -112,7 +112,7 @@ def merge(A, B, index, adj, brand=None, consistency=None):
                  "pair_agreement": round(agree_iv / n, 4), "sample_level": {**tp, "observed": round(po, 4), "cohen_kappa": round(kappa, 4)},
                  "per_requirement": per_req, "third_pass_decisions": len(adj),
                  "consistency_pass": {"checked": len(consistency or []), "removed": len(drop)}}
-    lab = os.path.join(HERE, "labels")
+    lab = os.environ.get("SG_LABEL_DIR", os.path.join(HERE, "labels"))   # test-2 writes to eval/labels/test2
     json.dump(gold, open(os.path.join(lab, "gold.json"), "w", encoding="utf8"), ensure_ascii=False, indent=1)
     json.dump(agreement, open(os.path.join(lab, "agreement.json"), "w", encoding="utf8"), indent=1)
     print(json.dumps({k: v for k, v in agreement.items() if k != "per_requirement"}))

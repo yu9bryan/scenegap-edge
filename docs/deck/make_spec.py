@@ -110,18 +110,15 @@ S.append({"type": "story", "section": "Problem", "title": "The missing shot is f
           "source": "Day rates: PRO360 quote statistics (TW), Film Lifestyle mid-level rates (US); docs/research/BUSINESS_FACTS.md."})
 # 3 existing tools
 S.append({"type": "table", "section": "Problem", "title": "Existing tools find footage; SceneGap adds shot-list rules, evidence and reshoot tracking",
-          "header": ["Tool (limits)", "Finds the moment in a clip", "Shot-list rules", "Runs locally", "Price (USD)"],
-          "rows": [["Premiere Pro media intelligence (English-only search)", "yes, In/Out range", "not in official docs", "yes, on device", "$22.99/mo*"],
-                   ["DaVinci Resolve 21 IntelliSearch (open project only)", "visual: whole clips", "not in official docs", "not stated", "$295 one-time"],
-                   ["Final Cut Pro 12 visual search (Apple silicon, US English)", "yes", "not in official docs", "not stated", "$299.99 or $129/yr"],
-                   ["Frame.io semantic search (Team/Enterprise, beta)", "yes, subclip marks", "not in official docs", "no (cloud)", "$25/member/mo"],
-                   ["Jumper (plug-ins for 4 editors)", "yes, In/Out", "not in official docs", "yes, offline after setup", "from $49/mo*"],
-                   ["Axle AI FOCUS (on-premise media asset manager)", "not stated", "not in official docs", "yes, on-premise", "$2,995–28,995/yr"],
-                   ["invideo AI script supervisor", "not stated", "done / pending only", "no (upload)", "not listed"],
-                   ["SceneGap Edge", "yes, original timecode", "length, takes, same frame; a person decides", "yes", "core free; bundle to test"]],
-          "colW": [3.9, 2.0, 2.4, 1.8, 2.0], "highlightRow": 7, "fontSize": 10.5,
+          "header": ["Tool", "Finds the moment in a clip", "Shot-list rules (length, takes, same frame)", "Runs locally"],
+          "rows": [["Premiere Pro media intelligence", "yes, In/Out range", "not in official docs", "yes, on device"],
+                   ["DaVinci Resolve 21 IntelliSearch", "visual search: whole clips", "not in official docs", "not stated"],
+                   ["Final Cut Pro 12 visual search", "yes", "not in official docs", "not stated"],
+                   ["invideo AI script supervisor", "not stated", "done / pending only", "no (upload)"],
+                   ["SceneGap Edge", "yes, original timecode", "checked per rule; a person decides", "yes"]],
+          "colW": [3.4, 2.6, 3.6, 2.5], "highlightRow": 4, "fontSize": 13,
           "note": "The difference is the workflow around search: shot list → rules → evidence → a person's decision → reshoot list → re-check.",
-          "source": "Vendor documentation, accessed 2026-10-26; * vendor price page not readable at access. Sources and verified flags: A11, docs/research/BUSINESS_FACTS.md."})
+          "source": "Vendor documentation, accessed 2026-10-26 (Adobe media intelligence FAQ and others). More tools and prices: A11."})
 # 4 status
 n_rule = f"{rule['correct']} of {rule['cases']}" if rule else "pending"
 rl = test["review_load"]
@@ -162,7 +159,7 @@ S.append({"type": "blocks", "section": "Solution", "title": "Before leaving, the
 S.append({"type": "blocks", "section": "Solution", "title": "Every answer plays its clip, and a person decides",
           "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 8.4, "h": 4.65, "path": img("shot_evi.png")},
                      {"kind": "text", "x": 8.65, "y": 0, "w": 3.25, "h": 4.75, "dark": True, "head": "SH-05 on this screen", "fontSize": 11,
-                      "bullets": ["Shot 「咖啡倒入杯中或拉花，連續 3 秒」: coffee or latte art poured, 3 s", "Filmstrip and clip ranges on the original timecode",
+                      "bullets": ["Shot 「咖啡倒入杯中或拉花，連續 3 秒」 as committed before any frame was seen (eval/requirements.json, 10/26 18:09)", "Filmstrip and clip ranges on the original timecode",
                                   "Ranking score 0.314: orders clips, not a probability", "Length check 24.0 s ≥ 3 s: how long frames stay close to the query",
                                   "Log: espresso stream with no cup rejected with a reason; latte-art pour accepted; each can be undone"]}],
           "source": "Live app (clip view, cropped). Original files are never touched."})
@@ -173,7 +170,8 @@ S.append({"type": "blocks", "section": "Solution", "title": "Shots without a usa
                                   "The card shows the AI's rules passed; the person decided the clip shows tamping, not grinding",
                                   "Status: to decide → reshoot → shooting → done / not reshooting",
                                   "Video demo: the reshot clip was analysed alone in 2.5 s and the grinder shot left the list",
-                                  "In this demo the review stopped at the top 3; the 4th candidate was a valid grinding clip (next page)"]}],
+                                  "The demo review stopped at the top 3; the 4th candidate was a valid grinding clip (next page)",
+                                  "Fixed: the card now shows how many candidates a person checked (已檢查 3／5) and warns when some are unchecked"]}],
           "source": "Live app (reshoot list, SH-04 card). Export: CSV / HTML."})
 # 9-10 what the model returns
 S.append({"type": "blocks", "section": "Evidence", "title": "What the model returns: top 5 per shot, checked against labels",
@@ -205,12 +203,12 @@ S.append({"type": "table", "section": "Evidence", "title": "What each rule actua
           "note": "Dense sampling gives more observations, not certainty: a clip that looks like pouring is still checked by a person."})
 # 11 rule check
 if rule:
-    S.append({"type": "table", "section": "Evidence", "title": f"Rule check on real footage: {rule['correct']} of {rule['cases']} cases right; misses are a finished latte and a re-encoded copy",
+    S.append({"type": "table", "section": "Evidence", "title": f"Rule check: {rule['correct']} of {rule['cases']} right; both misses are false acceptances",
               "header": ["Case (real Commons footage, cut to a known answer)", "Should", "SceneGap", "Measured run (s)", "Files / takes", "Right?"],
               "rows": [[f"{r['shot']} · {r['tests']}", r["expected"], ("pass" if r["passed"] else "not pass") + (f" ({', '.join(x.lower() for x in r['reasons'])})" if r["reasons"] else ""),
                         "—" if r["best_candidate_s"] is None else f"{r['best_candidate_s']:.1f}", f"{r['files']} / {r['takes_seen']}", "yes" if r["correct"] else "NO"] for r in rule["rows"]],
               "colW": [4.9, 1.1, 2.6, 1.3, 1.1, 0.8], "fontSize": 9.5,
-              "source": "SH-05 pour ≥ 3 s · SH-08 two people in a café, same frame, ≥ 2 s · SH-11 barista, 2 takes ≥ 3 s. CLIP sees a finished latte as 'pouring'; takes are told apart by file hash. eval/rule_check.py, frozen threshold."})
+              "source": "Open: an action check (a finished latte passes as 'pouring') and re-encoded-take dedup. Such passes stay 'candidate, a person confirms', never done. eval/rule_check.py, frozen threshold."})
 # 12 method, data and labels
 S.append({"type": "blocks", "section": "Evidence", "title": "How we tested: fixed protocol, open footage, AI-assisted labels",
           "lead": "Protocol and the 11 shots committed before any label; threshold set on dev only; test scored once. Every file below is in the repo.",
@@ -221,7 +219,7 @@ S.append({"type": "blocks", "section": "Evidence", "title": "How we tested: fixe
                         ["Test", f"{test_n} clips, {test_min:.1f} min: scored once"],
                         ["Distractors", f"{len(no_gold)} of {len(man['clips'])} clips contain none of the 11 shots"],
                         ["Licences", ", ".join(f"{k} {v}" for k, v in lic.most_common())],
-                        ["Split note", "one author pair crosses the split (022 dev, 025 test); found after scoring"]]},
+                        ["Split note", "one author pair crosses (022 dev, 025 test); without the 2 projects holding 025, SceneGap still catches 0/31"]]},
               {"kind": "table", "x": 6.1, "y": 0, "w": 5.8, "h": 3.85, "head": "Labels", "colW": [1.7, 4.1], "fontSize": 10.5, "header": ["Item", "Value"],
                "rows": [["Labellers", "two independent AI sessions on 1 fps sheets; an AI third pass"],
                         ["Agreement", f"{agr['pairs_agreeing_iou_ge_0.5_or_both_empty']}/{agr['clip_requirement_pairs']} clip × shot pairs ({agr['pair_agreement'] * 100:.1f}%); κ {s['cohen_kappa']:.3f} over {s['a'] + s['b'] + s['ab'] + s['none']:,} frame samples"],
@@ -229,7 +227,7 @@ S.append({"type": "blocks", "section": "Evidence", "title": "How we tested: fixe
                         ["Consistency pass", f"{agr['consistency_pass']['removed']} of {agr['consistency_pass']['checked']} agreed positives removed after labelling ({cons_by.get('SH-11', 0)} were SH-11)"],
                         ["Lenient labels", "restoring them leaves SceneGap unchanged (7/11, 18/55)"],
                         ["Threshold", f"τ {chosen['tau']}: dev F1 {chosen['f1']:.3f}, frame precision {prec_t * 100:.1f}%, recall {rec_t * 100:.1f}%"]]}],
-          "note": "Human-checked labels on the original video are the first Stage II task; details in A5–A7."})
+          "note": "Simulated projects reuse the same clips, so they are not independent shoots. Human-checked labels on the original video come next; details in A5–A7."})
 # 13 retrieval
 rt = test["retrieval"]
 per = test["per_requirement"]
@@ -271,7 +269,7 @@ S.append({"type": "blocks", "section": "Evidence", "title": "Finding missing sho
                            f"Why: at τ {chosen['tau']} only {prec_t * 100:.0f}% of frames above the threshold show the shot, so almost every shot finds something."]},
               {"kind": "table", "x": 6.9, "y": 0, "w": 5.0, "h": 3.9, "colW": [1.6, 1.15, 1.15, 1.1], "fontSize": 9.5, "maxRowH": 0.5, "head": "Dev only, after the test (not used to rescore)",
                "header": ["Score", "Missing caught", "Wrong reshoot", "'Found' when absent"], "rows": dev_tab}],
-          "note": "Stage II target (PRD 21.5): wrong reshoot ≤ 5%. Best dev point inside it today: 18% of missing shots (margin 0.02). Per-shot thresholds next."})
+          "note": "Target (PRD 21.5): wrong reshoot ≤ 5%. Inside it on dev: margin 0.0075, 11/89 caught at 0/131. Margin 0.02 gives 16/89 at 7/131 = 5.3%, just over."})
 # 15 hardware
 S.append({"type": "blocks", "section": "Hardware", "title": "Plan: the image half of CLIP on the UGen300; the PC keeps the rest",
           "blocks": [
@@ -284,7 +282,7 @@ S.append({"type": "blocks", "section": "Hardware", "title": "Plan: the image hal
 dc, mc, tc, fc, bc = P_CPU
 dg, mg, tg, fg, bg = P_GPU
 si = inter["summary"]
-S.append({"type": "blocks", "section": "Hardware", "title": f"Decoding is {dg:.1f} of the {tg:.1f} s per minute; the UGen300 would free the GPU or a laptop CPU, not shorten the run",
+S.append({"type": "blocks", "section": "Hardware", "title": f"Measured: decoding is {dg:.1f} of the {tg:.1f} s per minute; a UGen300 would free the GPU or a laptop CPU",
           "blocks": [
               {"kind": "chart", "x": 0, "y": 0, "w": 5.2, "h": 4.3, "head": "Seconds per minute of video (desktop)", "chartType": "BAR", "barDir": "col", "grouping": "stacked",
                "labels": ["CPU", "RTX 4080 GPU"], "series": [{"name": "Decode + sample", "values": [round(dc, 2), round(dg, 2)]}, {"name": "Model (CLIP image)", "values": [round(mc, 2), round(mg, 2)]}],
@@ -302,7 +300,7 @@ S.append({"type": "blocks", "section": "Hardware", "title": f"Decoding is {dg:.1
           "note": f"The model is {mc / tc * 100:.0f}% of the CPU run and {mg / tg * 100:.0f}% of the GPU run. Stage II measures an editing app alone vs with CPU, GPU or UGen300 analysis.",
           "source": "eval/results/perf.json (six short clips, 85 s, ≤ 1280 px, warm model; import and hashing not timed), interference.json (synthetic test pattern, not an editing app)."})
 # 18 market
-S.append({"type": "blocks", "section": "Business", "title": "Who pays first: 1–3 person crews and freelance editors",
+S.append({"type": "blocks", "section": "Business", "title": "Sourced: who pays first is 1–3 person crews and freelance editors",
           "blocks": [
               {"kind": "chart", "x": 0, "y": 0, "w": 5.3, "h": 4.3, "head": "US floor (BLS OOH, 2025)", "chartType": "BAR", "barDir": "bar",
                "labels": ["Openings per year", "Self-employed (35%)", "Editors + camera operators"], "series": [{"name": "people", "values": [5600, 25200, 72000]}],
@@ -317,7 +315,7 @@ S.append({"type": "blocks", "section": "Business", "title": "Who pays first: 1�
                "text": "BLS is a floor: it leaves out YouTubers and in-house marketing staff. Worldwide, ~50M creators and ~4% professional (Goldman Sachs, partly verified)."}],
           "source": "US BLS OOH accessed 2026-10-26 (39,400 editors + 32,600 camera operators; 35% self-employed; ~5,600 openings a year); self-employed split is our arithmetic. Day rates per videographer."})
 # 19 value and price
-S.append({"type": "blocks", "section": "Business", "title": "One avoided reshoot day pays for the bundle 5–10 times",
+S.append({"type": "blocks", "section": "Business", "title": "Hypothesis: one prevented reshoot could offset the device cost",
           "blocks": [
               {"kind": "table", "x": 0, "y": 0, "w": 6.7, "h": 3.0, "head": "Value = hours saved × hourly cost + reshoot avoided − tool cost", "colW": [2.2, 2.6, 1.9], "fontSize": 9.5, "maxRowH": 0.4,
                "header": ["Term", "Value used", "Status"],
@@ -334,7 +332,7 @@ S.append({"type": "blocks", "section": "Business", "title": "One avoided reshoot
                "series": [{"name": "USD", "values": [588, 300, 299.99, 299.99, 295, 276, 180, 129]}], "format": "$#,##0", "colors": ["6C4CF5"]},
               {"kind": "text", "x": 7.0, "y": 3.45, "w": 4.9, "h": 0.9, "fontSize": 9.5,
                "text": "Open core: the Apache-2.0 checker is free. Paid: a tested UGen300 bundle (installer, driver versions, device-checked model, support) and shot-list templates. Axle FOCUS: $2,995+/yr."}],
-          "note": "Today only the person's review avoids a reshoot (automatic detection 0/38); planned pickups are not savings.",
+          "note": "Device price only: the on-site computer, setup, upkeep and the person's time are extra. Test it: two groups check one card, by hand vs with SceneGap.",
           "source": "BUSINESS_FACTS.md §1c, §2, §4; * vendor page not readable at access. Yearly = 12 × monthly list price."})
 # 20 closing scorecard
 g1m = g1["metrics"] if g1 else {}
@@ -366,6 +364,15 @@ S.append({"type": "table", "section": "Appendix", "title": "A1 · G1: six checks
           "colW": [1.1, 5.1, 3.4, 2.5], "fontSize": 11,
           "note": "Vendor: Hailo-10H ViT-B/32 image encoder, CIFAR-100 zero-shot 65.3 float → 64.5 on chip (PCIe, not USB).",
           "source": "docs/MODEL_PLAN.md §2, §4; eval/results/g1_selfcheck.json; Hailo Model Zoo (vendor figures)."})
+S.append({"type": "table", "section": "Appendix", "title": "A1b · After G1: product-level checks on the device",
+          "header": ["Check", "What it protects against", "Status"],
+          "rows": [["Status agreement, UGen300 vs PC, on dev projects", "quantisation causing more false acceptances", "not run yet"],
+                   ["USB end-to-end analysis time for a 60 s clip", "a device that is fast in the zoo but slow over USB", "not run yet"],
+                   ["Editing-app playback and scrubbing with analysis on the device", "claiming host relief without measuring it", "not run yet"],
+                   ["Whole-system extra power (meter at the wall)", "quoting 2.5 W as the system's cost", "not run yet"],
+                   ["Missing shots caught and wrong reshoots on new footage, verifier on the device", "the product effect, not just matching vectors", "not run yet"]],
+          "colW": [4.6, 4.9, 2.6], "fontSize": 12,
+          "note": "Model agreement (G1) is necessary, not sufficient: the product effect is measured on new footage."})
 S.append({"type": "table", "section": "Appendix", "title": "A2 · What could break, and what we do then",
           "header": ["Risk", "Fallback"],
           "rows": [["HEF fails G1 (quantisation hurts ranking)", "Recalibrate with dev frames; TinyCLIP; else ship the CPU/GPU version and say so"],
