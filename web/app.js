@@ -987,6 +987,9 @@
         tableBox.replaceChildren(fresh.length ? assetTable(fresh, filter, () => render())
           : empty('film', '還沒加入素材，現在無法判斷缺哪些鏡頭。', '這個資料夾裡沒有可匯入的影片，請確認路徑或副檔名。'));
         await loadProject();
+        const nNew = (r.accepted || []).filter((x) => !x.duplicate_of).length;
+        toast({ kind: 'ok', title: '已匯入 ' + nNew + ' 支影片', text: (r.rejected || []).length ? '另有 ' + r.rejected.length + ' 支無法匯入，原因列在下表。' : '可以開始分析了。' });
+        render();                                    // re-render so the analyse button sees the new assets
       } catch (e) { importOut.replaceChildren(); showError(e, '匯入失敗'); }
     };
     const roots = proj.roots || [];
