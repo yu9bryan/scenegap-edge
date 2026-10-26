@@ -249,6 +249,10 @@ class SceneGap:
                 self.db.x("UPDATE assets SET status='missing', error_code='ASSET_MISSING' WHERE asset_id=?", (a["asset_id"],))
                 failed += 1
                 continue
+            if self._load_index(a["sha256"]) is not None:       # same content + same model already indexed: reuse
+                self.db.x("UPDATE assets SET status='analyzed', error_code=NULL, error_msg=NULL WHERE asset_id=?", (a["asset_id"],))
+                done += 1
+                continue
             self.db.x("UPDATE assets SET status='analyzing' WHERE asset_id=?", (a["asset_id"],))
             try:
                 rot = json.loads(a["probe"])["rotation"] if a["probe"] else 0
@@ -395,7 +399,7 @@ class SceneGap:
         outdated = revs != cur_revs or scope != cur_scope or run["model_fingerprint"] != self.backend.manifest.fingerprint \
             or run["config_hash"] != self.config_hash()
         decisions = self.decisions(pid)
-        shas = {a["sha256"] for a in self.assets(pid) if a["status"] != "excluded"}
+        shas = {a["sha256"]: a["capture_id"] for a in self.assets(pid) if a["status"] != "excluded"}
         rows = []
         for r in reqs:
             o = res["outcomes"].get(r.requirement_id)
@@ -418,7 +422,7 @@ class SceneGap:
     def decisions(self, pid: str) -> list[ReviewDecision]:
         return [ReviewDecision(d["requirement_id"], d["revision"], d["asset_sha"], Interval(d["start_ms"], d["end_ms"]),
                                Decision(d["decision"]), d["reason"] or "", d["source"], d["actor"], d["ts"])
-                for d in self.db.all("SELECT * FROM decisions WHERE project_id=? ORDER BY ts", (pid,))]
+                for d in self.db.all("SELECT * FROM decisions WHERE project_id=? ORDER BY ts, rowid", (pid,))]
 
     def review(self, pid: str, requirement_id: str, revision: int, asset_id: str, start_ms: int, end_ms: int,
                decision: str, reason: str = "", source: str = "model", actor: str = "local-user") -> str:
@@ -446,7 +450,7 @@ class SceneGap:
             return []
         reqs = {r.requirement_id: r for r in self.requirements(pid)}
         res = json.loads(run["result"])
-        shas = {a["sha256"] for a in self.assets(pid) if a["status"] != "excluded"}
+        shas = {a["sha256"]: a["capture_id"] for a in self.assets(pid) if a["status"] != "excluded"}
         confirmed = {rid for rid, r in reqs.items() if human_confirmed(r, self.decisions(pid), shas)[0]}
         from .domain.coverage import RequirementOutcome
         outs = []

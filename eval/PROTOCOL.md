@@ -54,3 +54,6 @@ Follows PRD ch. 21–24. Everything here is fixed before labels are produced and
 - Matching a candidate to gold: the candidate's interval is its conservative lower-bound interval, widened to at
   least one sampling period (1 s) around its start, because a single passing sample has a lower bound of ~0 ms.
   A match needs ≥ 0.5 s overlap with a gold interval of the same requirement in the same clip.
+- Crop policy (added the same day, before labels): CLIP's default centre crop drops about 44% of a 16:9 frame's
+  width. Both `center-crop` and `pad-square` (letterbox) are calibrated on dev; the one with the higher dev F1 is
+  frozen (ties keep `center-crop`). The choice is part of `preprocess_id` and therefore of the model fingerprint.

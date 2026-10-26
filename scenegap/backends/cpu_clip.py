@@ -12,10 +12,21 @@ import numpy as np
 from .base import Backend, ModelManifest
 
 MODEL_ID = os.environ.get("SG_CLIP_MODEL", "openai/clip-vit-base-patch32")
+CROPS = ("center-crop", "pad-square")       # center-crop drops ~44% of a 16:9 frame's width; pad-square keeps all of it
+
+
+def pad_square(img):
+    """Letterbox to a square on CLIP's mean colour so the whole 16:9 frame reaches the encoder."""
+    from PIL import Image
+    w, h = img.size
+    side = max(w, h)
+    canvas = Image.new("RGB", (side, side), (122, 116, 104))
+    canvas.paste(img.convert("RGB"), ((side - w) // 2, (side - h) // 2))
+    return canvas
 
 
 class ClipReference(Backend):
-    def __init__(self, device: str | None = None, batch: int = 32):
+    def __init__(self, device: str | None = None, batch: int = 32, crop: str | None = None):
         import torch
         import transformers
         from transformers import CLIPModel, CLIPProcessor
@@ -25,12 +36,15 @@ class ClipReference(Backend):
         self.model = CLIPModel.from_pretrained(MODEL_ID).to(self.device).eval()
         self.proc = CLIPProcessor.from_pretrained(MODEL_ID)
         self.batch = batch
+        self.crop = crop or os.environ.get("SG_CLIP_CROP", "center-crop")
+        if self.crop not in CROPS:
+            raise ValueError(f"crop must be one of {CROPS}")
         rev = getattr(self.model.config, "_commit_hash", None) or "unknown"
         dim = int(self.model.config.projection_dim)
         self.manifest = ModelManifest(
             model_id=MODEL_ID, version=str(rev), purpose="image-text retrieval", target_arch=self.device,
             interface="transformers", input_size=int(self.model.config.vision_config.image_size), embedding_dimension=dim,
-            paired_text_encoder=MODEL_ID, preprocess_id="clip-processor-default", quantization="fp32",
+            paired_text_encoder=MODEL_ID, preprocess_id=f"clip-processor-default+{self.crop}", quantization="fp32",
             artifact_sha256=None, license_reference="MIT (OpenAI CLIP)", runtime_version=f"torch {torch.__version__}; transformers {transformers.__version__}",
             compatibility_verified=False)
 
@@ -38,7 +52,10 @@ class ClipReference(Backend):
         outs = []
         with self.torch.no_grad():
             for i in range(0, len(images), self.batch):
-                px = self.proc(images=images[i:i + self.batch], return_tensors="pt")["pixel_values"].to(self.device)
+                chunk = images[i:i + self.batch]
+                if self.crop == "pad-square":
+                    chunk = [pad_square(im) for im in chunk]
+                px = self.proc(images=chunk, return_tensors="pt")["pixel_values"].to(self.device)
                 f = self.model.get_image_features(pixel_values=px)
                 f = getattr(f, "pooler_output", f)
                 outs.append(self.torch.nn.functional.normalize(f.float(), dim=-1).cpu().numpy())

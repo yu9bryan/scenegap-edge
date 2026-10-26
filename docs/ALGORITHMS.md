@@ -150,7 +150,11 @@ constraint is added.
 
 The candidate's `overall` is the three-valued AND (`domain/logic.py`) over the **hard** constraints:
 any FAIL gives FAIL; all PASS gives PASS; anything else, including an empty list, gives UNKNOWN. UNKNOWN is
-never treated as PASS. Soft constraints are reported but do not affect `overall`. `NOT` exists in
+never treated as PASS. Soft constraints are reported but do not affect `overall`. As a result, a
+requirement with any **hard** MANUAL constraint (action, readable text, composition) can never get
+`overall = PASS`, so it never becomes `candidate` and never counts towards `ai_candidate` coverage. It stays
+`partial` [`NEEDS_MANUAL`] until a person accepts a segment. This is intended (ADR-004), but the UI has to
+explain it. `NOT` exists in
 `logic.py` and returns UNKNOWN unless the negative-evidence scope is complete. No constraint uses it yet.
 
 ### 3.5 Ranking and de-duplication

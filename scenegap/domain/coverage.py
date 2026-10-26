@@ -182,12 +182,19 @@ def requirement_status(req: Requirement, assets: list[AssetIndex], cands: list[C
     return RequirementOutcome(req, AutoStatus.NOT_FOUND, [], ["NO_CANDIDATE"], complete)
 
 
-def human_confirmed(req: Requirement, decisions: list[ReviewDecision], asset_shas: set[str]) -> tuple[bool, bool]:
-    """(confirmed, by_exception). Only decisions bound to the current revision and to assets still in scope count."""
-    valid = [d for d in decisions if d.requirement_id == req.requirement_id and d.requirement_revision == req.revision
-             and d.asset_sha256 in asset_shas and d.decision in (Decision.ACCEPTED, Decision.OVERRIDDEN)
+def human_confirmed(req: Requirement, decisions: list[ReviewDecision], asset_shas) -> tuple[bool, bool]:
+    """(confirmed, by_exception). Only decisions bound to the current revision and to assets still in scope count.
+    Decisions are applied in order: a later decision on the same segment replaces an earlier one, so an accept that
+    was later rejected no longer counts. `asset_shas` is a set of in-scope sha256, or a dict sha256 -> capture_id so
+    takes are counted by capture the same way as the automatic count."""
+    latest: dict[tuple, ReviewDecision] = {}
+    for d in decisions:
+        if d.requirement_id == req.requirement_id and d.requirement_revision == req.revision and d.asset_sha256 in asset_shas:
+            latest[(d.asset_sha256, d.interval.start_ms, d.interval.end_ms)] = d
+    valid = [d for d in latest.values() if d.decision in (Decision.ACCEPTED, Decision.OVERRIDDEN)
              and (d.decision is not Decision.OVERRIDDEN or d.reason.strip())]
-    takes = {(d.asset_sha256) for d in valid}
+    cap = asset_shas if isinstance(asset_shas, dict) else {}
+    takes = {cap.get(d.asset_sha256, d.asset_sha256) for d in valid}
     ok = len(takes) >= max(1, req.min_takes)
     return ok, ok and any(d.decision is Decision.OVERRIDDEN for d in valid)
 
@@ -205,7 +212,7 @@ def coverage(reqs: list[Requirement], outcomes: dict[str, RequirementOutcome], d
              assets: list[AssetIndex]) -> Coverage:
     active = [r for r in reqs if r.active_required]
     denom = sum(r.weight for r in active)
-    shas = {a.sha256 for a in assets if a.status != "excluded"}
+    shas = {a.sha256: a.capture_id for a in assets if a.status != "excluded"}
     hc = sum(r.weight for r in active if human_confirmed(r, decisions, shas)[0])
     ai = sum(r.weight for r in active if outcomes.get(r.requirement_id) and outcomes[r.requirement_id].status == AutoStatus.CANDIDATE)
     incl = [a for a in assets if a.status != "excluded"]

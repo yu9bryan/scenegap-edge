@@ -184,3 +184,15 @@ def test_reshoot_cards_only_confirmed_and_review_first_TC027():
     assert [c for c in cs if c.requirement_id == "SH-012"][0].kind == "reshoot_proposed"
     for c in cs:
         assert c.source_text and c.handles == "未指定"                      # nothing invented
+
+
+def test_later_rejection_cancels_accept_and_takes_count_by_capture():
+    from scenegap.domain.coverage import human_confirmed
+    from scenegap.domain.models import Decision, Interval, Requirement, ReviewDecision
+    r = Requirement("SH-9", 1, "x", "x", True, 1, 0, 2, [], True)
+    acc_a = ReviewDecision("SH-9", 1, "sha_a", Interval(0, 1000), Decision.ACCEPTED)
+    acc_b = ReviewDecision("SH-9", 1, "sha_b", Interval(0, 1000), Decision.ACCEPTED)
+    assert human_confirmed(r, [acc_a, acc_b], {"sha_a", "sha_b"})[0]
+    assert not human_confirmed(r, [acc_a, acc_b], {"sha_a": "take1", "sha_b": "take1"})[0]   # proxy of the same take
+    rej_a = ReviewDecision("SH-9", 1, "sha_a", Interval(0, 1000), Decision.REJECTED)
+    assert not human_confirmed(r, [acc_a, acc_b, rej_a], {"sha_a", "sha_b"})[0]
