@@ -185,45 +185,31 @@ def test(a):
     svc.cfg["semantic_threshold"] = {be.manifest.fingerprint: tau}
     byid = {r["requirement_id"]: r for r in reqs}
 
-    # retrieval over the whole test library
+    # 1) system outputs, computed once (they do not depend on any label)
     pid, amap, _ = build_project(svc, a.mp4, test_clips, "test-library")
     set_requirements(svc, pid, reqs)
     run = svc.compute_run(pid)
     R = svc.requirements(pid)
     queries = sorted({q for r in R for q in svc._queries(r)})
     assets, _ = svc._asset_indexes(pid, queries)
-    per_req, retr = [], {m: {"hit": 0, "den": 0, "good": 0, "ret": 0} for m in ("keyword", "single_frame", "full")}
+    outputs = {}
     for r in R:
         rid = r.requirement_id
-        has_gold = any(gold_intervals(gold, c, rid) for c in test_clips)
-        full = [(amap[c["asset_id"]], *cand_window_s(c["start_ms"], c["end_ms"])) for c in run["outcomes"][rid]["candidates"]]
-        sf = [(c, t0 / 1000, t1 / 1000) for c, t0, t1 in single_frame(assets, amap, r, tau)]
-        kw = [(c, 0.0, 1e9) for c in keyword_hits(clips, test_clips, byid[rid])[:5]]
-        row = {"requirement_id": rid, "query_en": r.query_en, "gold_clips": sum(1 for c in test_clips if gold_intervals(gold, c, rid)),
-               "status": run["outcomes"][rid]["status"], "reasons": run["outcomes"][rid]["reasons"]}
-        for m, lst in (("keyword", kw), ("single_frame", sf), ("full", full)):
-            ok = [matches(gold, c, rid, s, e) for c, s, e in lst]
-            retr[m]["ret"] += len(ok)
-            retr[m]["good"] += sum(ok)
-            if has_gold:
-                retr[m]["den"] += 1
-                retr[m]["hit"] += int(any(ok))
-            row[m] = {"returned": len(ok), "correct": sum(ok)}
-        per_req.append(row)
-    lib_s = sum(a["duration_ms"] for a in svc.assets(pid)) / 1000
+        outputs[rid] = {"full": [(amap[c["asset_id"]], *cand_window_s(c["start_ms"], c["end_ms"])) for c in run["outcomes"][rid]["candidates"]],
+                        "single_frame": [(c, t0 / 1000, t1 / 1000) for c, t0, t1 in single_frame(assets, amap, r, tau)],
+                        "keyword": [(c, 0.0, 1e9) for c in keyword_hits(clips, test_clips, byid[rid])[:5]],
+                        "status": run["outcomes"][rid]["status"], "reasons": run["outcomes"][rid]["reasons"], "query_en": r.query_en,
+                        "min_s": (r.min_duration_ms or 0) / 1000}
+    lib_s = sum(x["duration_ms"] for x in svc.assets(pid)) / 1000
     shown_s = sum(min(c["end_ms"] - c["start_ms"], 10000) / 1000 if c["end_ms"] - c["start_ms"] >= 1000 else 1.0
                   for r in R for c in run["outcomes"][r.requirement_id]["candidates"])
     review_load = {"library_seconds": round(lib_s, 1), "requirements": len(R), "full_watch_seconds": round(lib_s, 1),
                    "candidate_seconds_to_review": round(shown_s, 1),
                    "note": "proxy only: footage seconds a person would play (each candidate counted at its lower-bound length, "
                            "at least 1 s, at most 10 s) versus watching the library once; not a user-time measurement"}
-    retrieval = {m: {"recall_at_5": wilson(v["hit"], v["den"]), "precision_at_5": wilson(v["good"], v["ret"])} for m, v in retr.items()}
-
-    # project simulation
     rng_clips = sorted(test_clips)
     k = max(3, min(8, len(rng_clips) // 2))
-    sim = {m: {"gap_hit": 0, "gaps": 0, "wrong_reshoot": 0, "avail": 0, "unknown": 0, "false_candidate": 0, "total": 0} for m in ("keyword", "single_frame", "full")}
-    projects = []
+    sims = []
     for i in range(N_PROJECTS):
         sub = random.Random(f"{PROJECT_SEED}-{i}").sample(rng_clips, k)
         ppid, pmap, _ = build_project(svc, a.mp4, sub, f"sim-{i}")
@@ -231,36 +217,66 @@ def test(a):
         prun = svc.compute_run(ppid)
         PR = svc.requirements(ppid)
         passets, _ = svc._asset_indexes(ppid, sorted({q for r in PR for q in svc._queries(r)}))
-        prow = {"clips": sub, "requirements": {}}
-        for r in PR:
-            rid = r.requirement_id
-            av = available(gold, sub, rid, (r.min_duration_ms or 0) / 1000)
-            st = {"full": prun["outcomes"][rid]["status"],
-                  "single_frame": "candidate" if single_frame(passets, pmap, r, tau, 1) else "not_found",
-                  "keyword": "candidate" if keyword_hits(clips, sub, byid[rid]) else "not_found"}
-            prow["requirements"][rid] = {"available": av, **st}
-            for m, s in st.items():
-                v = sim[m]
-                v["total"] += 1
-                v["unknown"] += int(s in ("partial", "unverifiable"))
-                if av:
-                    v["avail"] += 1
-                    v["wrong_reshoot"] += int(s == "not_found")
-                else:
-                    v["gaps"] += 1
-                    v["gap_hit"] += int(s == "not_found")
-                    v["false_candidate"] += int(s == "candidate")
-        projects.append(prow)
-    simulation = {m: {"gap_recall": wilson(v["gap_hit"], v["gaps"]), "wrong_reshoot_rate": wilson(v["wrong_reshoot"], v["avail"]),
-                      "unknown_rate": wilson(v["unknown"], v["total"]), "false_candidate_rate": wilson(v["false_candidate"], v["gaps"]),
-                      "false_ready_rate": "N/A (no automatic completion; human confirmation required)"} for m, v in sim.items()}
+        sims.append({"clips": sub, "status": {r.requirement_id: {
+            "full": prun["outcomes"][r.requirement_id]["status"],
+            "single_frame": "candidate" if single_frame(passets, pmap, r, tau, 1) else "not_found",
+            "keyword": "candidate" if keyword_hits(clips, sub, byid[r.requirement_id]) else "not_found"} for r in PR}})
+
+    # 2) score the same outputs against each gold set (primary first)
+    def score(g):
+        per_req, retr = [], {m: {"hit": 0, "den": 0, "good": 0, "ret": 0} for m in ("keyword", "single_frame", "full")}
+        for rid, o in outputs.items():
+            has_gold = any(gold_intervals(g, c, rid) for c in test_clips)
+            row = {"requirement_id": rid, "query_en": o["query_en"], "gold_clips": sum(1 for c in test_clips if gold_intervals(g, c, rid)),
+                   "status": o["status"], "reasons": o["reasons"]}
+            for m in ("keyword", "single_frame", "full"):
+                ok = [matches(g, c, rid, st, en) for c, st, en in o[m]]
+                retr[m]["ret"] += len(ok)
+                retr[m]["good"] += sum(ok)
+                if has_gold:
+                    retr[m]["den"] += 1
+                    retr[m]["hit"] += int(any(ok))
+                row[m] = {"returned": len(ok), "correct": sum(ok)}
+            per_req.append(row)
+        retrieval = {m: {"recall_at_5": wilson(v["hit"], v["den"]), "precision_at_5": wilson(v["good"], v["ret"])} for m, v in retr.items()}
+        sim = {m: {"gap_hit": 0, "gaps": 0, "wrong_reshoot": 0, "avail": 0, "unknown": 0, "false_candidate": 0, "total": 0} for m in ("keyword", "single_frame", "full")}
+        projects = []
+        for pr in sims:
+            prow = {"clips": pr["clips"], "requirements": {}}
+            for rid, st in pr["status"].items():
+                av = available(g, pr["clips"], rid, outputs[rid]["min_s"])
+                prow["requirements"][rid] = {"available": av, **st}
+                for m, s_ in st.items():
+                    v = sim[m]
+                    v["total"] += 1
+                    v["unknown"] += int(s_ in ("partial", "unverifiable"))
+                    if av:
+                        v["avail"] += 1
+                        v["wrong_reshoot"] += int(s_ == "not_found")
+                    else:
+                        v["gaps"] += 1
+                        v["gap_hit"] += int(s_ == "not_found")
+                        v["false_candidate"] += int(s_ == "candidate")
+            projects.append(prow)
+        simulation = {m: {"gap_recall": wilson(v["gap_hit"], v["gaps"]), "wrong_reshoot_rate": wilson(v["wrong_reshoot"], v["avail"]),
+                          "unknown_rate": wilson(v["unknown"], v["total"]), "false_candidate_rate": wilson(v["false_candidate"], v["gaps"]),
+                          "false_ready_rate": "N/A (no automatic completion; human confirmation required)"} for m, v in sim.items()}
+        return {"retrieval": retrieval, "per_requirement": per_req, "simulation": simulation, "projects": projects}
+
+    primary = score(gold)
+    lenient_p = os.environ.get("SG_EVAL_GOLD_LENIENT", os.path.join(HERE, "labels", "gold_lenient.json"))
+    sensitivity = score(json.load(open(lenient_p, encoding="utf8"))) if os.path.exists(lenient_p) else None
     out = {"tau": tau, "crop": cal["crop"], "fingerprint": cal["fingerprint"], "backend": be.name, "test_clips": test_clips, "project_size": k,
-           "retrieval": retrieval, "review_load": review_load, "per_requirement": per_req, "simulation": simulation, "projects": projects,
+           **primary, "review_load": review_load,
+           "sensitivity_lenient_gold": sensitivity and {k_: sensitivity[k_] for k_ in ("retrieval", "simulation")},
            "scored_at": time.strftime("%Y-%m-%d %H:%M:%S"), "note": "CPU/GPU reference backend; no NPU result exists."}
     json.dump(out, open(out_p, "w", encoding="utf8"), ensure_ascii=False, indent=1)
-    for m in ("keyword", "single_frame", "full"):
-        print(m, "R@5", retrieval[m]["recall_at_5"], "P@5", retrieval[m]["precision_at_5"])
-        print("   ", {kk: (vv["p"] if isinstance(vv, dict) else vv) for kk, vv in simulation[m].items()})
+    for name, res in (("primary", primary), ("lenient", sensitivity)):
+        if not res:
+            continue
+        for m in ("keyword", "single_frame", "full"):
+            print(name, m, "R@5", res["retrieval"][m]["recall_at_5"], "P@5", res["retrieval"][m]["precision_at_5"])
+            print("   ", {kk: (vv["p"] if isinstance(vv, dict) else vv) for kk, vv in res["simulation"][m].items()})
 
 
 # ---------------- performance ----------------

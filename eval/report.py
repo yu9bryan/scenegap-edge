@@ -30,7 +30,8 @@ def main():
         L += ["## Labels", "",
               f"- Two independent annotators, then a third pass on every disagreement ({agr['third_pass_decisions']} decisions).",
               f"- Clip × requirement pairs agreeing (interval IoU ≥ 0.5 or both empty): {agr['pairs_agreeing_iou_ge_0.5_or_both_empty']}/{agr['clip_requirement_pairs']} "
-              f"({agr['pair_agreement'] * 100:.0f}%). Sample-level Cohen's κ = {agr['sample_level']['cohen_kappa']}.", ""]
+              f"({agr['pair_agreement'] * 100:.0f}%). Sample-level Cohen's κ = {agr['sample_level']['cohen_kappa']}.",
+              f"- Consistency pass: {agr['consistency_pass']['removed']} of {agr['consistency_pass']['checked']} agreed positives removed under the third-pass rules (primary gold); the lenient gold keeps them.", ""]
     if cal:
         L += ["## Calibration (dev only)", "",
               f"- Crop policy frozen: `{cal['crop']}`; τ = {cal['chosen']['tau']} (dev sample-level F1 {cal['chosen']['f1']}, "
@@ -52,6 +53,12 @@ def main():
         for m in ("keyword", "single_frame", "full"):
             s = test["simulation"][m]
             L.append(f"| {names[m]} | {pct(s['gap_recall'])} | {pct(s['wrong_reshoot_rate'])} | {pct(s['unknown_rate'])} | {pct(s['false_candidate_rate'])} |")
+        sens = test.get("sensitivity_lenient_gold")
+        if sens:
+            L += ["", "### Sensitivity: lenient gold (agreed + third pass, no consistency pass)", "", "| Method | Recall@5 | Precision@5 | Gap recall | Wrong reshoot |", "|---|---|---|---|---|"]
+            for m in ("keyword", "single_frame", "full"):
+                L.append(f"| {names[m]} | {pct(sens['retrieval'][m]['recall_at_5'])} | {pct(sens['retrieval'][m]['precision_at_5'])} | "
+                         f"{pct(sens['simulation'][m]['gap_recall'])} | {pct(sens['simulation'][m]['wrong_reshoot_rate'])} |")
         L += ["", "False-ready rate: N/A. The system never marks a requirement done; a person confirms.", "",
               "### Per requirement (full system, whole test library)", "", "| Req | Query | Clips with gold | Status | Correct / returned |", "|---|---|---|---|---|"]
         for r in test["per_requirement"]:

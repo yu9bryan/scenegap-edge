@@ -70,3 +70,7 @@ Follows PRD ch. 21–24. Everything here is fixed before labels are produced and
   labelled what. Frames that clearly fail a rule are removed; all removals are listed in
   `eval/labels/consistency.json` and counted in `agreement.json`. Raw labels of both annotators stay unchanged in
   `eval/labels/raw/`. No calibration or test result existed when this was decided.
+- Result of the consistency pass: 78 of 238 agreed positives removed (65 of them SH-11 home or studio prep under
+  rule R3). Because this applies a stricter reading than the annotators were given, both are reported:
+  **primary gold** = agreed + third pass + consistency pass (`gold.json`), used for dev calibration and test;
+  **sensitivity gold** = agreed + third pass only (`gold_lenient.json`), scored in the same single test run.
