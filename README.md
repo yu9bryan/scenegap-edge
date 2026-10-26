@@ -198,7 +198,7 @@ CLIP ViT-B/32 on a desktop GPU/CPU; full numbers in [`eval/results/REPORT.md`](e
 |---|---|
 | Retrieval, top 5 per shot | Right clip in the top 5 for 7 of 11 shots (Hit@5 64%, Precision@5 33%). Plain single-frame search: 8 of 11 (73% / 40%); title keywords 45% / 36%. The lost hit is a ranking issue (runs ranked by average, not peak similarity), not a rule rejection |
 | Rule checks, controlled cases | 10 of 12 judged right (length, same frame, takes; real footage cut to a known answer). Misses: a finished latte passes as a pour; a re-encoded copy counts as a second take |
-| Finding missing shots automatically | **Not working yet**: 0 of 38 missing shots caught; SceneGap never answered 'not found', so its 0 of 50 wrong reshoots means nothing yet. The threshold was tuned for single frames; Stage II calibrates per shot |
+| Finding missing shots automatically | Test 1 (CLIP only): 0 of 38. **With the new verifier** (Qwen2-VL-2B checks the top 3 candidates; settings frozen on dev, `eval/PROTOCOL.md` Stage 1.5), on 24 new held-out clips scored once: **32 of 91 caught (35%)**, up from 2 of 91 without it, at **3 of 41 wrong reshoots (7.3%)**. Preregistered targets: ≥ 30% caught (met), ≤ 5% wrong reshoots (not met; all three are the coffee-package shot, whose query says 'bag' while the footage shows a jar) |
 | Review load (proxy) | Candidate clips add up to 317 s for 11 shots, versus 839 s of footage (footage length, not timed users) |
 | Labels | two independent AI annotators, κ = 0.91, AI third pass on 143 disputed frame labels |
 | Speed (desktop) | 2.3 s (GPU) / 3.1 s (CPU) of decode + embedding per minute of video (six short clips, ≤1280 px); text search over 10,000 segments p95 13–14 ms |
@@ -241,7 +241,7 @@ Details behind the table:
 | Media path: MP4/MOV H.264 8-bit, rotation, VFR, start offsets, corrupt and unsupported files | Implemented, tested on synthetic fixtures |
 | Semantic retrieval | OpenAI CLIP ViT-B/32 on host CPU or CUDA (`cpu-reference` / `cuda-reference`) |
 | Accuracy | Measured once on a held-out split of openly licensed Commons clips (not self-shot), AI-annotated |
-| Automatic missing-shot detection | Not working yet (0 of 38); Stage II |
+| Automatic missing-shot detection | Opt-in verifier (`python -m scenegap --verifier`): 35% of missing shots caught on new footage at 7.3% wrong reshoots; not yet at the ≤ 5% target |
 | Rule checks | 10 of 12 controlled cases right (`eval/rule_check.py`); a person still checks the action itself |
 | Platforms | Tested on Windows 11. UGen300 supports Windows, Linux and Android (no macOS listed); on a Mac SceneGap runs on CPU only |
 | UGen300 / Hailo-10H | Not run. Device check only; the Hailo backend refuses to run until the G1 gate passes on a real device |

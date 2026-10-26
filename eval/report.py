@@ -94,6 +94,25 @@ def main():
               f"beans in a blender). Run on its own, 019 passes every rule: SH-04 {r4['start_s']:.0f}–{r4['end_s']:.0f} s, "
               f"run {r4['len_s']:.0f} s, all conditions pass. So the rules did not reject it: in the test library the full system ranks runs "
               "by their average similarity, while single-frame search uses the peak frame, and other runs averaged higher. Stage II ranks runs by peak.", ""]
+    vd, t2 = load("verify_dev.json"), load("test2_metrics.json")
+    if vd:
+        c = vd["chosen"]
+        L += ["## Stage 1.5: a verifier for missing shots (after the first test)", "",
+              "The system's top-K candidates per shot go to Qwen2-VL-2B, which answers \"Does this image show <query>?\" on the best "
+              "frames of each candidate; a shot is reported missing when none reaches θ. K and θ were chosen on dev only and frozen "
+              "in eval/PROTOCOL.md before any test-2 label existed.", "",
+              "| Data | Method | Missing shots caught | Wrong reshoot | 'Found' when absent |", "|---|---|---|---|---|",
+              f"| Dev (20 projects) | system | {pct(vd['baseline']['gap_recall'])} | {pct(vd['baseline']['wrong_reshoot'])} | {pct(vd['baseline']['false_candidate'])} |",
+              f"| Dev (20 projects) | + verifier, K {c['k']}, θ {c['theta']} | {pct(c['gap_recall'])} | {pct(c['wrong_reshoot'])} | {pct(c['false_candidate'])} |"]
+        if t2:
+            L += [f"| Test 2 ({t2['clips']} new clips, {t2['projects']} projects), scored once | system | {pct(t2['system_only']['gap_recall'])} | {pct(t2['system_only']['wrong_reshoot'])} | {pct(t2['system_only']['false_candidate'])} |",
+                  f"| Test 2, scored once | + verifier (frozen) | {pct(t2['with_verifier']['gap_recall'])} | {pct(t2['with_verifier']['wrong_reshoot'])} | {pct(t2['with_verifier']['false_candidate'])} |",
+                  "", f"Preregistered criteria: wrong reshoot ≤ 5% and missing shots caught ≥ 30%. Result: missing shots caught "
+                  f"{t2['with_verifier']['gap_recall']['p'] * 100:.0f}% (met); wrong reshoot {t2['with_verifier']['wrong_reshoot']['p'] * 100:.1f}% (not met). "
+                  "All three wrong reshoots are SH-10: the only package in test 2 is a jar of instant coffee, the person-confirmed query "
+                  "says 'a bag of coffee beans', so the clip never reached the top 3 and the verifier had nothing true to confirm.",
+                  f"Hit@5 on the whole test-2 library: {pct(t2['hit5_system'])} as ranked by the system, {pct(t2['hit5_reranked'])} re-ranked by the verifier.",
+                  "Test-2 labels: two independent AI annotators on 1 fps sheets (κ 0.977), blind third pass on 11 frames; no human labels yet.", ""]
     ex = load("explore_dev_gap_tradeoff.json")
     if ex:
         L += ["## After the test: why gap recall is 0 (dev split only, exploratory)", "",

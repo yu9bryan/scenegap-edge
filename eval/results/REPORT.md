@@ -96,6 +96,21 @@ The two misses are limits of the method, not bugs: CLIP scores a finished latte 
 
 Single-frame search hit SH-03 and SH-04, the full system did not (it gained SH-06). The correct clip for both is 019 (grinding beans in a blender). Run on its own, 019 passes every rule: SH-04 0–19 s, run 19 s, all conditions pass. So the rules did not reject it: in the test library the full system ranks runs by their average similarity, while single-frame search uses the peak frame, and other runs averaged higher. Stage II ranks runs by peak.
 
+## Stage 1.5: a verifier for missing shots (after the first test)
+
+The system's top-K candidates per shot go to Qwen2-VL-2B, which answers "Does this image show <query>?" on the best frames of each candidate; a shot is reported missing when none reaches θ. K and θ were chosen on dev only and frozen in eval/PROTOCOL.md before any test-2 label existed.
+
+| Data | Method | Missing shots caught | Wrong reshoot | 'Found' when absent |
+|---|---|---|---|---|
+| Dev (20 projects) | system | 6% (5/89; 95% CI 2–12%) | 0% (0/131; 95% CI 0–3%) | 74% (66/89; 95% CI 64–82%) |
+| Dev (20 projects) | + verifier, K 3, θ 0.35 | 42% (37/89; 95% CI 32–52%) | 5% (6/131; 95% CI 2–10%) | 55% (49/89; 95% CI 45–65%) |
+| Test 2 (24 new clips, 12 projects), scored once | system | 2% (2/91; 95% CI 1–8%) | 0% (0/41; 95% CI 0–9%) | 80% (73/91; 95% CI 71–87%) |
+| Test 2, scored once | + verifier (frozen) | 35% (32/91; 95% CI 26–45%) | 7% (3/41; 95% CI 3–19%) | 56% (51/91; 95% CI 46–66%) |
+
+Preregistered criteria: wrong reshoot ≤ 5% and missing shots caught ≥ 30%. Result: missing shots caught 35% (met); wrong reshoot 7.3% (not met). All three wrong reshoots are SH-10: the only package in test 2 is a jar of instant coffee, the person-confirmed query says 'a bag of coffee beans', so the clip never reached the top 3 and the verifier had nothing true to confirm.
+Hit@5 on the whole test-2 library: 86% (6/7; 95% CI 49–97%) as ranked by the system, 86% (6/7; 95% CI 49–97%) re-ranked by the verifier.
+Test-2 labels: two independent AI annotators on 1 fps sheets (κ 0.977), blind third pass on 11 frames; no human labels yet.
+
 ## After the test: why gap recall is 0 (dev split only, exploratory)
 
 The frozen τ was chosen by frame-level F1 and is too low for project-level gap detection: almost every requirement

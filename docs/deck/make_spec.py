@@ -130,7 +130,7 @@ S.append({"type": "twocol", "section": "Problem", "title": "What works today, an
               "A person accepts, rejects, or adds the shot to the reshoot list",
               "Demo: 9 Commons clips (5.9 min) analysed in 22 s on a desktop GPU; new footage re-checked file by file"]},
           "right": {"head": "Not shown yet", "bullets": [
-              f"Automatic missing-shot detection: {test['simulation']['full']['gap_recall']['k']} of {test['simulation']['full']['gap_recall']['n']} caught on test (slide 15)",
+              "Missing shots at ≤ 5% wrong reshoots: the new verifier catches 35% on new footage at 7.3% (slide 15)",
               f"Time saved: no user study yet. Proxy: {rl['candidate_seconds_to_review']:.0f} s of candidate clips to play vs {rl['library_seconds']:.0f} s of footage ({rl['candidate_seconds_to_review'] / rl['library_seconds'] * 100:.0f}%)",
               "UGen300 speed and quality: not run on the device yet",
               "Human-checked labels: current labels are AI-assisted"]},
@@ -250,33 +250,48 @@ S.append({"type": "blocks", "section": "Evidence", "title": "Right clip in the t
                           {"name": "SceneGap", "values": [r["full"]["correct"] for r in per]}],
                "colors": ["A78BFA", "6C4CF5"]}],
           "source": f"{test_n} held-out clips, {test_min:.1f} min, scored once at τ {test['tau']}; Wilson 95% intervals. SH-03 and SH-07 each rest on one 3 s gold clip. Per shot: A5."})
-# 14 missing shots
+# 14 missing shots: verifier on the top candidates (Stage 1.5)
 sm = test["simulation"]
-dev_rows = {(r["tau"], "raw"): r for r in ex["rows"]} | {(r["tau"], "margin"): r for r in ex["margin_rows"]}
-pick = [("raw τ 0.225 (frozen)", (0.225, "raw")), ("raw τ 0.27", (0.27, "raw")), ("raw τ 0.29", (0.29, "raw")),
-        ("margin 0.02", (0.02, "margin")), ("margin 0.0475", (0.0475, "margin"))]
-dev_tab = [[lab, kn(dev_rows[k]["gap_recall"]), kn(dev_rows[k]["wrong_reshoot"]), kn(dev_rows[k]["false_candidate"])] for lab, k in pick if k in dev_rows]
-S.append({"type": "blocks", "section": "Evidence", "title": "Finding missing shots automatically does not work yet",
-          "lead": f"Unit: one shot in one simulated 8-clip project (8 × 11 = 88): {sum(gaps.values())} missing, {88 - sum(gaps.values())} present. Found = 'candidate'; can't decide = 'partial' or 'unverifiable'.",
+vd, t2 = load("eval/results/verify_dev.json"), load("eval/results/test2_metrics.json")
+
+
+def kk(w):
+    return "pending" if not w else f"{w['k']}/{w['n']} ({w['p'] * 100:.0f}%)"
+
+
+rows15 = [["Test 1 (scored once, Oct 26)", "system", kk(sm["full"]["gap_recall"]), kk(sm["full"]["wrong_reshoot_rate"]), kk(sm["full"]["false_candidate_rate"])]]
+if vd:
+    rows15 += [["Dev (20 projects)", "system", kk(vd["baseline"]["gap_recall"]), kk(vd["baseline"]["wrong_reshoot"]), kk(vd["baseline"]["false_candidate"])],
+               ["Dev (20 projects)", f"+ verifier (K {vd['chosen']['k']}, θ {vd['chosen']['theta']})", kk(vd["chosen"]["gap_recall"]), kk(vd["chosen"]["wrong_reshoot"]), kk(vd["chosen"]["false_candidate"])]]
+if t2:
+    rows15 += [["Test 2: new footage, scored once", "system", kk(t2["system_only"]["gap_recall"]), kk(t2["system_only"]["wrong_reshoot"]), kk(t2["system_only"]["false_candidate"])],
+               ["Test 2: new footage, scored once", "+ verifier (frozen)", kk(t2["with_verifier"]["gap_recall"]), kk(t2["with_verifier"]["wrong_reshoot"]), kk(t2["with_verifier"]["false_candidate"])]]
+else:
+    rows15 += [["Test 2: new footage, scored once", "+ verifier (frozen)", "pending", "pending", "pending"]]
+ok2 = bool(t2) and t2["with_verifier"]["wrong_reshoot"]["p"] <= 0.05 and t2["with_verifier"]["gap_recall"]["p"] >= 0.30
+title15 = ("Missing shots: the verifier catches " + (f"{t2['with_verifier']['gap_recall']['p'] * 100:.0f}% on new footage at {t2['with_verifier']['wrong_reshoot']['p'] * 100:.1f}% wrong reshoots" if t2 else "them on dev; new footage pending"))
+S.append({"type": "blocks", "section": "Evidence", "title": title15,
           "blocks": [
-              {"kind": "table", "x": 0, "y": 0, "w": 6.6, "h": 2.1, "colW": [1.9, 1.2, 1.3, 1.1, 1.3], "fontSize": 9.5, "highlightRow": 2, "maxRowH": 0.42, "head": "Test split",
-               "header": ["Method", "Missing caught", "Reshoot asked, shot there", "Can't decide", "'Found' when absent"],
-               "rows": [[name, kn(sm[m]["gap_recall"]), kn(sm[m]["wrong_reshoot_rate"]), kn(sm[m]["unknown_rate"], 1), kn(sm[m]["false_candidate_rate"])]
-                        for name, m in (("Title keywords", "keyword"), ("Single-frame", "single_frame"), ("SceneGap", "full"))]},
-              {"kind": "text", "x": 0, "y": 2.3, "w": 6.6, "h": 1.6, "head": "Where the missing shots sit", "fontSize": 10,
-               "bullets": [f"SH-07 is missing in {gaps['SH-07']} of 8 projects; SH-03, SH-04, SH-10 in {gaps['SH-03']}, {gaps['SH-04']}, {gaps['SH-10']}.",
-                           f"SceneGap answered 'candidate' for {full_on_gap.get('candidate', 0)} of them and 'partial' for {full_on_gap.get('partial', 0)} (SH-10's manual brand check).",
-                           f"Why: at τ {chosen['tau']} only {prec_t * 100:.0f}% of frames above the threshold show the shot, so almost every shot finds something."]},
-              {"kind": "table", "x": 6.9, "y": 0, "w": 5.0, "h": 3.9, "colW": [1.6, 1.15, 1.15, 1.1], "fontSize": 9.5, "maxRowH": 0.5, "head": "Dev only, after the test (not used to rescore)",
-               "header": ["Score", "Missing caught", "Wrong reshoot", "'Found' when absent"], "rows": dev_tab}],
-          "note": "Target (PRD 21.5): wrong reshoot ≤ 5%. Inside it on dev: margin 0.0075, 11/89 caught at 0/131. Margin 0.02 gives 16/89 at 7/131 = 5.3%, just over."})
+              {"kind": "table", "x": 0, "y": 0, "w": 7.6, "h": 3.0, "colW": [2.6, 1.9, 1.1, 1.2, 1.2], "fontSize": 9.5, "maxRowH": 0.45,
+               "highlightRow": len(rows15) - 1, "head": "Missing shots caught, wrong reshoots, 'found' when absent",
+               "header": ["Data", "Method", "Missing caught", "Wrong reshoot", "'Found' when absent"], "rows": rows15},
+              {"kind": "text", "x": 0, "y": 3.15, "w": 7.6, "h": 1.25, "fontSize": 10,
+               "bullets": ["Preregistered before test-2 labels: missing shots caught ≥ 30% (met) and wrong reshoot ≤ 5% (not met: all 3 are the package shot, whose query says 'bag' while the clip shows a jar).",
+                           "Why it works: the model answers 'is coffee being poured here?' per frame, so a finished latte or an empty street no longer counts as the shot."]},
+              {"kind": "chart", "x": 7.9, "y": 0, "w": 4.0, "h": 4.25, "head": "Missing shots caught (%)", "chartType": "BAR", "barDir": "col",
+               "labels": ["Dev"] + (["Test 2 (new)"] if t2 else []), "max": 60,
+               "series": [{"name": "system", "values": ([round(vd["baseline"]["gap_recall"]["p"] * 100)] if vd else [0]) + ([round(t2["system_only"]["gap_recall"]["p"] * 100)] if t2 else [])},
+                          {"name": "+ verifier", "values": ([round(vd["chosen"]["gap_recall"]["p"] * 100)] if vd else [0]) + ([round(t2["with_verifier"]["gap_recall"]["p"] * 100)] if t2 else [])}],
+               "colors": ["A78BFA", "6C4CF5"]}],
+          "note": "Test 1 was scored before the verifier existed and stays as it is. Test 2: 24 new Commons clips, chosen by metadata, AI-labelled (κ 0.98).",
+          "source": "Unit: one shot in one simulated 8-clip project; missing = no qualifying clip in it. Missing is reported when none of the top 3 is confirmed by Qwen2-VL-2B. eval/verify_eval.py; A8."})
 # 15 hardware
 S.append({"type": "blocks", "section": "Hardware", "title": "Plan: the image half of CLIP on the UGen300; the PC keeps the rest",
           "blocks": [
               {"kind": "image", "x": 0, "y": 0.05, "w": 7.0, "h": 3.6, "path": img("architecture.png")},
               {"kind": "table", "x": 7.3, "y": 0, "w": 4.6, "h": 4.3, "head": "ASUS UGen300", "colW": [1.5, 3.1], "fontSize": 9.5, "header": ["Item", "Value"], "rows": ugen_spec},
               {"kind": "text", "x": 0, "y": 3.85, "w": 7.0, "h": 0.95, "fontSize": 10.5,
-               "text": "Frames over USB: about 9 MB per minute of video (estimate) on a 10 Gbps link. Before the device replaces the PC model it must pass six G1 checks against the PC (A1). Demo PC: Windows 11, RTX 4080; on a Mac SceneGap runs on CPU only."}],
+               "text": "Second device job: the missing-shot verifier, Qwen2-VL-2B, which Hailo lists for Hailo-10H (slide 15). Frames over USB: about 9 MB per minute (estimate). Both models must pass G1-style checks against the PC first (A1). Demo PC: Windows 11, RTX 4080; Mac: CPU only."}],
           "source": "BUSINESS_FACTS.md §2 (ASUS spec; price reported by CNX Software), MODEL_PLAN.md §2, §6; Hailo Model Zoo measures over PCIe, not USB."})
 # 16 performance
 dc, mc, tc, fc, bc = P_CPU
@@ -341,7 +356,7 @@ S.append({"type": "blocks", "section": "Plan", "title": "Shown today, proven nex
           "blocks": [
               {"kind": "table", "x": 0, "y": 0, "w": 11.9, "h": 3.9, "colW": [1.6, 3.9, 4.3, 2.1], "fontSize": 10.5, "maxRowH": 0.62,
                "header": ["Proof", "Today", "Stage II target", "Source"],
-               "rows": [["1 · Rules", f"{n_rule} controlled cases; right clip in top 5 for 7/11; missing shots caught 0/38",
+               "rows": [["1 · Rules", f"{n_rule} controlled cases; top 5 right for 7/11; missing shots caught 35% on new footage at 7.3% wrong reshoots",
                          "Recall@5 ≥ 90% and wrong reshoot ≤ 5% in the supported scope; ranking by peak; per-shot thresholds", "PRD 21.5"],
                         ["2 · Labels", f"AI-assisted, κ {s['cohen_kappa']:.2f}", "a person labels sampled pairs on the original video", "Protocol"],
                         ["3 · People", "no study; proxy 38% of footage to play", "3–5 interviews, then 8–12 crews; median task time −30%", "PRD 22.1"],
@@ -480,7 +495,8 @@ S.append({"type": "table", "section": "Appendix", "title": "A10 · Hailo-10H mod
                    ["clip_vit_b_32_text_encoder", "Retrieval@10 90.6 → 89.3", "48.9 / 98.8", "not planned: text stays on the PC"],
                    ["tinyclip_vit_61m_32 image", "72.8 → 69.8", "101 / 388", "fallback if G1 fails (new threshold)"],
                    ["siglip2_b_32_256 image", "74.7 → 70.4", "64.7 / 221", "multilingual option for Chinese shot lists"],
-                   ["clip_vit_b_16 image", "68.6 → 64.6", "51.5 / 158", "finer detail, slower"]],
+                   ["clip_vit_b_16 image", "68.6 → 64.6", "51.5 / 158", "finer detail, slower"],
+                   ["Qwen2-VL-2B-Instruct (VLM)", "listed for Hailo-10H (GenAI zoo)", "see vendor page", "planned: the missing-shot verifier"]],
           "colW": [3.2, 3.2, 1.8, 3.9], "fontSize": 11,
           "note": f"At batch 8 the vendor figure (350 FPS) is close to the RTX 4080 we measured ({P_GPU[3]:.0f} frames/s); the device's case is freeing the host, not raw speed.",
           "source": "Hailo Model Zoo, Hailo-10H, PCIe Gen3 ×4 host (not USB); docs/MODEL_PLAN.md §2."})
