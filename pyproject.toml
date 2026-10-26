@@ -9,7 +9,7 @@ description = "Local-first shot coverage and reshoot assistant (requirement -> e
 readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.10"
-dependencies = ["fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2.6", "av>=12", "pillow>=10", "numpy>=1.26"]
+dependencies = ["fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2.6", "av>=12", "pillow>=10", "numpy>=1.26", "opencv-python-headless>=4.8"]
 
 [project.optional-dependencies]
 ml = ["torch>=2.2", "transformers>=4.40"]
