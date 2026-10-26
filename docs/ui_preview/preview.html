@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="sg-token" content="preview-no-token">
+  <meta name="color-scheme" content="dark">
+  <title>SceneGap Edge — UI 預覽</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../../web/style.css">
+  <script>
+  /* Sample responses shaped like the /api/v1 contract. Not measured data: the page shows a
+     "預覽資料（非實測）" ribbon whenever window.SG_PREVIEW is set. */
+  (function () {
+    var vm = /[?&]variant=(\w+)/.exec(location.search);
+    if (vm && !window.SG_PREVIEW_VARIANT) window.SG_PREVIEW_VARIANT = vm[1];   // ?variant=outdated | job
+    // Abstract placeholder "frames" (SVG gradients + shapes), one per asset. No real footage.
+    function frame(h1, h2, shape, label) {
+      var shapes = {
+        oven: '<rect x="70" y="40" width="180" height="110" rx="8" fill="#1a0f08" stroke="#ffb35c" stroke-width="3"/><rect x="88" y="58" width="144" height="74" rx="4" fill="#ff8a2a" opacity=".55"/><ellipse cx="160" cy="112" rx="46" ry="12" fill="#e0a060"/>',
+        cup: '<ellipse cx="160" cy="98" rx="62" ry="20" fill="#3a2414"/><path d="M98 98 q0 58 62 58 q62 0 62-58" fill="#efe6dc"/><path d="M140 96 q20-18 40 0 q-20 10-40 0" fill="#f6ead8"/>',
+        store: '<rect x="40" y="60" width="240" height="110" fill="#2b2f3a"/><rect x="60" y="34" width="200" height="34" rx="4" fill="#f2d39b"/><rect x="70" y="92" width="70" height="78" fill="#86b7d6" opacity=".6"/><rect x="180" y="92" width="80" height="50" fill="#86b7d6" opacity=".6"/>',
+        window: '<rect x="20" y="20" width="280" height="140" fill="#8fb8d8" opacity=".35"/><circle cx="150" cy="96" r="30" fill="#e8c4a0"/><rect x="118" y="126" width="64" height="44" rx="12" fill="#5b6c8f"/>',
+        board: '<rect x="50" y="26" width="220" height="130" rx="6" fill="#1d2a22" stroke="#8a6a45" stroke-width="6"/><path d="M76 62h120M76 86h150M76 110h96M76 134h132" stroke="#e8e8e0" stroke-width="5" stroke-linecap="round" opacity=".75"/>',
+        dough: '<ellipse cx="160" cy="118" rx="96" ry="36" fill="#f0dcc0"/><ellipse cx="120" cy="96" rx="34" ry="22" fill="#d9a77c"/><ellipse cx="204" cy="98" rx="34" ry="22" fill="#d9a77c"/>',
+        counter: '<rect x="0" y="120" width="320" height="60" fill="#3d2a1c"/><circle cx="100" cy="76" r="24" fill="#e2b48c"/><rect x="74" y="100" width="52" height="40" rx="10" fill="#2f6f5a"/><circle cx="226" cy="80" r="24" fill="#c99470"/><rect x="200" y="104" width="52" height="36" rx="10" fill="#7a4f8f"/>',
+      };
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180">' +
+        '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + h1 + '"/><stop offset="1" stop-color="' + h2 + '"/></linearGradient>' +
+        '<radialGradient id="v" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient></defs>' +
+        '<rect width="320" height="180" fill="url(#g)"/>' + (shapes[shape] || '') + '<rect width="320" height="180" fill="url(#v)"/>' +
+        '<text x="10" y="18" font-family="monospace" font-size="10" fill="#fff" opacity=".7">' + label + '</text></svg>';
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    var PID = 'p_8c1d2e';
+    var assets = [
+      { asset_id: 'a_7f3c01', sha256: '7f3c01e9…', capture_id: 'A001_C003', status: 'analyzed', error_code: null, error_msg: null, duration_ms: 48210,
+        probe: { codec: 'h264', width: 1920, height: 1080, rotation: 0, avg_fps: 29.97, vfr_suspected: false, start_ms: 0, duration_ms: 48210, supported: true, unsupported_reason: null, warnings: [] },
+        locations: ['Day1/A001_C003_0412.mov'] },
+      { asset_id: 'a_7f3c02', sha256: '7f3c02aa…', capture_id: 'A001_C007', status: 'analyzed', error_code: null, error_msg: null, duration_ms: 92040,
+        probe: { codec: 'hevc', width: 3840, height: 2160, rotation: 0, avg_fps: 25, vfr_suspected: false, start_ms: 0, duration_ms: 92040, supported: true, unsupported_reason: null, warnings: [] },
+        locations: ['Day1/A001_C007_0412.mov', 'Backup/Day1/A001_C007_0412.mov'] },
+      { asset_id: 'a_7f3c03', sha256: '7f3c03b1…', capture_id: 'A002_C001', status: 'analyzed', error_code: null, error_msg: null, duration_ms: 31500,
+        probe: { codec: 'h264', width: 1920, height: 1080, rotation: 0, avg_fps: 59.94, vfr_suspected: false, start_ms: 0, duration_ms: 31500, supported: true, unsupported_reason: null, warnings: [] },
+        locations: ['Day1/A002_C001_0412.mp4'] },
+      { asset_id: 'a_7f3c04', sha256: '7f3c04c2…', capture_id: 'IMG_4471', status: 'analyzed', error_code: null, error_msg: null, duration_ms: 22870,
+        probe: { codec: 'hevc', width: 1080, height: 1920, rotation: 90, avg_fps: 30.02, vfr_suspected: true, start_ms: 0, duration_ms: 22870, supported: true, unsupported_reason: null, warnings: ['variable frame rate suspected; timestamps use PTS'] },
+        locations: ['Day2_B-cam/IMG_4471.MOV'] },
+      { asset_id: 'a_7f3c05', sha256: '7f3c05d3…', capture_id: 'IMG_4472', status: 'analyzed', error_code: null, error_msg: null, duration_ms: 64320,
+        probe: { codec: 'hevc', width: 1920, height: 1080, rotation: 0, avg_fps: 29.97, vfr_suspected: false, start_ms: 0, duration_ms: 64320, supported: true, unsupported_reason: null, warnings: [] },
+        locations: ['Day2_B-cam/IMG_4472.MOV'] },
+      { asset_id: 'a_7f3c06', sha256: '7f3c06e4…', capture_id: 'IMG_4480', status: 'analyzed', error_code: null, error_msg: null, duration_ms: 15080,
+        probe: { codec: 'h264', width: 1920, height: 1080, rotation: 0, avg_fps: 29.97, vfr_suspected: false, start_ms: 0, duration_ms: 15080, supported: true, unsupported_reason: null, warnings: [] },
+        locations: ['Day2_B-cam/IMG_4480.MOV'] },
+      { asset_id: 'a_7f3c07', sha256: '7f3c07f5…', capture_id: 'A003_C002', status: 'failed', error_code: 'UNSUPPORTED_CODEC', error_msg: 'no decoder for prores_raw', duration_ms: null,
+        probe: { codec: 'prores_raw', width: 4096, height: 2160, rotation: 0, avg_fps: 23.976, vfr_suspected: false, start_ms: 0, duration_ms: 41000, supported: false, unsupported_reason: 'ProRes RAW 需先轉檔為 ProRes 422 或 H.264', warnings: [] },
+        locations: ['Day1/A003_C002_0412.mov'] },
+      { asset_id: 'a_7f3c08', sha256: '7f3c08a6…', capture_id: 'IMG_4490', status: 'missing', error_code: 'ASSET_MISSING', error_msg: 'file not found under authorized root (drive disconnected?)', duration_ms: 27400,
+        probe: { codec: 'hevc', width: 1920, height: 1080, rotation: 0, avg_fps: 29.97, vfr_suspected: false, start_ms: 0, duration_ms: 27400, supported: true, unsupported_reason: null, warnings: [] },
+        locations: ['Day2_B-cam/IMG_4490.MOV'] },
+    ];
+
+    var C = function (kind, cap, params, hard, note) { return { kind: kind, capability: cap, params: params || {}, hard: hard !== false, note: note || '' }; };
+    var reqs = [
+      { requirement_id: 'R01', revision: 2, source_text: '老闆把剛出爐的麵包從烤箱拿出來', query_en: 'a baker taking freshly baked bread out of an oven', required: true, weight: 2, min_duration_ms: 3000, min_takes: 1, confirmed: true, excluded_reason: null,
+        constraints: [C('semantic', 'auto', {}), C('duration', 'auto', { min_ms: 3000, handles_ms: 1000 })] },
+      { requirement_id: 'R02', revision: 1, source_text: '咖啡師拉花特寫', query_en: 'close-up of a barista pouring latte art into a cup', required: true, weight: 1, min_duration_ms: 2000, min_takes: 1, confirmed: true, excluded_reason: null,
+        constraints: [C('semantic', 'auto', {}), C('composition', 'manual', {}, true, '特寫，杯口佔畫面一半以上')] },
+      { requirement_id: 'R03', revision: 1, source_text: '店門口招牌與街景的開場空鏡', query_en: 'establishing shot of a small bakery storefront with its sign on a street', required: true, weight: 1, min_duration_ms: 5000, min_takes: 1, confirmed: true, excluded_reason: null,
+        constraints: [C('semantic', 'auto', {}), C('duration', 'auto', { min_ms: 5000, handles_ms: 1000 }), C('composition', 'manual', {}, false, '全景，招牌置中')] },
+      { requirement_id: 'R04', revision: 3, source_text: '客人在窗邊座位微笑咬下可頌', query_en: 'a customer by the window smiling and taking a bite of a croissant', required: true, weight: 1, min_duration_ms: 2500, min_takes: 2, confirmed: true, excluded_reason: null,
+        constraints: [C('semantic', 'auto', {}), C('takes', 'auto', { min: 2 }), C('action', 'unsupported', {}, false, '咬下動作的時間點')] },
+      { requirement_id: 'R05', revision: 1, source_text: '黑板菜單上的手寫字清楚可讀', query_en: 'chalkboard menu with clearly readable handwritten text', required: true, weight: 1, min_duration_ms: 2000, min_takes: 1, confirmed: true, excluded_reason: null,
+        constraints: [C('semantic', 'auto', {}), C('readable_text', 'manual', {}, true, '需人工確認字跡可讀')] },
+      { requirement_id: 'R06', revision: 1, source_text: '揉麵團的手部特寫（可做慢動作）', query_en: 'close-up of hands kneading dough on a floured table', required: true, weight: 1, min_duration_ms: 3000, min_takes: 1, confirmed: true, excluded_reason: null,
+        constraints: [C('semantic', 'auto', {}), C('quality', 'auto', { max_blur_fraction: 0.2 })] },
+      { requirement_id: 'R07', revision: 2, source_text: '店員和客人同框的結帳畫面', query_en: 'a cashier and a customer together at the counter during checkout', required: true, weight: 1, min_duration_ms: 4000, min_takes: 2, confirmed: true, excluded_reason: null,
+        constraints: [C('co_occur', 'auto', { queries: ['a cashier behind a counter', 'a customer paying'] }), C('takes', 'auto', { min: 2 }), C('composition', 'manual', {}, false, '兩人同時入鏡')] },
+      { requirement_id: 'R08', revision: 1, source_text: '品牌 Logo 結尾畫面', query_en: 'brand logo end card on a plain background', required: true, weight: 1, min_duration_ms: 3000, min_takes: 1, confirmed: false, excluded_reason: null,
+        constraints: [C('semantic', 'auto', {})] },
+    ];
+    var R = function (id) { return reqs.filter(function (r) { return r.requirement_id === id; })[0]; };
+    var cond = function (kind, verdict, reason) { return { kind: kind, verdict: verdict, reason: reason }; };
+    var cand = function (aid, shot, s, e, cap, score, overall, conds) { return { asset_id: aid, asset_sha256: aid + '…', shot: shot, start_ms: s, end_ms: e, capture_id: cap, ranking_score: score, overall: overall, source: 'model', conditions: conds }; };
+    var auto = function (rid, status, zh, reasons, cands) { return { status: status, status_zh: zh, reasons: reasons, scope_complete: false, revision: R(rid).revision, candidates: cands }; };
+
+    var rows = [
+      { requirement: R('R01'), auto: auto('R01', 'candidate', '有候選，待確認', [], [
+          cand('a_7f3c01', 3, 12480, 17920, 'A001_C003', 0.3124, 'pass', [cond('semantic', 'pass', '語意候選'), cond('duration', 'pass', '連續 5.4 秒 ≥ 3.0 秒')]),
+          cand('a_7f3c01', 5, 30120, 33060, 'A001_C003', 0.2911, 'unknown', [cond('semantic', 'pass', '語意候選'), cond('duration', 'unknown', '已確認 2.4 秒、最多 3.2 秒；需加密取樣或人工播放')]),
+          cand('a_7f3c02', 11, 40100, 42300, 'A001_C007', 0.2807, 'fail', [cond('semantic', 'pass', '語意候選'), cond('duration', 'fail', '最多連續 2.2 秒，需求為 3.0 秒')]),
+        ]), auto_outdated: false, human_confirmed: true, human_exception: false },
+      { requirement: R('R02'), auto: auto('R02', 'candidate', '有候選，待確認', ['NEEDS_MANUAL'], [
+          cand('a_7f3c03', 2, 3200, 7850, 'A002_C001', 0.2983, 'unknown', [cond('semantic', 'pass', '語意候選'), cond('composition', 'unknown', 'composition: 需要人工確認')]),
+        ]), auto_outdated: false, human_confirmed: false, human_exception: false },
+      { requirement: R('R03'), auto: auto('R03', 'partial', '部分符合', ['DURATION_SHORT'], [
+          cand('a_7f3c05', 0, 0, 3120, 'IMG_4472', 0.2761, 'fail', [cond('semantic', 'pass', '語意候選'), cond('duration', 'fail', '最多連續 3.1 秒，需求為 5.0 秒')]),
+        ]), auto_outdated: false, human_confirmed: false, human_exception: false },
+      { requirement: R('R04'), auto: auto('R04', 'not_found', '在已分析範圍未找到', ['NO_CANDIDATE', 'SCOPE_INCOMPLETE'], []), auto_outdated: false, human_confirmed: false, human_exception: false },
+      { requirement: R('R05'), auto: auto('R05', 'unverifiable', '無法自動確認', ['NEEDS_MANUAL'], [
+          cand('a_7f3c02', 18, 55000, 61400, 'A001_C007', 0.2542, 'unknown', [cond('semantic', 'pass', '語意候選'), cond('readable_text', 'unknown', 'readable_text: 需要人工確認')]),
+        ]), auto_outdated: false, human_confirmed: false, human_exception: false },
+      { requirement: R('R06'), auto: auto('R06', 'partial', '部分符合', ['QUALITY_WARNING'], [
+          cand('a_7f3c04', 1, 2100, 6400, 'IMG_4471', 0.3011, 'fail', [cond('semantic', 'pass', '語意候選'), cond('quality', 'fail', '模糊取樣比例 33%（上限 20%）')]),
+        ]), auto_outdated: false, human_confirmed: true, human_exception: true },
+      { requirement: R('R07'), auto: auto('R07', 'partial', '部分符合', ['TAKES_SHORT'], [
+          cand('a_7f3c06', 0, 1000, 8200, 'IMG_4480', 0.2664, 'unknown', [cond('co_occur', 'pass', '同一時段的語意候選'), cond('duration', 'pass', '連續 7.2 秒 ≥ 4.0 秒'), cond('takes', 'unknown', '依獨立 take 數另行計算')]),
+          cand('a_7f3c06', 2, 10400, 14600, 'IMG_4480', 0.2519, 'unknown', [cond('co_occur', 'pass', '同一時段的語意候選'), cond('duration', 'pass', '連續 4.2 秒 ≥ 4.0 秒'), cond('takes', 'unknown', '依獨立 take 數另行計算')]),
+        ]), auto_outdated: false, human_confirmed: false, human_exception: false },
+      { requirement: R('R08'), auto: auto('R08', 'draft', '草稿（未確認）', [], []), auto_outdated: false, human_confirmed: false, human_exception: false },
+    ];
+    var scope = {};
+    assets.forEach(function (a) { scope[a.asset_id] = a.status; });
+
+    var coverage = {
+      run: { run_id: 'run_20261025_1842', created_at: '2026-10-25T18:42:11', backend: 'cpu-reference', model_fingerprint: '3f9a1c0d7e52b8a4', config_hash: 'c0nf1g9e', code_version: '0.3.0' },
+      outdated: false,
+      coverage: { human_confirmed: 0.375, ai_candidate: 0.5, analysis_progress: 0.75, denominator_weight: 8, unknown_count: 1 },
+      requirements: rows, scope: scope,
+    };
+    if (window.SG_PREVIEW_VARIANT === 'outdated') {
+      coverage.outdated = true; coverage.coverage.ai_candidate = null;
+      rows[2].auto = null; rows[2].auto_outdated = true;
+    }
+
+    var reshoots = [
+      { requirement_id: 'R03', requirement_revision: 1, source_text: R('R03').source_text, kind: 'review_first', review_first: true, reasons: ['DURATION_SHORT'], reasons_zh: ['連續時長不足'],
+        best_candidate: { asset_id: 'a_7f3c05', start_ms: 0, end_ms: 3120, shortfalls: ['最多連續 3.1 秒，需求為 5.0 秒'] }, min_continuous_s: 5, handles: '前後各 1.0 秒',
+        composition: '全景，招牌置中', props: '依需求原文', verify_by: '重新匯入後自動比對語意與連續時長，再由人播放確認；composition 由人工確認', status: 'proposed' },
+      { requirement_id: 'R05', requirement_revision: 1, source_text: R('R05').source_text, kind: 'review_first', review_first: true, reasons: ['NEEDS_MANUAL'], reasons_zh: ['含需人工確認的條件'],
+        best_candidate: { asset_id: 'a_7f3c02', start_ms: 55000, end_ms: 61400, shortfalls: ['readable_text: 需要人工確認'] }, min_continuous_s: 2, handles: '未指定',
+        composition: '依需求原文', props: '依需求原文', verify_by: '重新匯入後自動比對語意與連續時長，再由人播放確認；readable_text 由人工確認', status: 'confirmed' },
+      { requirement_id: 'R07', requirement_revision: 2, source_text: R('R07').source_text, kind: 'review_first', review_first: true, reasons: ['TAKES_SHORT'], reasons_zh: ['獨立 take 數不足'],
+        best_candidate: { asset_id: 'a_7f3c06', start_ms: 1000, end_ms: 8200, shortfalls: ['依獨立 take 數另行計算'] }, min_continuous_s: 4, handles: '未指定',
+        composition: '兩人同時入鏡', props: '依需求原文', verify_by: '重新匯入後自動比對語意與連續時長，再由人播放確認；composition 由人工確認', status: 'proposed' },
+      { requirement_id: 'R04', requirement_revision: 3, source_text: R('R04').source_text, kind: 'reshoot_proposed', review_first: false, reasons: ['NO_CANDIDATE', 'SCOPE_INCOMPLETE'], reasons_zh: ['已分析範圍內沒有候選', '仍有素材未分析或失敗'],
+        best_candidate: null, min_continuous_s: 2.5, handles: '未指定', composition: '依需求原文', props: '可頌、窗邊座位',
+        verify_by: '重新匯入後自動比對語意與連續時長，再由人播放確認；action 由人工確認', status: 'shooting' },
+    ];
+
+    var device = { available: false, backend: 'hailo', model: null, interface: null, driver: null, firmware: null, runtime: null,
+      reason: 'HailoRT Python package (hailo_platform) not installed', compatibility_verified: false };
+    var manifest = { model_id: 'clip-vit-b-32', version: 'openai-2021-01', purpose: 'image-text retrieval (frame embedding)', target_arch: 'x86_64 CPU (ONNX Runtime)',
+      interface: 'cpu', input_size: 224, embedding_dimension: 512, paired_text_encoder: 'clip-vit-b-32-text', preprocess_id: 'clip-224-center-crop-v1', quantization: 'fp32',
+      artifact_sha256: null, license_reference: 'MIT (OpenAI CLIP)', runtime_version: 'onnxruntime 1.19.2', compatibility_verified: false, fingerprint: '3f9a1c0d7e52b8a4' };
+
+    var P = '/projects/' + PID;
+    var routes = {};
+    routes['GET /health'] = { service: 'scenegap-edge', version: '0.3.0', db: 'ok', active_backend: 'cpu-reference', npu_active: false, device: { available: false, reason: device.reason } };
+    routes['GET /device/status'] = { device: device, active_backend: 'cpu-reference', manifest: manifest, note: 'NPU results are reported only when a UGen300 answered the scan and a validated HEF ran.' };
+    routes['GET ' + P] = { project: { id: PID, name: '微光烘焙坊品牌短片', purpose: '品牌形象 60 秒短片', aspect: '16:9', target_len_s: 60, language: 'zh-TW', created_at: '2026-10-24T09:12:00' },
+      assets: { pending: 0, analyzing: 0, analyzed: 6, failed: 1, missing: 1, excluded: 0 },
+      roots: [{ id: 'r_01', path: 'D:\\Footage\\Bakery_Day1' }, { id: 'r_02', path: 'D:\\Footage\\Bakery_Day2_B-cam' }] };
+    routes['GET ' + P + '/requirements'] = reqs;
+    routes['GET ' + P + '/assets'] = assets;
+    routes['GET ' + P + '/coverage'] = coverage;
+    routes['GET ' + P + '/reshoots'] = reshoots;
+    routes['GET /jobs/j_demo'] = { job_id: 'j_demo', project_id: PID, state: 'running', stage: 'analyzing assets', done: 5, total: 8, failed: 1, error: null, payload: {} };
+    routes['POST ' + P + '/search'] = { query_en: '', note: 'ranking_score is a similarity, not a probability', results: [
+      { asset_id: 'a_7f3c01', shot: 3, best_ms: 14200, shot_start_ms: 11800, shot_end_ms: 18400, ranking_score: 0.3124, above_threshold: true },
+      { asset_id: 'a_7f3c02', shot: 11, best_ms: 41000, shot_start_ms: 39500, shot_end_ms: 42300, ranking_score: 0.2807, above_threshold: true },
+      { asset_id: 'a_7f3c06', shot: 0, best_ms: 3000, shot_start_ms: 0, shot_end_ms: 9100, ranking_score: 0.2112, above_threshold: false } ] };
+
+    window.SG_PREVIEW = {
+      project_id: PID,
+      active_job_id: window.SG_PREVIEW_VARIANT === 'job' ? 'j_demo' : null,
+      routes: routes,
+      frames: {
+        a_7f3c01: frame('#4a2a14', '#120a06', 'oven', 'A001_C003'),
+        a_7f3c02: frame('#20302a', '#0c1210', 'board', 'A001_C007'),
+        a_7f3c03: frame('#5a3a22', '#1a0f08', 'cup', 'A002_C001'),
+        a_7f3c04: frame('#6b5a44', '#2a2018', 'dough', 'IMG_4471'),
+        a_7f3c05: frame('#3a4a66', '#141a26', 'store', 'IMG_4472'),
+        a_7f3c06: frame('#5a3c2a', '#1c120c', 'counter', 'IMG_4480'),
+      },
+    };
+  })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要內容</a>
+  <div class="app" id="app">
+    <nav class="sidebar" aria-label="主選單">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text"><strong>SceneGap</strong> Edge</span>
+      </div>
+      <ul class="nav" id="nav"></ul>
+      <div class="sidebar-foot" id="sidebar-foot"></div>
+    </nav>
+    <header class="topbar" id="topbar">
+      <div class="topbar-left" id="topbar-left"></div>
+      <div class="topbar-right" id="topbar-right"></div>
+    </header>
+    <main class="main" id="main" tabindex="-1">
+      <div class="loading" role="status">載入中…</div>
+    </main>
+  </div>
+  <div class="toasts" id="toasts" role="region" aria-live="polite" aria-label="通知"></div>
+  <script src="../../web/app.js"></script>
+</body>
+</html>

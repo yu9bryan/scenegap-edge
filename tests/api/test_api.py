@@ -16,7 +16,7 @@ H = {"X-SG-Token": TOKEN}
 @pytest.fixture
 def client(tmp_path):
     app = create_app(str(tmp_path / "work"), MockColorBackend, {"semantic_threshold": 0.95, "stable_wait_s": 0.05}, token=TOKEN)
-    with TestClient(app) as c:
+    with TestClient(app, base_url="http://127.0.0.1:8765") as c:
         yield c
     app.state.runner.stop()
 
@@ -87,3 +87,10 @@ def test_html_report_escapes_text_TC020():
         "auto": {"status_zh": "x", "candidates": [], "reasons": []}, "auto_outdated": False, "human_confirmed": False, "human_exception": False}]}
     html = to_html(view, [], {"name": "<b>p</b>"})
     assert "<script>alert(1)</script>" not in html and "&lt;script&gt;" in html and "http" not in html.split("</style>")[1].split("<table>")[0]
+
+
+def test_dns_rebinding_host_rejected(tmp_path):
+    app = create_app(str(tmp_path / "work"), MockColorBackend, {"semantic_threshold": 0.95}, token=TOKEN)
+    with TestClient(app, base_url="http://evil.example:8765") as c:
+        r = c.get("/api/v1/projects/x", headers={"X-SG-Token": TOKEN})
+        assert r.status_code == 403 and r.json()["code"] == "HOST_REJECTED"

@@ -79,12 +79,16 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
     token = token or secrets.token_urlsafe(24)
     port = os.environ.get("SG_PORT", "8765")
     origins = allowed_origins or {f"http://127.0.0.1:{port}", f"http://localhost:{port}"}
+    hosts = {o.split("://", 1)[1] for o in origins} if allowed_origins is None else None
     app = FastAPI(title="SceneGap Edge", version=CODE_VERSION)
     app.state.svc, app.state.runner, app.state.token = svc, runner, token
 
     @app.middleware("http")
     async def guard(request: Request, call_next):
         path = request.url.path
+        host = request.headers.get("host", "")
+        if hosts and host not in hosts:                       # DNS-rebinding guard: only the loopback names we bound
+            return err(403, "HOST_REJECTED", "unexpected Host header", recoverable=False)
         if path.startswith("/api/v1/") and path != "/api/v1/health":
             origin = request.headers.get("origin")
             if origin and origin not in origins:
