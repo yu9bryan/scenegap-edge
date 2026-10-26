@@ -70,7 +70,8 @@ def diff(A, B, index):
     return out
 
 
-def merge(A, B, index, adj):
+def merge(A, B, index, adj, brand=None):
+    brand = brand or {}
     decide = {(d["clip"], d["requirement_id"], round(float(d["t"]), 3)): bool(d["positive"]) for d in adj}
     gold, n, agree_iv, tp = {"clips": {}}, 0, 0, {"a": 0, "b": 0, "ab": 0, "none": 0}
     per_req = {r: {"pairs": 0, "agree": 0} for r in REQS}
@@ -98,7 +99,7 @@ def merge(A, B, index, adj):
                 tp["ab" if (t in a and t in b) else "a" if t in a else "b" if t in b else "none"] += 1
         for key in ("SH-10_brand_readable",):
             ra, rb = A.get(clip, {}).get(key), B.get(clip, {}).get(key)
-            gold["clips"][clip][key] = ra if ra == rb else "disagree"
+            gold["clips"][clip][key] = ra if ra == rb else brand.get(clip, "disagree")
     if missing:
         sys.exit(f"{len(missing)} disagreements have no third-pass decision, e.g. {missing[:3]}")
     tot = sum(tp.values())
@@ -124,4 +125,6 @@ if __name__ == "__main__":
         json.dump(d, open(out, "w", encoding="utf8"), ensure_ascii=False, indent=0)
         print(len(d), "disagreements ->", out)
     else:
-        merge(A, B, index, json.load(open(sys.argv[5], encoding="utf8")))
+        rules = sys.argv[6] if len(sys.argv) > 6 else None
+        merge(A, B, index, json.load(open(sys.argv[5], encoding="utf8")),
+              json.load(open(rules, encoding="utf8")).get("brand", {}) if rules else None)
