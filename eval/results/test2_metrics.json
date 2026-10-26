@@ -1,0 +1,5117 @@
+{
+ "split": "test2 (new held-out footage)",
+ "clips": 24,
+ "projects": 12,
+ "project_size": 8,
+ "frozen": {
+  "k": 3,
+  "theta": 0.35,
+  "verifier_fingerprint": "50c2f0ae4c535c51"
+ },
+ "system_only": {
+  "k": null,
+  "theta": null,
+  "gap_recall": {
+   "k": 2,
+   "n": 91,
+   "p": 0.022,
+   "lo": 0.006,
+   "hi": 0.0766
+  },
+  "wrong_reshoot": {
+   "k": 0,
+   "n": 41,
+   "p": 0.0,
+   "lo": 0.0,
+   "hi": 0.0857
+  },
+  "unknown": {
+   "k": 21,
+   "n": 132,
+   "p": 0.1591,
+   "lo": 0.1065,
+   "hi": 0.231
+  },
+  "false_candidate": {
+   "k": 73,
+   "n": 91,
+   "p": 0.8022,
+   "lo": 0.7089,
+   "hi": 0.8711
+  }
+ },
+ "with_verifier": {
+  "k": 3,
+  "theta": 0.35,
+  "gap_recall": {
+   "k": 32,
+   "n": 91,
+   "p": 0.3516,
+   "lo": 0.2614,
+   "hi": 0.4539
+  },
+  "wrong_reshoot": {
+   "k": 3,
+   "n": 41,
+   "p": 0.0732,
+   "lo": 0.0252,
+   "hi": 0.1943
+  },
+  "unknown": {
+   "k": 10,
+   "n": 132,
+   "p": 0.0758,
+   "lo": 0.0417,
+   "hi": 0.1338
+  },
+  "false_candidate": {
+   "k": 51,
+   "n": 91,
+   "p": 0.5604,
+   "lo": 0.4581,
+   "hi": 0.6579
+  }
+ },
+ "hit5_system": {
+  "k": 6,
+  "n": 7,
+  "p": 0.8571,
+  "lo": 0.4869,
+  "hi": 0.9743
+ },
+ "hit5_reranked": {
+  "k": 6,
+  "n": 7,
+  "p": 0.8571,
+  "lo": 0.4869,
+  "hi": 0.9743
+ },
+ "scored_at": "2026-10-27 00:55:03",
+ "seconds": 173.3,
+ "raw": [
+  {
+   "clips": [
+    "021_Tassimo_coffee_system.webm.mp4",
+    "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+    "005_Folgers_commercial.ogv.mp4",
+    "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+    "015_ESPRESSO_achieves_First_Light.webm.mp4",
+    "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+    "006_Soaking_Wet_Coyote_Drinking_in_the_Rain-.webm.mp4",
+    "003_Morning_Espresso_Routine__abridged_version_.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.9084,
+      0.768,
+      0.7353,
+      0.8893,
+      0.694
+     ],
+     "cands": [
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       14.0,
+       18.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       26.52,
+       29.28
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       3.52,
+       6.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       21.0,
+       22.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "partial",
+     "p": [
+      0.2707,
+      0.0522
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       38.57
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       51.451,
+       52.451
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0429,
+      0.4137,
+      0.4137,
+      0.4137,
+      0.0561
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       35.301
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.3579,
+      0.1272,
+      0.3284,
+      0.022,
+      0.4122
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       7.0,
+       20.28
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.7931,
+      0.5121,
+      0.1547,
+      0.1506,
+      0.1353
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.518,
+       21.021
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.3395,
+      0.3579,
+      0.0752,
+      0.5415,
+      0.5415
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       35.802,
+       43.042
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       1.5,
+       83.5
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0292,
+      0.0942,
+      0.0138,
+      0.1125,
+      0.049
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       43.042
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       24.457,
+       28.461
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.251,
+       23.256
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "partial",
+     "p": [
+      0.0387
+     ],
+     "cands": [
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       51.451,
+       52.451
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.9096,
+      0.9328,
+      0.0116,
+      0.7336,
+      0.0054
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       30.04,
+       38.04
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       0.04,
+       22.04
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.0467,
+      0.2506,
+      0.3023,
+      0.3023,
+      0.3023
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       38.57
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       8.5,
+       9.5
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.8114,
+      0.8781,
+      0.0582,
+      0.0174,
+      0.8451
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "015_ESPRESSO_achieves_First_Light.webm.mp4",
+    "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+    "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+    "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+    "011_TWG_coffee_machine.ogv.mp4",
+    "021_Tassimo_coffee_system.webm.mp4",
+    "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+    "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.9084,
+      0.8472,
+      0.768,
+      0.7353,
+      0.8893
+     ],
+     "cands": [
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       40.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       14.0,
+       18.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       26.52,
+       29.28
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       3.52,
+       6.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.8242,
+      0.1612
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       36.0,
+       40.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "partial",
+     "p": [
+      0.4137,
+      0.4137,
+      0.4137,
+      0.0561,
+      0.1333
+     ],
+     "cands": [
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       2.0,
+       3.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.3579,
+      0.5372,
+      0.0398,
+      0.022,
+      0.04
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       52.5
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       0.0,
+       11.0
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       7.0,
+       20.28
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       28.36,
+       30.6
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.5121,
+      0.5217,
+      0.016,
+      0.1506,
+      0.4793
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       14.5
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       6.28,
+       9.76
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.518,
+       21.021
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.4008,
+      0.3579,
+      0.0752,
+      0.5415,
+      0.5415
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       6.266,
+       13.5
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       1.5,
+       83.5
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0942,
+      0.5383,
+      0.0138,
+      0.049,
+      0.2489
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       14.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.251,
+       23.256
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "partial",
+     "p": [
+      0.7496,
+      0.0136
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       4.766,
+       5.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.0116,
+      0.6408,
+      0.7336,
+      0.0054,
+      0.0095
+     ],
+     "cands": [
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       30.04,
+       38.04
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       2.5
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       0.04,
+       22.04
+      ],
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       39.04,
+       48.04
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.3509,
+      0.2506,
+      0.3023,
+      0.3023,
+      0.3023
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       19.5,
+       21.266
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       8.5,
+       9.5
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.3386,
+      0.0582,
+      0.0174,
+      0.0057,
+      0.009
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       46.5,
+       52.5
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       5.28,
+       6.28
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       11.52,
+       12.52
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "014_VOA_Speaks_with_a_Pulse_Bartender_s_Friend.webm.mp4",
+    "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+    "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+    "016_Gavin_Newsom_speaking_about_Harvey_Milk_on_Harvey_Milk_Day_2020.ogv.mp4",
+    "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+    "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+    "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+    "004_Milchkochen.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.6461,
+      0.4008
+     ],
+     "cands": [
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       62.0,
+       72.0
+      ],
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       60.0,
+       61.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "not_found",
+     "p": [],
+     "cands": [],
+     "single_frame": "not_found"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0416,
+      0.0475,
+      0.1281,
+      0.1376,
+      0.2135
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       55.054
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       8.28,
+       10.28
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       39.039,
+       40.039
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       48.298,
+       49.298
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.0461,
+      0.4747,
+      0.2025,
+      0.0398,
+      0.3822
+     ],
+     "cands": [
+      [
+       "004_Milchkochen.webm.mp4",
+       0.0,
+       10.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       57.015,
+       59.017
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       0.0,
+       11.0
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.0559,
+      0.9095,
+      0.3092,
+      0.3337,
+      0.4182
+     ],
+     "cands": [
+      [
+       "004_Milchkochen.webm.mp4",
+       0.0,
+       10.76
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       9.009,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.0593,
+      0.441,
+      0.4637,
+      0.1766,
+      0.2125
+     ],
+     "cands": [
+      [
+       "004_Milchkochen.webm.mp4",
+       3.0,
+       10.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       55.054
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       65.023,
+       68.026
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.2855,
+      0.2829,
+      0.1649,
+      0.02,
+      0.1735
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       51.05
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       57.015,
+       59.017
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "not_found",
+     "p": [],
+     "cands": [],
+     "single_frame": "not_found"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.9859,
+      0.0646,
+      0.1902,
+      0.0144,
+      0.1427
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       0.033,
+       55.054
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       0.0,
+       10.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       57.015,
+       59.017
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       7.28,
+       9.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       12.47,
+       15.473
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.0454,
+      0.028,
+      0.0216,
+      0.0826,
+      0.2644
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       43.042,
+       46.045
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       8.0,
+       9.52
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       37.537,
+       38.537
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       26.026,
+       27.027
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.8494,
+      0.1025,
+      0.2154,
+      0.2343,
+      0.2294
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       0.0,
+       10.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       50.008,
+       51.008
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       39.039,
+       40.039
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "006_Soaking_Wet_Coyote_Drinking_in_the_Rain-.webm.mp4",
+    "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+    "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+    "012_Rateel_cafe_music1.webm.mp4",
+    "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+    "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+    "005_Folgers_commercial.ogv.mp4",
+    "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.8472,
+      0.5329,
+      0.8533,
+      0.4208
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       40.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ],
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       21.0,
+       22.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.1071,
+      0.8242,
+      0.1612,
+      0.0522
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       0.0,
+       9.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       36.0,
+       40.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       51.451,
+       52.451
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0452,
+      0.1281,
+      0.1376,
+      0.2135,
+      0.232
+     ],
+     "cands": [
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       49.0
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       39.039,
+       40.039
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       48.298,
+       49.298
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       37.537,
+       38.537
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.4747,
+      0.0398,
+      0.2153,
+      0.7304,
+      0.022
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       0.0,
+       11.0
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       9.217,
+       15.473
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       7.0,
+       20.28
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.3092,
+      0.3337,
+      0.4182,
+      0.016,
+      0.1176
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       9.009,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       6.28,
+       9.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       59.267,
+       64.773
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.0233,
+      0.441,
+      0.4637,
+      0.2125,
+      0.379
+     ],
+     "cands": [
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       29.0
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       65.023,
+       68.026
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       55.013,
+       56.181
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.2855,
+      0.2829,
+      0.1649,
+      0.1996,
+      0.0069
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       1.0,
+       49.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "candidate",
+     "p": [
+      0.1857,
+      0.7496,
+      0.0387
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       3.0,
+       6.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       51.451,
+       52.451
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.243,
+      0.0144,
+      0.1427,
+      0.0271,
+      0.2798
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       7.28,
+       9.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       12.47,
+       15.473
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       8.0
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.035,
+      0.0454,
+      0.0826,
+      0.2644,
+      0.036
+     ],
+     "cands": [
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       49.0
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       37.537,
+       38.537
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       26.026,
+       27.027
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       20.02,
+       21.02
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.2154,
+      0.02,
+      0.2343,
+      0.2294,
+      0.3863
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       38.0,
+       41.0
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       50.008,
+       51.008
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       39.039,
+       40.039
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       48.298,
+       49.298
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+    "006_Soaking_Wet_Coyote_Drinking_in_the_Rain-.webm.mp4",
+    "004_Milchkochen.webm.mp4",
+    "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+    "016_Gavin_Newsom_speaking_about_Harvey_Milk_on_Harvey_Milk_Day_2020.ogv.mp4",
+    "015_ESPRESSO_achieves_First_Light.webm.mp4",
+    "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+    "003_Morning_Espresso_Routine__abridged_version_.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.8472,
+      0.5329
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       40.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.9414,
+      0.8242,
+      0.2707,
+      0.1612
+     ],
+     "cands": [
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       0.0,
+       12.012
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       36.0,
+       40.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       38.57
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0429,
+      0.0475,
+      0.1281,
+      0.1376,
+      0.2135
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       35.301
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       8.28,
+       10.28
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       39.039,
+       40.039
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       48.298,
+       49.298
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.0461,
+      0.1272,
+      0.4747,
+      0.2153,
+      0.3284
+     ],
+     "cands": [
+      [
+       "004_Milchkochen.webm.mp4",
+       0.0,
+       10.76
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.7931,
+      0.0559,
+      0.3092,
+      0.3337,
+      0.1547
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       0.0,
+       10.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       9.009,
+       15.473
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.3395,
+      0.0593,
+      0.441,
+      0.4637,
+      0.2125
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       35.802,
+       43.042
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       3.0,
+       10.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       65.023,
+       68.026
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0292,
+      0.2855,
+      0.2829,
+      0.1649,
+      0.1996
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       43.042
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "candidate",
+     "p": [
+      0.9469,
+      0.7496
+     ],
+     "cands": [
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       52.01,
+       54.012
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.9096,
+      0.9328,
+      0.0116,
+      0.0646,
+      0.243
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       30.04,
+       38.04
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       0.0,
+       10.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.0454,
+      0.0467,
+      0.0216,
+      0.0826,
+      0.2644
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       38.57
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       8.0,
+       9.52
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       37.537,
+       38.537
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       26.026,
+       27.027
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.8114,
+      0.8781,
+      0.1025,
+      0.2154,
+      0.8451
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "004_Milchkochen.webm.mp4",
+       0.0,
+       10.76
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+    "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+    "011_TWG_coffee_machine.ogv.mp4",
+    "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+    "017_Coyote_Pees_in_Drinking_Water_on_Purpose_-_WTF_.webm.mp4",
+    "014_VOA_Speaks_with_a_Pulse_Bartender_s_Friend.webm.mp4",
+    "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+    "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.6461,
+      0.4008,
+      0.4208
+     ],
+     "cands": [
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       62.0,
+       72.0
+      ],
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       60.0,
+       61.0
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       21.0,
+       22.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.9422,
+      0.2707
+     ],
+     "cands": [
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       31.031,
+       56.514
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       38.57
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0452,
+      0.0429,
+      0.4137,
+      0.0422,
+      0.0337
+     ],
+     "cands": [
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       49.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       35.301
+      ],
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       1.033
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.5372,
+      0.1272,
+      0.3284,
+      0.022,
+      0.0301
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       52.5
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       7.0,
+       20.28
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       28.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.7931,
+      0.1547,
+      0.5217,
+      0.0325,
+      0.1353
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       14.5
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       41.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.3395,
+      0.0233,
+      0.4008,
+      0.5415,
+      0.0186
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       35.802,
+       43.042
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       29.0
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       6.266,
+       13.5
+      ],
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       3.036,
+       4.037
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0292,
+      0.5383,
+      0.0069,
+      0.6308,
+      0.0267
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       43.042
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       14.5
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       1.0,
+       49.0
+      ],
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       55.764,
+       56.765
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       1.033
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "candidate",
+     "p": [
+      0.9299,
+      0.0136
+     ],
+     "cands": [
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       51.259,
+       54.763
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       4.766,
+       5.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.9096,
+      0.9328,
+      0.6408,
+      0.0271,
+      0.939
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       2.5
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       8.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.035,
+      0.3509,
+      0.0467,
+      0.3023
+     ],
+     "cands": [
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       49.0
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       19.5,
+       21.266
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       38.57
+      ],
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.8114,
+      0.3386,
+      0.8781,
+      0.02,
+      0.8451
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       46.5,
+       52.5
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       38.0,
+       41.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+    "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+    "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+    "005_Folgers_commercial.ogv.mp4",
+    "021_Tassimo_coffee_system.webm.mp4",
+    "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+    "017_Coyote_Pees_in_Drinking_Water_on_Purpose_-_WTF_.webm.mp4",
+    "003_Morning_Espresso_Routine__abridged_version_.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.9084,
+      0.8472,
+      0.768,
+      0.7353,
+      0.8893
+     ],
+     "cands": [
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       40.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       14.0,
+       18.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       26.52,
+       29.28
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       3.52,
+       6.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.8242,
+      0.2707,
+      0.1612,
+      0.0522
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       36.0,
+       40.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       38.57
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       51.451,
+       52.451
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0429,
+      0.4137,
+      0.4137,
+      0.4137,
+      0.0561
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       35.301
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.3579,
+      0.1272,
+      0.3284,
+      0.022,
+      0.4122
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       7.0,
+       20.28
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.7931,
+      0.5121,
+      0.1547,
+      0.1506,
+      0.1353
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.518,
+       21.021
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.3395,
+      0.3579,
+      0.0752,
+      0.5415,
+      0.5415
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       35.802,
+       43.042
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       1.5,
+       83.5
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0292,
+      0.0942,
+      0.0138,
+      0.1125,
+      0.049
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       43.042
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       24.457,
+       28.461
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.251,
+       23.256
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "partial",
+     "p": [
+      0.7496,
+      0.0387
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       51.451,
+       52.451
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.9096,
+      0.9328,
+      0.7336,
+      0.0203,
+      0.939
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.0467,
+      0.2506,
+      0.3023,
+      0.3023,
+      0.3023
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       37.57,
+       38.57
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       8.5,
+       9.5
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.8114,
+      0.8781,
+      0.0582,
+      0.0174,
+      0.8451
+     ],
+     "cands": [
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       5.038,
+       43.042
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       0.033,
+       4.037
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+       4.57,
+       5.57
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+    "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+    "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+    "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+    "012_Rateel_cafe_music1.webm.mp4",
+    "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+    "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+    "021_Tassimo_coffee_system.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.8472,
+      0.6461,
+      0.5329,
+      0.8533,
+      0.4008
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       40.0
+      ],
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       62.0,
+       72.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ],
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       60.0,
+       61.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.1071,
+      0.8242,
+      0.1612
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       0.0,
+       9.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       36.0,
+       40.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0416,
+      0.1281,
+      0.1376,
+      0.2135,
+      0.232
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       55.054
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       39.039,
+       40.039
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       48.298,
+       49.298
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       37.537,
+       38.537
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.3579,
+      0.4747,
+      0.0398,
+      0.3822,
+      0.2153
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       0.0,
+       11.0
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.5121,
+      0.9095,
+      0.3092,
+      0.3337,
+      0.4182
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       9.009,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.441,
+      0.4637,
+      0.3579,
+      0.1766,
+      0.2125
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       1.5,
+       83.5
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       55.054
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       65.023,
+       68.026
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0942,
+      0.2855,
+      0.2829,
+      0.1649,
+      0.02
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       51.05
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "candidate",
+     "p": [
+      0.1857,
+      0.7496
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       3.0,
+       6.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.9859,
+      0.1386,
+      0.7336,
+      0.243,
+      0.0144
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       0.033,
+       55.054
+      ],
+      [
+       "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+       0.0,
+       32.0
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ],
+      [
+       "018_Angle_Grinder_cutting_a_steel_chain_-_Video.webm.mp4",
+       7.28,
+       9.76
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.0454,
+      0.028,
+      0.2506,
+      0.0826,
+      0.2644
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       43.042,
+       46.045
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       8.5,
+       9.5
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       37.537,
+       38.537
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       26.026,
+       27.027
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.8494,
+      0.2154,
+      0.0582,
+      0.0285,
+      0.2343
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+       16.0,
+       30.0
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       50.008,
+       51.008
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+    "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+    "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+    "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+    "021_Tassimo_coffee_system.webm.mp4",
+    "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+    "019_Coffee_percolator.webm.mp4",
+    "014_VOA_Speaks_with_a_Pulse_Bartender_s_Friend.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.9084,
+      0.8472,
+      0.768,
+      0.7353,
+      0.8893
+     ],
+     "cands": [
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       40.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       14.0,
+       18.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       26.52,
+       29.28
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       3.52,
+       6.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.8242,
+      0.1612
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       36.0,
+       40.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "partial",
+     "p": [
+      0.4137,
+      0.4137,
+      0.4137,
+      0.0561
+     ],
+     "cands": [
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.1166,
+      0.3579,
+      0.022,
+      0.5007,
+      0.0283
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       7.0,
+       20.28
+      ],
+      [
+       "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+       15.0,
+       30.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       35.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.1098,
+      0.5121,
+      0.1485,
+      0.1506,
+      0.4793
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+       0.0,
+       32.266
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.518,
+       21.021
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.3579,
+      0.1227,
+      0.0752,
+      0.5415,
+      0.5415
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       1.5,
+       83.5
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       69.002
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0942,
+      0.035,
+      0.0138,
+      0.049,
+      0.2489
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.251,
+       23.256
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "partial",
+     "p": [
+      0.7496
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.1502,
+      0.0503,
+      0.7336,
+      0.0203,
+      0.1116
+     ],
+     "cands": [
+      [
+       "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+       0.0,
+       32.266
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       21.0,
+       22.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.1014,
+      0.2506,
+      0.3023,
+      0.3023,
+      0.3023
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       8.5,
+       9.5
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.0263,
+      0.0582,
+      0.0368,
+      0.0174,
+      0.009
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+       15.266,
+       18.266
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       11.52,
+       12.52
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+    "005_Folgers_commercial.ogv.mp4",
+    "015_ESPRESSO_achieves_First_Light.webm.mp4",
+    "016_Gavin_Newsom_speaking_about_Harvey_Milk_on_Harvey_Milk_Day_2020.ogv.mp4",
+    "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+    "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+    "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+    "011_TWG_coffee_machine.ogv.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.8472,
+      0.5329,
+      0.4208
+     ],
+     "cands": [
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       40.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       21.0,
+       22.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.9422,
+      0.8242,
+      0.1612,
+      0.0522
+     ],
+     "cands": [
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       31.031,
+       56.514
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       36.0,
+       40.0
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       33.0,
+       34.0
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       51.451,
+       52.451
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0416,
+      0.1333
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       55.054
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       2.0,
+       3.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.5372,
+      0.3822,
+      0.022,
+      0.3892,
+      0.0283
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       52.5
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       7.0,
+       20.28
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       38.204,
+       39.204
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       34.0,
+       35.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.9095,
+      0.5217,
+      0.1028
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       14.5
+      ],
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       56.264,
+       57.264
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.4008,
+      0.1766,
+      0.1879
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       6.266,
+       13.5
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       55.054
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       1.001,
+       2.001
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.5383,
+      0.02,
+      0.1125,
+      0.6308,
+      0.2489
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       14.5
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       40.039,
+       51.05
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       24.457,
+       28.461
+      ],
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       55.764,
+       56.765
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "candidate",
+     "p": [
+      0.9299,
+      0.7496,
+      0.0387,
+      0.0136
+     ],
+     "cands": [
+      [
+       "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+       51.259,
+       54.763
+      ],
+      [
+       "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+       30.766,
+       31.766
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       51.451,
+       52.451
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       4.766,
+       5.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.9859,
+      0.0116,
+      0.6408,
+      0.0054,
+      0.0095
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       0.033,
+       55.054
+      ],
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       30.04,
+       38.04
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       2.5
+      ],
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       0.04,
+       22.04
+      ],
+      [
+       "015_ESPRESSO_achieves_First_Light.webm.mp4",
+       39.04,
+       48.04
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.3509,
+      0.028
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       19.5,
+       21.266
+      ],
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       43.042,
+       46.045
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.8494,
+      0.3386,
+      0.1423,
+      0.009,
+      0.0461
+     ],
+     "cands": [
+      [
+       "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+       1.034,
+       55.054
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       46.5,
+       52.5
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       37.704,
+       39.205
+      ],
+      [
+       "007_Organ_Grinder_in_Berlin_Germany.ogv.mp4",
+       11.52,
+       12.52
+      ],
+      [
+       "005_Folgers_commercial.ogv.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+    "021_Tassimo_coffee_system.webm.mp4",
+    "014_VOA_Speaks_with_a_Pulse_Bartender_s_Friend.webm.mp4",
+    "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+    "019_Coffee_percolator.webm.mp4",
+    "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+    "012_Rateel_cafe_music1.webm.mp4",
+    "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "candidate",
+     "p": [
+      0.9084,
+      0.768,
+      0.6461,
+      0.7353,
+      0.8893
+     ],
+     "cands": [
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       14.0,
+       18.0
+      ],
+      [
+       "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+       62.0,
+       72.0
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       26.52,
+       29.28
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       3.52,
+       6.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.1071
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       0.0,
+       9.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "partial",
+     "p": [
+      0.1281,
+      0.1376,
+      0.2135,
+      0.232,
+      0.0876
+     ],
+     "cands": [
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       39.039,
+       40.039
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       48.298,
+       49.298
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       37.537,
+       38.537
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       55.013,
+       56.013
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.1166,
+      0.3579,
+      0.4747,
+      0.1519,
+      0.2153
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+       0.003,
+       60.034
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.1098,
+      0.5121,
+      0.5151,
+      0.3092,
+      0.3337
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+       0.003,
+       60.034
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       9.009,
+       15.473
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.1856,
+      0.441,
+      0.4637,
+      0.3579,
+      0.1227
+     ],
+     "cands": [
+      [
+       "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+       17.003,
+       52.034
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       25.025,
+       28.028
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       1.5,
+       83.5
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       69.002
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0942,
+      0.021,
+      0.035,
+      0.2855,
+      0.2829
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+       0.003,
+       60.034
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       11.469,
+       15.473
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "candidate",
+     "p": [
+      0.1857
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       3.0,
+       6.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.7206,
+      0.0503,
+      0.7336,
+      0.243,
+      0.1427
+     ],
+     "cands": [
+      [
+       "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+       0.003,
+       60.034
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       56.556,
+       59.017
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       12.47,
+       15.473
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.1014,
+      0.0454,
+      0.2506,
+      0.0826,
+      0.2644
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       41.374,
+       42.374
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       8.5,
+       9.5
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       37.537,
+       38.537
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       26.026,
+       27.027
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.6165,
+      0.0263,
+      0.2154,
+      0.0582,
+      0.0174
+     ],
+     "cands": [
+      [
+       "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+       0.003,
+       60.034
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+       43.752,
+       47.005
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+       30.0,
+       33.0
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  },
+  {
+   "clips": [
+    "019_Coffee_percolator.webm.mp4",
+    "014_VOA_Speaks_with_a_Pulse_Bartender_s_Friend.webm.mp4",
+    "011_TWG_coffee_machine.ogv.mp4",
+    "021_Tassimo_coffee_system.webm.mp4",
+    "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+    "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+    "016_Gavin_Newsom_speaking_about_Harvey_Milk_on_Harvey_Milk_Day_2020.ogv.mp4",
+    "012_Rateel_cafe_music1.webm.mp4"
+   ],
+   "rows": {
+    "SH-01": {
+     "status": "partial",
+     "p": [
+      0.8533
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-02": {
+     "status": "candidate",
+     "p": [
+      0.1071
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       0.0,
+       9.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-03": {
+     "status": "candidate",
+     "p": [
+      0.0452,
+      0.4137,
+      0.4137,
+      0.0561,
+      0.1333
+     ],
+     "cands": [
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       49.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       29.763,
+       30.763
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       2.0,
+       3.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-04": {
+     "status": "candidate",
+     "p": [
+      0.1166,
+      0.3579,
+      0.5372,
+      0.0301,
+      0.1013
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       52.5
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       28.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-05": {
+     "status": "candidate",
+     "p": [
+      0.1098,
+      0.5121,
+      0.5217,
+      0.0325,
+      0.1506
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       14.5
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       41.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.518,
+       21.021
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-06": {
+     "status": "candidate",
+     "p": [
+      0.0233,
+      0.4008,
+      0.3579,
+      0.1227,
+      0.0752
+     ],
+     "cands": [
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       29.0
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       6.266,
+       13.5
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       1.5,
+       83.5
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       69.002
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-07": {
+     "status": "candidate",
+     "p": [
+      0.0942,
+      0.035,
+      0.5383,
+      0.0069,
+      0.049
+     ],
+     "cands": [
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       14.5
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       1.0,
+       49.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       18.251,
+       23.256
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-08": {
+     "status": "candidate",
+     "p": [
+      0.1857,
+      0.0136
+     ],
+     "cands": [
+      [
+       "012_Rateel_cafe_music1.webm.mp4",
+       3.0,
+       6.0
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       4.766,
+       5.766
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-09": {
+     "status": "candidate",
+     "p": [
+      0.0503,
+      0.6408,
+      0.7336,
+      0.0271,
+      0.0844
+     ],
+     "cands": [
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       0.0,
+       2.5
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       8.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       6.006,
+       7.006
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-10": {
+     "status": "partial",
+     "p": [
+      0.035,
+      0.1014,
+      0.3509,
+      0.2506,
+      0.3023
+     ],
+     "cands": [
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       0.0,
+       49.0
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       19.5,
+       21.266
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       8.5,
+       9.5
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    },
+    "SH-11": {
+     "status": "candidate",
+     "p": [
+      0.3386,
+      0.0263,
+      0.0582,
+      0.02,
+      0.5538
+     ],
+     "cands": [
+      [
+       "011_TWG_coffee_machine.ogv.mp4",
+       46.5,
+       52.5
+      ],
+      [
+       "019_Coffee_percolator.webm.mp4",
+       0.0,
+       105.004
+      ],
+      [
+       "021_Tassimo_coffee_system.webm.mp4",
+       0.0,
+       83.5
+      ],
+      [
+       "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+       38.0,
+       41.0
+      ],
+      [
+       "000_Japanese_Phrase_of_the_Week_-_Season_2_-_Coffee_Shop__1014705_.webm.mp4",
+       0.0,
+       1.0
+      ]
+     ],
+     "single_frame": "candidate"
+    }
+   }
+  }
+ ],
+ "library": {
+  "SH-01": {
+   "status": "candidate",
+   "p": [
+    0.9084,
+    0.8472,
+    0.768,
+    0.6461,
+    0.7353
+   ],
+   "cands": [
+    [
+     "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+     30.0,
+     33.0
+    ],
+    [
+     "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+     34.0,
+     40.0
+    ],
+    [
+     "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+     14.0,
+     18.0
+    ],
+    [
+     "023_The_Station_Hall_Of_The_Tampere_Station.webm.mp4",
+     62.0,
+     72.0
+    ],
+    [
+     "022_College_niet_voor_verkeersmaatregel_om_drugsoverlast_te_verminderen.webm.mp4",
+     26.52,
+     29.28
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-02": {
+   "status": "candidate",
+   "p": [
+    0.9422,
+    0.1071,
+    0.8242,
+    0.2707,
+    0.1612
+   ],
+   "cands": [
+    [
+     "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+     31.031,
+     56.514
+    ],
+    [
+     "012_Rateel_cafe_music1.webm.mp4",
+     0.0,
+     9.0
+    ],
+    [
+     "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+     36.0,
+     40.0
+    ],
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     37.57,
+     38.57
+    ],
+    [
+     "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+     33.0,
+     34.0
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-03": {
+   "status": "candidate",
+   "p": [
+    0.0452,
+    0.0429,
+    0.0416,
+    0.0475,
+    0.1281
+   ],
+   "cands": [
+    [
+     "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+     0.0,
+     49.0
+    ],
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     5.038,
+     35.301
+    ],
+    [
+     "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+     40.039,
+     55.054
+    ],
+    [
+     "004_Milchkochen.webm.mp4",
+     8.28,
+     10.28
+    ],
+    [
+     "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+     41.374,
+     42.374
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-04": {
+   "status": "candidate",
+   "p": [
+    0.1166,
+    0.0461,
+    0.3579,
+    0.5372,
+    0.1272
+   ],
+   "cands": [
+    [
+     "019_Coffee_percolator.webm.mp4",
+     0.0,
+     105.004
+    ],
+    [
+     "004_Milchkochen.webm.mp4",
+     0.0,
+     10.76
+    ],
+    [
+     "021_Tassimo_coffee_system.webm.mp4",
+     0.0,
+     83.5
+    ],
+    [
+     "011_TWG_coffee_machine.ogv.mp4",
+     0.0,
+     52.5
+    ],
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     5.038,
+     43.042
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-05": {
+   "status": "candidate",
+   "p": [
+    0.7931,
+    0.1098,
+    0.0559,
+    0.5121,
+    0.5151
+   ],
+   "cands": [
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     5.038,
+     43.042
+    ],
+    [
+     "019_Coffee_percolator.webm.mp4",
+     0.0,
+     105.004
+    ],
+    [
+     "004_Milchkochen.webm.mp4",
+     0.0,
+     10.76
+    ],
+    [
+     "021_Tassimo_coffee_system.webm.mp4",
+     0.0,
+     83.5
+    ],
+    [
+     "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+     0.003,
+     60.034
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-06": {
+   "status": "candidate",
+   "p": [
+    0.3395,
+    0.1856,
+    0.0233,
+    0.4008,
+    0.0593
+   ],
+   "cands": [
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     35.802,
+     43.042
+    ],
+    [
+     "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+     17.003,
+     52.034
+    ],
+    [
+     "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+     0.0,
+     29.0
+    ],
+    [
+     "011_TWG_coffee_machine.ogv.mp4",
+     6.266,
+     13.5
+    ],
+    [
+     "004_Milchkochen.webm.mp4",
+     3.0,
+     10.76
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-07": {
+   "status": "candidate",
+   "p": [
+    0.0292,
+    0.0942,
+    0.021,
+    0.035,
+    0.5383
+   ],
+   "cands": [
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     37.57,
+     43.042
+    ],
+    [
+     "021_Tassimo_coffee_system.webm.mp4",
+     0.0,
+     83.5
+    ],
+    [
+     "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+     0.003,
+     60.034
+    ],
+    [
+     "019_Coffee_percolator.webm.mp4",
+     0.0,
+     105.004
+    ],
+    [
+     "011_TWG_coffee_machine.ogv.mp4",
+     0.0,
+     14.5
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-08": {
+   "status": "candidate",
+   "p": [
+    0.9299,
+    0.1857,
+    0.7496,
+    0.0387,
+    0.0136
+   ],
+   "cands": [
+    [
+     "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+     51.259,
+     54.763
+    ],
+    [
+     "012_Rateel_cafe_music1.webm.mp4",
+     3.0,
+     6.0
+    ],
+    [
+     "010_Tramvia_creuant_la_pla\u00e7a.ogv.mp4",
+     30.766,
+     31.766
+    ],
+    [
+     "005_Folgers_commercial.ogv.mp4",
+     51.451,
+     52.451
+    ],
+    [
+     "011_TWG_coffee_machine.ogv.mp4",
+     4.766,
+     5.766
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-09": {
+   "status": "candidate",
+   "p": [
+    0.9096,
+    0.9859,
+    0.9328,
+    0.7206,
+    0.1502
+   ],
+   "cands": [
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     5.038,
+     43.042
+    ],
+    [
+     "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+     0.033,
+     55.054
+    ],
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     0.033,
+     4.037
+    ],
+    [
+     "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+     0.003,
+     60.034
+    ],
+    [
+     "009_Kaffeemaschine_2.0_Zyklon_ICEBE_B25.webm.mp4",
+     0.0,
+     32.266
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-10": {
+   "status": "partial",
+   "p": [
+    0.035,
+    0.1014,
+    0.0454,
+    0.3509,
+    0.0467
+   ],
+   "cands": [
+    [
+     "008_Ripen_coffee_fruits__Kodagu__Karnataka.webm.mp4",
+     0.0,
+     49.0
+    ],
+    [
+     "019_Coffee_percolator.webm.mp4",
+     0.0,
+     105.004
+    ],
+    [
+     "002_Quintal_Brasileiro__um_drink_com_Jabuticaba_feito_pelo_melhor_bartender_do_Brasi.mp4",
+     41.374,
+     42.374
+    ],
+    [
+     "011_TWG_coffee_machine.ogv.mp4",
+     19.5,
+     21.266
+    ],
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     37.57,
+     38.57
+    ]
+   ],
+   "single_frame": "candidate"
+  },
+  "SH-11": {
+   "status": "candidate",
+   "p": [
+    0.8114,
+    0.8494,
+    0.6165,
+    0.3386,
+    0.0263
+   ],
+   "cands": [
+    [
+     "003_Morning_Espresso_Routine__abridged_version_.webm.mp4",
+     5.038,
+     43.042
+    ],
+    [
+     "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+     1.034,
+     55.054
+    ],
+    [
+     "001_Machine_\u00e0_caf\u00e9_\u00e0_l_h\u00f4tel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+     0.003,
+     60.034
+    ],
+    [
+     "011_TWG_coffee_machine.ogv.mp4",
+     46.5,
+     52.5
+    ],
+    [
+     "019_Coffee_percolator.webm.mp4",
+     0.0,
+     105.004
+    ]
+   ],
+   "single_frame": "candidate"
+  }
+ }
+}
