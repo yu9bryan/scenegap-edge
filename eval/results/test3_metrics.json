@@ -1,0 +1,254 @@
+{
+ "split": "test3 (new held-out footage)",
+ "clips": 39,
+ "projects": 20,
+ "project_size": 8,
+ "frozen": {
+  "qset": "main+parts",
+  "topn": "none",
+  "m": "2",
+  "theta": 0.5
+ },
+ "result": {
+  "gap_recall": {
+   "k": 76,
+   "n": 152,
+   "p": 0.5,
+   "lo": 0.4215,
+   "hi": 0.5785
+  },
+  "wrong_reshoot": {
+   "k": 8,
+   "n": 68,
+   "p": 0.1176,
+   "lo": 0.0608,
+   "hi": 0.2154
+  },
+  "verifier_calls": 85098
+ },
+ "system_only": {
+  "gap_recall": {
+   "k": 12,
+   "n": 152,
+   "p": 0.0789,
+   "lo": 0.0457,
+   "hi": 0.1329
+  },
+  "wrong_reshoot": {
+   "k": 1,
+   "n": 68,
+   "p": 0.0147,
+   "lo": 0.0026,
+   "hi": 0.0787
+  },
+  "verifier_calls": 72006
+ },
+ "targets": {
+  "wrong_reshoot_max": 0.05,
+  "gap_recall_min": 0.3
+ },
+ "met": false,
+ "scored_at": "2026-10-27 07:38:03",
+ "projects_clips": [
+  [
+   "025_Nespresso_coffeemake.ogv.mp4",
+   "017_Caf\u00e9_aan_de_rol-515898.ogv.mp4",
+   "018_Dispensador_de_caf\u00e8_antic.ogv.mp4",
+   "019_Kaffe_ur_maskin.webm.mp4",
+   "013_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22442352709_.webm.mp4",
+   "004_Coffee_machine.ogv.mp4",
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4",
+   "006_Cafe_du_Monde1.webm.mp4"
+  ],
+  [
+   "016_Ships-in-coffee.webm.mp4",
+   "018_Dispensador_de_caf\u00e8_antic.ogv.mp4",
+   "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4",
+   "030_COFFEE_and_SHAURMA_\u0433._\u0422\u0440\u0451\u0445\u0433\u043e\u0440\u043d\u044b\u0439.webm.mp4",
+   "033__speed_paint__\u5357\u56fd\u306a\u30c0\u30fc\u30af\u30a8\u30eb\u30d5\u306e\u8e0a\u308a\u5b50\u3055\u3093_\u5236\u4f5c\u52d5\u753b_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4",
+   "038_Armenian_Sign_Language__ArSL__-_\u057d\u0578\u0582\u0580\u0573_-_coffee.webm.mp4",
+   "015_Arabica_coffee_seedlings.ogv.mp4"
+  ],
+  [
+   "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+   "021_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22416151618_.webm.mp4",
+   "028__speed_paint__2024\u5e74\u8cc0\u30a4\u30e9\u30b9\u30c8_\u5236\u4f5c\u52d5\u753b_Illustration_Making_CLIP_STUDIO_PAINT_PRO_.webm.mp4",
+   "031_Carillon_kondigt_werkpauze_aan_Weeknummer_51-08_-_Open_Beelden_-_14528.ogv.mp4",
+   "017_Caf\u00e9_aan_de_rol-515898.ogv.mp4",
+   "015_Arabica_coffee_seedlings.ogv.mp4",
+   "019_Kaffe_ur_maskin.webm.mp4",
+   "030_COFFEE_and_SHAURMA_\u0433._\u0422\u0440\u0451\u0445\u0433\u043e\u0440\u043d\u044b\u0439.webm.mp4"
+  ],
+  [
+   "005_Koffie_en_protest_bij_bezoek_Mark_Rutte.webm.mp4",
+   "032_Maturation-of-the-HIV-1-core-by-a-non-diffusional-phase-transition-ncomms6854-s2.mp4",
+   "034__Cannon__Wilkins_Coffee_commercial__1957_.webm.mp4",
+   "001_Making_Cappuccino_coffee.webm.mp4",
+   "007_Espressokanne.ogv.mp4",
+   "030_COFFEE_and_SHAURMA_\u0433._\u0422\u0440\u0451\u0445\u0433\u043e\u0440\u043d\u044b\u0439.webm.mp4",
+   "031_Carillon_kondigt_werkpauze_aan_Weeknummer_51-08_-_Open_Beelden_-_14528.ogv.mp4",
+   "004_Coffee_machine.ogv.mp4"
+  ],
+  [
+   "000_Blinking_lights_on_panel_of_Philips_automatic_coffee_machine_during_descaling_pr.mp4",
+   "004_Coffee_machine.ogv.mp4",
+   "033__speed_paint__\u5357\u56fd\u306a\u30c0\u30fc\u30af\u30a8\u30eb\u30d5\u306e\u8e0a\u308a\u5b50\u3055\u3093_\u5236\u4f5c\u52d5\u753b_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4",
+   "003_Latte_Coffee_making.webm.mp4",
+   "031_Carillon_kondigt_werkpauze_aan_Weeknummer_51-08_-_Open_Beelden_-_14528.ogv.mp4",
+   "016_Ships-in-coffee.webm.mp4",
+   "008_Munchkin_kitty_Temari_Cat_Cafe_No_Ouchie.webm.mp4",
+   "021_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22416151618_.webm.mp4"
+  ],
+  [
+   "008_Munchkin_kitty_Temari_Cat_Cafe_No_Ouchie.webm.mp4",
+   "005_Koffie_en_protest_bij_bezoek_Mark_Rutte.webm.mp4",
+   "031_Carillon_kondigt_werkpauze_aan_Weeknummer_51-08_-_Open_Beelden_-_14528.ogv.mp4",
+   "032_Maturation-of-the-HIV-1-core-by-a-non-diffusional-phase-transition-ncomms6854-s2.mp4",
+   "030_COFFEE_and_SHAURMA_\u0433._\u0422\u0440\u0451\u0445\u0433\u043e\u0440\u043d\u044b\u0439.webm.mp4",
+   "020_Pr\u00eate_\u00e0_bondir.webm.mp4",
+   "004_Coffee_machine.ogv.mp4",
+   "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4"
+  ],
+  [
+   "038_Armenian_Sign_Language__ArSL__-_\u057d\u0578\u0582\u0580\u0573_-_coffee.webm.mp4",
+   "010_Harland_Sanders_Caf\u00e9_and_Museum_-_October_2023_-_Sarah_Stierch_28.webm.mp4",
+   "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+   "035_Coffee-Mate_-_Star_Wars_Stopmotion.webm.mp4",
+   "013_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22442352709_.webm.mp4",
+   "036_Kaffeemaschine_2.0_Schnecke_ICEBE_B25.webm.mp4",
+   "006_Cafe_du_Monde1.webm.mp4",
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4"
+  ],
+  [
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4",
+   "009_\u041f\u0440\u0438\u0433\u043e\u0442\u043e\u0432\u043b\u0435\u043d\u0438\u0435_\u043c\u0430\u043a\u0438\u0430\u0442\u043e.webm.mp4",
+   "021_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22416151618_.webm.mp4",
+   "028__speed_paint__2024\u5e74\u8cc0\u30a4\u30e9\u30b9\u30c8_\u5236\u4f5c\u52d5\u753b_Illustration_Making_CLIP_STUDIO_PAINT_PRO_.webm.mp4",
+   "010_Harland_Sanders_Caf\u00e9_and_Museum_-_October_2023_-_Sarah_Stierch_28.webm.mp4",
+   "016_Ships-in-coffee.webm.mp4",
+   "020_Pr\u00eate_\u00e0_bondir.webm.mp4",
+   "012_Prete_dannato_-_Sorelle_Pampini_-_Sermezzana.webm.mp4"
+  ],
+  [
+   "039_Misawa_Pacific_Update-_Cars___Coffee__967859_.webm.mp4",
+   "004_Coffee_machine.ogv.mp4",
+   "010_Harland_Sanders_Caf\u00e9_and_Museum_-_October_2023_-_Sarah_Stierch_28.webm.mp4",
+   "015_Arabica_coffee_seedlings.ogv.mp4",
+   "026_Un_pr\u00eat\u00e9_pour_un_rendu__1904_.webm.mp4",
+   "031_Carillon_kondigt_werkpauze_aan_Weeknummer_51-08_-_Open_Beelden_-_14528.ogv.mp4",
+   "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+   "000_Blinking_lights_on_panel_of_Philips_automatic_coffee_machine_during_descaling_pr.mp4"
+  ],
+  [
+   "018_Dispensador_de_caf\u00e8_antic.ogv.mp4",
+   "012_Prete_dannato_-_Sorelle_Pampini_-_Sermezzana.webm.mp4",
+   "038_Armenian_Sign_Language__ArSL__-_\u057d\u0578\u0582\u0580\u0573_-_coffee.webm.mp4",
+   "000_Blinking_lights_on_panel_of_Philips_automatic_coffee_machine_during_descaling_pr.mp4",
+   "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+   "020_Pr\u00eate_\u00e0_bondir.webm.mp4",
+   "036_Kaffeemaschine_2.0_Schnecke_ICEBE_B25.webm.mp4",
+   "031_Carillon_kondigt_werkpauze_aan_Weeknummer_51-08_-_Open_Beelden_-_14528.ogv.mp4"
+  ],
+  [
+   "020_Pr\u00eate_\u00e0_bondir.webm.mp4",
+   "001_Making_Cappuccino_coffee.webm.mp4",
+   "038_Armenian_Sign_Language__ArSL__-_\u057d\u0578\u0582\u0580\u0573_-_coffee.webm.mp4",
+   "028__speed_paint__2024\u5e74\u8cc0\u30a4\u30e9\u30b9\u30c8_\u5236\u4f5c\u52d5\u753b_Illustration_Making_CLIP_STUDIO_PAINT_PRO_.webm.mp4",
+   "030_COFFEE_and_SHAURMA_\u0433._\u0422\u0440\u0451\u0445\u0433\u043e\u0440\u043d\u044b\u0439.webm.mp4",
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4",
+   "018_Dispensador_de_caf\u00e8_antic.ogv.mp4",
+   "010_Harland_Sanders_Caf\u00e9_and_Museum_-_October_2023_-_Sarah_Stierch_28.webm.mp4"
+  ],
+  [
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4",
+   "039_Misawa_Pacific_Update-_Cars___Coffee__967859_.webm.mp4",
+   "004_Coffee_machine.ogv.mp4",
+   "025_Nespresso_coffeemake.ogv.mp4",
+   "023_Karin_Csernohorski_-_Kaffee-.webm.mp4",
+   "003_Latte_Coffee_making.webm.mp4",
+   "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+   "016_Ships-in-coffee.webm.mp4"
+  ],
+  [
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4",
+   "017_Caf\u00e9_aan_de_rol-515898.ogv.mp4",
+   "030_COFFEE_and_SHAURMA_\u0433._\u0422\u0440\u0451\u0445\u0433\u043e\u0440\u043d\u044b\u0439.webm.mp4",
+   "022__speed_paint__\u30c0\u30fc\u30af\u30a8\u30eb\u30d5\u306e\u8e0a\u308a\u5b50\u3055\u3093_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4",
+   "012_Prete_dannato_-_Sorelle_Pampini_-_Sermezzana.webm.mp4",
+   "021_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22416151618_.webm.mp4",
+   "007_Espressokanne.ogv.mp4",
+   "025_Nespresso_coffeemake.ogv.mp4"
+  ],
+  [
+   "014__speed_paint__\u6d77\u6708\u591c_\u5236\u4f5c\u52d5\u753b_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4",
+   "035_Coffee-Mate_-_Star_Wars_Stopmotion.webm.mp4",
+   "033__speed_paint__\u5357\u56fd\u306a\u30c0\u30fc\u30af\u30a8\u30eb\u30d5\u306e\u8e0a\u308a\u5b50\u3055\u3093_\u5236\u4f5c\u52d5\u753b_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4",
+   "029_Coffee-Mate_Cookies_Stopmotion.webm.mp4",
+   "025_Nespresso_coffeemake.ogv.mp4",
+   "019_Kaffe_ur_maskin.webm.mp4",
+   "000_Blinking_lights_on_panel_of_Philips_automatic_coffee_machine_during_descaling_pr.mp4",
+   "012_Prete_dannato_-_Sorelle_Pampini_-_Sermezzana.webm.mp4"
+  ],
+  [
+   "039_Misawa_Pacific_Update-_Cars___Coffee__967859_.webm.mp4",
+   "014__speed_paint__\u6d77\u6708\u591c_\u5236\u4f5c\u52d5\u753b_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4",
+   "018_Dispensador_de_caf\u00e8_antic.ogv.mp4",
+   "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+   "009_\u041f\u0440\u0438\u0433\u043e\u0442\u043e\u0432\u043b\u0435\u043d\u0438\u0435_\u043c\u0430\u043a\u0438\u0430\u0442\u043e.webm.mp4",
+   "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+   "031_Carillon_kondigt_werkpauze_aan_Weeknummer_51-08_-_Open_Beelden_-_14528.ogv.mp4",
+   "032_Maturation-of-the-HIV-1-core-by-a-non-diffusional-phase-transition-ncomms6854-s2.mp4"
+  ],
+  [
+   "009_\u041f\u0440\u0438\u0433\u043e\u0442\u043e\u0432\u043b\u0435\u043d\u0438\u0435_\u043c\u0430\u043a\u0438\u0430\u0442\u043e.webm.mp4",
+   "007_Espressokanne.ogv.mp4",
+   "004_Coffee_machine.ogv.mp4",
+   "016_Ships-in-coffee.webm.mp4",
+   "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+   "024_Coffee_whitening_flames.webm.mp4",
+   "012_Prete_dannato_-_Sorelle_Pampini_-_Sermezzana.webm.mp4",
+   "025_Nespresso_coffeemake.ogv.mp4"
+  ],
+  [
+   "004_Coffee_machine.ogv.mp4",
+   "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+   "030_COFFEE_and_SHAURMA_\u0433._\u0422\u0440\u0451\u0445\u0433\u043e\u0440\u043d\u044b\u0439.webm.mp4",
+   "013_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22442352709_.webm.mp4",
+   "006_Cafe_du_Monde1.webm.mp4",
+   "018_Dispensador_de_caf\u00e8_antic.ogv.mp4",
+   "016_Ships-in-coffee.webm.mp4",
+   "014__speed_paint__\u6d77\u6708\u591c_\u5236\u4f5c\u52d5\u753b_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4"
+  ],
+  [
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4",
+   "038_Armenian_Sign_Language__ArSL__-_\u057d\u0578\u0582\u0580\u0573_-_coffee.webm.mp4",
+   "006_Cafe_du_Monde1.webm.mp4",
+   "022__speed_paint__\u30c0\u30fc\u30af\u30a8\u30eb\u30d5\u306e\u8e0a\u308a\u5b50\u3055\u3093_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4",
+   "007_Espressokanne.ogv.mp4",
+   "034__Cannon__Wilkins_Coffee_commercial__1957_.webm.mp4",
+   "026_Un_pr\u00eat\u00e9_pour_un_rendu__1904_.webm.mp4",
+   "014__speed_paint__\u6d77\u6708\u591c_\u5236\u4f5c\u52d5\u753b_Illustration_Making_\u539a\u5857\u308a\u30e1\u30a4\u30ad\u30f3\u30b0_.webm.mp4"
+  ],
+  [
+   "001_Making_Cappuccino_coffee.webm.mp4",
+   "036_Kaffeemaschine_2.0_Schnecke_ICEBE_B25.webm.mp4",
+   "023_Karin_Csernohorski_-_Kaffee-.webm.mp4",
+   "027_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22646520200_.webm.mp4",
+   "021_Small_team_gets_BLM_firetrucks_to_America_s_wildfires__22416151618_.webm.mp4",
+   "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+   "012_Prete_dannato_-_Sorelle_Pampini_-_Sermezzana.webm.mp4",
+   "015_Arabica_coffee_seedlings.ogv.mp4"
+  ],
+  [
+   "034__Cannon__Wilkins_Coffee_commercial__1957_.webm.mp4",
+   "035_Coffee-Mate_-_Star_Wars_Stopmotion.webm.mp4",
+   "004_Coffee_machine.ogv.mp4",
+   "007_Espressokanne.ogv.mp4",
+   "036_Kaffeemaschine_2.0_Schnecke_ICEBE_B25.webm.mp4",
+   "000_Blinking_lights_on_panel_of_Philips_automatic_coffee_machine_during_descaling_pr.mp4",
+   "008_Munchkin_kitty_Temari_Cat_Cafe_No_Ouchie.webm.mp4",
+   "028__speed_paint__2024\u5e74\u8cc0\u30a4\u30e9\u30b9\u30c8_\u5236\u4f5c\u52d5\u753b_Illustration_Making_CLIP_STUDIO_PAINT_PRO_.webm.mp4"
+  ]
+ ]
+}
