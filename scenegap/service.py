@@ -11,6 +11,7 @@ import io
 import json
 import os
 import threading
+import time
 from dataclasses import asdict
 
 import numpy as np
@@ -244,9 +245,13 @@ class SceneGap:
             self.db.x("UPDATE assets SET status='analyzing' WHERE asset_id=?", (a["asset_id"],))
             try:
                 rot = json.loads(a["probe"])["rotation"] if a["probe"] else 0
+                t0 = time.perf_counter()
                 shots, frames, st = analyze(path, rot, self.cfg["sample_every_ms"])
+                t1 = time.perf_counter()
                 emb = self.backend.encode_images([f.image for f in frames])
-                self._save_index(a["sha256"], shots, frames, emb, {"decode": st})
+                t2 = time.perf_counter()
+                self._save_index(a["sha256"], shots, frames, emb, {"decode": st, "decode_sample_s": round(t1 - t0, 3),
+                                                                   "embed_s": round(t2 - t1, 3), "backend_at_index": self.backend.name})
                 self.db.x("UPDATE assets SET status='analyzed', error_code=NULL, error_msg=NULL WHERE asset_id=?", (a["asset_id"],))
                 done += 1
             except Exception as e:                               # one bad file never sinks the project (FR-ING-06)
