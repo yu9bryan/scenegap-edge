@@ -123,18 +123,30 @@ def frame_p(row, i, rid, qset):
     return v
 
 
+_FR = {}
+
+
 def project_frames(dense, sims, clips, rid):
-    """All 1 s samples of the project's clips: (clip, index, shot, t_ms, clip similarity)."""
+    """All 1 s samples of the project's clips: (clip, index, shot, t_ms, clip similarity). Cached."""
+    key = (id(dense), tuple(clips), rid)
+    if key in _FR:
+        return _FR[key]
     fr = []
     for c in clips:
         row = dense[c]
         sc = sims.get(c, {})
+        ts = sorted(sc)
         for i, t in enumerate(row["t_ms"]):
             s = sc.get(t)
-            if s is None and sc:                           # nearest system sample (same 1 s grid, rounding only)
-                s = sc[min(sc, key=lambda x: abs(int(x) - t))]
+            if s is None and ts:                           # nearest system sample (same 1 s grid, rounding only)
+                s = sc[min(ts, key=lambda x: abs(x - t))]
             fr.append((c, i, row["shot"][i], t, (s or {}).get(rid, 0.0)))
+    _FR[key] = fr
     return fr
+
+
+def int_keys(sims):
+    return {c: {int(t): v for t, v in d.items()} for c, d in sims.items()}
 
 
 def present(dense, frames, rid, qset, topn, theta, m):
@@ -218,7 +230,7 @@ def main():
     if a.mode == "dev":
         rows = []
         src = sources()
-        data = {n: (load(os.path.join(a.dense, d)), load(os.path.join(a.dense, "sims_" + ("test2" if n == "test2" else "commons") + ".json")), load(g), pr, st)
+        data = {n: (load(os.path.join(a.dense, d)), int_keys(load(os.path.join(a.dense, "sims_" + ("test2" if n == "test2" else "commons") + ".json"))), load(g), pr, st)
                 for n, (_, d, g, pr, st) in src.items()}
         for qset in QSETS:
             for topn in TOPN:
@@ -247,7 +259,7 @@ def main():
     clips = sorted(c["clip"] for c in load(os.path.join(MAN, "test3_manifest.json"))["clips"])
     projects = [random.Random(f"test3-{i}").sample(clips, 8) for i in range(20)]
     dense = load(os.path.join(a.dense, "test3.json"))
-    sims = load(os.path.join(a.dense, "sims_test3.json"))
+    sims = int_keys(load(os.path.join(a.dense, "sims_test3.json")))
     gold = load(os.path.join(HERE, "labels", "test3", "gold.json"))
     status = system_status(a.work, "F:/sg_data/commons3/mp4", projects, a.device)
     res = score_source(dense, sims, gold, projects, status, fz["qset"], fz["topn"], fz["theta"], fz["m"])
