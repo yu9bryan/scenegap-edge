@@ -1,13 +1,13 @@
 {
- "run_at": "2026-10-26 23:33:56",
+ "run_at": "2026-10-27 00:58:38",
  "python": "3.13.9",
  "os": "Windows-11-10.0.26200-SP0",
  "pip_exit": 0,
  "pytest_exit": 0,
  "pytest_summary": [
-  "47 passed, 1 warning in 11.75s"
+  "48 passed, 1 warning in 13.04s"
  ],
- "seconds": 33,
+ "seconds": 34,
  "packages": [
   "annotated-doc==0.0.5",
   "annotated-types==0.8.0",
