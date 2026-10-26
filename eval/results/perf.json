@@ -1,0 +1,126 @@
+{
+ "measured_at": "2026-10-26 19:24:58",
+ "note": "reference backends on a desktop; UGen300 numbers: not_run",
+ "backends": {
+  "cpu-reference": {
+   "model_load_s": 6.51,
+   "per_clip": [
+    {
+     "clip": "000_Cadaques_cafe_de_la_habana_2008_august_converted_YAN3.ogv.mp4",
+     "duration_s": 9.3,
+     "samples": 10,
+     "decode_sample_s": 0.329,
+     "embed_s": 0.163,
+     "analyse_total_s": 0.509
+    },
+    {
+     "clip": "001_Vichy_-_Grand_Caf\u00e9__terrasse_sous_la_gr\u00eale.ogv.mp4",
+     "duration_s": 10.11,
+     "samples": 11,
+     "decode_sample_s": 0.364,
+     "embed_s": 0.171,
+     "analyse_total_s": 0.552
+    },
+    {
+     "clip": "002_Merry_X-mas_at_Kranzler.webm.mp4",
+     "duration_s": 23.03,
+     "samples": 23,
+     "decode_sample_s": 1.056,
+     "embed_s": 0.372,
+     "analyse_total_s": 1.445
+    },
+    {
+     "clip": "003_Times_Cafe_inflatable_waving_character.webm.mp4",
+     "duration_s": 5.83,
+     "samples": 6,
+     "decode_sample_s": 0.206,
+     "embed_s": 0.1,
+     "analyse_total_s": 0.322
+    },
+    {
+     "clip": "004_Rateel_cafe_music2.webm.mp4",
+     "duration_s": 25.8,
+     "samples": 26,
+     "decode_sample_s": 0.626,
+     "embed_s": 0.44,
+     "analyse_total_s": 1.085
+    },
+    {
+     "clip": "005_Starbucks_en_la_a\u0109etcentro_Kristall__Tjumeno_.webm.mp4",
+     "duration_s": 11.1,
+     "samples": 12,
+     "decode_sample_s": 0.357,
+     "embed_s": 0.185,
+     "analyse_total_s": 0.556
+    }
+   ],
+   "search_ms": {
+    "n": 55,
+    "segments": 10000,
+    "p50": 11.77,
+    "p95": 14.29
+   },
+   "device": "desktop CPU"
+  },
+  "cuda-reference": {
+   "model_load_s": 1.88,
+   "per_clip": [
+    {
+     "clip": "000_Cadaques_cafe_de_la_habana_2008_august_converted_YAN3.ogv.mp4",
+     "duration_s": 9.3,
+     "samples": 10,
+     "decode_sample_s": 0.264,
+     "embed_s": 0.074,
+     "analyse_total_s": 0.352
+    },
+    {
+     "clip": "001_Vichy_-_Grand_Caf\u00e9__terrasse_sous_la_gr\u00eale.ogv.mp4",
+     "duration_s": 10.11,
+     "samples": 11,
+     "decode_sample_s": 0.368,
+     "embed_s": 0.019,
+     "analyse_total_s": 0.4
+    },
+    {
+     "clip": "002_Merry_X-mas_at_Kranzler.webm.mp4",
+     "duration_s": 23.03,
+     "samples": 23,
+     "decode_sample_s": 1.069,
+     "embed_s": 0.038,
+     "analyse_total_s": 1.123
+    },
+    {
+     "clip": "003_Times_Cafe_inflatable_waving_character.webm.mp4",
+     "duration_s": 5.83,
+     "samples": 6,
+     "decode_sample_s": 0.229,
+     "embed_s": 0.012,
+     "analyse_total_s": 0.256
+    },
+    {
+     "clip": "004_Rateel_cafe_music2.webm.mp4",
+     "duration_s": 25.8,
+     "samples": 26,
+     "decode_sample_s": 0.683,
+     "embed_s": 0.055,
+     "analyse_total_s": 0.759
+    },
+    {
+     "clip": "005_Starbucks_en_la_a\u0109etcentro_Kristall__Tjumeno_.webm.mp4",
+     "duration_s": 11.1,
+     "samples": 12,
+     "decode_sample_s": 0.345,
+     "embed_s": 0.043,
+     "analyse_total_s": 0.402
+    }
+   ],
+   "search_ms": {
+    "n": 55,
+    "segments": 10000,
+    "p50": 7.61,
+    "p95": 13.39
+   },
+   "device": "NVIDIA GeForce RTX 4080"
+  }
+ }
+}
