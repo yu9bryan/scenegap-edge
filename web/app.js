@@ -685,7 +685,7 @@
     return h('div', null,
       pageHead('選擇或建立專案', '專案包含一組需求（腳本鏡頭清單）與授權的素材資料夾。'),
       h('div', { class: 'grid-2' }, panel('建立新專案', create, { icon: 'plus' }),
-        h('div', null, panel('開啟既有專案', open, { icon: 'open' }), panel('最近開啟', recentList, { icon: 'clock' }))));
+        h('div', { class: 'stack' }, panel('開啟既有專案', open, { icon: 'open' }), panel('最近開啟', recentList, { icon: 'clock' }))));
   };
 
   // ---------- 1 home
@@ -1079,7 +1079,7 @@
       const tbl = h('table', { class: 'tbl matrix' },
         h('thead', null, h('tr', null,
           h('th', { scope: 'col', class: 'col-id' }, 'ID'), h('th', { scope: 'col' }, '需求'), h('th', { scope: 'col', class: 'col-auto' }, '自動判定（AI）'),
-          h('th', { scope: 'col', class: 'col-human' }, '人工狀態'), h('th', { scope: 'col' }, '原因'), h('th', { scope: 'col', class: 'col-thumb' }, '最佳候選'),
+          h('th', { scope: 'col', class: 'col-human' }, '人工狀態'), h('th', { scope: 'col', class: 'col-reason' }, '原因'), h('th', { scope: 'col', class: 'col-thumb' }, '最佳候選'),
           h('th', { scope: 'col', class: 'col-act' }, h('span', { class: 'sr-only' }, '動作')))),
         h('tbody', null, vis.map((row) => {
           const r = row.requirement;
@@ -1142,6 +1142,7 @@
 
     // left: requirement
     const hard = (req.constraints || []).filter((c) => c.hard !== false);
+    const synthDur = req.min_duration_ms && !hard.some((c) => c.kind === 'duration');
     const soft = (req.constraints || []).filter((c) => c.hard === false);
     const consItem = (c) => h('li', null, h('div', { class: 'row', style: 'gap:6px;justify-content:space-between' },
       h('strong', null, KIND_ZH[c.kind] || c.kind), capChip(c.capability)),
@@ -1152,11 +1153,11 @@
         h('div', null, h('div', { class: 'faint small' }, '中文原文'), h('div', { style: 'font-weight:600;font-size:15px' }, req.source_text)),
         h('div', null, h('div', { class: 'faint small' }, '英文檢索字'), h('div', { class: 'mono small muted', lang: 'en' }, req.query_en)),
         kvs([['最短連續', fmtSec(req.min_duration_ms)], ['最少 take', String(req.min_takes)], ['權重', String(req.weight)]]),
-        reasonList(row.auto && row.auto.reasons)),
-      h('div', { class: 'stack' },
-        h('div', null, h('h3', { style: 'margin-bottom:8px' }, '硬性條件（' + (hard.length + (req.min_duration_ms ? 1 : 0)) + '）'),
+        row.auto && row.auto.reasons && row.auto.reasons.length ? reasonList(row.auto.reasons) : null),
+      h('div', { class: 'stack', style: 'margin-top:16px' },
+        h('div', null, h('h3', { style: 'margin-bottom:8px' }, '硬性條件（' + (hard.length + (synthDur ? 1 : 0)) + '）'),
           h('ul', { class: 'hard-list' },
-            req.min_duration_ms ? h('li', null, h('div', { class: 'row', style: 'gap:6px;justify-content:space-between' }, h('strong', null, '連續時長 ≥ ' + fmtSec(req.min_duration_ms)), capChip('auto'))) : null,
+            synthDur ? h('li', null, h('div', { class: 'row', style: 'gap:6px;justify-content:space-between' }, h('strong', null, '連續時長 ≥ ' + fmtSec(req.min_duration_ms)), capChip('auto'))) : null,
             hard.map(consItem)),
           !hard.length && !req.min_duration_ms ? h('p', { class: 'faint small' }, '只有語意內容條件。') : null),
         soft.length ? h('div', null, h('h3', { style: 'margin-bottom:8px' }, '參考條件'), h('ul', { class: 'hard-list' }, soft.map(consItem))) : null)),
@@ -1484,7 +1485,8 @@
   // ------------------------------------------------------------------ boot
   function boot() {
     if (PREVIEW) {
-      document.body.append(h('div', { class: 'preview-ribbon', role: 'note' }, icon('beaker'), '預覽資料（非實測）'));
+      document.body.classList.add('is-preview');
+      document.body.prepend(h('div', { class: 'preview-ribbon', role: 'note' }, icon('beaker'), '預覽資料（非實測）— 畫面使用範例資料，不是實際分析結果'));
     } else if (!TOKEN || TOKEN === '__SG_TOKEN__') {
       toast({ kind: 'error', title: '缺少工作階段權杖', text: '下一步：請從 SceneGap 啟動程式開啟本頁，不要直接開啟 HTML 檔。' });
     }

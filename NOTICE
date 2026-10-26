@@ -1,0 +1,12 @@
+SceneGap Edge
+Copyright 2026 SceneGap Edge contributors. Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Third-party components (not redistributed in this repository; downloaded by their own tools at run time):
+- OpenAI CLIP ViT-B/32 weights (openai/clip-vit-base-patch32), MIT licence, via Hugging Face Transformers.
+- FastAPI, Uvicorn, Pydantic (MIT), PyAV (BSD-3-Clause; links FFmpeg, LGPL/GPL depending on the build),
+  Pillow (MIT-CMU), NumPy (BSD-3-Clause), PyTorch (BSD-3-Clause), Transformers (Apache-2.0).
+
+Evaluation footage is NOT included. `datasets/manifests/commons_manifest.json` lists every clip with its Wikimedia
+Commons page, author and licence (CC0, public domain, CC BY or CC BY-SA). Rebuild the set with
+scripts/fetch_commons.py. Contact sheets and thumbnails derived from CC BY-SA clips keep the same licence and
+attribution.

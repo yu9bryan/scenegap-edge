@@ -1,0 +1,7 @@
+# core service (no model): API, media timeline, shots, storage, exports
+fastapi>=0.110
+uvicorn>=0.29
+pydantic>=2.6
+av>=12
+pillow>=10
+numpy>=1.26
