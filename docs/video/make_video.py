@@ -9,6 +9,7 @@ import json
 import os
 import subprocess
 import sys
+import wave
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
@@ -109,8 +110,8 @@ def card_problem():
 def card_tools():
     im = BGIMG.copy(); d = ImageDraw.Draw(im)
     overline(d, "What exists", 120, 120)
-    d.text((120, 170), "Search finds a cup. Nobody checks the shot list.", font=font(56, True), fill=TEXT)
-    cols = [(120, "Tool"), (900, "Searches footage"), (1400, "Checks the shot list")]
+    d.text((120, 170), "Search finds a cup. None checks length, takes or frame.", font=font(56, True), fill=TEXT)
+    cols = [(120, "Tool"), (900, "Searches footage"), (1400, "Checks length · takes")]
     y0 = 300
     for x, h_ in cols:
         d.text((x, y0), h_.upper(), font=font(24, True), fill=MUTED)
@@ -151,9 +152,9 @@ def card_results():
     overline(d, "Evidence", 120, 110)
     d.text((120, 160), "Tested on real, openly licensed footage", font=font(60, True), fill=TEXT)
     stats = [(f"{len(man['clips'])}", f"Wikimedia Commons clips · {mins:.0f} min"),
-             (f"κ {agr['sample_level']['cohen_kappa']:.2f}", "two independent annotators"),
+             (f"κ {agr['sample_level']['cohen_kappa']:.2f}", "agreement between two AI annotators (1 = perfect)"),
              (f"{r5['k']} / {r5['n']}", "shots with the right clip in the top 5 (held-out test, scored once)"),
-             (f"{rl['candidate_seconds_to_review']:.0f} s", f"of clips to check, instead of {rl['library_seconds']:.0f} s of footage")]
+             (f"{rl['candidate_seconds_to_review']:.0f} s", f"of candidate clips, out of {rl['library_seconds']:.0f} s of footage ({rl['candidate_seconds_to_review'] / rl['library_seconds'] * 100:.0f}%)")]
     for i, (big, lab) in enumerate(stats):
         x, y = 120 + (i % 2) * 860, 270 + (i // 2) * 270
         d.rounded_rectangle((x, y, x + 820, y + 240), 24, fill=(21, 21, 31), outline=(42, 42, 58), width=2)
@@ -166,7 +167,7 @@ def card_results():
 def card_arch():
     im = BGIMG.copy(); d = ImageDraw.Draw(im)
     overline(d, "Hardware", 120, 90)
-    d.text((120, 135), "Next: the CLIP image encoder on the ASUS UGen300", font=font(54, True), fill=TEXT)
+    d.text((120, 135), "Next: the image half of CLIP on the ASUS UGen300", font=font(54, True), fill=TEXT)
     a = Image.open(os.path.join(os.path.dirname(REPO), "decks", "scenegap", "img", "architecture.png")).convert("RGB")
     a.thumbnail((1500, 610))
     im.paste(a, ((W - a.width) // 2, 230))
@@ -178,32 +179,84 @@ def card_end(credits):
     d.text((120, 170), "SceneGap Edge", font=font(110, True), fill=(255, 255, 255))
     d.text((126, 310), "Fewer surprises in the edit.", font=font(44), fill=CYAN)
     d.text((126, 380), "[Team name] · github.com/[team]/scenegap-edge", font=font(30), fill=TEXT)
-    d.text((126, 470), "FOOTAGE (Wikimedia Commons, used under each licence)", font=font(24, True), fill=MUTED)
-    y = 515
+    d.text((126, 450), "FOOTAGE · Wikimedia Commons, used under each licence; cropped, scaled and sped up for this video", font=font(24, True), fill=MUTED)
+    y = 494
     for title, author, lic in credits:
-        d.text((126, y), f"{title} — {author} — {lic}", font=font(24), fill=TEXT)
+        f = font(24)
+        line = f"{title} — {author} — {lic}"
+        while text_w(d, line, f) > 1680 and f.size > 18:
+            f = font(f.size - 1)
+        d.text((126, y), line, font=f, fill=TEXT)
         y += 36
-    d.text((126, y + 16), "Live app recordings: SceneGap Edge on a desktop GPU (cuda-reference). Narration: synthetic voice.", font=font(22), fill=MUTED)
+    d.text((126, y + 14), "Full credits with links: datasets/manifests/commons_manifest.json in the repository.", font=font(22), fill=MUTED)
+    d.text((126, y + 48), "Live app recorded on a desktop GPU (RTX 4080). Narration: Microsoft en-US-AndrewNeural (edge-tts).", font=font(22), fill=MUTED)
+    d.text((126, y + 82), "This video adapts CC BY-SA footage and is released under CC BY-SA 4.0.", font=font(22), fill=MUTED)
     return save(im, "card_end.png")
 
 
-def caption_png(text, tag, name):
+def tag_png(tag, name):
     im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    if tag:
-        f = font(24, True); tw = text_w(d, tag, f)
-        d.rounded_rectangle((40, 36, 40 + tw + 36, 84), 24, fill=(11, 11, 18, 200), outline=(108, 76, 245, 255), width=2)
-        d.text((58, 46), tag, font=f, fill=(255, 255, 255, 255))
-    if text:
-        f = font(40)
-        lines = wrap(d, text, f, 1500)
-        lh = 54; bh = len(lines) * lh + 34
-        y0 = H - 60 - bh
-        d.rounded_rectangle(((W - 1580) // 2, y0, (W + 1580) // 2, y0 + bh), 18, fill=(0, 0, 0, 175))
-        for i, ln in enumerate(lines):
-            d.text(((W - text_w(d, ln, f)) / 2, y0 + 17 + i * lh), ln, font=f, fill=(255, 255, 255, 255))
+    f = font(24, True); tw = text_w(d, tag, f)
+    d.rounded_rectangle((40, 36, 40 + tw + 36, 84), 24, fill=(11, 11, 18, 215), outline=(108, 76, 245, 255), width=2)
+    d.text((58, 46), tag, font=f, fill=(255, 255, 255, 255))
     p = os.path.join(TMP, name)
     im.save(p)
     return p
+
+
+def balanced(d, text, f, maxw):
+    """Wrap into as few lines as fit, then even out the line lengths so no line is a lone word."""
+    lines = wrap(d, text, f, maxw)
+    if len(lines) < 2:
+        return lines
+    words = text.split()
+    best, best_cost = lines, None
+    for w_ in range(int(maxw * 0.55), maxw + 1, 20):
+        ls = wrap(d, text, f, w_)
+        if len(ls) != len(lines):
+            continue
+        cost = max(text_w(d, ln, f) for ln in ls) - min(text_w(d, ln, f) for ln in ls)
+        if best_cost is None or cost < best_cost:
+            best, best_cost = ls, cost
+    return best
+
+
+def caption_png(text, name):
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    f = font(40)
+    lines = balanced(d, text, f, 1640)
+    lh = 54; bh = len(lines) * lh + 30
+    bw = max(text_w(d, ln, f) for ln in lines) + 80
+    y0 = H - 24 - bh                               # sits in the band under the screen recordings
+    d.rounded_rectangle(((W - bw) // 2, y0, (W + bw) // 2, y0 + bh), 18, fill=(0, 0, 0, 215))
+    for i, ln in enumerate(lines):
+        d.text(((W - text_w(d, ln, f)) / 2, y0 + 15 + i * lh), ln, font=f, fill=(255, 255, 255, 255))
+    p = os.path.join(TMP, name)
+    im.save(p)
+    return p
+
+
+def piece(p):
+    """(start, end, speed) or (start, end, speed, (cx, cy, zoom)) in recording seconds and 1440x900 page pixels."""
+    return (p[0], p[1], p[2], p[3] if len(p) > 3 else None)
+
+
+def rec_to_out(pieces, t):
+    """Where recording time t lands in the edited scene."""
+    out = 0.0
+    for a, b, sp, _ in map(piece, pieces):
+        if t <= a:
+            break
+        out += (min(t, b) - a) / sp
+    return out
+
+
+def piece_windows(pieces):
+    t, win = 0.0, []
+    for a, b, sp, _ in map(piece, pieces):
+        win.append((t, t + (b - a) / sp))
+        t += (b - a) / sp
+    return win
 
 
 # ---------------- scenes ----------------
@@ -223,8 +276,9 @@ def video_src(scene):
         ins = ["-loop", "1", "-t", str(D), "-i", scene["png"]]
         z = scene.get("zoom", 0)
         if z:
-            filt = (f"[0:v]scale={int(W * 1.1)}:{int(H * 1.1)},zoompan=z='min(1+{z}*on/{int(D * FPS)},1+{z})':x='iw/2-(iw/zoom/2)':"
-                    f"y='ih/2-(ih/zoom/2)':d={int(D * FPS)}:s={W}x{H}:fps={FPS},setsar=1[v]")
+            fx, fy = scene.get("zoom_to", (0.5, 0.5))   # push in towards this point (share of the frame)
+            filt = (f"[0:v]scale={int(W * 2)}:{int(H * 2)},zoompan=z='1+{z}*(1-cos(PI*min(on/{int(D * FPS)},1)))/2':x='(iw-iw/zoom)*{fx}':"
+                    f"y='(ih-ih/zoom)*{fy}':d={int(D * FPS)}:s={W}x{H}:fps={FPS},setsar=1[v]")
         else:
             filt = f"[0:v]scale={W}:{H},fps={FPS},setsar=1[v]"
         if scene.get("inset"):
@@ -245,16 +299,57 @@ def video_src(scene):
     if k == "rec":
         src = os.path.join(WORK, "rec", scene["rec"])
         ins = ["-i", src]
-        pieces = scene["pieces"]                  # [(start, end, speed)]
-        parts = []
-        for i, (a, b, sp) in enumerate(pieces):
-            parts.append(f"[0:v]trim={a}:{b},setpts=(PTS-STARTPTS)/{sp}[p{i}]")
+        pieces = [piece(p) for p in scene["pieces"]]
         n = len(pieces)
+        parts = [f"[0:v]split={n}" + "".join(f"[s{i}]" for i in range(n))]
+        for i, (a, b, sp, z) in enumerate(pieces):
+            crop = ""
+            if z:                                  # punch-in on the action, same output size
+                cx, cy, k = z
+                cw, ch = int(1440 / k) // 2 * 2, int(900 / k) // 2 * 2
+                x, y = int(min(max(cx - cw / 2, 0), 1440 - cw)), int(min(max(cy - ch / 2, 0), 900 - ch))
+                crop = f",crop={cw}:{ch}:{x}:{y},scale=1440:900:flags=lanczos"
+            parts.append(f"[s{i}]trim={a}:{b},setpts=(PTS-STARTPTS)/{sp}{crop},setsar=1[p{i}]")
+        # the recording sits above a caption band: 1408x880 at the top, captions below it
         filt = (";".join(parts) + ";" + "".join(f"[p{i}]" for i in range(n)) + f"concat=n={n}:v=1:a=0[r];"
-                f"[r]scale=-2:990,fps={FPS},pad={W}:{H}:(ow-iw)/2:78:color=0x0B0B12,tpad=stop_mode=clone:stop_duration=30,"
+                f"[r]scale=1408:880:flags=lanczos,fps={FPS},pad={W}:{H}:(ow-iw)/2:12:color=0x0B0B12,tpad=stop_mode=clone:stop_duration=30,"
                 f"trim=0:{D},setpts=PTS-STARTPTS,setsar=1[v]")
         return ins, filt
     raise ValueError(k)
+
+
+def place_sentences(scene, vo_len):
+    """Each sentence: (source start, source end, time in the scene). A sentence goes at its cue (a recorded click,
+    mapped through the scene's speed changes) but never before the previous sentence has finished."""
+    sents = TIMING.get(scene["id"], [])
+    cues = scene.get("cues") or [None] * len(sents)
+    out, free = [], LEAD
+    for j, s in enumerate(sents):
+        a = 0.0 if j == 0 else s["start"]
+        b = sents[j + 1]["start"] if j + 1 < len(sents) else vo_len
+        want = LEAD + s["start"] if cues[j] is None else cues[j]
+        t = max(want, free)
+        out.append((a, b, t, s["text"]))
+        free = t + (b - a) + 0.15
+    return out
+
+
+def scene_audio(sid, placed, D, sr=48000):
+    """The scene's narration as a WAV: each sentence cut from the TTS file and placed at its time in the scene."""
+    raw = os.path.join(TMP, f"vo_{sid}.f32")
+    ff("-i", os.path.join(WORK, "vo", f"{sid}.mp3"), "-ac", "1", "-ar", str(sr), "-f", "f32le", raw)
+    src = np.fromfile(raw, dtype="<f4")
+    out = np.zeros(int(D * sr), dtype="<f4")
+    for a, b, t, _ in placed:
+        seg = src[int(a * sr):int(b * sr)]
+        i0 = int(t * sr)
+        seg = seg[:max(0, len(out) - i0)]
+        out[i0:i0 + len(seg)] += seg
+    wav = os.path.join(TMP, f"vo_{sid}.wav")
+    with wave.open(wav, "wb") as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr)
+        w.writeframes((np.clip(out, -1, 1) * 32767).astype("<i2").tobytes())
+    return wav
 
 
 def build_scene(i, scene):
@@ -262,31 +357,33 @@ def build_scene(i, scene):
     D = scene["D"]
     ins, filt = video_src(scene)
     n_in = sum(1 for x in ins if x == "-i")
-    # captions: one PNG per sentence, shown from its start until the next sentence starts
-    sents = TIMING.get(sid, [])
-    caps = []
-    for j, s in enumerate(sents):
-        start = LEAD + s["start"]
-        end = LEAD + (sents[j + 1]["start"] if j + 1 < len(sents) else s["end"] + 0.4)
-        caps.append((caption_png(s["text"], scene.get("tag"), f"cap_{sid}_{j}.png"), start, min(end, D)))
-    if not caps and scene.get("tag"):
-        caps.append((caption_png("", scene["tag"], f"cap_{sid}_tag.png"), 0, D))
-    for p, _, _ in caps:
+    placed = scene["placed"]
+    # captions: one PNG per sentence, shown while it is spoken (and until the next one if the gap is short)
+    layers = []
+    for j, (a, b, t, text) in enumerate(placed):
+        end = t + (b - a) + 0.3
+        if j + 1 < len(placed) and placed[j + 1][2] - end < 0.8:
+            end = placed[j + 1][2]
+        layers.append((caption_png(text, f"cap_{sid}_{j}.png"), t, min(end, D)))
+    # tags: one per recording piece (speed shown honestly), or one for the whole scene
+    tags = scene.get("tags")
+    if tags:
+        for j, ((a, b), tg) in enumerate(zip(piece_windows(scene["pieces"]), tags)):
+            if tg:
+                last_piece = j == len(tags) - 1
+                layers.append((tag_png(tg, f"tag_{sid}_{j}.png"), a, D if last_piece else b))
+    elif scene.get("tag"):
+        layers.append((tag_png(scene["tag"], f"tag_{sid}.png"), 0, D))
+    for p, _, _ in layers:
         ins += ["-i", p]
     chain, last = filt, "v"
-    for j, (_, a, b) in enumerate(caps):
+    for j, (_, a, b) in enumerate(layers):
         chain += f";[{last}][{n_in + j}:v]overlay=0:0:enable='between(t,{a:.2f},{b:.2f})'[o{j}]"
         last = f"o{j}"
-    if scene.get("tag") and sents:                 # keep the tag visible before the first sentence too
-        tagp = caption_png("", scene["tag"], f"cap_{sid}_tagonly.png")
-        ins += ["-i", tagp]
-        chain += f";[{last}][{n_in + len(caps)}:v]overlay=0:0:enable='lt(t,{LEAD + sents[0]['start']:.2f})+gte(t,{caps[-1][2]:.2f})'[ot]"
-        last = "ot"
     chain += f";[{last}]fade=t=in:st=0:d=0.25,fade=t=out:st={D - 0.3}:d=0.3,format=yuv420p[vout]"
-    vo = os.path.join(WORK, "vo", f"{sid}.mp3")
-    ins += ["-i", vo]
+    ins += ["-i", scene_audio(sid, placed, D)]
     a_idx = sum(1 for x in ins if x == "-i") - 1
-    chain += f";[{a_idx}:a]adelay={int(LEAD * 1000)}|{int(LEAD * 1000)},apad,atrim=0:{D},aresample=48000[aout]"
+    chain += f";[{a_idx}:a]anull[aout]"
     out = os.path.join(TMP, f"scene_{sid}.mp4")
     ff(*ins, "-filter_complex", chain, "-map", "[vout]", "-map", "[aout]", "-t", str(D), "-r", str(FPS),
        "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-c:a", "aac", "-b:a", "192k", "-ac", "2", out)
@@ -296,33 +393,70 @@ def build_scene(i, scene):
 def main():
     man = json.load(open(os.path.join(REPO, "datasets", "manifests", "commons_manifest.json"), encoding="utf8"))
     used = ["001_", "007_", "012_", "016_", "020_", "022_", "026_", "032_", "041_"]
-    credits = [((c["title"] or "").replace("File:", "").rsplit(".", 1)[0][:58], (c.get("artist") or c.get("credit") or "unknown")[:40], c.get("license") or "")
+    credits = [((c["title"] or "").replace("File:", "").rsplit(".", 1)[0], c.get("attribution") or c.get("artist") or "unknown", c.get("license") or "")
                for c in man["clips"] if any(c["clip"].startswith(u) for u in used)]
     frame = os.path.join(TMP, "frame_title.png")
     ff("-ss", "55", "-i", clip("007_"), "-frames:v", "1", frame)
     vo_len = {t: dur(os.path.join(WORK, "vo", f"{t}.mp3")) for t in TIMING}
+    M = json.load(open(os.path.join(WORK, "rec", "marks.json"), encoding="utf8"))
+    m = lambda rec, name: M[rec][name]["t"]
+
+    def at(scene, rec, name, early=0.2):            # a recorded click, as a time in the edited scene
+        return round(rec_to_out(scene["pieces"], m(rec, name)) - early, 2)
+
+    def zoom_on(rec, name, k=1.6, dy=-120):         # punch-in centred a little above the clicked control
+        b = M[rec][name]["box"]
+        return (b["x"] + b["width"] / 2, b["y"] + b["height"] / 2 + dy, k)
+
+    s06 = {"id": "06", "kind": "rec", "rec": "06_import.mp4",
+           "pieces": [(0, m("06_import", "analyse") + 0.3, 3.0), (m("06_import", "analyse") + 0.3, m("06_import", "analysed"), 6.0), (m("06_import", "analysed"), 47.8, 1.0)],
+           "tags": ["Live app · ×3", f"Live app · analysis ×6 · {m('06_import', 'analysed') - m('06_import', 'analyse'):.0f} s real time", "Live app · real time"]}
+    s06["cues"] = [None, at(s06, "06_import", "analyse")]
+    s08 = {"id": "08", "kind": "rec", "rec": "08_sh05.mp4",
+           "pieces": [(0, m("08_sh05", "play1") - 0.3, 1.5), (m("08_sh05", "play1") - 0.3, m("08_sh05", "reject") - 0.5, 1.0),
+                      (m("08_sh05", "reject") - 0.5, m("08_sh05", "confirm_reject") + 1.2, 1.0, zoom_on("08_sh05", "reason", 1.5, 120)),
+                      (m("08_sh05", "confirm_reject") + 1.2, m("08_sh05", "play2") + 3.2, 2.0),
+                      (m("08_sh05", "play2") + 3.2, m("08_sh05", "accept") + 2.2, 1.0, zoom_on("08_sh05", "accept", 1.5))],
+           "tags": ["Live app · ×1.5", "Live app · real time", "Live app · real time · zoom", "Live app · ×2", "Live app · real time · zoom"]}
+    s08["cues"] = [None, at(s08, "08_sh05", "play1"), at(s08, "08_sh05", "chip2"), at(s08, "08_sh05", "accept", 0.4)]
+    s09 = {"id": "09", "kind": "rec", "rec": "09_reshoot.mp4",
+           "pieces": [(0, m("09_reshoot", "add1") - 0.3, 1.5), (m("09_reshoot", "add1") - 0.3, m("09_reshoot", "confirm1") + 1.0, 2.0, zoom_on("09_reshoot", "reason1", 1.5, 120)),
+                      (m("09_reshoot", "confirm1") + 1.0, m("09_reshoot", "add2") - 0.3, 2.0),
+                      (m("09_reshoot", "add2") - 0.3, m("09_reshoot", "confirm2") + 1.0, 2.0, zoom_on("09_reshoot", "reason2", 1.5, 120)),
+                      (m("09_reshoot", "confirm2") + 1.0, 32.5, 1.0)],
+           "tags": ["Live app · ×1.5", "Live app · ×2 · zoom", "Live app · ×2", "Live app · ×2 · zoom", "Live app · real time"]}
+    s09["cues"] = [None, at(s09, "09_reshoot", "sh07"), at(s09, "09_reshoot", "board", -0.6)]
+    s10 = {"id": "10", "kind": "rec", "rec": "10_new_clip.mp4",
+           "pieces": [(0, m("10_new_clip", "analyse") - 0.2, 3.0), (m("10_new_clip", "analyse") - 0.2, m("10_new_clip", "analysed") + 0.3, 1.0),
+                      (m("10_new_clip", "analysed") + 0.3, m("10_new_clip", "play") - 0.3, 3.0),
+                      (m("10_new_clip", "play") - 0.3, m("10_new_clip", "accept") - 0.6, 1.0),
+                      (m("10_new_clip", "accept") - 0.6, m("10_new_clip", "board") - 0.2, 1.0, zoom_on("10_new_clip", "accept", 1.5)),
+                      (m("10_new_clip", "board") - 0.2, m("10_new_clip", "board") + 3.0, 1.0)],
+           "tags": ["Live app · ×3", "Live app · real time", "Live app · ×3", "Reshoot stand-in: another Commons clip (022)", "Live app · real time · zoom", "Live app · real time"]}
+    s10["cues"] = [at(s10, "10_new_clip", "import"), at(s10, "10_new_clip", "analyse"), at(s10, "10_new_clip", "play"), at(s10, "10_new_clip", "accept", 0.5)]
     S = [
         {"id": "01", "kind": "footage", "clips": [("007_", 53.0, 2.6), ("026_", 3.0, 2.4), ("001_", 1.0, 2.2)], "tag": "Real footage · Wikimedia Commons"},
         {"id": "02", "kind": "still", "png": card_problem(), "inset": ("020_", 36.0, 0, (1080, 360, 720, 405))},
         {"id": "03", "kind": "still", "png": card_tools()},
         {"id": "04", "kind": "still", "png": card_title(frame), "zoom": 0.04},
-        {"id": "05", "kind": "rec", "rec": "05_shotlist.mp4", "pieces": [(0, 13.2, 1.05)], "tag": "Live app · Shot list"},
-        {"id": "06", "kind": "rec", "rec": "06_import.mp4", "pieces": [(0, 15.5, 2.0), (15.5, 42.5, 12.0), (42.5, 45.7, 1.0)], "tag": "Live app · analysis sped up"},
-        {"id": "07", "kind": "rec", "rec": "07_coverage.mp4", "pieces": [(0, 14.0, 1.75)], "tag": "Live app · Coverage"},
-        {"id": "08", "kind": "rec", "rec": "08_sh05.mp4", "pieces": [(0, 29.8, 1.75)], "tag": "Live app · review (×1.75)"},
-        {"id": "09", "kind": "rec", "rec": "09_reshoot.mp4", "pieces": [(0, 32.8, 2.2)], "tag": "Live app · reshoot list (×2.2)"},
-        {"id": "10", "kind": "rec", "rec": "10_new_clip.mp4", "pieces": [(0, 12.0, 3.0), (12.0, 17.5, 2.0), (17.5, 28.0, 1.5), (28.0, 32.7, 1.6)], "tag": "Live app · new clip (sped up)"},
+        {"id": "05", "kind": "rec", "rec": "05_shotlist.mp4", "pieces": [(0, 14.1, 1.15)], "tag": "Live app · ×1.15"},
+        s06,
+        {"id": "07", "kind": "rec", "rec": "07_coverage.mp4", "pieces": [(0, 15.3, 2.0)], "tag": "Live app · ×2"},
+        s08, s09, s10,
         {"id": "11", "kind": "seq", "png": card_results(), "card_s": round(LEAD + TIMING["11"][1]["start"] - 0.25, 2), "clip": "11_chart.mp4"},
-        {"id": "12", "kind": "still", "png": card_arch(), "zoom": 0.05},
+        {"id": "12", "kind": "still", "png": card_arch(), "zoom": 0.06, "zoom_to": (0.86, 0.3)},
         {"id": "13", "kind": "still", "png": card_end(credits)},
     ]
-    vis = {"05": 13.2 / 1.05, "06": 15.5 / 2 + 27 / 12 + 3.2, "07": 14 / 1.75, "08": 29.8 / 1.75, "09": 32.8 / 2.2,
-           "10": 12 / 3 + 5.5 / 2 + 10.5 / 1.5 + 4.7 / 1.6, "13": 9.0}
+    S[4]["cues"] = [None, round(m("05_shotlist", "open_sh05") / 1.15 - 1.2, 2)]
     files = []
     for i, s in enumerate(S):
-        s["D"] = round(max(vo_len[s["id"]] + LEAD + 0.55, vis.get(s["id"], 0)), 2)
+        s["placed"] = place_sentences(s, vo_len[s["id"]])
+        last = s["placed"][-1]
+        talk = last[2] + (last[1] - last[0]) + 0.6
+        vis = sum(b - a for a, b in piece_windows(s["pieces"])) if s["kind"] == "rec" else 0
+        s["D"] = round(max(talk, vis, 5.0 if s["id"] == "13" else 0), 2)
         files.append(build_scene(i, s))
-        print(s["id"], s["D"])
+        print(s["id"], s["D"], [round(p[2], 1) for p in s["placed"]])
     lst = os.path.join(TMP, "concat.txt")
     open(lst, "w", encoding="utf8").write("".join(f"file '{f}'\n" for f in files))
     ff("-f", "concat", "-safe", "0", "-i", lst, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-c:a", "aac", "-b:a", "192k",

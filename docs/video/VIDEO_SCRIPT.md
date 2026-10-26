@@ -1,6 +1,7 @@
 # SceneGap Edge: Stage I demo video script (English)
 
-- Length: 3:00 maximum, target about 2:50. English narration, about 400 words.
+- Length: 3:00 maximum. As built (v4): 2:57, narration 359 words (`docs/video/narration.json` is the final text).
+- The shot table below is the plan; times and wording in the final cut follow `narration.json` and `make_video.py`.
 - Everything on screen is real: Wikimedia Commons footage (CC0 / CC BY / CC BY-SA, credited at the end), live
   screen recordings of the SceneGap app running on a desktop, and figures from the repository. No actors.
 - Narration: neural English voice (edge-tts, en-US). Burned-in English captions for every line.
@@ -35,7 +36,7 @@
 | 12 | 2:38–2:52 | Architecture figure, push-in on the UGen300 box. | Next, the image encoder moves onto the ASUS UGen300, so the analysis leaves your editing machine free. Today it takes about two seconds per minute of video on a desktop GPU. | "Next: CLIP image encoder on UGen300" |
 | 13 | 2:52–3:00 | End card: SceneGap Edge · team · repo · footage credits. | SceneGap Edge. Fewer surprises in the edit. | Credits list (author, licence) for every clip shown |
 
-Narration total: about 400 words. If the cut runs long, shorten scene 3 first, then scene 9.
+Planned narration was about 400 words; the final cut uses 359.
 
 ## Footage credits shown on the end card
 
@@ -49,8 +50,7 @@ Only clips that appear in the video, with author and licence from `datasets/mani
    held to match.
 3. Cards are rendered as 1920×1080 PNGs in the deck's look (Neo: violet/cyan on near-black).
 4. Captions: white text on a dark band, bottom third.
-5. Assemble with ffmpeg: per-scene MP4s → concat → narration mix (−16 LUFS) + soft music bed is **not** used
-   (no licensed track at hand).
+5. Assemble with ffmpeg: per-scene MP4s → concat → narration mixed to −16 LUFS. No music bed (no licensed track available).
 
 ## As built (v2, 2026-10-26)
 
@@ -60,3 +60,16 @@ Only clips that appear in the video, with author and licence from `datasets/mani
 - Recording the demo found two UI bugs, both fixed before the final take: the analyse button stayed disabled after an
   import, and the job stage label reused the evidence `.stage` class (rendered as a large dark box).
 - Assembled with `make_video.py` (Pillow cards and captions, ffmpeg).
+
+## As built (v4, 2026-10-26)
+
+- 2:57, 1920×1080, 30 fps, −16 LUFS. Built after a four-way review (judge, numbers, copy, video).
+- UI re-recorded with `record_demo.py` after the wording changes; the recorder now writes `marks.json` (time and box of
+  every click). `make_video.py` places each narration sentence on the click it describes, so voice and picture match.
+- Screen recordings sit above a caption band (captions no longer cover the buttons); punch-in zooms on reject,
+  add-to-reshoot and accept; every piece carries its real speed ("Live app · ×2", "real time · zoom").
+- Narration changes: AI annotators named as AI; plain frame search scored one more top-5 hit than SceneGap, said
+  plainly; the reshoot clip is labelled as a stand-in (another Commons clip); no claim about freeing the editing
+  machine.
+- End card: full attribution for every clip shown, voice and GPU named, and the licence: the video adapts CC BY-SA
+  footage, so it is released under CC BY-SA 4.0.

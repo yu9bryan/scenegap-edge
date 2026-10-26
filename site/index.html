@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SceneGap Edge</title>
+<meta name="description" content="SceneGap Edge checks a video shot list against the footage on your own computer, before the crew leaves the location. Local-first, a person confirms every answer.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="SceneGap Edge">
+<meta property="og:description" content="Checks your shot list against your footage, on your own computer, before the crew leaves the location.">
+<meta property="og:image" content="assets/05_evidence.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23F5F5F5'/%3E%3Cpath d='M21.5 10.5a8 8 0 1 0 0 11' fill='none' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="SceneGap Edge, back to top"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">SceneGap Edge</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#problem">Problem</a>
+      <a href="#how">How it works</a>
+      <a href="#walkthrough">Walkthrough</a>
+      <a href="#results">Results</a>
+      <a href="#hardware">Hardware</a>
+      <a href="#roadmap">Roadmap</a>
+      <a class="nav-cta" href="https://github.com/[team]/scenegap-edge">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ======================= hero ======================= -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">ASUS UGen AI League · Creator AI · Lightning track · [Team name]</p>
+      <h1>Check the shot list before the crew leaves.</h1>
+      <p class="lead">SceneGap Edge compares a video shot list with the footage on your own computer. It finds candidate
+        segments with their original timecodes, checks length, takes and what must be in the same frame, and says per
+        shot what it found and what it could not decide. A person accepts or rejects every answer; missing shots go on
+        a reshoot list. Nothing is uploaded.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#demo">Watch the demo</a>
+        <a class="btn" href="assets/SceneGapEdge_StageI_Proposal.pdf">Proposal deck (PDF)</a>
+        <a class="btn" href="https://github.com/[team]/scenegap-edge">Source code</a>
+      </div>
+      <div class="hero-meta">
+        <span class="pill">CLIP ViT-B/32</span>
+        <span class="pill">FastAPI + vanilla JS</span>
+        <span class="pill">Runs on 127.0.0.1</span>
+        <span class="pill">Apache-2.0</span>
+      </div>
+    </div>
+    <div id="demo">
+      <div class="stage">
+        <video controls preload="none" playsinline poster="assets/04_coverage.png" aria-describedby="demo-cap">
+          <source src="assets/SceneGapEdge_StageI_Demo.mp4" type="video/mp4">
+          Your browser cannot play this video. <a href="assets/SceneGapEdge_StageI_Demo.mp4">Download the demo (MP4)</a>.
+        </video>
+        <p class="stage-cap" id="demo-cap">Stage I demo, under 3 minutes, English narration and captions. Live recordings of the
+          app on openly licensed Wikimedia Commons footage. <a href="https://github.com/[team]/scenegap-edge/releases">Full resolution on the releases page</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= problem ======================= -->
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">The problem</p>
+      <h2>Missing shots are found in the edit, after the location is gone.</h2>
+      <p>Small crews shoot from a list of must-have shots. Nobody has time to scrub every card before packing up, so gaps
+        show up at the editing desk, when a reshoot is expensive or impossible.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card reveal">
+        <h3>A café promo, one afternoon, two people</h3>
+        <div class="timeline">
+          <span class="t">17:40</span><span>The crew wraps and leaves the café.</span>
+          <span class="t">23:00</span><span>The editor finds that the pour cuts away after two seconds, and nobody filmed a customer drinking.</span>
+        </div>
+        <p class="note">The scenario from the demo video. The shot list asked for 3 s of coffee being poured and a person drinking.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Search exists. Checking length, takes and same-frame rules does not.</h3>
+        <table class="compare">
+          <thead><tr><th scope="col">Tool</th><th scope="col">Searches footage</th><th scope="col">Checks length, takes, same frame</th></tr></thead>
+          <tbody>
+            <tr><td>Premiere Pro (Media Intelligence)</td><td class="yes">yes</td><td class="no">no</td></tr>
+            <tr><td>DaVinci Resolve 21 (IntelliSearch)</td><td class="yes">yes</td><td class="no">no</td></tr>
+            <tr><td>Final Cut Pro 12 (Visual Search)</td><td class="yes">yes</td><td class="no">no</td></tr>
+            <tr><td>SceneGap Edge</td><td class="yes">yes, local</td><td class="yes">yes, a person confirms</td></tr>
+          </tbody>
+        </table>
+        <p class="note" style="margin-top:12px">Based on the vendors' own pages, accessed 2026-10-26
+          (<a href="https://github.com/[team]/scenegap-edge/blob/main/docs/research/BUSINESS_FACTS.md">sources</a>). None of them claims a
+          shot-list check; that does not prove no such tool exists.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= how it works ======================= -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">How it works</p>
+      <h2>Requirement, evidence, decision.</h2>
+      <p>Every answer keeps its evidence: which file, which frames, which timecode, which rule passed or could not be
+        decided. The model ranks; a person decides.</p>
+    </div>
+    <ol class="flow">
+      <li class="reveal"><h3>Write the shot list</h3><p>Chinese wording from the script, plus an English query a person confirms
+        for the model. Rules: minimum continuous length, number of takes, what must appear together. Every edit is a new
+        revision.</p></li>
+      <li class="reveal"><h3>Index the footage</h3><p>Read-only. Probe, SHA-256 (a copy is not a second take), cut shots, sample
+        about 1 frame per second on the original timecode, embed each frame with CLIP ViT-B/32.</p></li>
+      <li class="reveal"><h3>Check the rules</h3><p>A frame passes when its similarity reaches τ, a threshold calibrated on dev
+        footage and frozen. Length uses conservative bounds; undecided windows are re-sampled every 250 ms. Each check
+        is pass, fail or unknown, and unknown never counts as pass.</p></li>
+      <li class="reveal accent"><h3>A person decides</h3><p>Accept, reject with a reason, adjust the range, or send the shot to
+        the reshoot list. The AI answer and the human answer are stored and shown separately.</p></li>
+    </ol>
+    <div class="grid-2">
+      <div class="card reveal">
+        <h3>What the AI can say about a shot</h3>
+        <div class="statuses">
+          <span class="pill ai"><span class="dot"></span>candidate</span>
+          <span class="pill partial"><span class="dot"></span>partial</span>
+          <span class="pill miss"><span class="dot"></span>not found</span>
+          <span class="pill grey"><span class="dot"></span>unverifiable</span>
+          <span class="pill grey"><span class="dot"></span>not analysed</span>
+        </div>
+        <p class="note" style="margin-top:12px">Never "done". "Not found" means nothing reached τ in the analysed footage, not proof of absence.</p>
+      </div>
+      <div class="card reveal">
+        <h3>What only a person can say</h3>
+        <div class="statuses">
+          <span class="pill human">accepted</span>
+          <span class="pill">rejected, with reason</span>
+          <span class="pill">accepted as exception</span>
+        </div>
+        <p class="note" style="margin-top:12px">Actions, readable brand text and composition are manual in this version: the system
+          ranks where to look. Coverage counts human-confirmed and AI-candidate shots separately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= walkthrough ======================= -->
+<section id="walkthrough">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">Walkthrough</p>
+      <h2>The real app, on real footage.</h2>
+      <p>A café-promo project with 11 shots, on openly licensed Wikimedia Commons clips, analysed on a desktop GPU. The UI is
+        in Traditional Chinese; the captions translate it. The GIFs are cut from the live recordings made for the demo video.</p>
+    </div>
+
+    <div class="steps">
+      <article class="step reveal">
+        <figure class="shot">
+          <picture>
+            <source srcset="assets/import-analyse-still.jpg" media="(prefers-reduced-motion: reduce)">
+            <img src="assets/import-analyse.gif" width="960" height="600" loading="lazy" alt="Assets screen: a folder is authorised, 8 clips are imported, and the analysis progress bar runs to completion.">
+          </picture>
+          <button class="play-btn" type="button">Play animation</button>
+        </figure>
+        <div>
+          <p class="step-n">Step 1</p>
+          <h3>Import a card and analyse it</h3>
+          <span class="tag">Sped up: import 2×, analysis about 6×</span>
+          <p>Authorise the card folder, import it, start the analysis. Each file is hashed, cut into shots and sampled on its
+            original timecode. These 8 clips took 25.2 s on a desktop GPU.</p>
+          <ul class="glossary">
+            <li><span class="zh" lang="zh-Hant">素材</span><span>Assets</span></li>
+            <li><span class="zh" lang="zh-Hant">授權資料夾</span><span>Authorise folder</span></li>
+            <li><span class="zh" lang="zh-Hant">開始分析</span><span>Start analysis</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step reveal">
+        <figure class="shot">
+          <picture>
+            <source srcset="assets/coverage-board-still.jpg" media="(prefers-reduced-motion: reduce)">
+            <img src="assets/coverage-board.gif" width="800" height="500" loading="lazy" alt="Coverage board scrolling through 11 shots, each with an AI answer, a human decision column and a thumbnail of the best candidate.">
+          </picture>
+          <button class="play-btn" type="button">Play animation</button>
+        </figure>
+        <div>
+          <p class="step-n">Step 2</p>
+          <h3>Read the coverage board</h3>
+          <span class="tag">Sped up 1.5×</span>
+          <p>One row per shot: the AI answer in a bronze pill, the human decision beside it, and the best candidate's
+            thumbnail with its timecode.</p>
+          <ul class="glossary">
+            <li><span class="zh" lang="zh-Hant">AI 判斷</span><span>AI answer</span></li>
+            <li><span class="zh" lang="zh-Hant">有候選</span><span>Candidate found</span></li>
+            <li><span class="zh" lang="zh-Hant">部分符合</span><span>Partial</span></li>
+            <li><span class="zh" lang="zh-Hant">人工決定</span><span>Human decision</span></li>
+            <li><span class="zh" lang="zh-Hant">未確認</span><span>Not confirmed yet</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step reveal">
+        <figure class="shot">
+          <picture>
+            <source srcset="assets/review-reject-accept-still.jpg" media="(prefers-reduced-motion: reduce)">
+            <img src="assets/review-reject-accept.gif" width="768" height="480" loading="lazy" alt="Evidence view: an espresso-stream candidate is rejected with the reason 'No cup in frame', then a latte-art pour is played and accepted.">
+          </picture>
+          <button class="play-btn" type="button">Play animation</button>
+        </figure>
+        <div>
+          <p class="step-n">Step 3</p>
+          <h3>Reject with a reason, accept the right take</h3>
+          <span class="tag">Real time, trimmed</span>
+          <p>Shot SH-05 asks for coffee poured into a cup, 3 s continuous. The first candidate is an espresso stream with no
+            cup, so it is rejected with the reason "No cup in frame". The latte-art pour is played and accepted.</p>
+          <ul class="glossary">
+            <li><span class="zh" lang="zh-Hant">片段檢視</span><span>Evidence view</span></li>
+            <li><span class="zh" lang="zh-Hant">接受 / 拒絕</span><span>Accept / reject</span></li>
+            <li><span class="zh" lang="zh-Hant">排序分數</span><span>Ranking score (not a probability)</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step reveal">
+        <figure class="shot">
+          <picture>
+            <source srcset="assets/reshoot-add-still.jpg" media="(prefers-reduced-motion: reduce)">
+            <img src="assets/reshoot-add.gif" width="960" height="600" loading="lazy" alt="A grinder shot whose candidates show tamping is added to the reshoot list with a typed reason; the reshoot list then shows the card.">
+          </picture>
+          <button class="play-btn" type="button">Play animation</button>
+        </figure>
+        <div>
+          <p class="step-n">Step 4</p>
+          <h3>Send a missing shot to the reshoot list</h3>
+          <span class="tag">Real time</span>
+          <p>The candidates for SH-04 (grinding coffee, 2 s) show tamping, not grinding. The shot goes on the reshoot list with
+            the reason "Tamping, not grinding. Need 2 s of grounds coming out", while the crew is still on location.</p>
+          <ul class="glossary">
+            <li><span class="zh" lang="zh-Hant">加入補拍</span><span>Add to reshoot list</span></li>
+            <li><span class="zh" lang="zh-Hant">補拍清單</span><span>Reshoot list</span></li>
+            <li><span class="zh" lang="zh-Hant">先複核</span><span>Review first</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step reveal">
+        <figure class="shot">
+          <picture>
+            <source srcset="assets/new-clip-accept-still.jpg" media="(prefers-reduced-motion: reduce)">
+            <img src="assets/new-clip-accept.gif" width="960" height="600" loading="lazy" alt="A reshot clip is imported and analysed on its own; the grinder shot now shows grounds falling, is accepted, and leaves the reshoot list.">
+          </picture>
+          <button class="play-btn" type="button">Play animation</button>
+        </figure>
+        <div>
+          <p class="step-n">Step 5</p>
+          <h3>Add the reshot clip; only the new file is analysed</h3>
+          <span class="tag">Sped up: 3×, 2×, then 1.5×</span>
+          <p>The new clip took 2.5 s to analyse on a desktop GPU. SH-04 now shows grounds falling from a grinder; it is
+            accepted and leaves the reshoot list.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="thumbs">
+      <figure class="reveal">
+        <div class="shot"><img src="assets/02_shotlist.png" width="1440" height="900" loading="lazy" alt="Shot list screen with 11 shots and the editor for SH-05 showing the Chinese wording and the English query."></div>
+        <figcaption>Shot list: Chinese wording on the left, the English query the model reads on the right. 已定稿 = finalised; 第 1 版 = revision 1.</figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="shot"><img src="assets/04_coverage.png" width="1440" height="900" loading="lazy" alt="Coverage board after review, with accepted shots in white pills."></div>
+        <figcaption>Coverage after review: 已接受 (accepted) in a white pill is a person's decision; the bronze pill is the AI's.</figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="shot"><img src="assets/05_evidence.png" width="1440" height="900" loading="lazy" alt="Evidence view with the candidate frame, a filmstrip, range chips and the action bar."></div>
+        <figcaption>Evidence view: filmstrip of sampled frames, candidate ranges as chips, and the action bar (accept, reject, adjust range, add to reshoot, accept as exception).</figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="shot"><img src="assets/05b_evidence_history.png" width="1440" height="900" loading="lazy" alt="Rule check showing continuous length 24.0 s passing, and a decision history with one acceptance and one rejection with its reason."></div>
+        <figcaption>Rule check and decision history: 連續時長 ≥ 3 秒 passes with 24.0 s; the rejection keeps its reason; the latest decision wins and can be reverted.</figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="shot"><img src="assets/06_reshoots.png" width="1440" height="900" loading="lazy" alt="Reshoot list with a review-first group and a reshoot group; a grinder card shows the reason and minimum length."></div>
+        <figcaption>Reshoot list: each card keeps the reason, the minimum length and the best candidate so far; exports to CSV.</figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="shot"><img src="assets/07_device.png" width="1440" height="900" loading="lazy" alt="Device screen: UGen300 not connected, backend cuda-reference, NPU active: no."></div>
+        <figcaption>Device: UGen300 未連線 (not connected), backend <code>cuda-reference</code>, NPU active: no. A CPU/GPU run is never labelled as NPU.</figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="shot"><img src="assets/01_home.png" width="1440" height="900" loading="lazy" alt="Home screen with human-confirmed coverage 45.5 percent and AI-candidate coverage 90.9 percent shown as separate cards."></div>
+        <figcaption>Home: human-confirmed coverage (45.5%) and AI-candidate coverage (90.9%) are shown apart.</figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="shot"><img src="assets/03_assets.png" width="1440" height="900" loading="lazy" alt="Assets table with codec, resolution, frame rate, length and a variable-frame-rate warning."></div>
+        <figcaption>Assets: codec, resolution, frame rate and length per file; a possible variable frame rate (VFR) is flagged, and times stay on the original timestamps.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= results ======================= -->
+<section id="results">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">Measured results</p>
+      <h2>Scored once, on footage it had not seen.</h2>
+      <p>44 openly licensed Wikimedia Commons clips (25.3 min), split by author into dev (18 clips) and test (26 clips,
+        14 min). The protocol and the 11 shots were written before any label existed; the threshold was set on dev only;
+        the test split was scored once. Reference backends on a desktop CPU and GPU.</p>
+    </div>
+
+    <div class="kpis">
+      <div class="card kpi reveal">
+        <p class="k-label">Right clip in the top 5</p>
+        <p class="k-num grad">7<small>of 11 shots</small></p>
+        <p class="k-sub">Recall@5 64%, Precision@5 33%. Plain single-frame search: 8 of 11.</p>
+      </div>
+      <div class="card kpi reveal">
+        <p class="k-label">Missing shots found automatically</p>
+        <p class="k-num">0<small>%</small></p>
+        <p class="k-sub">Not working yet: the frozen threshold is too permissive. The main Stage II target.</p>
+      </div>
+      <div class="card kpi reveal">
+        <p class="k-label">Footage to review (proxy)</p>
+        <p class="k-num">317<small>s vs 839 s</small></p>
+        <p class="k-sub">Candidate segments for 11 shots versus the whole test library. Footage length, not timed users.</p>
+      </div>
+      <div class="card kpi reveal">
+        <p class="k-label">Label agreement</p>
+        <p class="k-num">0.91<small>κ</small></p>
+        <p class="k-sub">Two independent AI annotators; a third AI pass on 143 disputed labels. No human labels yet.</p>
+      </div>
+      <div class="card kpi reveal">
+        <p class="k-label">Analysis time per minute of video</p>
+        <p class="k-num">2.3<small>s GPU · 3.1 s CPU</small></p>
+        <p class="k-sub">Decode and embedding on a desktop; most of it is decoding.</p>
+      </div>
+      <div class="card kpi reveal">
+        <p class="k-label">Automated tests</p>
+        <p class="k-num">46</p>
+        <p class="k-sub">30 of 36 acceptance cases pass by test; the rest need the device or are proxies.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card reveal">
+        <h3>Recall@5 on the test split (11 shots)</h3>
+        <div class="bars" role="list">
+          <div class="bar-row" role="listitem"><span class="name">Title keyword match</span><span class="bar" aria-hidden="true"><span style="width:45%"></span></span><span class="val">45% · 5/11</span></div>
+          <div class="bar-row" role="listitem"><span class="name">Single-frame semantic</span><span class="bar" aria-hidden="true"><span style="width:73%"></span></span><span class="val">73% · 8/11</span></div>
+          <div class="bar-row" role="listitem"><span class="name">SceneGap (+ length rules)</span><span class="bar main" aria-hidden="true"><span style="width:64%"></span></span><span class="val">64% · 7/11</span></div>
+        </div>
+        <p class="note" style="margin-top:16px">The length rules cost one hit on this test (the 95% intervals overlap). What they add,
+          rejecting runs that are too short, is not what Recall@5 measures.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Why missing-shot detection fails (dev only, after the test)</h3>
+        <p>τ = 0.225 was chosen for frame-level F1, so almost every shot finds some candidate and none is reported missing.
+          Raising τ trades gaps found against reshoots asked for wrongly:</p>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th scope="col">Raw cosine τ</th><th scope="col">Gaps found</th><th scope="col">Wrong reshoot</th></tr></thead>
+            <tbody>
+              <tr><td class="n">0.225</td><td class="n">6%</td><td class="n">0%</td></tr>
+              <tr><td class="n">0.26</td><td class="n">20%</td><td class="n">11%</td></tr>
+              <tr><td class="n">0.29</td><td class="n">46%</td><td class="n">31%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note" style="margin-top:12px">Not used to rescore test. Stage II pre-registers a project-level objective and scores it once on new footage.</p>
+      </div>
+    </div>
+
+    <h3 class="sr-only">Full test-split table</h3>
+    <div class="table-wrap reveal" style="margin-top:16px">
+      <table class="data">
+        <caption class="sr-only">Test split scored once, Wilson 95% intervals</caption>
+        <thead><tr><th scope="col">Method</th><th scope="col">Recall@5</th><th scope="col">Precision@5</th><th scope="col">Gap recall</th><th scope="col">Wrong reshoot</th><th scope="col">Unknown</th></tr></thead>
+        <tbody>
+          <tr><td>Title keyword match</td><td class="n">45% (5/11; 21–72%)</td><td class="n">36% (8/22; 20–57%)</td><td class="n">89% (34/38)</td><td class="n">44% (22/50)</td><td class="n">0% (0/88)</td></tr>
+          <tr><td>Single-frame semantic</td><td class="n">73% (8/11; 43–90%)</td><td class="n">40% (22/55; 28–53%)</td><td class="n">0% (0/38)</td><td class="n">0% (0/50)</td><td class="n">0% (0/88)</td></tr>
+          <tr class="hl"><td>SceneGap (semantic + duration + densify)</td><td class="n">64% (7/11; 35–85%)</td><td class="n">33% (18/55; 22–46%)</td><td class="n">0% (0/38)</td><td class="n">0% (0/50)</td><td class="n">12% (11/88)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:12px">Gap recall, wrong reshoot and unknown come from 8 simulated projects of 8 test clips each.
+      Full report with per-shot results: <a href="https://github.com/[team]/scenegap-edge/blob/main/eval/results/REPORT.md">eval/results/REPORT.md</a>.</p>
+
+    <div class="grid-2" style="margin-top:32px">
+      <div class="card reveal">
+        <h3>Speed on a desktop (reference backends)</h3>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th scope="col">Backend</th><th scope="col">Per second of video</th><th scope="col">Search p50 / p95</th><th scope="col">Model load</th></tr></thead>
+            <tbody>
+              <tr><td>CPU</td><td class="n">52 ms</td><td class="n">11.8 / 14.3 ms</td><td class="n">6.5 s</td></tr>
+              <tr><td>RTX 4080 GPU</td><td class="n">39 ms</td><td class="n">7.6 / 13.4 ms</td><td class="n">1.9 s</td></tr>
+              <tr><td>UGen300</td><td class="n">not run</td><td class="n">not run</td><td class="n">not run</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note" style="margin-top:12px">Six short clips (85 s, ≤ 1280 px), warm model. Search over 10,000 segments, text encoded per query.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Playback while analysing (proxy)</h3>
+        <p>A 1080p30 test pattern decoded at real-time pace while SceneGap analyses in another process: 0 late frames of
+          1,800. Frame work p95 went from 5.7 ms to 7.5 ms with CPU analysis and 6.2 ms with GPU analysis, against a 33 ms
+          budget.</p>
+        <p class="note">A proxy, not a test inside an editing application. UGen300: not run.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= hardware ======================= -->
+<section id="hardware">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">Hardware plan</p>
+      <h2>The image encoder moves to the UGen300, after a gate.</h2>
+      <p>Nothing has run on the UGen300 yet. The reference backends today are CPU and GPU, and the app says so on screen.
+        The Hailo backend refuses to run until the G1 check passes on a real device.</p>
+    </div>
+    <div class="route">
+      <div class="card reveal">
+        <h3>Host computer</h3>
+        <ul>
+          <li>Decode, cut detection, 1 fps sampling, densify</li>
+          <li>CLIP text encoder (same fp32 weights)</li>
+          <li>Rule checks, status, decisions, UI</li>
+        </ul>
+      </div>
+      <div class="arrow" aria-hidden="true">⇄</div>
+      <div class="card dev reveal">
+        <p class="note" style="margin:0">USB 3.1 Gen2 · planned</p>
+        <p class="big-name">UGen300</p>
+        <p>Hailo-10H runs the Model Zoo HEF <code>clip_vit_b_32_image_encoder</code>, the same OpenAI checkpoint as the reference, batch 8.</p>
+        <div class="spec">
+          <span class="pill">40 TOPS INT4 / 20 TOPS INT8</span>
+          <span class="pill">8 GB LPDDR4</span>
+          <span class="pill">2.5 W typical</span>
+        </div>
+        <p class="note" style="margin-top:10px">Vendor specification, not our measurement.</p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card reveal">
+        <h3>G1 gate: quantized vs fp32, on the same dev frames</h3>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th scope="col">Check</th><th scope="col">Pass criterion</th></tr></thead>
+            <tbody>
+              <tr><td>G1a per-frame cosine</td><td>median ≥ 0.98, 5th pct ≥ 0.95</td></tr>
+              <tr><td>G1b Spearman ρ per query</td><td>median ≥ 0.95, worst ≥ 0.85</td></tr>
+              <tr><td>G1c top-K overlap</td><td>≥ 0.80 (K=5), ≥ 0.85 (K=10)</td></tr>
+              <tr><td>G1d dev Recall@5 / Precision@5</td><td>within 3 / 5 points of fp32</td></tr>
+              <tr><td>G1e status agreement</td><td>≥ 90% same status</td></tr>
+              <tr><td>G1f throughput over USB</td><td>measured and reported</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card reveal">
+        <h3>Why this split</h3>
+        <p>Only the image tower goes to the NPU, so quantization error sits on one side and G1 can measure it directly. Text
+          queries are few per project, so the host handles them.</p>
+        <p>At 1 frame per second most of the time is decoding on the host. The NPU's job is to keep the editing machine's
+          CPU and GPU free, not to make the total much shorter.</p>
+        <p class="note">The G1 script is ready and was checked CPU against GPU (cosine 1.0, ρ 0.99999); that proves the
+          script, not the device. If G1 fails, the plan in order: recompile with dev frames for calibration, keep the last
+          layers at 16-bit if the compiler allows, switch to TinyCLIP with a new reference, or stay on the CPU/GPU reference.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= roadmap ======================= -->
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">Roadmap · Stage II</p>
+      <h2>Each step has a number it must reach.</h2>
+      <p>First the device and missing-shot detection; then the checks that are manual today.</p>
+    </div>
+    <ol class="road">
+      <li class="reveal"><span class="id">S2-0</span><span class="what">Fix the known code risks</span><span class="exit">A unit test for each; dev numbers recomputed</span></li>
+      <li class="reveal"><span class="id">S2-1</span><span class="what">UGen300 bring-up over USB</span><span class="exit">HAILO10H identified, HEF loads, FPS measured at batch 1 and 8</span></li>
+      <li class="reveal"><span class="id">S2-2</span><span class="what">G1 gate on dev</span><span class="exit">G1a–G1e pass, or a documented failure and fallback</span></li>
+      <li class="reveal"><span class="id">Gaps</span><span class="what">Missing-shot detection</span><span class="exit">Per-shot thresholds and a margin score, a project-level objective, pre-registered and scored once on new footage</span></li>
+      <li class="reveal"><span class="id">S2-3</span><span class="what">Object and person-count hints (YOLO)</span><span class="exit">Per-class precision ≥ 0.90, person count ≥ 0.90 on dev</span></li>
+      <li class="reveal"><span class="id">S2-4</span><span class="what">Composition from detector boxes</span><span class="exit">Precision ≥ 0.90 on dev composition labels</span></li>
+      <li class="reveal"><span class="id">S2-5</span><span class="what">OCR for Traditional Chinese brand text</span><span class="exit">Exact match ≥ 0.90, false-readable ≤ 0.02</span></li>
+      <li class="reveal"><span class="id">S2-6</span><span class="what">Action aid, optional VLM verifier</span><span class="exit">The verifier stays manual unless precision ≥ 0.95 at recall ≥ 0.5</span></li>
+      <li class="reveal"><span class="id">S2-7</span><span class="what">Frozen end-to-end test, run once</span><span class="exit">All metrics with CIs; CPU, GPU and NPU latency and NPU power reported separately</span></li>
+    </ol>
+    <p class="note" style="margin-top:16px">Also planned: human labels, a user study that times real reviews, a multilingual text encoder for Chinese queries.</p>
+  </div>
+</section>
+
+<!-- ======================= links ======================= -->
+<section id="links">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">Read more</p>
+      <h2>Code, deck and documents.</h2>
+    </div>
+    <div class="links">
+      <a class="card link-card reveal" href="https://github.com/[team]/scenegap-edge"><h3>Repository</h3><p>Source, quick start, API, tests. Apache-2.0.</p></a>
+      <a class="card link-card reveal" href="assets/SceneGapEdge_StageI_Proposal.pdf"><h3>Proposal deck</h3><p>Stage I proposal as PDF.</p></a>
+      <a class="card link-card reveal" href="https://github.com/[team]/scenegap-edge/blob/main/eval/results/REPORT.md"><h3>Evaluation report</h3><p>Every number on this page, with intervals and per-shot results.</p></a>
+      <a class="card link-card reveal" href="https://github.com/[team]/scenegap-edge/blob/main/eval/PROTOCOL.md"><h3>Evaluation protocol</h3><p>Written before any label or threshold; dated additions.</p></a>
+      <a class="card link-card reveal" href="https://github.com/[team]/scenegap-edge/blob/main/docs/MODEL_PLAN.md"><h3>Model and hardware plan</h3><p>Hailo-10H research, the G1 gate, Stage II exit criteria.</p></a>
+      <a class="card link-card reveal" href="https://github.com/[team]/scenegap-edge/blob/main/docs/ALGORITHMS.md"><h3>Algorithms</h3><p>How each status is computed, with file and line references.</p></a>
+      <a class="card link-card reveal" href="https://github.com/[team]/scenegap-edge/blob/main/docs/VALIDATION_zh.md"><h3>驗證過程 (Validation)</h3><p>The validation timeline, in Traditional Chinese.</p></a>
+      <a class="card link-card reveal" href="https://github.com/[team]/scenegap-edge/tree/main/docs/adr"><h3>Decision records</h3><p>Reference backend, Hailo route A, Chinese queries, manual-first checks.</p></a>
+      <a class="card link-card reveal" href="https://github.com/[team]/scenegap-edge/releases"><h3>Demo video, full resolution</h3><p>Attached to the GitHub release.</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= credits ======================= -->
+<section id="credits">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">Footage credits</p>
+      <h2>44 clips from Wikimedia Commons.</h2>
+      <p>All footage on this page, in the GIFs, the deck and the video comes from these openly licensed clips (CC0, public
+        domain, CC BY, CC BY-SA). Frames keep the licence of their clip; images with frames from CC BY-SA clips are shared
+        under CC BY-SA. The footage itself is not in the repository.</p>
+    </div>
+    <details class="credits reveal">
+      <summary>Show all 44 clips: title, author, licence</summary>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th scope="col">#</th><th scope="col">Title on Commons</th><th scope="col">Author</th><th scope="col">Licence</th></tr></thead>
+          <tbody>
+            <tr><td class="num">000</td><td><a href="https://commons.wikimedia.org/wiki/File:Cadaques_cafe_de_la_habana_2008_august_converted_YAN3.ogv">Cadaques cafe de la habana 2008 august converted YAN3.ogv</a></td><td>Cliché Online (Yan.)</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+            <tr><td class="num">001</td><td><a href="https://commons.wikimedia.org/wiki/File:Vichy_-_Grand_Caf%C3%A9,_terrasse_sous_la_gr%C3%AAle.ogv">Vichy - Grand Café, terrasse sous la grêle.ogv</a></td><td>Romainbehar</td><td><a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a></td></tr>
+            <tr><td class="num">002</td><td><a href="https://commons.wikimedia.org/wiki/File:Merry_X-mas_at_Kranzler.webm">Merry X-mas at Kranzler.webm</a></td><td>C.Suthorn</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">003</td><td><a href="https://commons.wikimedia.org/wiki/File:Times_Cafe_inflatable_waving_character.webm">Times Cafe inflatable waving character.webm</a></td><td>Andy Li</td><td><a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a></td></tr>
+            <tr><td class="num">004</td><td><a href="https://commons.wikimedia.org/wiki/File:Rateel_cafe_music2.webm">Rateel cafe music2.webm</a></td><td>Iainsimpsonstewart</td><td><a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a></td></tr>
+            <tr><td class="num">005</td><td><a href="https://commons.wikimedia.org/wiki/File:Starbucks_en_la_a%C4%89etcentro_Kristall_(Tjumeno).webm">Starbucks en la aĉetcentro Kristall (Tjumeno).webm</a></td><td>RG72</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">006</td><td><a href="https://commons.wikimedia.org/wiki/File:Interior_Paragon_Caf%C3%A9_Katoomba.ogv">Interior Paragon Café Katoomba.ogv</a></td><td>Bluedawe</td><td><a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a></td></tr>
+            <tr><td class="num">007</td><td><a href="https://commons.wikimedia.org/wiki/File:Caf%C3%A9_Lomi,_Paris_-_Vimeo.webm">Café Lomi, Paris - Vimeo.webm</a></td><td>ideafarm films</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+            <tr><td class="num">008</td><td><a href="https://commons.wikimedia.org/wiki/File:Operation_Ghost_Stories_-_Video_01.webm">Operation Ghost Stories - Video 01.webm</a></td><td>FBI – Federal Bureau of Investigation</td><td>Public domain</td></tr>
+            <tr><td class="num">009</td><td><a href="https://commons.wikimedia.org/wiki/File:Coffee_Bean_%26_Tea_Leaf_Process.webm">Coffee Bean &amp; Tea Leaf Process.webm</a></td><td>Kelliks</td><td><a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a></td></tr>
+            <tr><td class="num">010</td><td><a href="https://commons.wikimedia.org/wiki/File:%E2%80%9C%E8%B5%B0%E7%BA%BF%E5%AE%A2%E2%80%9D%E8%BF%87%E5%A2%83%E5%A2%A8%E8%A5%BF%E5%93%A5_%E4%B8%8D%E5%BF%98%E6%9D%A5%E6%9D%AF%E6%98%9F%E5%B7%B4%E5%85%8B.webm">“走线客”过境墨西哥 不忘来杯星巴克.webm</a></td><td>美国之音中文网</td><td>Public domain</td></tr>
+            <tr><td class="num">011</td><td><a href="https://commons.wikimedia.org/wiki/File:Color_sorter_coffeebeans.webm">Color sorter coffeebeans.webm</a></td><td>AlexanderKlink</td><td><a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a></td></tr>
+            <tr><td class="num">012</td><td><a href="https://commons.wikimedia.org/wiki/File:Kaffe_-_Ystad-2024.ogg">Kaffe - Ystad-2024.ogg</a></td><td>Jonn Leffmann</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+            <tr><td class="num">013</td><td><a href="https://commons.wikimedia.org/wiki/File:Coffee_from_dan_2.webm">Coffee from dan 2.webm</a></td><td>Denis kasozi</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">014</td><td><a href="https://commons.wikimedia.org/wiki/File:Traditional_Ethiopian_Coffee_Roasting_Ceremony.webm">Traditional Ethiopian Coffee Roasting Ceremony.webm</a></td><td>Keria T</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">015</td><td><a href="https://commons.wikimedia.org/wiki/File:Despulpadora.ogg">Despulpadora.ogg</a></td><td>Jhonespe150102</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">016</td><td><a href="https://commons.wikimedia.org/wiki/File:Lions_Almelo_zamelt_koffie_in_voor_Voedselbank.webm">Lions Almelo zamelt koffie in voor Voedselbank.webm</a></td><td>AAVISIE</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+            <tr><td class="num">017</td><td><a href="https://commons.wikimedia.org/wiki/File:Sunday_Morning_Espresso_Routine_-_Grind_%2B_distribute_%2B_tamp_%2B_extraction_(15-Second_Abridged_Version).webm">Sunday Morning Espresso Routine - Grind + distribute + tamp + extraction (15-Second Abridged Version).webm</a></td><td>Scott Schiller from San Francisco, CA, USA</td><td><a href="https://creativecommons.org/licenses/by/2.0">CC BY 2.0</a></td></tr>
+            <tr><td class="num">018</td><td><a href="https://commons.wikimedia.org/wiki/File:%D0%9A%D0%BE%D1%84%D0%B5%D0%BC%D0%B5%D0%BB%D1%8C%D0%BD%D0%B8%D1%86%D0%B0_JURA_43.webm">Кофемельница JURA 43.webm</a></td><td>Gontcharik.petr</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">019</td><td><a href="https://commons.wikimedia.org/wiki/File:MoliendoCafeEnLicuadora_ohs02.webm">MoliendoCafeEnLicuadora ohs02.webm</a></td><td>PetrohsW</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">020</td><td><a href="https://commons.wikimedia.org/wiki/File:Espresso_video.ogv">Espresso video.ogv</a></td><td>Rosatrieu</td><td><a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a></td></tr>
+            <tr><td class="num">021</td><td><a href="https://commons.wikimedia.org/wiki/File:Macro_Espresso_Process.webm">Macro Espresso Process.webm</a></td><td>Scott Schiller from San Francisco, CA, USA</td><td><a href="https://creativecommons.org/licenses/by/2.0">CC BY 2.0</a></td></tr>
+            <tr><td class="num">022</td><td><a href="https://commons.wikimedia.org/wiki/File:Der_perfekte_Espresso_aus_dem_Siebtr%C3%A4ger.ogv">Der perfekte Espresso aus dem Siebträger.ogv</a></td><td>Max Duchardt, Katrin Engel</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+            <tr><td class="num">023</td><td><a href="https://commons.wikimedia.org/wiki/File:Pour_Over.ogv">Pour Over.ogv</a></td><td>Lev Lazinskiy</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">024</td><td><a href="https://commons.wikimedia.org/wiki/File:Use_of_a_coffee_press.ogv">Use of a coffee press.ogv</a></td><td>Daniel Case</td><td><a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a></td></tr>
+            <tr><td class="num">025</td><td><a href="https://commons.wikimedia.org/wiki/File:Schritt_f%C3%BCr_Schritt_-_Kaffeezubereitung_mit_der_Chemex.ogv">Schritt für Schritt - Kaffeezubereitung mit der Chemex.ogv</a></td><td>Max Duchardt, Katrin Engel</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+            <tr><td class="num">026</td><td><a href="https://commons.wikimedia.org/wiki/File:Latte_art_flower_-_01.ogv">Latte art flower - 01.ogv</a></td><td>Anna Frodesiak</td><td><a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a></td></tr>
+            <tr><td class="num">027</td><td><a href="https://commons.wikimedia.org/wiki/File:Latte_art_leaf_-_01.ogv">Latte art leaf - 01.ogv</a></td><td>Anna Frodesiak</td><td><a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a></td></tr>
+            <tr><td class="num">028</td><td><a href="https://commons.wikimedia.org/wiki/File:Nespresso_machine.ogv">Nespresso machine.ogv</a></td><td>Kjetil Ree</td><td><a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a></td></tr>
+            <tr><td class="num">029</td><td><a href="https://commons.wikimedia.org/wiki/File:A_man_pours_Arabic_coffee.ogv">A man pours Arabic coffee.ogv</a></td><td>Sarah Canbel</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">030</td><td><a href="https://commons.wikimedia.org/wiki/File:Servido_tradicional_de_caf%C3%A9_et%C3%ADope.webm">Servido tradicional de café etíope.webm</a></td><td>ProtoplasmaKid</td><td><a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a></td></tr>
+            <tr><td class="num">031</td><td><a href="https://commons.wikimedia.org/wiki/File:How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.webm">How to brew Coffee using the laws of physics - with the Hario Syphon Technica.webm</a></td><td>Coffee Circle</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+            <tr><td class="num">032</td><td><a href="https://commons.wikimedia.org/wiki/File:Sugar_falling_into_coffee.webm">Sugar falling into coffee.webm</a></td><td>Anselm Schüler</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">033</td><td><a href="https://commons.wikimedia.org/wiki/File:Bosnian_coffee_with_rahat_lokum,_Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_and_Herzegovina_(2026)-bs.webm">Bosnian coffee with rahat lokum, Kujundziluk and Old Bridge in Mostar - Bosnia and Herzegovina (2026)-bs.webm</a></td><td>Minja Klarić</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">034</td><td><a href="https://commons.wikimedia.org/wiki/File:A_cup_of_Kenyan_Coffee.webm">A cup of Kenyan Coffee.webm</a></td><td>Queen Asali</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">035</td><td><a href="https://commons.wikimedia.org/wiki/File:Latte_salute.webm">Latte salute.webm</a></td><td>The White House</td><td>Public domain</td></tr>
+            <tr><td class="num">036</td><td><a href="https://commons.wikimedia.org/wiki/File:Turkish_tea_2015.webm">Turkish tea 2015.webm</a></td><td>Klapi</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">037</td><td><a href="https://commons.wikimedia.org/wiki/File:Jane_pouring_beer_fast.webm">Jane pouring beer fast.webm</a></td><td>Angulidayaaluta</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">038</td><td><a href="https://commons.wikimedia.org/wiki/File:Turkovich_Family_Wines_-_June_2019_-_Stierch_03.ogv">Turkovich Family Wines - June 2019 - Stierch 03.ogv</a></td><td>Missvain</td><td><a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a></td></tr>
+            <tr><td class="num">039</td><td><a href="https://commons.wikimedia.org/wiki/File:Drinking_glass_symphony.ogv">Drinking glass symphony.ogv</a></td><td>IMG 4512</td><td><a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a></td></tr>
+            <tr><td class="num">040</td><td><a href="https://commons.wikimedia.org/wiki/File:Thermochromic_mug.webm">Thermochromic mug.webm</a></td><td>The wub</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a></td></tr>
+            <tr><td class="num">041</td><td><a href="https://commons.wikimedia.org/wiki/File:Empty_Streets_of_Paris_COVID19.webm">Empty Streets of Paris COVID19.webm</a></td><td>CreatorsCloud</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+            <tr><td class="num">042</td><td><a href="https://commons.wikimedia.org/wiki/File:IrishTraditionalMusic-IrishPub-Tokyo-2016-2-24.webm">IrishTraditionalMusic-IrishPub-Tokyo-2016-2-24.webm</a></td><td>Nesnad</td><td><a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a></td></tr>
+            <tr><td class="num">043</td><td><a href="https://commons.wikimedia.org/wiki/File:Couple_holding_hands.webm">Couple holding hands.webm</a></td><td>YouTube user “Editor”</td><td><a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>SceneGap Edge</strong> · [Team name] · ASUS UGen AI League entry · Code under Apache-2.0.</p>
+    <p>Not affiliated with or endorsed by ASUS or Hailo. Product names belong to their owners. The colour palette follows
+      the app's own dark design; no ASUS logos or marks are used.</p>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+</body>
+</html>

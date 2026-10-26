@@ -1,15 +1,15 @@
 [
  {"id": "01", "text": "A café promo. Eleven must-have shots. Two people, one afternoon on location."},
- {"id": "02", "text": "The crew packs up at five forty. At eleven that night, the editor finds the pour cuts away after two seconds, and nobody filmed a customer drinking."},
- {"id": "03", "text": "Editing tools can now search footage for a cup. None of them checks the shot list: how long, how many takes, what must be in the same frame."},
+ {"id": "02", "text": "The crew packs up at five forty. At eleven that night, the editor finds that every pour cuts away after two seconds, and nobody filmed a customer drinking."},
+ {"id": "03", "text": "Editing apps can already find a cup in your footage. None of them checks what the shot list demands: how long, how many takes, what must share the frame."},
  {"id": "04", "text": "This is SceneGap Edge. It checks your shot list against your footage, on your own computer, before you leave."},
- {"id": "05", "text": "You write the shot list the way the crew talks. A person confirms the English query the model reads, and adds rules: minimum length, number of takes, what must appear together."},
- {"id": "06", "text": "Point it at the card. It hashes every file, cuts the shots, samples one frame a second on the original timecode, and indexes everything with CLIP."},
+ {"id": "05", "text": "You write the shot list in Chinese, the way the crew talks. Then you check the English phrase the model searches with, and add rules: minimum length, number of takes, what must appear together."},
+ {"id": "06", "text": "Point it at the camera card. It finds the cuts, keeps the original timecode, and makes one frame per second searchable with CLIP."},
  {"id": "07", "text": "Every shot gets an answer from the AI, and a separate answer from you. Only yours counts."},
  {"id": "08", "text": "Coffee poured into a cup, three seconds. The first candidate is an espresso stream with no cup in frame, so you reject it and say why. The next one is a latte-art pour. One click, accepted."},
- {"id": "09", "text": "Nobody grinds coffee in these clips, and nobody drinks it. Those go on the reshoot list, with the reason and the minimum length, while the crew is still on location."},
- {"id": "10", "text": "Here is the reshot clip. Only the new file is analysed. The grinder shot is now found. Accept it, and the gap closes."},
- {"id": "11", "text": "We tested on forty-four openly licensed clips, labelled by two independent annotators, and scored the held-out set once. The right clip was in the top five for seven of eleven shots, and checking took about a third of the footage time. Detecting missing shots on its own is our next fix."},
- {"id": "12", "text": "Next, the image encoder moves onto the ASUS UGen300, so the analysis leaves your editing machine free. Today it takes about two seconds per minute of video on a desktop GPU."},
+ {"id": "09", "text": "For the grinder, the AI still offers candidates, but they show tamping, not grinding. Nobody drinks coffee in these clips either. Both go on the reshoot list, with the reason, while the crew is still on location."},
+ {"id": "10", "text": "Here is the reshot clip. Only the new file is analysed. The grinder shot now has a real match. Accept it, and it comes off the reshoot list."},
+ {"id": "11", "text": "We tested on forty-four openly licensed clips, labelled by two separate AI annotators, and scored the held-out set once. The right clip was in the top five for seven of eleven shots. Plain frame search got eight; our length rules cost one hit on this test. Flagging missing shots without a person doesn't work yet. That is our next fix."},
+ {"id": "12", "text": "Next, the image half of the model moves onto the ASUS UGen300. Today, analysis takes a little over two seconds per minute of footage on a desktop graphics card."},
  {"id": "13", "text": "SceneGap Edge. Fewer surprises in the edit."}
 ]

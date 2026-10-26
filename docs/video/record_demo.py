@@ -93,6 +93,7 @@ class Rec:
     def close(self):
         dst = os.path.join(OUT, self.name + ".webm")
         video = self.pg.video
+        time.sleep(1.0)                                 # let the recorder flush the last frames
         self.ctx.close()                                # finishes the recording
         if os.path.exists(dst):
             os.remove(dst)
