@@ -64,6 +64,19 @@ def main():
         for r in test["per_requirement"]:
             L.append(f"| {r['requirement_id']} | {r['query_en']} | {r['gold_clips']} | {r['status']} | {r['full']['correct']}/{r['full']['returned']} |")
         L.append("")
+    ex = load("explore_dev_gap_tradeoff.json")
+    if ex:
+        L += ["## After the test: why gap recall is 0 (dev split only, exploratory)", "",
+              "The frozen τ was chosen by frame-level F1 and is too low for project-level gap detection: almost every requirement",
+              "finds some candidate. Sweeping τ on dev mini-projects shows the trade-off a project-level objective must handle:", "",
+              "| Score | τ / margin | Gap recall | Wrong reshoot |", "|---|---|---|---|"]
+        for key, label in (("rows", "raw cosine"), ("margin_rows", "margin over negative prompts")):
+            for r in ex.get(key, []):
+                if r["wrong_reshoot"]["p"] in (0.0,) and r is not ex[key][-1]:
+                    continue
+                L.append(f"| {label} | {r['tau']} | {r['gap_recall']['p'] * 100:.0f}% | {r['wrong_reshoot']['p'] * 100:.0f}% |")
+        L += ["", "Not used to rescore test. Stage II pre-registers a project-level objective (per-query thresholds, margin score) and",
+              "scores it once on new footage.", ""]
     if perf:
         L += ["## Performance (desktop reference)", "", f"Measured {perf['measured_at']}. {perf['note']}.", "",
               "| Backend | Device | Search p50 / p95 over 10,000 segments | Mean analyse time per clip-second |", "|---|---|---|---|"]

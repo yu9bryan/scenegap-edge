@@ -1,6 +1,6 @@
 # PRD 23 acceptance trace
 
-Generated 2026-10-26 18:24 by `scripts/acceptance.py`. 44/44 tests passed; 30/36 TC ids pass by automated test (synthetic fixtures + test-only mock backend for model output).
+Generated 2026-10-26 19:25 by `scripts/acceptance.py`. 44/44 tests passed; 30/36 TC ids pass by automated test (synthetic fixtures + test-only mock backend for model output).
 
 | TC | Scenario | Status | Evidence |
 |---|---|---|---|

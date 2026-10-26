@@ -11,14 +11,28 @@ confirms every result. Missing shots turn into reshoot cards.
 Built for the ASUS UGen AI League (Creator AI, Lightning track, ASUS UGen300 with Hailo-10H).
 
 <!-- RESULTS:BEGIN -->
-Results are filled in from `eval/results/REPORT.md` once the test split has been scored.
+![Evidence viewer on real Commons footage](docs/screenshots/05_evidence.png)
+
+**Measured so far** (44 openly licensed Wikimedia Commons clips, 25 min; held-out test split of 26 clips scored once;
+CLIP ViT-B/32 on a desktop GPU/CPU; full numbers in [`eval/results/REPORT.md`](eval/results/REPORT.md)):
+
+| | Result |
+|---|---|
+| Retrieval, top 5 per shot | Recall@5 64% (7/11), Precision@5 33%; single-frame search 73% / 40%; title keywords 45% / 36% |
+| Finding missing shots automatically | **Not achieved yet**: gap recall 0% at the frozen threshold (it was tuned for frame-level F1 and is too permissive). Dev-only analysis of the trade-off is in the report; Stage II fixes the objective |
+| Review load | 317 s of candidate clips to check for 11 shots, versus 839 s of footage |
+| Labels | two independent annotators, κ = 0.91, third pass on 143 disputed frames |
+| Speed (desktop) | 2.3 s (GPU) / 3.1 s (CPU) of analysis per minute of video; text search over 10,000 segments p95 13–14 ms |
+| Playback while analysing | 0 late frames of 1,800 at 1080p30; frame work p95 5.7 → 7.5 ms (CPU) / 6.2 ms (GPU) |
+| UGen300 | not run yet (G1 gate script ready) |
+| Tests | 46 automated tests; 30 of 36 PRD acceptance cases pass by test; fresh-environment rebuild passes |
 <!-- RESULTS:END -->
 
 ## What is real today, and what is not
 
 | Part | Status |
 |---|---|
-| Requirement → constraint → evidence → decision pipeline, three-valued logic, coverage, reshoot cards | Implemented, 41 automated tests |
+| Requirement → constraint → evidence → decision pipeline, three-valued logic, coverage, reshoot cards | Implemented, 46 automated tests |
 | Media path: MP4/MOV H.264 8-bit, rotation, VFR, start offsets, corrupt and unsupported files | Implemented, tested on synthetic fixtures |
 | Semantic retrieval | OpenAI CLIP ViT-B/32 on host **CPU or CUDA** (`cpu-reference` / `cuda-reference`) |
 | UGen300 / Hailo-10H | **Not run.** Device check only; the Hailo backend refuses to run until the G1 gate passes on a real device (`docs/MODEL_PLAN.md`) |
