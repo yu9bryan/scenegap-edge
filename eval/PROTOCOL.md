@@ -109,7 +109,7 @@ Test-2 (new held-out footage):
 - Success criteria, fixed now: wrong reshoot ≤ 5% (PRD 21.5, point estimate) **and** missing shots caught ≥ 30%
   (at least five times the system alone on dev). Both are reported whatever the outcome.
 
-## Stage 1.6: the verifier decides, and test-3 (added 2026-10-27 05:55, before any test-3 label or score)
+## Stage 1.6: the verifier decides, and test-3 (added 2026-10-27 05:48, before any test-3 label or score)
 
 Why: test-2 met the missing-shot target (32/91) but not the wrong-reshoot cap (3/41 = 7.3%). Diagnosis on dev and
 test-2: wrong reshoots happen when the right clip is not among the top 3 candidates, or is ranked 4th–5th; missed
@@ -119,7 +119,7 @@ so from here on they are development data; only new footage can judge Stage 1.6.
 
 Method family (`eval/verify16.py`, chosen on dev + test-1 + test-2 only):
 - The verifier (Qwen2-VL-2B-Instruct, same fingerprint) scores every 1 s sample with P(yes) (`eval/verify_dense.py`).
-- Check questions per shot (`eval/verify_questions.json`, written 05:45 from `eval/LABEL_GUIDE.md` and rules
+- Check questions per shot (`eval/verify_questions.json`, written 05:41 from `eval/LABEL_GUIDE.md` and rules
   R1–R8, before any test-3 footage existed). SH-08 and SH-11 add one extra condition (inside a café; a commercial
   setting); a frame's score is then the minimum. In the product these are drafted from the shot text and confirmed
   by the person, like `query_en`.
