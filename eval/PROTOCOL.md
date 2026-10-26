@@ -108,3 +108,38 @@ Test-2 (new held-out footage):
   system and as re-ranked by the verifier.
 - Success criteria, fixed now: wrong reshoot ≤ 5% (PRD 21.5, point estimate) **and** missing shots caught ≥ 30%
   (at least five times the system alone on dev). Both are reported whatever the outcome.
+
+## Stage 1.6: the verifier decides, and test-3 (added 2026-10-27 05:55, before any test-3 label or score)
+
+Why: test-2 met the missing-shot target (32/91) but not the wrong-reshoot cap (3/41 = 7.3%). Diagnosis on dev and
+test-2: wrong reshoots happen when the right clip is not among the top 3 candidates, or is ranked 4th–5th; missed
+gaps happen when the Stage 1.5 question accepts a clip the shot definition excludes (a home espresso routine as
+"barista", a capsule machine as "espresso machine"). Test-1 and test-2 have both been scored and their errors seen,
+so from here on they are development data; only new footage can judge Stage 1.6.
+
+Method family (`eval/verify16.py`, chosen on dev + test-1 + test-2 only):
+- The verifier (Qwen2-VL-2B-Instruct, same fingerprint) scores every 1 s sample with P(yes) (`eval/verify_dense.py`).
+- Check questions per shot (`eval/verify_questions.json`, written 05:45 from `eval/LABEL_GUIDE.md` and rules
+  R1–R8, before any test-3 footage existed). SH-08 and SH-11 add one extra condition (inside a café; a commercial
+  setting); a frame's score is then the minimum. In the product these are drafted from the shot text and confirmed
+  by the person, like `query_en`.
+- Grid: question set {Stage 1.5 question, check question, check question + conditions} × frames looked at {all,
+  CLIP top 8, 16, 32 samples of the project} × run length {1, 2, the shot's own minimum seconds} × θ 0.05…0.95.
+  A shot is present when one clip and one detected shot holds a run of looked-at samples with P(yes) ≥ θ of that
+  length; otherwise `not_found`.
+- Selection rule, fixed now: pooled wrong reshoot ≤ 3% **and** ≤ 5% in each of dev, test-1 and test-2; among those,
+  most missing shots caught; ties → fewer verifier calls, then higher θ. If nothing qualifies, test-3 is not scored.
+
+Test-3 (new held-out footage):
+- 40 Wikimedia Commons videos in none of the earlier sets, chosen by `scripts/search_commons.py` from metadata
+  only with 12 new search terms (coffee machine, cappuccino, coffee preparation, coffee making, kaffee, koffie,
+  cafetería, moka pot, coffeehouse, coffee bar, espresso machine, café), round robin in Commons' relevance order;
+  manifest `datasets/manifests/test3_manifest.json`. Many are not about coffee; they make real missing shots.
+- Labels: same guide and rules R1–R8, two independent AI annotator passes on 1 fps contact sheets, a blind third
+  pass on every disagreement, no access to any system or verifier output; stored in `eval/labels/test3/` and
+  committed before scoring.
+- Scoring: 20 simulated projects × 8 clips (seeds `test3-0` … `test3-19`), run once by `eval/verify16.py test3`,
+  which refuses a second run.
+- Success criteria (unchanged from Stage 1.5): wrong reshoot ≤ 5% **and** missing shots caught ≥ 30%. Reported
+  whatever the outcome. If they are missed, the next change is again chosen on all scored data and judged on a
+  new test set; test-3 is never re-scored.

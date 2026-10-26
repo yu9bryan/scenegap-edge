@@ -1,0 +1,17 @@
+{
+ "about": "Stage 1.6 check questions per shot, written 2026-10-27 05:45 from eval/LABEL_GUIDE.md and the third-pass rules R1-R8 (eval/labels/adjudication_rules.json), before any test-3 footage was seen. In the product these are drafted from the shot text and confirmed by the person, like query_en. 'parts' are extra conditions; a frame passes when every part and the main question pass (the frame score is the minimum).",
+ "suffix": " Answer yes or no.",
+ "shots": {
+  "SH-01": {"main": "Is the outside of a café or coffee shop visible from the street, such as its storefront, sign, façade or café tables set out on the pavement?"},
+  "SH-02": {"main": "Is this a view of the inside of a café or coffee shop, with tables or chairs visible?"},
+  "SH-03": {"main": "Is this a close-up in which coffee beans fill a large part of the image?"},
+  "SH-04": {"main": "Is ground coffee coming out of a coffee grinder?"},
+  "SH-05": {"main": "Is coffee or milk being poured or dripping into a cup or glass?"},
+  "SH-06": {"main": "Is a cup or glass of coffee the main subject, standing on a table, saucer or counter, with nothing being poured into it?"},
+  "SH-07": {"main": "Is a person drinking from a coffee cup or holding a coffee cup up to drink?"},
+  "SH-08": {"main": "Are at least two people visible?", "parts": ["Is this the inside of a café or coffee shop?"]},
+  "SH-09": {"main": "Is coffee flowing out of the portafilter of an espresso machine?"},
+  "SH-10": {"main": "Is a bag, box or other package of coffee visible?"},
+  "SH-11": {"main": "Is a person preparing coffee, for example grinding, tamping, operating a coffee machine or pouring?", "parts": ["Is this a café, bar, restaurant or other commercial setting?"]}
+ }
+}

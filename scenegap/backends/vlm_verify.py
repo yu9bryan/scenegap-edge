@@ -51,6 +51,20 @@ class VlmVerifier:
         self.calls += 1
         return float(self.torch.sigmoid(y - n))
 
+    def p_yes_many(self, image, questions: list[str]) -> list[float]:
+        """P(yes) for several questions about one image in one batch (left padding, last-token logits)."""
+        tok = self.proc.tokenizer
+        tok.padding_side = "left"
+        texts = [self.proc.apply_chat_template([{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": q}]}],
+                                               tokenize=False, add_generation_prompt=True) for q in questions]
+        inp = self.proc(text=texts, images=[image] * len(texts), return_tensors="pt", padding=True).to(self.device)
+        with self.torch.no_grad():
+            logits = self.model(**inp).logits[:, -1].float()
+        y = self.torch.logsumexp(logits[:, self.yes], 1)
+        n = self.torch.logsumexp(logits[:, self.no], 1)
+        self.calls += len(questions)
+        return [float(x) for x in self.torch.sigmoid(y - n)]
+
 
 def frame_at(path: str, t_ms: int):
     """One RGB frame at t_ms (original timestamps), decoded with PyAV."""

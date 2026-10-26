@@ -1,9 +1,9 @@
-"""Find new openly licensed café / coffee videos on Wikimedia Commons for a fresh held-out test set (test-2).
+"""Find new openly licensed café / coffee videos on Wikimedia Commons for a fresh held-out test set (test-2, test-3).
 
-  python scripts/search_commons.py <out_candidates.json> [--n 24] [--exclude datasets/manifests/commons_manifest.json]
+  python scripts/search_commons.py <out_candidates.json> [--n 24] [--exclude manifest.json ...]
 
 Selection uses metadata only (search rank, licence, length, size), never the frames, so it cannot favour the
-method under test. Clips already in the first dataset are excluded. Order: round robin over the search terms,
+method under test. Clips already in an earlier dataset (every --exclude manifest) are excluded. Order: round robin over the search terms,
 each term in Commons' own relevance order.
 """
 import argparse
@@ -41,11 +41,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("out")
     ap.add_argument("--n", type=int, default=24)
-    ap.add_argument("--exclude", default="datasets/manifests/commons_manifest.json")
+    ap.add_argument("--terms", help="comma-separated search terms in round-robin order (default: TERMS)")
+    ap.add_argument("--exclude", action="append", help="manifest of clips to leave out; repeatable (default: the first dataset)")
     a = ap.parse_args()
-    old = {c["title"] for c in json.load(open(a.exclude, encoding="utf8"))["clips"]}
+    old = {c["title"] for m in (a.exclude or ["datasets/manifests/commons_manifest.json"]) for c in json.load(open(m, encoding="utf8"))["clips"]}
+    terms = [t.strip() for t in a.terms.split(",")] if a.terms else TERMS
     per_term = {}
-    for t in TERMS:
+    for t in terms:
         r = get({"action": "query", "generator": "search", "gsrsearch": f"filetype:video {t}", "gsrnamespace": 6, "gsrlimit": 50,
                  "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata|mediatype"})
         pages = sorted((r.get("query") or {}).get("pages", {}).values(), key=lambda p: p.get("index", 0))
@@ -66,10 +68,10 @@ def main():
                          "search_term": t})
         per_term[t] = rows
         print(t, len(rows))
-        time.sleep(1)
+        time.sleep(3)
     picked, seen = [], set()
     while len(picked) < a.n and any(per_term.values()):
-        for t in TERMS:
+        for t in terms:
             while per_term[t] and per_term[t][0]["title"] in seen:
                 per_term[t].pop(0)
             if per_term[t] and len(picked) < a.n:
