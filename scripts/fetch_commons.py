@@ -32,6 +32,25 @@ def license_ok(lic: str) -> bool:
     return bool(re.search(r"\bcc0\b|public domain|\bpd\b|\bcc by( sa)?\b", s))
 
 
+def download(url, dst, tries=6):
+    """Fetch once into dst.part, then rename. On HTTP 429/503, wait as the server asks (Retry-After) and retry."""
+    import urllib.error
+    for k in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=120) as r, open(dst + ".part", "wb") as f:
+                while b := r.read(1 << 20):
+                    f.write(b)
+            os.replace(dst + ".part", dst)
+            return
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 503) or k == tries - 1:
+                raise
+            wait = int(e.headers.get("Retry-After") or 0) or 15 * (k + 1)
+            print(f"  HTTP {e.code}, waiting {wait}s", flush=True)
+            time.sleep(min(wait + 5, 1200))      # honour Retry-After; retrying earlier only extends the block
+
+
 def sha256(path):
     h = hashlib.sha256()
     with open(path, "rb") as f:
@@ -44,6 +63,12 @@ def safe_name(title: str) -> str:
     base = title.replace("File:", "")
     keep = "".join(ch if ch.isalnum() or ch in "-_." else "_" for ch in base)
     return keep[:80]
+
+
+def write_manifest(path, clips):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    json.dump({"source": "Wikimedia Commons", "built": time.strftime("%Y-%m-%d"), "transcode": "H.264 yuv420p CRF23, <=1280 px, no audio",
+               "clips": clips}, open(path, "w", encoding="utf8"), ensure_ascii=False, indent=1)
 
 
 def main():
@@ -70,12 +95,8 @@ def main():
         name = f"{i:03d}_{safe_name(c['title'])}"
         src = os.path.join(orig_dir, name + ext)
         if not os.path.exists(src):
-            req = urllib.request.Request(c["download_url"], headers={"User-Agent": UA})
-            with urllib.request.urlopen(req, timeout=120) as r, open(src + ".part", "wb") as f:
-                while b := r.read(1 << 20):
-                    f.write(b)
-            os.replace(src + ".part", src)
-            time.sleep(0.5)                       # be polite to the Commons servers
+            download(c["download_url"], src)
+            time.sleep(8)                         # be polite to the Commons servers
         total += os.path.getsize(src) / 1e6
         dst = os.path.join(mp4_dir, name + ".mp4")
         if not os.path.exists(dst):
@@ -86,10 +107,9 @@ def main():
                     "license": c.get("license"), "license_url": c.get("license_url"), "artist": c.get("artist"), "credit": c.get("credit"),
                     "source_sha256": sha256(src), "mp4_sha256": sha256(dst), "tags_from_metadata": c.get("tags", []),
                     "duration_s_metadata": c.get("duration_s")})
-        print(f"{len(out):02d} {name} {os.path.getsize(src)/1e6:.1f} MB")
-    os.makedirs(os.path.dirname(a.manifest), exist_ok=True)
-    json.dump({"source": "Wikimedia Commons", "built": time.strftime("%Y-%m-%d"), "transcode": "H.264 yuv420p CRF23, <=1280 px, no audio",
-               "clips": out}, open(a.manifest, "w", encoding="utf8"), ensure_ascii=False, indent=1)
+        print(f"{len(out):02d} {name} {os.path.getsize(src)/1e6:.1f} MB", flush=True)
+        write_manifest(a.manifest, out)                  # after every clip, so an interrupted run keeps its record
+    write_manifest(a.manifest, out)
     print("clips", len(out), "MB", round(total, 1))
 
 
