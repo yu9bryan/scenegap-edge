@@ -1,0 +1,278 @@
+[
+ {
+  "requirement_id": "SH-01",
+  "source_text": "店外街景，看得到咖啡店門面，連續 3 秒",
+  "query_en": "a photo of the outside of a cafe seen from the street",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 3000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a photo of the outside of a cafe seen from the street"
+    }
+   }
+  ],
+  "keywords": [
+   "exterior",
+   "terrasse",
+   "street",
+   "boulevard",
+   "outside"
+  ]
+ },
+ {
+  "requirement_id": "SH-02",
+  "source_text": "店內全景，看得到桌椅，連續 3 秒",
+  "query_en": "a photo of the inside of a cafe with tables and chairs",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 3000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a photo of the inside of a cafe with tables and chairs"
+    }
+   }
+  ],
+  "keywords": [
+   "interior",
+   "inside",
+   "café",
+   "cafe"
+  ]
+ },
+ {
+  "requirement_id": "SH-03",
+  "source_text": "咖啡豆特寫，連續 2 秒",
+  "query_en": "a close-up photo of roasted coffee beans",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 2000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a close-up photo of roasted coffee beans"
+    }
+   }
+  ],
+  "keywords": [
+   "bean",
+   "beans",
+   "roast"
+  ]
+ },
+ {
+  "requirement_id": "SH-04",
+  "source_text": "磨豆過程，連續 2 秒",
+  "query_en": "a photo of a coffee grinder grinding coffee",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 2000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a photo of a coffee grinder grinding coffee"
+    }
+   }
+  ],
+  "keywords": [
+   "grind",
+   "grinder",
+   "mill"
+  ]
+ },
+ {
+  "requirement_id": "SH-05",
+  "source_text": "咖啡倒入杯中或拉花，連續 3 秒",
+  "query_en": "a photo of coffee being poured into a cup",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 3000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a photo of coffee being poured into a cup"
+    }
+   }
+  ],
+  "keywords": [
+   "pour",
+   "pouring",
+   "latte",
+   "art"
+  ]
+ },
+ {
+  "requirement_id": "SH-06",
+  "source_text": "成品主視覺：桌上一杯咖啡，連續 2 秒",
+  "query_en": "a close-up photo of a cup of coffee on a table",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 2000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a close-up photo of a cup of coffee on a table"
+    }
+   }
+  ],
+  "keywords": [
+   "cup",
+   "coffee"
+  ]
+ },
+ {
+  "requirement_id": "SH-07",
+  "source_text": "有人拿著杯子喝咖啡，連續 2 秒",
+  "query_en": "a photo of a person drinking coffee from a cup",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 2000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a photo of a person drinking coffee from a cup"
+    }
+   }
+  ],
+  "keywords": [
+   "drink",
+   "drinking",
+   "sip"
+  ]
+ },
+ {
+  "requirement_id": "SH-08",
+  "source_text": "店內兩人同框，連續 2 秒",
+  "query_en": "two people sitting together in a cafe",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 2000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "co_occur",
+    "capability": "auto",
+    "params": {
+     "queries": [
+      "a photo of two people sitting together",
+      "a photo of the inside of a cafe"
+     ]
+    }
+   }
+  ],
+  "keywords": [
+   "two",
+   "people",
+   "friends"
+  ]
+ },
+ {
+  "requirement_id": "SH-09",
+  "source_text": "義式咖啡機萃取，連續 2 秒",
+  "query_en": "a photo of an espresso machine making espresso",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 2000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a photo of an espresso machine making espresso"
+    }
+   }
+  ],
+  "keywords": [
+   "espresso",
+   "machine"
+  ]
+ },
+ {
+  "requirement_id": "SH-10",
+  "source_text": "咖啡豆包裝，品牌字樣要清楚可讀",
+  "query_en": "a photo of a bag of coffee beans",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 1000,
+  "min_takes": 1,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a photo of a bag of coffee beans"
+    }
+   },
+   {
+    "kind": "text_readable",
+    "capability": "manual",
+    "params": {
+     "text": "品牌名稱"
+    },
+    "hard": true,
+    "note": "品牌字樣是否可讀由人判斷"
+   }
+  ],
+  "keywords": [
+   "bag",
+   "package",
+   "pack"
+  ]
+ },
+ {
+  "requirement_id": "SH-11",
+  "source_text": "咖啡師工作畫面，至少兩個不同 take，每段 3 秒",
+  "query_en": "a photo of a barista making coffee",
+  "required": true,
+  "weight": 1,
+  "min_duration_ms": 3000,
+  "min_takes": 2,
+  "confirmed": true,
+  "constraints": [
+   {
+    "kind": "semantic",
+    "capability": "auto",
+    "params": {
+     "query": "a photo of a barista making coffee"
+    }
+   }
+  ],
+  "keywords": [
+   "barista"
+  ]
+ }
+]

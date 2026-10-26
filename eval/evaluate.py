@@ -112,7 +112,7 @@ def set_requirements(svc, pid, reqs):
 def calibrate_one(a, crop, dev, reqs, gold):
     svc, be = make_service(os.path.join(a.work, a.device), a.device, crop=crop)
     pid, amap, dt = build_project(svc, a.mp4, dev, "dev-" + crop)
-    R = [req_from_dict({k: v for k, v in r.items() if k != "keywords"}) for r in reqs]
+    R = [req_from_dict({**{k: v for k, v in r.items() if k != "keywords"}, "revision": 1}) for r in reqs]
     queries = sorted({q for r in R for q in svc._queries(r)})
     assets, _ = svc._asset_indexes(pid, queries)
     scores, labels = [], []
