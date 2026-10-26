@@ -65,11 +65,14 @@ class DB:
                 raise
 
     def one(self, sql: str, args=()):
-        r = self.x(sql, args).fetchone()
+        with self._lock:                               # fetch inside the lock: the connection is shared by threads
+            r = self.conn.execute(sql, args).fetchone()
         return dict(r) if r else None
 
     def all(self, sql: str, args=()):
-        return [dict(r) for r in self.x(sql, args).fetchall()]
+        with self._lock:
+            rows = self.conn.execute(sql, args).fetchall()
+        return [dict(r) for r in rows]
 
 
 def atomic_write_bytes(path: str, data: bytes):

@@ -332,3 +332,14 @@ def test_person_can_request_reshoot_for_a_candidate(tmp_path, media):
     svc.set_requirement(pid, {**RED, "min_duration_ms": 2500}, expected_revision=1)
     svc.compute_run(pid)
     assert svc.reshoot_cards(pid) == []                       # the request was bound to revision 1
+
+
+def test_concurrent_reads_do_not_mix_rows(tmp_path, media):
+    from concurrent.futures import ThreadPoolExecutor
+    svc, be = make(tmp_path)
+    pid = svc.create_project("threads")
+    rid = svc.add_root(pid, str(media))
+    ids = [a["asset_id"] for a in svc.import_assets(pid, rid, ["two_shots.mp4", "plain.mp4", "rotated_90.mp4"])["accepted"]]
+    with ThreadPoolExecutor(16) as ex:
+        paths = list(ex.map(lambda i: svc.asset_path(ids[i % len(ids)]), range(600)))
+    assert all(p and os.path.isfile(p) for p in paths)

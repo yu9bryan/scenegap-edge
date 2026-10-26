@@ -17,7 +17,7 @@ def device_status() -> dict:
         import hailo_platform as hp            # HailoRT Python package
         info["runtime"] = getattr(hp, "__version__", "unknown")
     except Exception:
-        info["reason"] = "HailoRT Python package (hailo_platform) not installed"
+        info["reason"] = "未安裝 HailoRT（hailo_platform）"
         hp = None
     cli = shutil.which("hailortcli")
     if hp is not None:
@@ -26,19 +26,19 @@ def device_status() -> dict:
             if ids:
                 info.update(available=True, model="Hailo device", interface=str(ids[0]))
             else:
-                info["reason"] = "no Hailo device found by Device.scan()"
+                info["reason"] = "找不到 Hailo 裝置"
         except Exception as e:
-            info["reason"] = f"device scan failed: {e}"
+            info["reason"] = f"裝置掃描失敗：{e}"
     elif cli:
         try:
             r = subprocess.run([cli, "scan"], capture_output=True, text=True, timeout=10, shell=False)
             if "Device" in r.stdout:
                 info.update(available=True, model="Hailo device (hailortcli)", interface=r.stdout.strip().splitlines()[-1])
-                info["reason"] = "device visible to hailortcli; Python runtime missing"
+                info["reason"] = "hailortcli 看得到裝置，但缺 Python 執行環境"
             else:
-                info["reason"] = "hailortcli found no device"
+                info["reason"] = "hailortcli 找不到裝置"
         except Exception as e:
-            info["reason"] = f"hailortcli scan failed: {e}"
+            info["reason"] = f"hailortcli 掃描失敗：{e}"
     return info
 
 

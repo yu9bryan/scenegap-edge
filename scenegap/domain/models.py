@@ -23,8 +23,8 @@ class AutoStatus(str, Enum):
 
 
 STATUS_TEXT_ZH = {
-    "not_analyzed": "尚未分析", "analyzing": "分析中", "candidate": "有候選，待確認", "partial": "部分符合",
-    "not_found": "在已分析範圍未找到", "unverifiable": "無法自動確認", "failed": "分析失敗", "draft": "草稿（未確認）",
+    "not_analyzed": "尚未分析", "analyzing": "分析中", "candidate": "有候選", "partial": "部分符合",
+    "not_found": "沒找到", "unverifiable": "無法自動判斷", "failed": "分析失敗", "draft": "草稿",
 }
 
 

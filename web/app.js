@@ -4,7 +4,7 @@
  * (through h()). innerHTML is used only for the constant icon SVG paths defined in this file.
  *
  * Preview mode: when window.SG_PREVIEW is set (docs/ui_preview/preview.html), api() answers from
- * that object instead of fetch() and the page shows a "預覽資料（非實測）" ribbon.
+ * that object instead of fetch() and the page shows a "預覽資料" ribbon.
  */
 (function () {
   'use strict';
@@ -111,23 +111,23 @@
   const AUTO = {
     not_analyzed: { zh: '尚未分析', icon: 'dashed', tone: 'slate' },
     analyzing: { zh: '分析中', icon: 'loader', tone: 'cyan', spin: true },
-    candidate: { zh: '有候選，待確認', icon: 'target', tone: 'violet' },
+    candidate: { zh: '有候選', icon: 'target', tone: 'violet' },
     partial: { zh: '部分符合', icon: 'half', tone: 'amber' },
-    not_found: { zh: '在已分析範圍未找到', icon: 'searchx', tone: 'red' },
-    unverifiable: { zh: '無法自動確認', icon: 'help', tone: 'orange' },
+    not_found: { zh: '沒找到', icon: 'searchx', tone: 'red' },
+    unverifiable: { zh: '無法自動判斷', icon: 'help', tone: 'orange' },
     failed: { zh: '分析失敗', icon: 'alert', tone: 'red' },
-    draft: { zh: '草稿（未確認）', icon: 'pencil', tone: 'slate' },
+    draft: { zh: '草稿', icon: 'pencil', tone: 'slate' },
   };
-  const AUTO_STALE = { zh: '結果已過期，需重新分析', icon: 'clock', tone: 'slate' };
+  const AUTO_STALE = { zh: '已過期，請重新分析', icon: 'clock', tone: 'slate' };
   const HUMAN = {
     confirmed: { zh: '已人工確認', icon: 'checkc', tone: 'green' },
-    exception: { zh: '人工接受例外', icon: 'flag', tone: 'amber' },
+    exception: { zh: '例外接受', icon: 'flag', tone: 'amber' },
     none: { zh: '未確認', icon: 'circle', tone: 'slate' },
   };
   const REASON_ZH = {
-    NO_CANDIDATE: '已分析範圍內沒有候選', DURATION_SHORT: '連續時長不足', DURATION_UNKNOWN: '連續時長未能確認',
-    QUALITY_WARNING: '品質警示', NEEDS_MANUAL: '含需人工確認的條件', EVIDENCE_UNKNOWN: '證據不足',
-    TAKES_SHORT: '獨立 take 數不足', SCOPE_INCOMPLETE: '仍有素材未分析或失敗', UNSUPPORTED_CORE: '核心條件此版本不支援',
+    NO_CANDIDATE: '已分析的素材裡沒找到', DURATION_SHORT: '長度不夠', DURATION_UNKNOWN: '長度無法確認',
+    QUALITY_WARNING: '品質警示', NEEDS_MANUAL: '有條件要人工確認', EVIDENCE_UNKNOWN: '證據不足',
+    TAKES_SHORT: 'Take 數不夠', SCOPE_INCOMPLETE: '還有素材沒分析完', UNSUPPORTED_CORE: '這個版本還不支援此條件',
     ANALYSIS_FAILED: '分析失敗', NOT_ANALYZED: '尚未分析', NO_ASSETS: '尚未加入素材', CONSTRAINT_FAILED: '條件不符',
   };
   const ASSET_ST = {
@@ -141,7 +141,7 @@
   const VERDICT = {
     pass: { zh: '通過', icon: 'checkc', tone: 'green', cls: 'v-pass' },
     fail: { zh: '不符', icon: 'xc', tone: 'red', cls: 'v-fail' },
-    unknown: { zh: '未能確認', icon: 'help', tone: 'amber', cls: 'v-unknown' },
+    unknown: { zh: '無法確認', icon: 'help', tone: 'amber', cls: 'v-unknown' },
   };
   const CAP = {
     auto: { zh: '自動', icon: 'sparkle', tone: 'cyan' },
@@ -149,8 +149,8 @@
     unsupported: { zh: '不支援', icon: 'ban', tone: 'slate' },
   };
   const KIND_ZH = {
-    semantic: '語意內容', co_occur: '同框共現', duration: '連續時長', takes: '獨立 take 數', quality: '畫質',
-    readable_text: '可讀文字', action: '動作', composition: '構圖', forbidden: '禁止出現',
+    semantic: '畫面內容', co_occur: '同框', duration: '連續時長', takes: 'Take 數', quality: '畫質',
+    readable_text: '文字清楚可讀', action: '動作', composition: '構圖', forbidden: '不能入鏡',
   };
   const JOB_ST = {
     queued: { zh: '排隊中', icon: 'clock', tone: 'slate' },
@@ -160,33 +160,33 @@
     cancelled: { zh: '已取消', icon: 'stop', tone: 'slate' },
   };
   const STAGE_ZH = {
-    'queued': '排隊等待中', 'analyzing assets': '解析素材中（切鏡、取樣、計算特徵）', 'matching requirements': '比對需求中',
-    'done': '完成', 'cancelled by user': '已由使用者取消', 'resumed after restart': '服務重啟後自動續跑', 'failed': '失敗',
+    'queued': '排隊中', 'analyzing assets': '分析素材中（切鏡頭、抽影格、算特徵）', 'matching requirements': '比對 Shot list 中',
+    'done': '完成', 'cancelled by user': '已由使用者取消', 'resumed after restart': '重新啟動後自動接續', 'failed': '失敗',
   };
   const RESHOOT_ST = [
-    ['proposed', '待確認'], ['confirmed', '已確認補拍'], ['shooting', '拍攝中'], ['done', '已完成'], ['dismissed', '已略過'],
+    ['proposed', '待確認'], ['confirmed', '確定補拍'], ['shooting', '拍攝中'], ['done', '已完成'], ['dismissed', '已略過'],
   ];
   const RESHOOT_TONE = { proposed: 'slate', confirmed: 'violet', shooting: 'cyan', done: 'green', dismissed: 'slate' };
   const RESHOOT_ICON = { proposed: 'dashed', confirmed: 'check', shooting: 'camera', done: 'checkc', dismissed: 'ban' };
   const WARN_ZH = {
-    'non-zero start time': '起始時間不為 0（時間碼以原始時間戳為準）',
-    'variable frame rate suspected; timestamps use PTS': '疑似可變影格率；時間以 PTS 為準',
+    'non-zero start time': '影片不是從 0 秒開始，時間碼以原始時間為準',
+    'variable frame rate suspected; timestamps use PTS': '可能是可變影格率（VFR），時間以 PTS 為準',
   };
   const NEXT_STEP = {
     NETWORK: '無法連線到本機服務。請確認 SceneGap 仍在執行，再重新整理本頁。',
-    UNAUTHORIZED: '工作階段權杖已失效。請從 SceneGap 啟動程式重新開啟本頁。',
-    ORIGIN_REJECTED: '請直接從 SceneGap 啟動程式開啟的網址使用本工具。',
-    NOT_FOUND: '項目不存在或已被移除。請重新整理後再試。',
+    UNAUTHORIZED: '連線已失效，請從 SceneGap 重新開啟這個頁面。',
+    ORIGIN_REJECTED: '請用 SceneGap 啟動時顯示的網址開啟。',
+    NOT_FOUND: '找不到這筆資料，可能已被刪除，請重新整理。',
     ROOT_NOT_FOUND: '找不到這個資料夾。請確認路徑存在、磁碟已連接，再重新授權。',
     PATH_NOT_ALLOWED: '只能讀取已授權資料夾內的檔案。請先授權包含該檔案的資料夾。',
-    STALE_REVISION: '需求已被修改，請重新載入。',
+    STALE_REVISION: '這個鏡頭已被修改，請重新載入。',
     REASON_REQUIRED: '請填寫理由後再送出。',
     BAD_INTERVAL: '時段需落在影片長度內，且開始時間要早於結束時間。',
-    UNCALIBRATED: '語意門檻尚未校準，目前無法搜尋。請先執行校準流程。',
-    SCHEMA: '欄位內容不符合格式，請檢查後再送出。',
+    UNCALIBRATED: '門檻還沒校準，暫時不能搜尋。請先執行校準。',
+    SCHEMA: '格式不對，請檢查後再送出。',
     ASSET_MISSING: '素材離線或已被移動。請重新連接磁碟或重新授權資料夾。',
     NO_FRAME: '這個時間點取不到影格，請改選其他時間。',
-    MODEL_MISMATCH: '模型版本與既有索引不一致，請重新分析。',
+    MODEL_MISMATCH: '模型版本變了，請重新分析。',
     PREVIEW: '預覽模式只顯示範例資料，不會寫入任何東西。',
   };
 
@@ -341,7 +341,7 @@
   }
   function autoChip(row, cov, lg) {
     const d = autoDef(row, cov);
-    return chip(d, { prefix: 'AI', lg, aria: '自動判定：' + d.zh });
+    return chip(d, { prefix: 'AI', lg, aria: 'AI 判斷：' + d.zh });
   }
   function humanDef(row) {
     if (!row) return HUMAN.none;
@@ -357,13 +357,13 @@
     if (!codes || !codes.length) return h('span', { class: 'faint small' }, '—');
     return h('div', { class: 'chips' }, codes.map((c) => h('span', { class: 'reason', title: c }, icon('info'), REASON_ZH[c] || c)));
   }
-  function capChip(cap) { return chip(CAP[cap] || CAP.auto, { aria: '判定方式：' + (CAP[cap] || CAP.auto).zh }); }
+  function capChip(cap) { return chip(CAP[cap] || CAP.auto, { aria: '判斷方式：' + (CAP[cap] || CAP.auto).zh }); }
 
   function thumb(aid, t, label) {
     const img = h('img', { alt: label || ('影格 ' + fmtTime(t)), decoding: 'async', loading: 'lazy' });
     const box = h('span', { class: 'thumb' }, img, h('span', { class: 't-time' }, fmtTime(t)));
     let failed = false;
-    const fail = () => { if (failed) return; failed = true; img.remove(); box.classList.add('none'); box.prepend(h('span', { title: '素材離線、這個時間點沒有影格，或工作階段已過期（請重新整理頁面）' }, '無法載入影格')); };
+    const fail = () => { if (failed) return; failed = true; img.remove(); box.classList.add('none'); box.prepend(h('span', { title: '素材離線、這個時間點沒有影格，或連線已過期（請重新整理）' }, '無法載入影格')); };
     img.addEventListener('error', fail);
     frameUrl(aid, t).then((u) => { if (u) img.src = u; else fail(); }, fail);
     return box;
@@ -446,6 +446,14 @@
     box.append(t);
     if (o.kind !== 'error') setTimeout(() => t.remove(), 5000);
   }
+  // Short label for the top bar; the full backend name stays in the tooltip and on the device screen.
+  function beShort(be) {
+    if (!be || be === 'not loaded') return '模型載入中';
+    if (be.startsWith('cuda')) return 'GPU 參考';
+    if (be.startsWith('cpu')) return 'CPU 參考';
+    if (be.startsWith('hailo')) return 'UGen300';
+    return be;
+  }
   function showError(err, title) {
     if (!(err instanceof ApiError)) err = new ApiError(0, { code: 'CLIENT', message: String(err && err.message || err) });
     const next = NEXT_STEP[err.code] || (err.status >= 500 ? '本機服務發生內部錯誤。請查看啟動 SceneGap 的視窗訊息，並附上請求編號回報。'
@@ -484,7 +492,7 @@
   }
   async function cancelJob() {
     if (!S.jobId) return;
-    try { await api('POST', '/jobs/' + encodeURIComponent(S.jobId) + '/cancel'); toast({ kind: 'info', title: '已要求取消', text: '目前處理中的檔案完成後會停止。' }); pollJob(); }
+    try { await api('POST', '/jobs/' + encodeURIComponent(S.jobId) + '/cancel'); toast({ kind: 'info', title: '已要求取消', text: '這支檔案處理完就會停止。' }); pollJob(); }
     catch (e) { showError(e, '取消失敗'); }
   }
   function pollJob() {
@@ -499,7 +507,7 @@
         if (j.state === 'queued' || j.state === 'running') { S.jobTimer = setTimeout(tick, 1000); return; }
         if (!PREVIEW) store.del(jobKey());
         if (j.state === 'done') toast({ kind: 'ok', title: '分析完成', text: '覆蓋矩陣已更新。' });
-        else if (j.state === 'failed') toast({ kind: 'error', title: '分析工作失敗', text: '下一步：檢查失敗的素材，或到「裝置與診斷」確認後端狀態後重新分析。' });
+        else if (j.state === 'failed') toast({ kind: 'error', title: '分析工作失敗', text: '下一步：先看失敗的素材，或到「裝置」確認後端，再重新分析。' });
         if (['home', 'assets', 'coverage'].includes(S.route.name)) render();
       } catch (e) {
         if (e.code === 'NOT_FOUND') { S.jobId = null; S.job = null; if (!PREVIEW) store.del(jobKey()); notifyJob(); return; }
@@ -544,7 +552,7 @@
         S.jobId ? h('span', { class: 'mono faint' }, '工作 ' + S.jobId) : null));
       if (j.state === 'failed') {
         el.append(h('div', { class: 'err-line' }, '原因：' + firstLine(j.error || '未提供')),
-          h('div', { class: 'faint small' }, '下一步：檢查失敗的素材，或到「裝置與診斷」確認後端狀態後重新分析。'));
+          h('div', { class: 'faint small' }, '下一步：先看失敗的素材，或到「裝置」確認後端，再重新分析。'));
       }
     };
     S.jobSubs.add(upd); cleanup.push(() => S.jobSubs.delete(upd));
@@ -563,8 +571,8 @@
 
   // ------------------------------------------------------------------ chrome: nav + topbar
   const NAV = [
-    ['home', '專案首頁', 'home'], ['requirements', '需求編輯器', 'list'], ['assets', '素材庫', 'film'],
-    ['coverage', '覆蓋矩陣', 'grid'], ['evidence', '證據檢視器', 'eye'], ['board', '複核／補拍板', 'board'], ['device', '裝置與診斷', 'cpu'],
+    ['home', '首頁', 'home'], ['requirements', 'Shot list', 'list'], ['assets', '素材', 'film'],
+    ['coverage', 'Coverage', 'grid'], ['evidence', '片段檢視', 'eye'], ['board', '補拍清單', 'board'], ['device', '裝置', 'cpu'],
   ];
   const NAME_ZH = Object.fromEntries(NAV.map((n) => [n[0], n[1]]));
   NAME_ZH.projects = '選擇專案';
@@ -585,7 +593,7 @@
     const foot = $('#sidebar-foot');
     foot.replaceChildren(
       h('span', { class: 'foot-text' }, 'SceneGap Edge ' + ((S.health && S.health.version) ? 'v' + S.health.version : '')),
-      h('span', { class: 'foot-text' }, '本機服務 · 資料不離開這台電腦'));
+      h('span', { class: 'foot-text' }, '只在這台電腦執行 · 素材不上傳'));
   }
 
   function renderTop() {
@@ -599,8 +607,8 @@
     const right = h('div', { class: 'top-right' });
     const be = (S.device && S.device.active_backend) || (S.health && S.health.active_backend) || null;
     if (be) {
-      right.append(h('a', { href: '#/device', class: 'spill', title: '目前實際使用的推論後端', 'aria-label': '目前後端：' + be },
-        icon('cpu'), h('span', null, '後端 ' + (be === 'not loaded' ? '尚未載入' : be))));
+      right.append(h('a', { href: '#/device', class: 'spill', title: '運算後端：' + be, 'aria-label': '目前後端：' + be },
+        icon('cpu'), h('span', null, beShort(be))));
     }
     const dev = (S.device && S.device.device) || (S.health && S.health.device);
     if (dev) {
@@ -668,7 +676,7 @@
       try {
         const r = await api('POST', '/projects', { name: f.name.trim(), purpose: f.purpose.trim(), aspect: f.aspect, target_len_s: t });
         setProject(r.project_id, f.name.trim());
-        toast({ kind: 'ok', title: '專案已建立', text: '下一步：建立需求，並授權素材資料夾。' });
+        toast({ kind: 'ok', title: '專案已建立', text: '下一步：建立 Shot list，再授權素材資料夾。' });
         go('#/home');
       } catch (e) { showError(e, '無法建立專案'); }
     } },
@@ -694,7 +702,7 @@
       } catch (e) { if (e.code === 'NOT_FOUND') openErr.textContent = '找不到這個專案 ID。'; else showError(e, '無法開啟專案'); }
     } },
     h('div', { class: 'field' }, h('label', { for: 'pj-id' }, '專案 ID'), h('input', { id: 'pj-id', class: 'input mono', placeholder: 'p_…', oninput: (e) => { openId = e.target.value; } }),
-      h('span', { class: 'hint' }, '通常直接從右側清單開啟即可；這裡用於貼上別處取得的專案 ID。')),
+      h('span', { class: 'hint' }, '一般從右邊清單開啟就好；有專案 ID 時可以貼在這裡。')),
     openErr, h('div', { class: 'row' }, h('span', { class: 'grow' }), btn('開啟', { icon: 'open', type: 'submit' })));
 
     // Project list from the service; this browser's recent list is only a fallback.
@@ -704,7 +712,7 @@
       items = (rows || []).map((r) => ({ id: r.project_id || r.id, name: r.name, purpose: r.purpose, at: r.created_at }));
     } catch (e) {
       listTitle = '最近開啟（離線清單）';
-      listNote = banner('warn', '無法取得專案清單', (NEXT_STEP[e.code] || '請稍後再試。') + ' 下面只列出這台瀏覽器曾開啟過的專案。');
+      listNote = banner('warn', '無法取得專案清單', (NEXT_STEP[e.code] || '請稍後再試。') + ' 以下只有這台瀏覽器開過的專案。');
       items = store.get('sg.recent', []).map((r) => ({ id: r.id, name: r.name }));
     }
     const recentList = h('div', null, listNote, items.length
@@ -715,7 +723,7 @@
       : h('p', { class: 'faint' }, '還沒有專案。先在左側建立一個。'));
 
     return h('div', null,
-      pageHead('選擇或建立專案', '專案包含一組需求（腳本鏡頭清單）與授權的素材資料夾。'),
+      pageHead('選擇或建立專案', '每個專案有一份 Shot list，加上你授權的素材資料夾。'),
       h('div', { class: 'grid-2' }, panel('建立新專案', create, { icon: 'plus' }),
         h('div', { class: 'stack' }, panel('開啟既有專案', open, { icon: 'open' }), panel(listTitle + '（' + items.length + '）', recentList, { icon: 'clock' }))));
   };
@@ -732,18 +740,18 @@
     const out = [];
     out.push(pageHead(p.name || S.pid,
       [p.purpose, p.aspect, p.target_len_s ? '目標 ' + p.target_len_s + ' 秒' : null].filter(Boolean).join(' · ') || null,
-      [btn('切換專案', { icon: 'open', href: '#/projects' }), btn('開啟覆蓋矩陣', { kind: 'secondary', icon: 'grid', href: '#/coverage' })]));
+      [btn('切換專案', { icon: 'open', href: '#/projects' }), btn('看 Coverage', { kind: 'secondary', icon: 'grid', href: '#/coverage' })]));
 
     if (dev && !dev.available) {
-      out.push(banner('info', 'UGen300 未連線', '目前以明示的 CPU 參考後端（' + (be === 'not loaded' ? '尚未載入，首次分析時載入' : be) + '）執行分析；結果與報告都會標示這個後端，不代表 NPU 效能。',
-        [btn('裝置與診斷', { sm: true, href: '#/device', icon: 'cpu' })]));
+      out.push(banner('info', 'UGen300 未連線', '目前用本機 ' + (be === 'not loaded' ? 'CPU／GPU' : beShort(be).replace(' 參考', '')) + ' 分析。',
+        [btn('裝置', { sm: true, href: '#/device', icon: 'cpu' })]));
     }
     if (cov && cov.run && cov.outdated) {
-      out.push(banner('warn', '需求或素材已變更，請重新分析', 'AI 候選覆蓋在重新分析前顯示為 N/A；人工確認仍有效。',
+      out.push(banner('warn', 'Shot list 或素材有變更，請重新分析', '重新分析前，AI 覆蓋顯示 N/A。',
         [btn('重新分析', { sm: true, kind: 'primary', icon: 'refresh', onclick: startAnalyze })]));
     }
     if (counts.failed) {
-      out.push(banner('warn', '這 ' + counts.failed + ' 支影片尚未完成解析；目前結果只涵蓋其餘素材。', '失敗的檔案列在素材庫，原因不會被隱藏。',
+      out.push(banner('warn', '這 ' + counts.failed + ' 支影片還沒分析完，目前結果只包含其他素材。', '失敗原因列在素材頁。',
         [btn('查看失敗素材', { sm: true, href: '#/assets/failed' })]));
     }
 
@@ -760,30 +768,30 @@
         h('div', { class: 'k-foot' }, foot));
     };
     const noRun = !cov || !cov.run || !c;          // human coverage is still known without a run
-    const denom = c && c.denominator_weight != null ? '分母：已確認的必要需求權重 ' + c.denominator_weight : '';
+    const denom = c && c.denominator_weight != null ? '分母：必拍鏡頭權重 ' + c.denominator_weight : '';
     out.push(h('div', { class: 'kpis' },
       kpi('human', 'checkc', '人工確認覆蓋', c ? fmtPct(c.human_confirmed) : null, c ? (c.human_confirmed == null ? null : c.human_confirmed) : null,
-        !c ? '尚無資料' : (c.human_confirmed == null ? '分母為 0：尚無已確認的必要需求' : denom), 'green'),
+        !c ? '尚無資料' : (c.human_confirmed == null ? '還沒有確認過的必拍鏡頭' : denom), 'green'),
       kpi('ai', 'sparkle', 'AI 候選覆蓋', c ? fmtPct(c.ai_candidate) : null, c ? c.ai_candidate : null,
-        noRun ? '尚無分析快照，分析後才會顯示' : (c.ai_candidate == null ? (cov.outdated ? '結果已過期，重新分析後才會顯示' : '無法計算') : '候選仍需人工確認'), ''),
+        noRun ? '分析後才會顯示' : (c.ai_candidate == null ? (cov.outdated ? '已過期，重新分析後才會顯示' : '無法計算') : '候選還要人工確認'), ''),
       kpi('prog', 'activity', '分析進度', c ? fmtPct(c.analysis_progress) : null, c ? c.analysis_progress : null,
-        noRun ? '尚無分析快照' : (c.analysis_progress == null ? '範圍內沒有可分析的素材' : '已分析素材佔納入範圍的比例'), 'cyan'),
+        noRun ? '尚無分析快照' : (c.analysis_progress == null ? '範圍內沒有可分析的素材' : '已分析的素材比例'), 'cyan'),
       kpi('unk', 'help', '未能自動判定', c && c.unknown_count != null ? c.unknown_count + ' 項' : null, undefined,
-        noRun ? '尚無分析快照' : '需人工確認或含不支援條件的需求')));
+        noRun ? '尚無分析快照' : '需要人工判斷的鏡頭')));
 
     // asset summary + job
     const statline = h('div', { class: 'statline' }, Object.keys(ASSET_ST).map((k) =>
       h('a', { class: 'stat', href: '#/assets/' + k, style: 'text-decoration:none;color:inherit' }, chip(ASSET_ST[k]), h('span', { class: 's-n' }, String(counts[k] || 0)))));
     const assetsBody = total === 0
-      ? empty('film', '尚未加入素材，現在不能判斷是否缺鏡頭。', '先授權素材資料夾並匯入影片，再開始分析。', [btn('前往素材庫', { kind: 'primary', icon: 'folder', href: '#/assets' })])
+      ? empty('film', '還沒加入素材，現在無法判斷缺哪些鏡頭。', '先授權素材資料夾、匯入影片，再開始分析。', [btn('去素材頁', { kind: 'primary', icon: 'folder', href: '#/assets' })])
       : h('div', { class: 'stack' }, statline, h('div', { class: 'panel', style: 'box-shadow:none' }, jobPanel({ disabled: total === 0 })));
     const runInfo = cov && cov.run
       ? kvs([['執行編號', h('span', { class: 'mono' }, cov.run.run_id)], ['時間', fmtDate(cov.run.created_at)], ['後端', cov.run.backend],
         ['模型指紋', h('span', { class: 'mono' }, cov.run.model_fingerprint)], ['設定雜湊', h('span', { class: 'mono' }, cov.run.config_hash)],
-        ['狀態', cov.outdated ? chip(AUTO_STALE) : chip({ zh: '與目前需求、素材一致', icon: 'check', tone: 'green' })]])
-      : h('p', { class: 'muted' }, '尚未有分析結果。加入素材與需求後按「開始分析」。');
+        ['狀態', cov.outdated ? chip(AUTO_STALE) : chip({ zh: '是最新結果', icon: 'check', tone: 'green' })]])
+      : h('p', { class: 'muted' }, '還沒有分析結果。加入素材和 Shot list 後按「開始分析」。');
     out.push(h('div', { class: 'grid-2' },
-      panel('素材（共 ' + total + ' 支）', assetsBody, { icon: 'film', right: btn('素材庫', { sm: true, kind: 'ghost', href: '#/assets', icon: 'right' }) }),
+      panel('素材（共 ' + total + ' 支）', assetsBody, { icon: 'film', right: btn('素材', { sm: true, kind: 'ghost', href: '#/assets', icon: 'right' }) }),
       panel('最近一次分析', runInfo, { icon: 'activity' })));
     return h('div', null, out);
   };
@@ -803,7 +811,7 @@
     let dirty = false;
     const guard = (ev) => { if (dirty && !confirm('有未儲存的變更，確定要離開？')) { ev.preventDefault(); return false; } return true; };
 
-    const listEl = h('ul', { class: 'req-list', 'aria-label': '需求清單' }, list.map((r) => h('li', null, h('button', {
+    const listEl = h('ul', { class: 'req-list', 'aria-label': 'Shot list' }, list.map((r) => h('li', null, h('button', {
       type: 'button', 'aria-current': r.requirement_id === sel && !isNew ? 'true' : null,
       onclick: (ev) => { if (guard(ev)) go('#/requirements/' + encodeURIComponent(r.requirement_id)); },
     }, h('span', { class: 'rl-id' }, r.requirement_id), h('span', { class: 'rl-text', title: r.source_text }, r.source_text || '（未填寫）'),
@@ -813,12 +821,12 @@
       !r.required ? chip({ zh: '非必要', icon: 'circle', tone: 'slate' }) : null,
       h('span', { class: 'faint small' }, '第 ' + r.revision + ' 版'))))));
     const left = panel('需求（' + list.length + '）', h('div', null,
-      list.length ? listEl : h('p', { class: 'faint', style: 'padding:12px' }, '還沒有需求。'),
-      h('div', { style: 'padding:10px' }, btn('新增需求', { icon: 'plus', block: true, onclick: (ev) => { if (guard(ev)) go('#/requirements/new'); } }))),
+      list.length ? listEl : h('p', { class: 'faint', style: 'padding:12px' }, '還沒有鏡頭。'),
+      h('div', { style: 'padding:10px' }, btn('新增鏡頭', { icon: 'plus', block: true, onclick: (ev) => { if (guard(ev)) go('#/requirements/new'); } }))),
     { icon: 'list', raw: true });
 
     return h('div', null,
-      pageHead('需求編輯器', '中文原文與確認過的英文檢索字並排；每次修改會產生新版本，舊的人工決策不會套到新版本。'),
+      pageHead('Shot list', '左邊是中文原文，右邊是模型用的英文 Query。每次修改都會產生新版本，舊的確認不會帶到新版本。'),
       h('div', { class: 'split' }, left, reqForm(orig, isNew, list, () => { dirty = true; })));
   };
 
@@ -833,10 +841,10 @@
     const consWrap = h('div', { class: 'cons-list' });
     const drawCons = () => {
       consWrap.replaceChildren();
-      if (!d.constraints.length) consWrap.append(h('p', { class: 'faint small' }, '沒有額外條件。語意內容以英文檢索字比對；可加入時長、take 數、構圖等條件。'));
+      if (!d.constraints.length) consWrap.append(h('p', { class: 'faint small' }, '沒有額外條件。可以加上長度、Take 數、構圖等條件。'));
       d.constraints.forEach((c, i) => {
         const badgeBox = h('div', { class: 'cons-badges' });
-        const drawBadges = () => badgeBox.replaceChildren(capChip(c.capability || 'auto'), c.hard ? chip({ zh: '硬性', icon: 'alert', tone: 'violet' }) : chip({ zh: '參考', icon: 'circle', tone: 'slate' }));
+        const drawBadges = () => badgeBox.replaceChildren(capChip(c.capability || 'auto'), c.hard ? chip({ zh: '必要', icon: 'alert', tone: 'violet' }) : chip({ zh: '參考', icon: 'circle', tone: 'slate' }));
         drawBadges();
         const kinds = Object.keys(KIND_ZH).includes(c.kind) ? Object.keys(KIND_ZH) : [c.kind].concat(Object.keys(KIND_ZH));
         const pid = 'cp-' + i;
@@ -854,7 +862,7 @@
             perr,
             h('input', { class: 'input', 'aria-label': '條件備註', placeholder: '備註（例：需人工看字卡是否清楚）', value: c.note || '', oninput: (e) => { c.note = e.target.value; markDirty(); } })),
           h('div', { class: 'cons-side' }, badgeBox,
-            h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: c.hard !== false, onchange: (e) => { c.hard = e.target.checked; markDirty(); drawBadges(); } }), '硬性條件'),
+            h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: c.hard !== false, onchange: (e) => { c.hard = e.target.checked; markDirty(); drawBadges(); } }), '必要條件'),
             btn('移除', { sm: true, kind: 'ghost', icon: 'trash', aria: '移除條件 ' + (i + 1), onclick: () => { d.constraints.splice(i, 1); paramsText.splice(i, 1); markDirty(); drawCons(); } }))));
       });
     };
@@ -868,11 +876,11 @@
         const r = await api('POST', P() + '/search', { query_en: d.query_en, top_k: 6 });
         const res = r.results || [];
         searchOut.replaceChildren(
-          h('p', { class: 'faint small', style: 'margin-top:10px' }, '排序分數（非機率）僅用來排序；是否高於門檻由校準值決定。' + (r.note ? '' : '')),
+          h('p', { class: 'faint small', style: 'margin-top:10px' }, '分數用來排序。' + (r.note ? '' : '')),
           res.length ? h('div', { class: 'search-results' }, res.map((x) => h('div', { class: 'sr' },
             thumb(x.asset_id, x.best_ms), h('div', { class: 'row', style: 'justify-content:space-between' },
               h('span', { class: 'mono small' }, fmtTime(x.shot_start_ms) + '–' + fmtTime(x.shot_end_ms)),
-              h('span', { class: 'mono small', title: '排序分數（非機率）' }, Number(x.ranking_score).toFixed(3))),
+              h('span', { class: 'mono small', title: '排序分數' }, Number(x.ranking_score).toFixed(3))),
             x.above_threshold ? chip({ zh: '高於門檻', icon: 'check', tone: 'violet' }) : chip({ zh: '低於門檻', icon: 'dashed', tone: 'slate' }))))
             : h('p', { class: 'muted' }, '已分析範圍內沒有結果。'));
       } catch (e) { searchOut.replaceChildren(); showError(e, '搜尋失敗'); }
@@ -885,7 +893,7 @@
       if (isNew && !/^[A-Za-z0-9_-]{1,32}$/.test(d.requirement_id || '')) { errs.rid.textContent = 'ID 只能使用英數字、底線或連字號。'; bad = true; }
       if (isNew && list.some((r) => r.requirement_id === d.requirement_id)) { errs.rid.textContent = '這個 ID 已存在。'; bad = true; }
       if (!String(d.source_text || '').trim()) { errs.src.textContent = '請填寫中文原文。'; bad = true; }
-      if (!String(d.query_en || '').trim()) { errs.q.textContent = '請填寫確認過的英文檢索字（必填）。'; bad = true; }
+      if (!String(d.query_en || '').trim()) { errs.q.textContent = '請填英文 Query（必填）。'; bad = true; }
       if (!(d.weight > 0)) { errs.w.textContent = '權重需大於 0。'; bad = true; }
       const cons = [];
       d.constraints.forEach((c, i) => {
@@ -908,7 +916,7 @@
         go('#/requirements/' + encodeURIComponent(data.requirement_id));
       } catch (e) {
         if (e.code === 'STALE_REVISION') {
-          formMsg.replaceChildren(banner('error', '需求已被修改，請重新載入', '另一個視窗或成員已更新這筆需求。重新載入會捨棄你在此畫面的修改。',
+          formMsg.replaceChildren(banner('error', '這個鏡頭已被修改，請重新載入', '這個鏡頭已在別的視窗被修改。重新載入會捨棄你在這裡的修改。',
             [btn('重新載入', { sm: true, icon: 'refresh', onclick: () => render() })]));
         } else showError(e, '儲存失敗');
       }
@@ -921,41 +929,41 @@
     const body = h('div', { class: 'stack' },
       formMsg,
       h('div', { class: 'row' },
-        h('div', { class: 'field', style: 'width:160px' }, h('label', { for: 'rq-id' }, '需求 ID'),
+        h('div', { class: 'field', style: 'width:160px' }, h('label', { for: 'rq-id' }, '鏡頭 ID'),
           h('input', { id: 'rq-id', class: 'input mono', value: d.requirement_id, readonly: !isNew, oninput: (e) => set('requirement_id', e.target.value.trim()) }), fieldErr('rid')),
         h('div', { class: 'grow' }),
         h('label', { class: 'switch' }, h('input', { type: 'checkbox', role: 'switch', checked: !!d.confirmed, onchange: (e) => set('confirmed', e.target.checked) }),
-          h('span', null, h('strong', null, '已確認需求'), h('span', { class: 'faint small', style: 'display:block' }, '確認後才列入覆蓋率分母')))),
+          h('span', null, h('strong', null, '已確認'), h('span', { class: 'faint small', style: 'display:block' }, '確認後才計入覆蓋率')))),
       h('div', { class: 'bilingual' },
         h('div', { class: 'field' }, h('label', { for: 'rq-src' }, '中文原文', h('span', { class: 'lang' }, 'ZH')),
           h('textarea', { id: 'rq-src', class: 'input', rows: 3, value: d.source_text, oninput: (e) => set('source_text', e.target.value) }),
           h('span', { class: 'hint' }, '腳本或客戶原話，系統不會改寫。'), fieldErr('src')),
-        h('div', { class: 'field' }, h('label', { for: 'rq-q' }, '確認過的英文檢索字', h('span', { class: 'lang' }, 'EN')),
+        h('div', { class: 'field' }, h('label', { for: 'rq-q' }, '英文 Query', h('span', { class: 'lang' }, 'EN')),
           h('textarea', { id: 'rq-q', class: 'input', rows: 3, lang: 'en', spellcheck: 'false', value: d.query_en, oninput: (e) => set('query_en', e.target.value) }),
-          h('div', { class: 'row', style: 'justify-content:space-between' }, h('span', { class: 'hint' }, '模型只看這段英文；請由人確認語意與原文一致。'),
-            btn('試搜尋', { sm: true, icon: 'search', onclick: () => { if (String(d.query_en || '').trim()) trySearch(); } })), fieldErr('q'))),
+          h('div', { class: 'row', style: 'justify-content:space-between' }, h('span', { class: 'hint' }, '模型只讀這段英文，請確認意思和原文一致。'),
+            btn('試搜', { sm: true, icon: 'search', onclick: () => { if (String(d.query_en || '').trim()) trySearch(); } })), fieldErr('q'))),
       searchOut,
       h('div', { class: 'form-grid' },
-        h('div', { class: 'field' }, h('span', { class: 'label' }, '必要性'),
-          h('label', { class: 'check', style: 'height:34px' }, h('input', { type: 'checkbox', checked: !!d.required, onchange: (e) => set('required', e.target.checked) }), '必要鏡頭')),
+        h('div', { class: 'field' }, h('span', { class: 'label' }, '必拍'),
+          h('label', { class: 'check', style: 'height:34px' }, h('input', { type: 'checkbox', checked: !!d.required, onchange: (e) => set('required', e.target.checked) }), '必拍鏡頭')),
         num('rq-w', '權重', d.weight, (v) => set('weight', Number(v)), { min: '0.1', step: '0.1' }, null, 'w'),
-        num('rq-dur', '最短連續時長（秒）', (d.min_duration_ms || 0) / 1000, (v) => set('min_duration_ms', Math.round(Number(v) * 1000)), { min: '0', step: '0.1' }),
-        num('rq-takes', '最少獨立 take 數', d.min_takes, (v) => set('min_takes', v), { min: '1', step: '1' })),
+        num('rq-dur', '最短長度（秒）', (d.min_duration_ms || 0) / 1000, (v) => set('min_duration_ms', Math.round(Number(v) * 1000)), { min: '0', step: '0.1' }),
+        num('rq-takes', '最少 Take 數', d.min_takes, (v) => set('min_takes', v), { min: '1', step: '1' })),
       h('div', { class: 'field' }, h('label', { for: 'rq-ex' }, '排除理由'),
-        h('input', { id: 'rq-ex', class: 'input', placeholder: '留空表示納入；填寫後此需求不列入覆蓋率', value: d.excluded_reason || '', oninput: (e) => set('excluded_reason', e.target.value) })),
+        h('input', { id: 'rq-ex', class: 'input', placeholder: '填寫後，這個鏡頭不計入覆蓋率', value: d.excluded_reason || '', oninput: (e) => set('excluded_reason', e.target.value) })),
       h('div', null, h('div', { class: 'row', style: 'justify-content:space-between;margin-bottom:10px' },
         h('h3', null, '條件（' + d.constraints.length + '）'),
         btn('新增條件', { sm: true, icon: 'plus', onclick: () => { d.constraints.push({ kind: 'duration', capability: 'auto', params: {}, hard: true, note: '' }); paramsText.push('{}'); markDirty(); drawCons(); } })),
-      h('div', { class: 'row small faint', style: 'margin-bottom:10px;gap:8px' }, '判定方式：', capChip('auto'), '由模型或規則判定', capChip('manual'), '需人工看過', capChip('unsupported'), '此版本無法判定'),
+      h('div', { class: 'row small faint', style: 'margin-bottom:10px;gap:8px' }, '判斷方式：', capChip('auto'), '自動判斷', capChip('manual'), '人工判斷', capChip('unsupported'), '尚不支援'),
       consWrap));
 
-    const head = isNew ? '新增需求' : orig.requirement_id + ' · 第 ' + orig.revision + ' 版';
+    const head = isNew ? '新增鏡頭' : orig.requirement_id + ' · 第 ' + orig.revision + ' 版';
     return h('section', { class: 'panel', 'aria-label': head },
       h('div', { class: 'panel-head' }, h('h2', null, icon(isNew ? 'plus' : 'pencil'), head),
-        !isNew ? h('a', { class: 'btn sm ghost', href: '#/evidence/' + encodeURIComponent(orig.requirement_id) }, icon('eye'), h('span', null, '開啟證據')) : null),
+        !isNew ? h('a', { class: 'btn sm ghost', href: '#/evidence/' + encodeURIComponent(orig.requirement_id) }, icon('eye'), h('span', null, '看片段')) : null),
       h('div', { class: 'panel-body' }, body),
       h('div', { class: 'form-foot' },
-        h('span', { class: 'faint small grow' }, isNew ? '新需求會建立第 1 版。' : '儲存時會送出目前版本（第 ' + orig.revision + ' 版）；若已被他人修改會提示重新載入。'),
+        h('span', { class: 'faint small grow' }, isNew ? '新鏡頭從第 1 版開始。' : '儲存時會送出目前版本（第 ' + orig.revision + ' 版）；若已被他人修改會提示重新載入。'),
         btn('還原', { kind: 'ghost', onclick: () => render() }), btn('儲存', { kind: 'primary', icon: 'check', onclick: save })));
   }
 
@@ -964,20 +972,20 @@
     const [proj, assets] = await Promise.all([loadProject(), api('GET', P() + '/assets')]);
     const counts = proj.assets || {};
     const filter = params[0] && ASSET_ST[params[0]] ? params[0] : 'all';
-    const out = [pageHead('素材庫', '只讀取你授權的資料夾；檔案不會被移動或修改。')];
+    const out = [pageHead('素材', '只讀取你授權的資料夾，不會改動檔案。')];
 
     // roots
     let newPath = '';
     const rootErr = h('div', { class: 'err-line', role: 'alert' });
     const importOut = h('div');
     const doImport = async (root) => {
-      importOut.replaceChildren(h('p', { class: 'faint small', role: 'status' }, '匯入中…（正在計算雜湊並讀取影片資訊）'));
+      importOut.replaceChildren(h('p', { class: 'faint small', role: 'status' }, '匯入中…（計算雜湊、讀取影片資訊）'));
       try {
         const r = await api('POST', P() + '/assets/import', { root_id: root.id, rel_paths: null });
         importOut.replaceChildren(importResult(r));
         const fresh = await api('GET', P() + '/assets');
         tableBox.replaceChildren(fresh.length ? assetTable(fresh, filter, () => render())
-          : empty('film', '尚未加入素材，現在不能判斷是否缺鏡頭。', '這個資料夾沒有可匯入的影片；請確認路徑或副檔名。'));
+          : empty('film', '還沒加入素材，現在無法判斷缺哪些鏡頭。', '這個資料夾裡沒有可匯入的影片，請確認路徑或副檔名。'));
         await loadProject();
       } catch (e) { importOut.replaceChildren(); showError(e, '匯入失敗'); }
     };
@@ -998,7 +1006,7 @@
         h('span', { class: 'path', title: r.path }, r.path),
         btn('匯入整個資料夾', { sm: true, icon: 'download', onclick: () => doImport(r) }))))
         : h('p', { class: 'muted' }, '尚未授權任何資料夾。'),
-      rootForm, rootErr, h('p', { class: 'hint faint small', style: 'margin-top:6px' }, '請輸入絕對路徑。SceneGap 只會讀取已授權資料夾內的影片。'),
+      rootForm, rootErr, h('p', { class: 'hint faint small', style: 'margin-top:6px' }, '請輸入完整路徑。'),
       importOut);
 
     // analyze
@@ -1006,10 +1014,10 @@
 
     out.push(h('div', { class: 'grid-2' }, panel('授權素材資料夾', rootsBody, { icon: 'folder' }), analyzePanel));
 
-    if (counts.failed) out.push(banner('warn', '這 ' + counts.failed + ' 支影片尚未完成解析；目前結果只涵蓋其餘素材。', '下表以紅色標示失敗的檔案與原因。修正後可重新匯入或重新分析。'));
+    if (counts.failed) out.push(banner('warn', '這 ' + counts.failed + ' 支影片還沒分析完，目前結果只包含其他素材。', '失敗的檔案會標紅並寫出原因，修正後可重新匯入或重新分析。'));
 
     const tableBox = h('div');
-    tableBox.append(assets.length ? assetTable(assets, filter, () => render()) : empty('film', '尚未加入素材，現在不能判斷是否缺鏡頭。', '授權資料夾後按「匯入整個資料夾」。'));
+    tableBox.append(assets.length ? assetTable(assets, filter, () => render()) : empty('film', '還沒加入素材，現在無法判斷缺哪些鏡頭。', '授權資料夾後按「匯入整個資料夾」。'));
     out.push(panel('素材（' + assets.length + '）', tableBox, { icon: 'film', raw: true }));
     return h('div', { class: 'stack' }, out);
   };
@@ -1042,7 +1050,7 @@
       ok.addEventListener('click', async () => {
         try {
           await api('POST', P() + '/assets/' + encodeURIComponent(a.asset_id) + '/exclude', { reason: inp.value.trim() });
-          toast({ kind: 'ok', title: '已排除 ' + name, text: '這支素材不再列入分析範圍；覆蓋結果需重新分析。' });
+          toast({ kind: 'ok', title: '已排除 ' + name, text: '這支素材不再列入分析，請重新分析。' });
           if (onChanged) onChanged();
         } catch (e) { showError(e, '排除失敗'); }
       });
@@ -1106,15 +1114,15 @@
   SCREENS.coverage = async function () {
     const [{ cov, rows }, proj] = await Promise.all([coverageRows(), loadProject()]);
     const counts = proj.assets || {};
-    const out = [pageHead('覆蓋矩陣', '每列一個需求。AI 判定與人工狀態分開顯示；只有人工確認才算數。',
-      [btn('匯出 HTML', { icon: 'external', onclick: () => doExport('html') }), btn('重新分析', { kind: 'primary', icon: 'refresh', onclick: startAnalyze })])];
-    if (cov && cov.run && cov.outdated) out.push(banner('warn', '需求或素材已變更，請重新分析', '下表的 AI 判定來自舊快照；過期的列以「結果已過期」標示。'));
-    if (counts.failed) out.push(banner('warn', '這 ' + counts.failed + ' 支影片尚未完成解析；目前結果只涵蓋其餘素材。', null, [btn('查看', { sm: true, href: '#/assets/failed' })]));
+    const out = [pageHead('Coverage', '每列一個鏡頭，人工確認後才算完成。',
+      [btn('Export HTML', { icon: 'external', onclick: () => doExport('html') }), btn('重新分析', { kind: 'primary', icon: 'refresh', onclick: startAnalyze })])];
+    if (cov && cov.run && cov.outdated) out.push(banner('warn', 'Shot list 或素材有變更，請重新分析', 'AI 判斷來自舊的分析結果，過期的列會標示出來。'));
+    if (counts.failed) out.push(banner('warn', '這 ' + counts.failed + ' 支影片還沒分析完，目前結果只包含其他素材。', null, [btn('查看', { sm: true, href: '#/assets/failed' })]));
     if (S.job && (S.job.state === 'running' || S.job.state === 'queued')) out.push(h('div', { class: 'panel', style: 'margin-bottom:14px' }, jobPanel()));
-    if (!totalAssets(counts)) out.push(banner('info', '尚未加入素材，現在不能判斷是否缺鏡頭。', null, [btn('前往素材庫', { sm: true, href: '#/assets' })]));
+    if (!totalAssets(counts)) out.push(banner('info', '還沒加入素材，現在無法判斷缺哪些鏡頭。', null, [btn('去素材頁', { sm: true, href: '#/assets' })]));
 
     if (!rows.length) {
-      out.push(panel(null, empty('list', '還沒有需求', '先在需求編輯器建立腳本中的必要鏡頭。', [btn('新增需求', { kind: 'primary', icon: 'plus', href: '#/requirements/new' })]), { raw: true }));
+      out.push(panel(null, empty('list', '還沒有鏡頭', '先在 Shot list 建立腳本裡的必拍鏡頭。', [btn('新增鏡頭', { kind: 'primary', icon: 'plus', href: '#/requirements/new' })]), { raw: true }));
       return h('div', null, out);
     }
 
@@ -1125,7 +1133,7 @@
       run ? [h('span', { class: 'kv-inline' }, '執行 ', h('b', { class: 'mono' }, run.run_id)), h('span', { class: 'kv-inline' }, '時間 ', h('b', null, fmtDate(run.created_at))),
         h('span', { class: 'kv-inline' }, '後端 ', h('b', null, run.backend)), h('span', { class: 'kv-inline' }, '模型 ', h('b', { class: 'mono' }, run.model_fingerprint)),
         scopeVals.length ? h('span', { class: 'kv-inline' }, '分析範圍 ', h('b', null, scopeVals.length + ' 支素材（已分析 ' + scopeVals.filter((s) => s === 'analyzed').length + '、失敗 ' + scopeVals.filter((s) => s === 'failed').length + '）')) : null]
-        : h('span', null, '尚無分析快照，下表的 AI 判定都是「尚未分析」。'));
+        : h('span', null, '還沒分析，AI 判斷都顯示「尚未分析」。'));
 
     const groups = {
       all: () => true,
@@ -1133,16 +1141,16 @@
       gap: (r) => r.auto && ['not_found', 'unverifiable', 'failed'].includes(r.auto.status),
       human: (r) => r.human_confirmed || r.human_exception,
     };
-    const gLabel = { all: ['全部', 'grid'], review: ['待人工確認', 'target'], gap: ['缺口／無法判定', 'searchx'], human: ['已人工處理', 'checkc'] };
+    const gLabel = { all: ['全部', 'grid'], review: ['待人工確認', 'target'], gap: ['缺鏡頭／無法判斷', 'searchx'], human: ['已人工處理', 'checkc'] };
     const tableBox = h('div');
     const draw = (g) => {
       const vis = rows.filter(groups[g]);
-      const seg = h('div', { class: 'seg', role: 'group', 'aria-label': '篩選需求' }, Object.keys(groups).map((k) =>
+      const seg = h('div', { class: 'seg', role: 'group', 'aria-label': '篩選鏡頭' }, Object.keys(groups).map((k) =>
         h('button', { type: 'button', 'aria-pressed': String(k === g), onclick: () => draw(k) }, icon(gLabel[k][1]), gLabel[k][0], h('span', { class: 'count' }, String(rows.filter(groups[k]).length)))));
       const tbl = h('table', { class: 'tbl matrix' },
         h('thead', null, h('tr', null,
-          h('th', { scope: 'col', class: 'col-id' }, 'ID'), h('th', { scope: 'col', class: 'col-req' }, '需求'), h('th', { scope: 'col', class: 'col-auto' }, '自動判定（AI）'),
-          h('th', { scope: 'col', class: 'col-human' }, '人工狀態'), h('th', { scope: 'col', class: 'col-reason' }, '原因'), h('th', { scope: 'col', class: 'col-thumb' }, '最佳候選'),
+          h('th', { scope: 'col', class: 'col-id' }, 'ID'), h('th', { scope: 'col', class: 'col-req' }, '鏡頭'), h('th', { scope: 'col', class: 'col-auto' }, 'AI 判斷'),
+          h('th', { scope: 'col', class: 'col-human' }, '人工確認'), h('th', { scope: 'col', class: 'col-reason' }, '原因'), h('th', { scope: 'col', class: 'col-thumb' }, '最佳候選'),
           h('th', { scope: 'col', class: 'col-act' }, h('span', { class: 'sr-only' }, '動作')))),
         h('tbody', null, vis.map((row) => {
           const r = row.requirement;
@@ -1152,7 +1160,7 @@
             h('td', { class: 'id' }, r.requirement_id, h('div', { class: 'faint small' }, 'v' + r.revision)),
             h('td', null, h('div', { class: 'src' }, r.source_text), h('div', { class: 'q' }, r.query_en),
               h('div', { class: 'chips', style: 'margin-top:6px' },
-                !r.confirmed ? chip(AUTO.draft, { text: '需求未確認' }) : null,
+                !r.confirmed ? chip(AUTO.draft, { text: '鏡頭未確認' }) : null,
                 !r.required ? chip({ zh: '非必要', icon: 'circle', tone: 'slate' }) : null,
                 r.excluded_reason ? chip({ zh: '已排除', icon: 'ban', tone: 'slate' }, { title: r.excluded_reason }) : null)),
             h('td', null, autoChip(row, cov)),
@@ -1160,13 +1168,13 @@
             h('td', null, reasonList(row.auto && row.auto.reasons)),
             h('td', null, c ? thumb(c.asset_id, c.start_ms, r.source_text + ' 的最佳候選') : noThumb(row.auto ? '沒有候選' : '—'),
               c ? h('div', { class: 'faint small mono', style: 'margin-top:4px' }, fmtTime(c.start_ms) + '–' + fmtTime(c.end_ms)) : null),
-            h('td', { class: 'cell-actions' }, h('a', { class: 'btn sm', href: '#/evidence/' + encodeURIComponent(r.requirement_id), title: '開啟證據', 'aria-label': '開啟 ' + r.requirement_id + ' 的證據' }, icon('eye'), h('span', { class: 'act-label' }, '開啟證據'))));
+            h('td', { class: 'cell-actions' }, h('a', { class: 'btn sm', href: '#/evidence/' + encodeURIComponent(r.requirement_id), title: '看片段', 'aria-label': '開啟 ' + r.requirement_id + ' 的證據' }, icon('eye'), h('span', { class: 'act-label' }, '看片段'))));
         })));
       tableBox.replaceChildren(h('div', { class: 'row', style: 'padding:12px 16px;border-bottom:1px solid var(--line-soft)' }, seg),
-        vis.length ? h('div', { class: 'table-wrap' }, tbl) : h('p', { class: 'faint', style: 'padding:16px' }, '沒有符合篩選的需求。'));
+        vis.length ? h('div', { class: 'table-wrap' }, tbl) : h('p', { class: 'faint', style: 'padding:16px' }, '沒有符合篩選的鏡頭。'));
     };
     draw('all');
-    out.push(h('section', { class: 'panel', 'aria-label': '覆蓋矩陣' }, runbar, tableBox));
+    out.push(h('section', { class: 'panel', 'aria-label': 'Coverage' }, runbar, tableBox));
     return h('div', null, out);
   };
 
@@ -1178,7 +1186,7 @@
   SCREENS.evidence = async function (params) {
     const [{ cov, rows }, assets, decisions] = await Promise.all([coverageRows(), api('GET', P() + '/assets'),
       api('GET', P() + '/decisions').catch(() => null)]);
-    if (!rows.length) return h('div', null, pageHead('證據檢視器'), panel(null, empty('eye', '還沒有需求', '建立需求並分析後，才能檢視證據。', [btn('需求編輯器', { href: '#/requirements/new', kind: 'primary' })]), { raw: true }));
+    if (!rows.length) return h('div', null, pageHead('片段檢視'), panel(null, empty('eye', '還沒有鏡頭', '建立 Shot list 並分析後，才能看片段。', [btn('Shot list', { href: '#/requirements/new', kind: 'primary' })]), { raw: true }));
     let rid = params[0];
     if (!rid) { const withC = rows.find((r) => r.auto && r.auto.candidates && r.auto.candidates.length); rid = (withC || rows[0]).requirement.requirement_id; }
     const idxRow = rows.findIndex((r) => r.requirement.requirement_id === rid);
@@ -1240,7 +1248,7 @@
       if (!video.getAttribute('src')) return;
       msg.classList.remove('corner'); msg.hidden = false;
       msg.replaceChildren(icon('alert'), h('strong', null, '無法播放這個檔案'),
-        h('span', null, '可能原因：素材離線、編碼不受瀏覽器支援，或工作階段已過期（請重新整理頁面）。仍可用影格與時間碼複核。'));
+        h('span', null, '可能是素材離線、瀏覽器不支援這個編碼，或連線已過期（請重新整理）。仍可以用影格和時間碼檢查。'));
     });
 
     // ---- floating transport column (R2/R3: white = primary, glass = idle, bronze = active)
@@ -1262,7 +1270,7 @@
       h('div', { class: 'pill-row' },
         h('span', { class: 'gpill' }, icon('cpu'), '後端 ' + (run ? run.backend : '—')),
         h('span', { class: 'gpill mono' }, '執行 ' + (run ? run.run_id : '—'))),
-      h('div', { class: 'pill-row' }, autoChip(row, cov, true), row._noRun ? h('span', { class: 'gpill' }, '人工狀態：分析後顯示') : humanChip(row, true)));
+      h('div', { class: 'pill-row' }, autoChip(row, cov, true), row._noRun ? h('span', { class: 'gpill' }, '人工確認：分析後顯示') : humanChip(row, true)));
 
     // ---- filmstrip (R5) with candidate segments, playhead (R7) and fix-range handles (R6)
     const fsWrap = h('div', { class: 'filmstrip' });
@@ -1276,7 +1284,7 @@
       const aid = st.aid;
       if (!cand && !st.fix) {             // nothing to show yet: no candidate and no manual range being picked
         domLabels.textContent = '';
-        fsWrap.replaceChildren(h('div', { class: 'fs-track empty' }, h('span', null, '還沒有片段。按「+」選擇素材與時段，影格條會顯示在這裡。')));
+        fsWrap.replaceChildren(h('div', { class: 'fs-track empty' }, h('span', null, '還沒有片段。按「+」選素材和時段。')));
         head = null; handles = null; return;
       }
       const same = cands.map((c, i) => [c, i]).filter(([c]) => c.asset_id === aid);
@@ -1386,9 +1394,9 @@
       const sync = (which, inp) => inp.addEventListener('change', () => { const v = parseTime(inp.value); if (isFinite(v)) setFix(which, v); else inp.value = fmtTime(st.fix[which]); });
       sync('s', sIn); sync('e', eIn);
       const err = h('div', { class: 'err-line', role: 'alert' });
-      const here = (which) => h('button', { type: 'button', class: 'linkish', onclick: () => setFix(which, curMs()) }, '用目前位置');
+      const here = (which) => h('button', { type: 'button', class: 'linkish', onclick: () => setFix(which, curMs()) }, '用目前時間');
       const body = h('div', { class: 'stack-s' },
-        h('p', { class: 'small muted' }, '拖曳影格條上的圓形把手，或直接輸入時間（mm:ss.mmm）。會以「人工片段」記錄為接受。'),
+        h('p', { class: 'small muted' }, '拖曳影格條上的把手，或輸入時間（mm:ss.mmm），會記為人工片段並接受。'),
         h('div', { class: 'field' }, h('label', { for: 'fx-a' }, '素材'),
           h('select', { id: 'fx-a', class: 'input', onchange: (e) => { st.aid = e.target.value; st.fix = { aid: st.aid, s: startOff(), e: startOff() + Math.min(3000, durOf() || 3000) }; loadMedia(st.aid); drawStrip(); sIn.value = fmtTime(st.fix.s); eIn.value = fmtTime(st.fix.e); } },
             playable.map((a) => h('option', { value: a.asset_id, selected: a.asset_id === st.aid }, baseName((a.locations || [])[0] || a.asset_id))))),
@@ -1397,14 +1405,14 @@
           h('div', { class: 'field' }, h('label', { for: 'fx-e' }, '結束'), eIn, here('e'))),
         err,
         h('div', { class: 'row end' }, btn('取消', { kind: 'ghost', onclick: closePop }),
-          btn('以此時段接受', { kind: 'primary', icon: 'check', onclick: () => {
+          btn('用這段', { kind: 'primary', icon: 'check', onclick: () => {
             const s = parseTime(sIn.value), e = parseTime(eIn.value);
             if (!isFinite(s) || !isFinite(e)) { err.textContent = '時間格式請用 mm:ss.mmm，例如 01:02.500。'; return; }
             if (s >= e) { err.textContent = '開始時間要早於結束時間。'; return; }
             if (!st.aid) { err.textContent = '請選擇素材。'; return; }
             send('accepted', { asset_id: st.aid, start_ms: s, end_ms: e, source: 'manual', reason: '' }, '人工修正時段 ' + fmtTime(s) + '–' + fmtTime(e));
           } })));
-      openPop('修正時段', body);
+      openPop('調整時段', body);
     };
     const reasonPop = (title, hint, required, okLabel, okIcon, onOk) => {
       const rIn = h('textarea', { class: 'input', id: 'dc-reason', rows: 3, placeholder: hint });
@@ -1422,9 +1430,9 @@
     const bubble = h('div', { class: 'bubble', role: 'toolbar', 'aria-label': cand ? '候選 ' + (ci + 1) + ' 的人工決策' : '人工決策' },
       cand ? bubBtn('check', '接受', () => send('accepted', Object.assign({}, rng, { reason: '' }), '接受候選 ' + fmtTime(cand.start_ms) + '–' + fmtTime(cand.end_ms))) : null,
       cand ? bubBtn('x', '拒絕', () => reasonPop('拒絕候選', '（選填）例：手持晃動太大', false, '確認拒絕', 'x', (why) => send('rejected', Object.assign({}, rng, { reason: why }), '拒絕候選'))) : null,
-      bubBtn('scissors', '修正時段', fixPop, !playable.length && !cand),
-      bubBtn('camera', '需要補拍', () => {
-        reasonPop('要求補拍', '必填：為什麼現有片段不能用，例：倒入只拍到 2 秒、品牌被手擋住', true, '送到補拍板', 'camera', async (why) => {
+      bubBtn('scissors', '調整時段', fixPop, !playable.length && !cand),
+      bubBtn('camera', '要補拍', () => {
+        reasonPop('加入補拍', '必填：為什麼現有片段不能用，例：倒入只有 2 秒、品牌被手擋住', true, '加入補拍清單', 'camera', async (why) => {
           if (cand && !(await send('rejected', Object.assign({}, rng, { reason: '需要補拍：' + why }), '拒絕此候選'))) return;
           try {
             await api('POST', P() + '/reshoots/' + encodeURIComponent(req.requirement_id) + '/request', { revision: req.revision, reason: why });
@@ -1432,9 +1440,9 @@
           } catch (e) { showError(e, '補拍要求沒有寫入'); }
         });
       }),
-      cand ? bubBtn('flag', '人工接受例外', () => reasonPop('人工接受例外', '片段不完全符合條件，但人工決定接受。例：客戶同意以 2.4 秒版本使用', true, '確認接受例外', 'flag',
-        (why) => send('overridden', Object.assign({}, rng, { reason: why }), '人工接受例外'))) : null);
-    const chipsRow = h('div', { class: 'rchips', role: 'list', 'aria-label': '這個需求的候選時段' });
+      cand ? bubBtn('flag', '例外接受', () => reasonPop('例外接受', '不完全符合條件，但仍要使用。例：客戶同意用 2.4 秒的版本', true, '確認例外接受', 'flag',
+        (why) => send('overridden', Object.assign({}, rng, { reason: why }), '例外接受'))) : null);
+    const chipsRow = h('div', { class: 'rchips', role: 'list', 'aria-label': '這個鏡頭的候選時段' });
     cands.forEach((c, i) => {
       const rv = reviewOf(c);
       const dz = rv ? (DECISION[rv.decision] || { zh: rv.decision }).zh : null;
@@ -1478,7 +1486,7 @@
     if (!cand) setTransport(false);
 
     loadMedia(cand ? cand.asset_id : null);
-    if (!cand) msg.replaceChildren(icon('searchx'), h('strong', null, '這個需求沒有自動候選'), h('span', null, '可按下方的「+」或「修正時段」手動指定素材與時段。'));
+    if (!cand) msg.replaceChildren(icon('searchx'), h('strong', null, '這個鏡頭沒有自動找到候選'), h('span', null, '可以按下方的「+」或「調整時段」自己指定素材和時段。'));
     drawStrip();
 
     // ---- cards under the stage: requirement | conditions | history
@@ -1490,23 +1498,23 @@
       c.params && Object.keys(c.params).length ? h('code', { class: 'faint' }, JSON.stringify(c.params)) : null);
     const reqCard = panel(req.requirement_id + ' · 第 ' + req.revision + ' 版', h('div', { class: 'stack' },
       h('div', null, h('div', { class: 'faint small' }, '中文原文'), h('div', { class: 'lead' }, req.source_text)),
-      h('div', null, h('div', { class: 'faint small' }, '英文檢索字'), h('div', { class: 'mono small muted', lang: 'en' }, req.query_en)),
-      kvs([['最短連續', fmtSec(req.min_duration_ms)], ['最少 take', String(req.min_takes)], ['權重', String(req.weight)]]),
+      h('div', null, h('div', { class: 'faint small' }, '英文 Query'), h('div', { class: 'mono small muted', lang: 'en' }, req.query_en)),
+      kvs([['最短長度', fmtSec(req.min_duration_ms)], ['最少 Take', String(req.min_takes)], ['權重', String(req.weight)]]),
       row.auto && row.auto.reasons && row.auto.reasons.length ? reasonList(row.auto.reasons) : null,
       h('div', null, h('h3', { class: 'mb8' }, '硬性條件（' + (hard.length + (synthDur ? 1 : 0)) + '）'),
         h('ul', { class: 'hard-list' },
           synthDur ? h('li', null, h('div', { class: 'row between' }, h('strong', null, '連續時長 ≥ ' + fmtSec(req.min_duration_ms)), capChip('auto'))) : null,
           hard.map(consItem)),
-        !hard.length && !req.min_duration_ms ? h('p', { class: 'faint small' }, '只有語意內容條件。') : null),
+        !hard.length && !req.min_duration_ms ? h('p', { class: 'faint small' }, '只有畫面內容條件。') : null),
       soft.length ? h('div', null, h('h3', { class: 'mb8' }, '參考條件'), h('ul', { class: 'hard-list' }, soft.map(consItem))) : null),
     { icon: 'list', right: h('div', { class: 'row tight' },
-      h('button', { type: 'button', class: 'rbtn glass', 'aria-label': '上一個需求', title: '上一個需求', disabled: !prevReq, onclick: () => prevReq && go('#/evidence/' + encodeURIComponent(prevReq.requirement.requirement_id)) }, icon('left')),
-      h('button', { type: 'button', class: 'rbtn glass', 'aria-label': '下一個需求', title: '下一個需求', disabled: !nextReq, onclick: () => nextReq && go('#/evidence/' + encodeURIComponent(nextReq.requirement.requirement_id)) }, icon('right'))) });
+      h('button', { type: 'button', class: 'rbtn glass', 'aria-label': '上一個鏡頭', title: '上一個鏡頭', disabled: !prevReq, onclick: () => prevReq && go('#/evidence/' + encodeURIComponent(prevReq.requirement.requirement_id)) }, icon('left')),
+      h('button', { type: 'button', class: 'rbtn glass', 'aria-label': '下一個鏡頭', title: '下一個鏡頭', disabled: !nextReq, onclick: () => nextReq && go('#/evidence/' + encodeURIComponent(nextReq.requirement.requirement_id)) }, icon('right'))) });
 
     const conds = cand ? cand.conditions || [] : [];
     const condCard = panel('條件檢查', h('div', { class: 'stack' },
-      cand ? h('div', { class: 'score', title: 'ranking_score 只用於排序，不是機率' },
-        h('div', null, h('div', { class: 's-l' }, '排序分數（非機率）'), h('div', { class: 'faint small' }, '只用來排序候選，不代表正確的機率')),
+      cand ? h('div', { class: 'score', title: '排序用' },
+        h('div', null, h('div', { class: 's-l' }, '排序分數'), h('div', { class: 'faint small' }, '排序用')),
         h('div', { class: 's-v num' }, Number(cand.ranking_score).toFixed(3))) : null,
       conds.length ? h('div', null, conds.map((x) => {
         const v = VERDICT[x.verdict] || VERDICT.unknown;
@@ -1534,8 +1542,8 @@
     cleanup.push(() => document.removeEventListener('keydown', onKey));
 
     return h('div', { class: 'ev' },
-      h('div', { class: 'ev-bar' }, h('a', { class: 'btn ghost', href: '#/coverage' }, icon('left'), h('span', null, '覆蓋矩陣')),
-        h('h1', { class: 'grow ellipsis' }, '證據檢視器', h('span', { class: 'h1-sub' }, req.requirement_id + ' · ' + req.source_text)),
+      h('div', { class: 'ev-bar' }, h('a', { class: 'btn ghost', href: '#/coverage' }, icon('left'), h('span', null, 'Coverage')),
+        h('h1', { class: 'grow ellipsis' }, '片段檢視', h('span', { class: 'h1-sub' }, req.requirement_id + ' · ' + req.source_text)),
         cov && cov.outdated && cov.run ? chip(AUTO_STALE, { text: '分析快照已過期' }) : null),
       stage,
       h('div', { class: 'ev-cards' }, reqCard, condCard, h('div', { class: 'ev-hist' }, historyPanel(req, decisions, assets))));
@@ -1544,7 +1552,7 @@
   const DECISION = {
     accepted: { zh: '接受', icon: 'check', tone: 'green' },
     rejected: { zh: '拒絕', icon: 'x', tone: 'red' },
-    overridden: { zh: '人工接受例外', icon: 'flag', tone: 'amber' },
+    overridden: { zh: '例外接受', icon: 'flag', tone: 'amber' },
   };
   // One write path for every review decision. On success the screen re-renders so the human chip,
   // the history and the coverage numbers all come from the service again.
@@ -1555,8 +1563,8 @@
       render();
       return true;
     } catch (e) {
-      if (e.code === 'STALE_REVISION' && errBox) errBox.replaceChildren(banner('error', '需求已被修改，請重新載入', '這筆決策沒有寫入。', [btn('重新載入', { sm: true, icon: 'refresh', onclick: () => render() })]));
-      else showError(e, '決策沒有寫入');
+      if (e.code === 'STALE_REVISION' && errBox) errBox.replaceChildren(banner('error', '這個鏡頭已被修改，請重新載入', '這筆沒有寫入。', [btn('重新載入', { sm: true, icon: 'refresh', onclick: () => render() })]));
+      else showError(e, '沒有寫入');
       return false;
     }
   }
@@ -1564,14 +1572,14 @@
   // Review log for one requirement, newest first. The latest decision on a segment wins; undo = a new
   // "rejected" decision on the same segment.
   function historyPanel(req, decisions, assets) {
-    if (decisions == null) return panel('決策紀錄', h('p', { class: 'faint small' }, '無法載入決策紀錄；重新整理後再試。'), { icon: 'clock' });
+    if (decisions == null) return panel('確認紀錄', h('p', { class: 'faint small' }, '無法載入確認紀錄，請重新整理。'), { icon: 'clock' });
     const bySha = Object.fromEntries(assets.map((a) => [a.sha256, a]));
     const mine = decisions.filter((d) => d.requirement_id === req.requirement_id);
     const key = (d) => [d.revision, d.asset_sha, d.start_ms, d.end_ms].join('|');
     const latest = new Map();
     mine.forEach((d, i) => latest.set(key(d), i));
     const errBox = h('div');
-    if (!mine.length) return panel('決策紀錄（0）', h('p', { class: 'faint small' }, '這個需求還沒有人工決策。'), { icon: 'clock' });
+    if (!mine.length) return panel('確認紀錄（0）', h('p', { class: 'faint small' }, '這個鏡頭還沒有人確認過。'), { icon: 'clock' });
     const items = mine.map((d, i) => ({ d, i })).reverse().map(({ d, i }) => {
       const a = bySha[d.asset_sha];
       const def = DECISION[d.decision] || { zh: d.decision, icon: 'help', tone: 'slate' };
@@ -1583,25 +1591,25 @@
       const canUndo = isLatest && !oldRev && d.decision !== 'rejected' && a && a.status !== 'excluded';
       return h('li', { class: 'hist-item' + (isLatest && !oldRev ? '' : ' superseded') },
         h('div', { class: 'row', style: 'gap:6px' }, chip(def, { human: true, aria: '決策：' + def.zh }), state, h('span', { class: 'grow' }),
-          canUndo ? btn('撤銷', { sm: true, kind: 'ghost', icon: 'back', aria: '撤銷這筆' + def.zh, onclick: () =>
+          canUndo ? btn('復原', { sm: true, kind: 'ghost', icon: 'back', aria: '復原這筆' + def.zh, onclick: () =>
             postReview(req, 'rejected', { asset_id: a.asset_id, start_ms: d.start_ms, end_ms: d.end_ms, source: d.source === 'manual' ? 'manual' : 'model', reason: '撤銷先前的「' + def.zh + '」決策' }, '撤銷「' + def.zh + '」', errBox) }) : null),
         h('div', { class: 'mono small' }, (a ? baseName((a.locations || [])[0] || a.asset_id) : '素材 ' + short(d.asset_sha, 10)) + ' · ' + fmtTime(d.start_ms) + '–' + fmtTime(d.end_ms)),
         d.reason ? h('div', { class: 'small muted' }, '理由：' + d.reason) : null,
         h('div', { class: 'faint small' }, [d.source === 'manual' ? '人工片段' : '模型候選', d.actor, fmtDate(d.ts)].filter(Boolean).join(' · ')));
     });
-    return panel('決策紀錄（' + mine.length + '）', h('div', null, errBox, h('ul', { class: 'hist' }, items),
-      h('p', { class: 'faint small', style: 'margin-top:10px' }, '同一片段以最後一筆決策為準；撤銷會新增一筆「拒絕」，不會刪除紀錄。')), { icon: 'clock' });
+    return panel('確認紀錄（' + mine.length + '）', h('div', null, errBox, h('ul', { class: 'hist' }, items),
+      h('p', { class: 'faint small', style: 'margin-top:10px' }, '同一片段以最後一次決定為準。')), { icon: 'clock' });
   }
 
   // ---------- 6 review / reshoot board
   SCREENS.board = async function () {
     const cards = await api('GET', P() + '/reshoots');
     const cov = await api('GET', P() + '/coverage').catch(() => null);
-    const out = [pageHead('複核／補拍板', '系統依已確認需求與證據整理；所有建議都要人工確認，不會自動改狀態。',
-      [btn('匯出 CSV', { icon: 'download', onclick: () => doExport('csv') })])];
-    if (cov && cov.run && cov.outdated) out.push(banner('warn', '需求或素材已變更，請重新分析', '卡片來自上一次分析；有修改的需求在重新分析前不會出現。'));
+    const out = [pageHead('補拍清單', '依目前的 Shot list 和片段整理。',
+      [btn('Export CSV', { icon: 'download', onclick: () => doExport('csv') })])];
+    if (cov && cov.run && cov.outdated) out.push(banner('warn', 'Shot list 或素材有變更，請重新分析', '修改過的鏡頭要重新分析才會出現。'));
     if (!cov || !cov.run) {
-      out.push(panel(null, empty('board', '尚無分析結果', '分析完成後才會產生複核與補拍建議。', [btn('前往素材庫', { href: '#/assets', kind: 'primary' })]), { raw: true }));
+      out.push(panel(null, empty('board', '尚無分析結果', '分析完才會有複核和補拍建議。', [btn('去素材頁', { href: '#/assets', kind: 'primary' })]), { raw: true }));
       return h('div', null, out);
     }
     const review = cards.filter((c) => c.kind === 'review_first' || (c.kind !== 'reshoot_proposed' && c.review_first));
@@ -1610,8 +1618,8 @@
       h('div', { class: 'col-head' }, h('span', { class: 'chip tone-' + tone, 'aria-hidden': 'true' }, icon(ic)), h('h2', null, title), h('span', { class: 'count' }, String(list.length))),
       h('div', { class: 'col-body' }, h('p', { class: 'faint small' }, hint), list.length ? list.map(card) : h('p', { class: 'muted', style: 'padding:12px 0' }, emptyText)));
     out.push(h('div', { class: 'board' },
-      col('先複核', 'eye', 'violet', review, '目前沒有需要先複核的需求。', '已有部分證據，先看片段再決定是否補拍。'),
-      col('建議補拍（待確認）', 'camera', 'orange', reshoot, '目前沒有補拍建議。', '已分析範圍內找不到可用片段；確認後再排入拍攝。')));
+      col('先複核', 'eye', 'violet', review, '目前沒有要先複核的鏡頭。', '有部分片段，先看過再決定要不要補拍。'),
+      col('補拍', 'camera', 'orange', reshoot, '目前沒有補拍建議。', '已分析的素材裡找不到可用片段，或你已決定要補拍。')));
     return h('div', null, out);
   };
 
@@ -1637,13 +1645,13 @@
       h('div', { class: 'chips' }, (c.reasons || []).map((code, i) => h('span', { class: 'reason', title: code }, icon('info'), (c.reasons_zh && c.reasons_zh[i]) || REASON_ZH[code] || code))),
       b ? h('div', { class: 'best' }, thumb(b.asset_id, b.start_ms, c.source_text + ' 的最佳候選'),
         h('div', null, h('div', { class: 'small' }, '最佳候選 ', h('span', { class: 'mono' }, fmtTime(b.start_ms) + '–' + fmtTime(b.end_ms))),
-          b.shortfalls && b.shortfalls.length ? h('ul', { class: 'shortfalls' }, b.shortfalls.map((s) => h('li', null, s))) : h('div', { class: 'faint small' }, '沒有列出不足之處。')))
+          b.shortfalls && b.shortfalls.length ? h('ul', { class: 'shortfalls' }, b.shortfalls.map((s) => h('li', null, s))) : h('div', { class: 'faint small' }, 'AI 判斷條件都通過。')))
         : h('div', { class: 'faint small' }, '沒有可用的候選片段。'),
       h('div', { class: 'facts' },
         fact('最短連續時長', c.min_continuous_s != null ? c.min_continuous_s + ' 秒' : null), fact('前後預留', c.handles),
         fact('構圖', c.composition), fact('道具／人物', c.props), h('div', { style: 'grid-column:1/-1' }, h('div', { class: 'k' }, '驗收方式'), h('div', null, c.verify_by || '—'))),
       h('div', { class: 'card-foot' }, seg,
-        h('a', { class: 'btn sm', href: '#/evidence/' + encodeURIComponent(c.requirement_id) }, icon('eye'), h('span', null, '開啟證據'))));
+        h('a', { class: 'btn sm', href: '#/evidence/' + encodeURIComponent(c.requirement_id) }, icon('eye'), h('span', null, '看片段'))));
   }
 
   // ---------- 7 device & diagnostics
@@ -1653,19 +1661,19 @@
     const dev = dv.device || {};
     const be = dv.active_backend;
     const BE_TEXT = {
-      'cpu-reference': 'CPU 參考後端：結果可重現，但不代表 NPU 的速度或功耗。',
-      'cuda-reference': 'CUDA 參考後端（GPU）：用於開發比對，不代表 NPU 的速度或功耗。',
-      'not loaded': '尚未載入模型；第一次分析時才會載入。',
+      'cpu-reference': '本機 CPU 參考後端。',
+      'cuda-reference': '本機 GPU（CUDA）參考後端。',
+      'not loaded': '第一次分析時載入模型。',
     };
     const yes = (b, y, n) => b ? chip({ zh: y, icon: 'checkc', tone: 'green' }) : chip({ zh: n, icon: 'xc', tone: 'slate' });
-    const out = [pageHead('裝置與診斷', '顯示實際執行的後端與模型；無法量測的指標一律顯示 N/A。', [btn('重新偵測', { icon: 'refresh', onclick: () => { refreshStatus(); render(); } })])];
+    const out = [pageHead('裝置', '目前使用的後端和模型。', [btn('重新偵測', { icon: 'refresh', onclick: () => { refreshStatus(); render(); } })])];
     const npuTxt = hl.npu_active == null ? 'N/A' : (hl.npu_active ? '是' : '否');
     out.push(h('section', { class: 'panel hero', 'aria-label': 'UGen300 裝置狀態' },
       h('div', { class: 'hero-main' },
         h('div', { class: 'hero-kicker' }, 'Edge AI 裝置'),
         h('div', { class: 'hero-title grad-text' }, 'UGen300'),
-        h('p', { class: 'muted' }, dev.available ? '已偵測到裝置。只有在實機驗證過的模型執行時，才會回報 NPU 結果。'
-          : 'UGen300 未連線；目前由明示的 CPU 參考後端執行，所有結果與報告都會標示實際後端。'),
+        h('p', { class: 'muted' }, dev.available ? '已偵測到 UGen300。'
+          : 'UGen300 未連線，目前用本機 CPU／GPU 分析。'),
         dev.reason ? h('p', { class: 'mono small faint', style: 'margin-top:6px' }, dev.reason) : null),
       h('div', { class: 'tiles' },
         tile('連線狀態', dev.available ? chip({ zh: '已連線', icon: 'plug', tone: 'green' }) : chip({ zh: '未連線', icon: 'plugoff', tone: 'orange' }), dev.available ? 'green' : 'orange'),
@@ -1690,15 +1698,15 @@
       kvs(Object.entries(m).filter(([k]) => k !== 'compatibility_verified').slice(Math.ceil((Object.keys(m).length - 1) / 2))
         .map(([k, v]) => [k, h('span', { class: 'mono small' }, v == null ? 'N/A' : typeof v === 'object' ? JSON.stringify(v) : String(v))])
         .concat([['compatibility_verified', yes(m.compatibility_verified, '已驗證', '未驗證')]])))
-      : h('p', { class: 'muted' }, '模型尚未載入，沒有 manifest。第一次分析時會載入並在此顯示。'), { icon: 'file' }));
+      : h('p', { class: 'muted' }, '模型還沒載入，第一次分析時會顯示 manifest。'), { icon: 'file' }));
     const na = (k, hint) => h('div', { class: 'na-tile' }, h('div', { class: 'k' }, k), h('div', { class: 'v' }, 'N/A'), h('div', { class: 'faint small' }, hint));
     const npuOn = dev.available && hl.npu_active === true;
     out.push(panel('NPU 指標', h('div', null,
-      h('p', { class: 'muted small', style: 'margin-bottom:12px' }, 'NPU 指標無法量測時顯示 N/A。' + (npuOn ? '' : '目前沒有 NPU 在執行，因此不顯示任何 NPU 數字。')),
+      h('p', { class: 'muted small', style: 'margin-bottom:12px' }, '' + (npuOn ? '' : '接上 UGen300 後顯示。')),
       h('div', { class: 'grid-3' }, na('NPU 使用率', '需要 UGen300 回報'), na('每影格推論延遲', '僅在 NPU 實際執行時量測'), na('功耗', '需要裝置感測器')),
     ), { icon: 'activity' }));
     out.push(panel('匯出報告', h('div', null,
-      h('p', { class: 'muted small', style: 'margin-bottom:12px' }, '報告包含覆蓋結果、人工決策、補拍卡片與實際後端資訊。'),
+      h('p', { class: 'muted small', style: 'margin-bottom:12px' }, '覆蓋結果、人工確認和補拍卡。'),
       h('div', { class: 'exports' },
         btn('JSON', { icon: 'download', disabled: !S.pid, onclick: () => doExport('json') }),
         btn('CSV', { icon: 'download', disabled: !S.pid, onclick: () => doExport('csv') }),
@@ -1711,7 +1719,7 @@
   function boot() {
     if (PREVIEW) {
       document.body.classList.add('is-preview');
-      document.body.prepend(h('div', { class: 'preview-ribbon', role: 'note' }, icon('beaker'), '預覽資料（非實測）· 畫面使用範例資料，不是實際分析結果'));
+      document.body.prepend(h('div', { class: 'preview-ribbon', role: 'note' }, icon('beaker'), '預覽資料 · 範例畫面'));
     } else if (!TOKEN || TOKEN === '__SG_TOKEN__') {
       toast({ kind: 'error', title: '缺少工作階段權杖', text: '下一步：請從 SceneGap 啟動程式開啟本頁，不要直接開啟 HTML 檔。' });
     }

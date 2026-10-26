@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../../web/style.css">
   <script>
   /* Sample responses shaped like the /api/v1 contract. Not measured data: the page shows a
-     "預覽資料（非實測）" ribbon whenever window.SG_PREVIEW is set. */
+     "預覽資料" ribbon whenever window.SG_PREVIEW is set. */
   (function () {
     var vm = /[?&]variant=(\w+)/.exec(location.search);
     if (vm && !window.SG_PREVIEW_VARIANT) window.SG_PREVIEW_VARIANT = vm[1];   // ?variant=outdated | job

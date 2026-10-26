@@ -142,8 +142,7 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
         dev = device_status()
         be = svc._backend
         return {"device": dev, "active_backend": be.name if be else "not loaded",
-                "manifest": be.manifest.to_dict() if be else None,
-                "note": "NPU results are reported only when a UGen300 answered the scan and a validated HEF ran."}
+                "manifest": be.manifest.to_dict() if be else None}
 
     @app.get("/api/v1/projects")
     def list_projects():

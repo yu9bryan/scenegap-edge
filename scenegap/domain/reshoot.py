@@ -8,10 +8,10 @@ from .coverage import RequirementOutcome
 from .models import AutoStatus, Capability
 
 REASON_ZH = {
-    "NO_CANDIDATE": "已分析範圍內沒有候選", "DURATION_SHORT": "連續時長不足", "DURATION_UNKNOWN": "連續時長未能確認",
-    "QUALITY_WARNING": "品質警示（模糊比例偏高）", "NEEDS_MANUAL": "含需人工確認的條件", "EVIDENCE_UNKNOWN": "證據不足",
-    "TAKES_SHORT": "獨立 take 數不足", "SCOPE_INCOMPLETE": "仍有素材未分析或失敗", "UNSUPPORTED_CORE": "核心條件此版本不支援",
-    "ANALYSIS_FAILED": "分析失敗", "NOT_ANALYZED": "尚未分析", "NO_ASSETS": "尚未加入素材", "CONSTRAINT_FAILED": "條件不符",
+    "NO_CANDIDATE": "已分析的素材裡沒找到", "DURATION_SHORT": "長度不夠", "DURATION_UNKNOWN": "長度無法確認",
+    "QUALITY_WARNING": "畫面偏模糊", "NEEDS_MANUAL": "有條件要人工確認", "EVIDENCE_UNKNOWN": "片段不足",
+    "TAKES_SHORT": "Take 數不夠", "SCOPE_INCOMPLETE": "還有素材沒分析完", "UNSUPPORTED_CORE": "這個版本還不支援此條件",
+    "ANALYSIS_FAILED": "分析失敗", "NOT_ANALYZED": "尚未分析", "NO_ASSETS": "還沒加入素材", "CONSTRAINT_FAILED": "條件不符",
 }
 
 
@@ -54,16 +54,16 @@ def cards(outcomes: list[RequirementOutcome], confirmed_ids: set[str], human_req
             best = {"asset_id": c.segment.asset_id, "start_ms": c.segment.interval.start_ms, "end_ms": c.segment.interval.end_ms,
                     "shortfalls": [x.reason for x in c.results if x.verdict.value != "pass"]}
         manual = [c for c in r.constraints if c.capability is not Capability.AUTO]
-        comp = "；".join(c.note or c.kind for c in r.constraints if c.kind == "composition") or "依需求原文"
-        props = "；".join(str(c.params.get("props")) for c in r.constraints if c.params.get("props")) or "依需求原文"
-        verify = "重新匯入後自動比對語意與連續時長，再由人播放確認"
+        comp = "；".join(c.note or c.kind for c in r.constraints if c.kind == "composition") or "依原文"
+        props = "；".join(str(c.params.get("props")) for c in r.constraints if c.params.get("props")) or "依原文"
+        verify = "補拍後重新匯入，自動比對畫面和長度，再由人看過確認"
         if manual:
-            verify += "；" + "、".join(sorted({c.kind for c in manual})) + " 由人工確認"
+            verify += "；" + "、".join(sorted({c.kind for c in manual})) + " 由人確認"
         out.append(ReshootCard(
             requirement_id=r.requirement_id, requirement_revision=r.revision, source_text=r.source_text,
             kind="reshoot_requested" if requested else ("review_first" if review_first else "reshoot_proposed"), review_first=review_first,
             reasons=list(o.reasons) + (["HUMAN_REQUESTED"] if requested else []),
-            reasons_zh=[REASON_ZH.get(x, x) for x in o.reasons] + ([f"人工複核後要求補拍：{human_requests[r.requirement_id]}"] if requested else []),
+            reasons_zh=[REASON_ZH.get(x, x) for x in o.reasons] + ([f"人工加入補拍：{human_requests[r.requirement_id]}"] if requested else []),
             best_candidate=best,
             min_continuous_s=r.min_duration_ms / 1000,
             handles=next((f"前後各 {c.params['handles_ms']/1000:.1f} 秒" for c in r.constraints if c.params.get("handles_ms")), "未指定"),

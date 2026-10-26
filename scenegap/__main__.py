@@ -43,6 +43,8 @@ def main():
 
     token = secrets.token_urlsafe(24)
     app = create_app(a.workdir, factory, cfg, token=token)
+    import threading
+    threading.Thread(target=lambda: app.state.svc.backend, daemon=True).start()   # load the model while the page opens
     import uvicorn
     print(f"SceneGap Edge: http://{a.host}:{a.port}/   (workdir {os.path.abspath(a.workdir)})")
     uvicorn.run(app, host=a.host, port=a.port, log_level="warning")
