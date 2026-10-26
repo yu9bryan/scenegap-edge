@@ -112,6 +112,14 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
     async def _inv(request, e: Invalid):
         return err(_STATUS.get(e.code, 422), e.code, str(e))
 
+    @app.exception_handler(ModuleNotFoundError)
+    async def _dep(request, e: ModuleNotFoundError):
+        return err(500, "DEPENDENCY_MISSING", f"required package not installed: {e.name}; install requirements.txt", recoverable=True)
+
+    @app.exception_handler(Exception)
+    async def _any(request, e: Exception):                     # never send a traceback to the browser
+        return err(500, "INTERNAL", f"{type(e).__name__}; see the local service log", recoverable=True)
+
     @app.exception_handler(Conflict)
     async def _conf(request, e: Conflict):
         return err(409, "STALE_REVISION", str(e))

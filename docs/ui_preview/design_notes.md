@@ -56,3 +56,49 @@ Linear's 2024 UI refresh, Vercel's 2026 sidebar navigation and Final Cut Pro's b
   only searches imported media).
 - Linear blog: "How we redesigned the Linear UI" and the 2024-03-20 changelog (LCH themes, contrast, less noise).
 - Vercel changelog: dashboard navigation redesign rollout (sidebar, workflow ordering).
+
+## ASUS design references (restyle, 2026-10-26)
+
+The user asked for the feel of ASUS's own software. SceneGap Edge runs on the ASUS UGen300 and is an entry in
+ASUS's UGen AI League, so the UI now borrows that hardware-utility feel. **We take the feel, not the brand:**
+no ASUS / ProArt / ROG logos, wordmarks, icons or images are used; the app is still "SceneGap Edge", and only
+the device screen names the hardware ("UGen300"). Our accents stay violet `#6C4CF5`/`#8B72FF` and cyan `#22D3EE`,
+not ProArt's bronze or ROG red.
+
+### What we looked at (described, not copied; screenshots kept outside the repo)
+- **ProArt Creator Hub product page** — https://www.asus.com/uk/ProArt/ProArt-Creator-Hub/ (we looked at the
+  hero section and the dashboard screenshots). The app is a near-black, neutral (not blue-tinted) charcoal
+  window. A slim left rail has icon + label items and a filled active item. Device tabs run across the top
+  (laptop, monitor). Square cards have a small title at top-left, a hairline under the header and a tiny
+  action glyph at top-right. Big *light-weight* numerals ("7 %") sit next to a thin ring gauge. Key/value rows
+  put the label left in grey and the value right in the accent colour. Thin progress lines everywhere.
+- **ProArt Creator Hub FAQ** — https://www.asus.com/support/faq/1045995/ (structure: Dashboard with
+  draggable info cards, operating-mode quick switches, a 2026 refresh that moves system info to the top-left).
+- **Armoury Crate 6 article** — https://rog.asus.com/uk/articles/guides/armoury-crate-version-6-is-here-optimizing-your-gaming-pc-easier-than-ever/
+  (dashboard and feature-library screenshots, plus the article page itself). It describes a "less visually busy"
+  redesign. Panels have **chamfered (angled) corners**, condensed uppercase headings, a slash `/` before
+  section titles, a `/////` hatch motif next to dates, and dense metric tables with right-aligned values and
+  thin coloured lines. The left nav is split into small grey **group labels**.
+- **MyASUS introduction / FAQ** — https://www.asus.com/us/support/faq/1050467/ (home page screenshot). A device
+  hero shows the product name large, serial and quick links, with a **2×2 grid of status tiles**: each has a
+  thin coloured top line, icon, label and a big number with a small unit (Battery 79 %, CPU load 6 % | 77 °C).
+- ASUS ProArt home page — https://www.asus.com/proart/ (overall tone: black canvas, light display type,
+  generous spacing, thin rules).
+
+### What we adopted, and where
+1. **Neutral charcoal surfaces** (`#0B0B0D` canvas, `#141417` panels, hairline `#2C2C33`), with no blue tint.
+   Status colours are unchanged and still always paired with an icon and text.
+2. **Chamfered top-right corner on every panel and card**, with a hairline drawn along the cut (`clip-path`
+   plus a rotated 1.5 px line). Corners are square (2 px) elsewhere. Buttons and inputs are *not* clipped,
+   so focus rings stay fully visible.
+3. **Slash section markers** (`/ 條件檢查`) replace the panel-header icons; **condensed uppercase eyebrows** with
+   a `////` hatch sit above every page title (`//// COVERAGE MATRIX`). Fonts: Barlow / Barlow Condensed for
+   display numbers and eyebrows (Google Fonts); Inter + Noto Sans TC for body text.
+4. **KPI tiles in the Creator Hub / MyASUS style**: 2 px coloured top line, light 42 px numerals with a smaller
+   unit, and a thin ring gauge. A null value draws a dashed empty ring and prints "N/A", never 0 %.
+5. **Device hero on 裝置與診斷**: "UGen300" in large light type, a one-line status, and a 2×2 tile grid
+   (連線狀態, 執行後端, 相容性驗證, NPU 執行中). Detailed key/value rows follow, label left, value right.
+6. **Nav rail with group labels** (專案 / 準備 / 檢查 / 系統), a filled active row with a 3 px accent bar.
+   Below 1280 px the rail collapses to icons with hairline group dividers.
+7. **Dense tables** with condensed uppercase column headers and right-aligned key/value rows (run info,
+   device details, requirement facts).

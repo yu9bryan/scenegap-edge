@@ -19,8 +19,10 @@ SHOTS = [
     ("01b_home_outdated", "?variant=outdated", "#/home"),
     ("02_requirements", "", "#/requirements/R03"),
     ("03_assets", "?variant=job", "#/assets"),
+    ("03b_assets_table", "?variant=job", "#/assets", 560),
     ("04_coverage", "", "#/coverage"),
     ("05_evidence", "", "#/evidence/R01/0"),
+    ("05b_evidence_history", "", "#/evidence/R01/0", 520),
     ("06_board", "", "#/board"),
     ("07_device", "", "#/device"),
 ]
@@ -31,14 +33,19 @@ with sync_playwright() as p:
     errors = []
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
-    for name, query, route in SHOTS:
+    for name, query, route, *scroll in SHOTS:
         page.goto(URL + query + route)
         page.wait_for_load_state("networkidle")
         page.wait_for_timeout(600)
+        if scroll:
+            page.evaluate("y => { document.querySelector('#main').scrollTop = y; }", scroll[0])
+            page.wait_for_timeout(300)
         page.screenshot(path=str(HERE / f"{name}{SUFFIX}.png"))
         # overflow check: anything wider than the viewport?
         over = page.evaluate("""() => { const m = document.querySelector('#main');
-            return {docW: document.documentElement.scrollWidth, mainOverflowX: m.scrollWidth - m.clientWidth}; }""")
+            const inner = [...document.querySelectorAll('.table-wrap, .panel, .card')].map((e) => e.scrollWidth - e.clientWidth);
+            return {docW: document.documentElement.scrollWidth, mainOverflowX: m.scrollWidth - m.clientWidth,
+                    innerOverflowX: Math.max(0, ...inner)}; }""")
         print(name, over)
     browser.close()
     print("errors:", errors or "none")

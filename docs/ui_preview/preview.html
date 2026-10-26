@@ -8,7 +8,7 @@
   <title>SceneGap Edge — UI 預覽</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="../../web/style.css">
   <script>
   /* Sample responses shaped like the /api/v1 contract. Not measured data: the page shows a
@@ -116,7 +116,7 @@
     assets.forEach(function (a) { scope[a.asset_id] = a.status; });
 
     var coverage = {
-      run: { run_id: 'run_20261025_1842', created_at: '2026-10-25T18:42:11', backend: 'cpu-reference', model_fingerprint: '3f9a1c0d7e52b8a4', config_hash: 'c0nf1g9e', code_version: '0.3.0' },
+      run: { run_id: 'run_20261025_1842', created_at: '2026-10-25T18:42:11', backend: 'cpu-reference', model_fingerprint: '3f9a1c0d7e52b8a4', config_hash: 'c0nf1g9e', code_version: '0.1.0' },
       outdated: false,
       coverage: { human_confirmed: 0.375, ai_candidate: 0.5, analysis_progress: 0.75, denominator_weight: 8, unknown_count: 1 },
       requirements: rows, scope: scope,
@@ -149,7 +149,7 @@
 
     var P = '/projects/' + PID;
     var routes = {};
-    routes['GET /health'] = { service: 'scenegap-edge', version: '0.3.0', db: 'ok', active_backend: 'cpu-reference', npu_active: false, device: { available: false, reason: device.reason } };
+    routes['GET /health'] = { service: 'scenegap-edge', version: '0.1.0', db: 'ok', active_backend: 'cpu-reference', npu_active: false, device: { available: false, reason: device.reason } };
     routes['GET /device/status'] = { device: device, active_backend: 'cpu-reference', manifest: manifest, note: 'NPU results are reported only when a UGen300 answered the scan and a validated HEF ran.' };
     routes['GET ' + P] = { project: { id: PID, name: '微光烘焙坊品牌短片', purpose: '品牌形象 60 秒短片', aspect: '16:9', target_len_s: 60, language: 'zh-TW', created_at: '2026-10-24T09:12:00' },
       assets: { pending: 0, analyzing: 0, analyzed: 6, failed: 1, missing: 1, excluded: 0 },
@@ -158,6 +158,18 @@
     routes['GET ' + P + '/assets'] = assets;
     routes['GET ' + P + '/coverage'] = coverage;
     routes['GET ' + P + '/reshoots'] = reshoots;
+    routes['GET /projects'] = [
+      { id: PID, name: '微光烘焙坊品牌短片', purpose: '品牌形象 60 秒短片', aspect: '16:9', target_len_s: 60, created_at: '2026-10-24T09:12:00' },
+      { id: 'p_51aa07', name: '咖啡豆產地紀錄（第二集）', purpose: 'YouTube 長片', aspect: '16:9', target_len_s: 600, created_at: '2026-10-12T14:03:00' },
+      { id: 'p_0b9e33', name: '新品上市直式短影音', purpose: 'Reels / Shorts', aspect: '9:16', target_len_s: 30, created_at: '2026-09-30T10:40:00' } ];
+    routes['GET ' + P + '/jobs'] = window.SG_PREVIEW_VARIANT === 'job'
+      ? [{ job_id: 'j_demo', project_id: PID, state: 'running', stage: 'analyzing assets', done: 5, total: 8, failed: 1, error: null, payload: {} }] : [];
+    routes['GET ' + P + '/decisions'] = [
+      { id: 'd_01', project_id: PID, requirement_id: 'R01', revision: 1, asset_sha: '7f3c02aa…', start_ms: 40100, end_ms: 42300, decision: 'accepted', reason: '', source: 'model', actor: 'local-user', ts: '2026-10-24T16:20:05' },
+      { id: 'd_02', project_id: PID, requirement_id: 'R01', revision: 2, asset_sha: '7f3c02aa…', start_ms: 40100, end_ms: 42300, decision: 'accepted', reason: '', source: 'model', actor: 'local-user', ts: '2026-10-25T18:50:12' },
+      { id: 'd_03', project_id: PID, requirement_id: 'R01', revision: 2, asset_sha: '7f3c02aa…', start_ms: 40100, end_ms: 42300, decision: 'rejected', reason: '撤銷先前的「接受」決策', source: 'model', actor: 'local-user', ts: '2026-10-25T18:52:40' },
+      { id: 'd_04', project_id: PID, requirement_id: 'R01', revision: 2, asset_sha: '7f3c01e9…', start_ms: 12480, end_ms: 17920, decision: 'accepted', reason: '烤箱門打開到麵包出爐完整', source: 'model', actor: 'local-user', ts: '2026-10-25T18:55:31' },
+      { id: 'd_05', project_id: PID, requirement_id: 'R06', revision: 1, asset_sha: '7f3c04c2…', start_ms: 2100, end_ms: 6400, decision: 'overridden', reason: '客戶同意：慢動作段落可接受輕微模糊', source: 'model', actor: 'local-user', ts: '2026-10-25T19:02:10' } ];
     routes['GET /jobs/j_demo'] = { job_id: 'j_demo', project_id: PID, state: 'running', stage: 'analyzing assets', done: 5, total: 8, failed: 1, error: null, payload: {} };
     routes['POST ' + P + '/search'] = { query_en: '', note: 'ranking_score is a similarity, not a probability', results: [
       { asset_id: 'a_7f3c01', shot: 3, best_ms: 14200, shot_start_ms: 11800, shot_end_ms: 18400, ranking_score: 0.3124, above_threshold: true },
@@ -166,7 +178,6 @@
 
     window.SG_PREVIEW = {
       project_id: PID,
-      active_job_id: window.SG_PREVIEW_VARIANT === 'job' ? 'j_demo' : null,
       routes: routes,
       frames: {
         a_7f3c01: frame('#4a2a14', '#120a06', 'oven', 'A001_C003'),

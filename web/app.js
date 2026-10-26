@@ -272,35 +272,15 @@
     return data;
   }
 
-  // Media: <img>/<video> cannot send the X-SG-Token header, so media is fetched with the header and
-  // handed to the element as a blob: URL. (See report: a short-lived media URL would allow streaming.)
-  const blobCache = new Map();
-  function authBlob(path) {
-    if (blobCache.has(path)) return blobCache.get(path);
-    const p = fetch(API + path, { headers: { 'X-SG-Token': TOKEN } }).then(async (r) => {
-      if (!r.ok) { let b = null; try { b = await r.json(); } catch (e) { /* not json */ } throw new ApiError(r.status, b); }
-      return URL.createObjectURL(await r.blob());
-    });
-    blobCache.set(path, p);
-    p.catch(() => blobCache.delete(path));
-    return p;
-  }
-  const frameQ = []; let frameActive = 0;
-  function pumpFrames() {
-    while (frameActive < 3 && frameQ.length) {
-      const job = frameQ.shift(); frameActive++;
-      job.fn().then(job.res, job.rej).finally(() => { frameActive--; pumpFrames(); });
-    }
-  }
+  // Media: GET / sets an HttpOnly SameSite=Strict cookie (sg_media, path /api/v1/assets), so <img>/<video>
+  // load media directly; the browser streams with HTTP Range. No whole-file download.
   function frameUrl(aid, t) {
     if (PREVIEW) return Promise.resolve((PREVIEW.frames || {})[aid] || null);
-    const path = '/assets/' + encodeURIComponent(aid) + '/frame?t_ms=' + Math.max(0, Math.round(t || 0));
-    if (blobCache.has(path)) return blobCache.get(path);
-    return new Promise((res, rej) => { frameQ.push({ fn: () => authBlob(path), res, rej }); pumpFrames(); });
+    return Promise.resolve(API + '/assets/' + encodeURIComponent(aid) + '/frame?t_ms=' + Math.max(0, Math.round(t || 0)));
   }
   function videoUrl(aid) {
     if (PREVIEW) return Promise.resolve(null);
-    return authBlob('/assets/' + encodeURIComponent(aid) + '/media');
+    return Promise.resolve(API + '/assets/' + encodeURIComponent(aid) + '/media');
   }
 
   async function doExport(fmt) {
@@ -380,9 +360,11 @@
   function capChip(cap) { return chip(CAP[cap] || CAP.auto, { aria: '判定方式：' + (CAP[cap] || CAP.auto).zh }); }
 
   function thumb(aid, t, label) {
-    const img = h('img', { alt: label || ('影格 ' + fmtTime(t)), decoding: 'async' });
+    const img = h('img', { alt: label || ('影格 ' + fmtTime(t)), decoding: 'async', loading: 'lazy' });
     const box = h('span', { class: 'thumb' }, img, h('span', { class: 't-time' }, fmtTime(t)));
-    const fail = () => { img.remove(); box.classList.add('none'); box.prepend(h('span', null, '無法載入影格')); };
+    let failed = false;
+    const fail = () => { if (failed) return; failed = true; img.remove(); box.classList.add('none'); box.prepend(h('span', { title: '素材離線、這個時間點沒有影格，或工作階段已過期（請重新整理頁面）' }, '無法載入影格')); };
+    img.addEventListener('error', fail);
     frameUrl(aid, t).then((u) => { if (u) img.src = u; else fail(); }, fail);
     return box;
   }
@@ -412,10 +394,29 @@
       title ? h('div', { class: 'panel-head' }, h(opts.h || 'h2', null, opts.icon ? icon(opts.icon) : null, title), opts.right || null) : null,
       opts.raw ? body : h('div', { class: 'panel-body' }, body));
   }
+  function eyebrow(text) {
+    return h('div', { class: 'eyebrow' }, h('span', { class: 'hatch', 'aria-hidden': 'true' }), h('span', { lang: 'en' }, text));
+  }
   function pageHead(title, sub, actions) {
     return h('div', { class: 'page-head' },
-      h('div', null, h('h1', null, title), sub ? h('div', { class: 'sub' }, sub) : null),
+      h('div', null, eyebrow(NAME_EN[S.route.name] || 'SCENEGAP EDGE'), h('h1', null, title), sub ? h('div', { class: 'sub' }, sub) : null),
       actions && actions.length ? h('div', { class: 'actions' }, actions) : null);
+  }
+  // Thin gauge ring for a 0..1 ratio; null draws a dashed empty track (N/A). Built with DOM calls only.
+  function ring(ratio) {
+    const NS = 'http://www.w3.org/2000/svg';
+    const el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+    const r = 22, c = 2 * Math.PI * r;
+    const svg = el('svg', { viewBox: '0 0 56 56', class: 'ring' + (ratio == null ? ' na' : ''), 'aria-hidden': 'true', focusable: 'false' });
+    svg.append(el('circle', { cx: 28, cy: 28, r, class: 'ring-track' }));
+    if (ratio != null) {
+      const v = Math.max(0, Math.min(1, ratio));
+      svg.append(el('circle', { cx: 28, cy: 28, r, class: 'ring-arc', 'stroke-dasharray': (v * c).toFixed(2) + ' ' + c.toFixed(2), transform: 'rotate(-90 28 28)' }));
+    }
+    return svg;
+  }
+  function tile(k, v, tone) {
+    return h('div', { class: 'tile line-' + (tone || 'violet') }, h('div', { class: 't-k' }, k), h('div', { class: 't-v' }, v == null || v === '' ? '—' : v));
   }
   function kvs(pairs) {
     return h('dl', { class: 'kvs' }, pairs.map(([k, v]) => [h('dt', null, k), h('dd', null, v == null || v === '' ? '—' : v)]));
@@ -441,17 +442,30 @@
   }
   function showError(err, title) {
     if (!(err instanceof ApiError)) err = new ApiError(0, { code: 'CLIENT', message: String(err && err.message || err) });
-    const next = NEXT_STEP[err.code] || (err.recoverable ? '請確認輸入後再試一次。' : '請重新啟動 SceneGap 後再試。');
+    const next = NEXT_STEP[err.code] || (err.status >= 500 ? '本機服務發生內部錯誤。請查看啟動 SceneGap 的視窗訊息，並附上請求編號回報。'
+      : err.recoverable ? '請確認輸入後再試一次。' : '請重新啟動 SceneGap 後再試。');
     toast({ kind: 'error', title: title || '操作失敗', text: '下一步：' + next, meta: (err.message ? '詳細：' + err.message + ' · ' : '') + '代碼 ' + err.code + (err.request_id ? ' · 請求 ' + err.request_id : '') });
   }
 
   // ------------------------------------------------------------------ jobs
   function jobKey() { return 'sg.job.' + S.pid; }
-  function restoreJob() {
+  // After a reload, ask the service which job is still queued/running for this project.
+  // localStorage is only a fallback when that request fails.
+  async function restoreJob() {
     clearTimeout(S.jobTimer); S.job = null; S.jobId = null;
-    if (!S.pid) return;
-    const id = PREVIEW ? PREVIEW.active_job_id : store.get(jobKey(), null);
-    if (id) { S.jobId = id; pollJob(); }
+    const pid = S.pid;
+    if (!pid) return;
+    let id = null;
+    try {
+      const active = await api('GET', '/projects/' + encodeURIComponent(pid) + '/jobs?active=1');
+      if (pid !== S.pid) return;
+      id = Array.isArray(active) && active.length ? active[0].job_id : null;
+      if (!PREVIEW) { if (id) store.set(jobKey(), id); else store.del(jobKey()); }
+    } catch (e) {
+      if (pid !== S.pid) return;
+      id = PREVIEW ? null : store.get(jobKey(), null);
+    }
+    if (id) { S.jobId = id; pollJob(); } else notifyJob();
   }
   async function startAnalyze() {
     try {
@@ -548,17 +562,23 @@
   ];
   const NAME_ZH = Object.fromEntries(NAV.map((n) => [n[0], n[1]]));
   NAME_ZH.projects = '選擇專案';
+  const NAME_EN = {
+    home: 'PROJECT OVERVIEW', projects: 'PROJECTS', requirements: 'SHOT REQUIREMENTS', assets: 'MEDIA LIBRARY',
+    coverage: 'COVERAGE MATRIX', evidence: 'EVIDENCE VIEWER', board: 'REVIEW & RESHOOT', device: 'DEVICE & DIAGNOSTICS',
+  };
+  const NAV_GROUP = { home: '專案', requirements: '準備', coverage: '檢查', device: '系統' };
 
   function renderNav() {
     const ul = $('#nav');
-    ul.replaceChildren(...NAV.map(([key, label, ic], i) => {
+    ul.replaceChildren(...NAV.flatMap(([key, label, ic], i) => {
       const needsProject = !['home', 'device'].includes(key);
       const disabled = needsProject && !S.pid;
       const cur = S.route.name === key || (key === 'home' && S.route.name === 'projects');
-      return h('li', null, h('a', {
+      const group = NAV_GROUP[key] ? h('li', { class: 'nav-group', role: 'presentation' }, NAV_GROUP[key]) : null;
+      return [group, h('li', null, h('a', {
         href: '#/' + key, class: disabled ? 'disabled' : null, 'aria-current': cur ? 'page' : null,
         'aria-disabled': disabled ? 'true' : null, tabindex: disabled ? '-1' : null, title: label,
-      }, icon(ic), h('span', { class: 'nav-label' }, label), h('span', { class: 'nav-step', 'aria-hidden': 'true' }, String(i + 1))));
+      }, icon(ic), h('span', { class: 'nav-label' }, label), h('span', { class: 'nav-step', 'aria-hidden': 'true' }, String(i + 1))))].filter(Boolean);
     }));
     const foot = $('#sidebar-foot');
     foot.replaceChildren(
@@ -672,20 +692,30 @@
       } catch (e) { if (e.code === 'NOT_FOUND') openErr.textContent = '找不到這個專案 ID。'; else showError(e, '無法開啟專案'); }
     } },
     h('div', { class: 'field' }, h('label', { for: 'pj-id' }, '專案 ID'), h('input', { id: 'pj-id', class: 'input mono', placeholder: 'p_…', oninput: (e) => { openId = e.target.value; } }),
-      h('span', { class: 'hint' }, '本機服務目前沒有「列出所有專案」的 API，因此只顯示這台瀏覽器曾開啟過的專案。')),
+      h('span', { class: 'hint' }, '通常直接從右側清單開啟即可；這裡用於貼上別處取得的專案 ID。')),
     openErr, h('div', { class: 'row' }, h('span', { class: 'grow' }), btn('開啟', { icon: 'open', type: 'submit' })));
 
-    const recent = store.get('sg.recent', []);
-    const recentList = recent.length
-      ? h('div', { class: 'roots' }, recent.map((r) => h('div', { class: 'root-item' }, icon('film'),
-        h('div', { class: 'grow' }, h('div', null, r.name || r.id), h('div', { class: 'mono faint' }, r.id)),
-        btn('開啟', { sm: true, onclick: () => { setProject(r.id, r.name); go('#/home'); } }))))
-      : h('p', { class: 'faint' }, '還沒有開啟過的專案。');
+    // Project list from the service; this browser's recent list is only a fallback.
+    let listTitle = '本機專案', listNote = null, items = [];
+    try {
+      const rows = await api('GET', '/projects');
+      items = (rows || []).map((r) => ({ id: r.project_id || r.id, name: r.name, purpose: r.purpose, at: r.created_at }));
+    } catch (e) {
+      listTitle = '最近開啟（離線清單）';
+      listNote = banner('warn', '無法取得專案清單', (NEXT_STEP[e.code] || '請稍後再試。') + ' 下面只列出這台瀏覽器曾開啟過的專案。');
+      items = store.get('sg.recent', []).map((r) => ({ id: r.id, name: r.name }));
+    }
+    const recentList = h('div', null, listNote, items.length
+      ? h('div', { class: 'roots' }, items.map((r) => h('div', { class: 'root-item' }, icon('film'),
+        h('div', { class: 'grow' }, h('div', null, r.name || r.id, r.id === S.pid ? h('span', { class: 'faint small' }, '（目前專案）') : null),
+          h('div', { class: 'mono faint small' }, [r.id, r.purpose, r.at ? fmtDate(r.at) : null].filter(Boolean).join(' · '))),
+        btn('開啟', { sm: true, kind: r.id === S.pid ? 'ghost' : '', onclick: () => { setProject(r.id, r.name); go('#/home'); } }))))
+      : h('p', { class: 'faint' }, '還沒有專案。先在左側建立一個。'));
 
     return h('div', null,
       pageHead('選擇或建立專案', '專案包含一組需求（腳本鏡頭清單）與授權的素材資料夾。'),
       h('div', { class: 'grid-2' }, panel('建立新專案', create, { icon: 'plus' }),
-        h('div', { class: 'stack' }, panel('開啟既有專案', open, { icon: 'open' }), panel('最近開啟', recentList, { icon: 'clock' }))));
+        h('div', { class: 'stack' }, panel('開啟既有專案', open, { icon: 'open' }), panel(listTitle + '（' + items.length + '）', recentList, { icon: 'clock' }))));
   };
 
   // ---------- 1 home
@@ -716,22 +746,23 @@
     }
 
     // KPI cards
-    const kpi = (cls, ic, label, val, ratio, foot, barCls) => {
+    const kpi = (cls, ic, label, val, ratio, foot) => {
       const na = val == null;
+      const m = na ? null : /^([\d.]+)\s*(.*)$/.exec(String(val));
+      const value = h('div', { class: 'k-value' + (na ? ' na' : ''), role: 'img', 'aria-label': label + '：' + (na ? 'N/A，無法計算' : val) },
+        na ? 'N/A' : (m ? [h('span', { class: 'k-num' }, m[1]), h('span', { class: 'k-unit' }, m[2])] : val));
       return h('div', { class: 'panel kpi ' + cls },
         h('div', { class: 'k-label' }, icon(ic), label),
-        h('div', { class: 'k-value' + (na ? ' na' : '') }, na ? 'N/A' : val),
-        ratio === undefined ? null : h('div', { class: 'bar ' + (na ? 'na' : barCls || ''), role: 'img', 'aria-label': na ? label + '：無法計算' : label + '：' + val },
-          na ? null : h('span', { style: 'width:' + Math.max(0, Math.min(100, ratio * 100)).toFixed(1) + '%' })),
+        h('div', { class: 'k-body' }, value, ratio === undefined ? null : ring(na ? null : ratio)),
         h('div', { class: 'k-foot' }, foot));
     };
-    const noRun = !cov || !cov.run || !c;
+    const noRun = !cov || !cov.run || !c;          // human coverage is still known without a run
     const denom = c && c.denominator_weight != null ? '分母：已確認的必要需求權重 ' + c.denominator_weight : '';
     out.push(h('div', { class: 'kpis' },
       kpi('human', 'checkc', '人工確認覆蓋', c ? fmtPct(c.human_confirmed) : null, c ? (c.human_confirmed == null ? null : c.human_confirmed) : null,
-        noRun ? '尚無分析快照' : (c.human_confirmed == null ? '尚無已確認的必要需求' : denom), 'green'),
+        !c ? '尚無資料' : (c.human_confirmed == null ? '分母為 0：尚無已確認的必要需求' : denom), 'green'),
       kpi('ai', 'sparkle', 'AI 候選覆蓋', c ? fmtPct(c.ai_candidate) : null, c ? c.ai_candidate : null,
-        noRun ? '尚無分析快照' : (c.ai_candidate == null ? (cov.outdated ? '結果已過期，重新分析後才會顯示' : '無法計算') : '候選仍需人工確認'), ''),
+        noRun ? '尚無分析快照，分析後才會顯示' : (c.ai_candidate == null ? (cov.outdated ? '結果已過期，重新分析後才會顯示' : '無法計算') : '候選仍需人工確認'), ''),
       kpi('prog', 'activity', '分析進度', c ? fmtPct(c.analysis_progress) : null, c ? c.analysis_progress : null,
         noRun ? '尚無分析快照' : (c.analysis_progress == null ? '範圍內沒有可分析的素材' : '已分析素材佔納入範圍的比例'), 'cyan'),
       kpi('unk', 'help', '未能自動判定', c && c.unknown_count != null ? c.unknown_count + ' 項' : null, undefined,
@@ -942,7 +973,8 @@
         const r = await api('POST', P() + '/assets/import', { root_id: root.id, rel_paths: null });
         importOut.replaceChildren(importResult(r));
         const fresh = await api('GET', P() + '/assets');
-        tableBox.replaceChildren(assetTable(fresh, filter));
+        tableBox.replaceChildren(fresh.length ? assetTable(fresh, filter, () => render())
+          : empty('film', '尚未加入素材，現在不能判斷是否缺鏡頭。', '這個資料夾沒有可匯入的影片；請確認路徑或副檔名。'));
         await loadProject();
       } catch (e) { importOut.replaceChildren(); showError(e, '匯入失敗'); }
     };
@@ -974,7 +1006,7 @@
     if (counts.failed) out.push(banner('warn', '這 ' + counts.failed + ' 支影片尚未完成解析；目前結果只涵蓋其餘素材。', '下表以紅色標示失敗的檔案與原因。修正後可重新匯入或重新分析。'));
 
     const tableBox = h('div');
-    tableBox.append(assets.length ? assetTable(assets, filter) : empty('film', '尚未加入素材，現在不能判斷是否缺鏡頭。', '授權資料夾後按「匯入整個資料夾」。'));
+    tableBox.append(assets.length ? assetTable(assets, filter, () => render()) : empty('film', '尚未加入素材，現在不能判斷是否缺鏡頭。', '授權資料夾後按「匯入整個資料夾」。'));
     out.push(panel('素材（' + assets.length + '）', tableBox, { icon: 'film', raw: true }));
     return h('div', { class: 'stack' }, out);
   };
@@ -994,7 +1026,32 @@
           : h('p', { class: 'faint small' }, '沒有被拒絕的檔案。')));
   }
 
-  function assetTable(assets, filter) {
+  // Exclude needs a reason; the cell turns into a small inline form.
+  function excludeCell(a, onChanged) {
+    const cell = h('div');
+    const name = baseName((a.locations || [])[0] || a.asset_id);
+    const showBtn = () => cell.replaceChildren(btn('排除', { sm: true, kind: 'ghost', icon: 'ban', aria: '排除 ' + name, onclick: showForm }));
+    const showForm = () => {
+      const inp = h('input', { class: 'input', style: 'min-width:180px', placeholder: '排除理由（必填）', 'aria-label': name + ' 的排除理由' });
+      const ok = btn('確認排除', { sm: true, kind: 'danger', disabled: true });
+      inp.addEventListener('input', () => { ok.disabled = !inp.value.trim(); });
+      inp.addEventListener('keydown', (e) => { if (e.key === 'Escape') showBtn(); if (e.key === 'Enter' && inp.value.trim()) ok.click(); });
+      ok.addEventListener('click', async () => {
+        try {
+          await api('POST', P() + '/assets/' + encodeURIComponent(a.asset_id) + '/exclude', { reason: inp.value.trim() });
+          toast({ kind: 'ok', title: '已排除 ' + name, text: '這支素材不再列入分析範圍；覆蓋結果需重新分析。' });
+          if (onChanged) onChanged();
+        } catch (e) { showError(e, '排除失敗'); }
+      });
+      cell.replaceChildren(h('div', { style: 'display:flex;flex-direction:column;gap:6px' }, inp,
+        h('div', { class: 'row', style: 'gap:6px;justify-content:flex-end' }, btn('取消', { sm: true, kind: 'ghost', onclick: showBtn }), ok)));
+      inp.focus();
+    };
+    showBtn();
+    return cell;
+  }
+
+  function assetTable(assets, filter, onChanged) {
     const counts = {};
     assets.forEach((a) => { counts[a.status] = (counts[a.status] || 0) + 1; });
     const wrap = h('div');
@@ -1005,7 +1062,7 @@
         Object.keys(ASSET_ST).filter((k) => counts[k]).map((k) => h('button', { type: 'button', 'aria-pressed': String(f === k), onclick: () => draw(k) },
           icon(ASSET_ST[k].icon), ASSET_ST[k].zh, h('span', { class: 'count' }, String(counts[k])))));
       const tbl = h('table', { class: 'tbl' },
-        h('thead', null, h('tr', null, ['檔案', '狀態', '編碼', '解析度', '影格率', '長度', '警示／錯誤'].map((t) => h('th', { scope: 'col' }, t)))),
+        h('thead', null, h('tr', null, ['檔案', '狀態', '編碼', '解析度', '影格率', '長度', '警示／錯誤', '動作'].map((t, i) => h('th', { scope: 'col', class: i === 0 ? 'col-file' : (i === 7 ? 'col-act' : null) }, t)))),
         h('tbody', null, rows.map((a) => {
           const pr = a.probe || {};
           const warns = [].concat(pr.warnings || []);
@@ -1018,13 +1075,16 @@
             h('td', null, pr.codec || '—'),
             h('td', { class: 'num' }, pr.width ? pr.width + '×' + pr.height + (pr.rotation ? ' · 旋轉 ' + pr.rotation + '°' : '') : '—'),
             h('td', { class: 'num' }, pr.avg_fps ? Number(pr.avg_fps).toFixed(2) + ' fps' : '—',
-              pr.vfr_suspected ? h('div', null, chip({ zh: '疑似可變影格率', icon: 'alert', tone: 'amber' })) : null),
-            h('td', { class: 'num mono' }, fmtTime(a.duration_ms != null ? a.duration_ms : pr.duration_ms)),
+              pr.vfr_suspected ? h('div', { style: 'margin-top:4px' }, chip({ zh: 'VFR', icon: 'alert', tone: 'amber' }, { title: '疑似可變影格率', aria: '疑似可變影格率（VFR）' })) : null),
+            h('td', { class: 'num mono' }, (() => { const d = a.duration_ms != null ? a.duration_ms : pr.duration_ms; return d ? fmtTime(d) : '—'; })()),
             h('td', null,
-              a.error_code || a.error_msg ? h('div', { class: 'err-line' }, [a.error_code, a.error_msg].filter(Boolean).join('：')) : null,
+              a.status === 'excluded'
+                ? h('div', { class: 'muted small' }, '排除理由：' + (a.error_msg || '未提供'))
+                : (a.error_code || a.error_msg ? h('div', { class: 'err-line' }, [a.error_code, a.error_msg].filter(Boolean).join('：')) : null),
               pr.supported === false ? h('div', { class: 'err-line' }, '不支援：' + (pr.unsupported_reason || '未提供原因')) : null,
               warns.map((w) => h('div', { class: 'warn-line', title: w }, '⚠ ' + (WARN_ZH[w] || w))),
-              !a.error_code && !a.error_msg && pr.supported !== false && !warns.length ? h('span', { class: 'faint' }, '—') : null));
+              !a.error_code && !a.error_msg && pr.supported !== false && !warns.length ? h('span', { class: 'faint' }, '—') : null),
+            h('td', { class: 'cell-actions' }, a.status === 'excluded' ? h('span', { class: 'faint small' }, '—') : excludeCell(a, onChanged)));
         })));
       wrap.replaceChildren(h('div', { style: 'padding:12px 16px;border-bottom:1px solid var(--line-soft)' }, seg),
         rows.length ? h('div', { class: 'table-wrap' }, tbl) : h('p', { class: 'faint', style: 'padding:16px' }, '沒有符合篩選的素材。'));
@@ -1078,7 +1138,7 @@
         h('button', { type: 'button', 'aria-pressed': String(k === g), onclick: () => draw(k) }, icon(gLabel[k][1]), gLabel[k][0], h('span', { class: 'count' }, String(rows.filter(groups[k]).length)))));
       const tbl = h('table', { class: 'tbl matrix' },
         h('thead', null, h('tr', null,
-          h('th', { scope: 'col', class: 'col-id' }, 'ID'), h('th', { scope: 'col' }, '需求'), h('th', { scope: 'col', class: 'col-auto' }, '自動判定（AI）'),
+          h('th', { scope: 'col', class: 'col-id' }, 'ID'), h('th', { scope: 'col', class: 'col-req' }, '需求'), h('th', { scope: 'col', class: 'col-auto' }, '自動判定（AI）'),
           h('th', { scope: 'col', class: 'col-human' }, '人工狀態'), h('th', { scope: 'col', class: 'col-reason' }, '原因'), h('th', { scope: 'col', class: 'col-thumb' }, '最佳候選'),
           h('th', { scope: 'col', class: 'col-act' }, h('span', { class: 'sr-only' }, '動作')))),
         h('tbody', null, vis.map((row) => {
@@ -1097,7 +1157,7 @@
             h('td', null, reasonList(row.auto && row.auto.reasons)),
             h('td', null, c ? thumb(c.asset_id, c.start_ms, r.source_text + ' 的最佳候選') : noThumb(row.auto ? '沒有候選' : '—'),
               c ? h('div', { class: 'faint small mono', style: 'margin-top:4px' }, fmtTime(c.start_ms) + '–' + fmtTime(c.end_ms)) : null),
-            h('td', { class: 'cell-actions' }, h('a', { class: 'btn sm' + (c ? ' primary' : ''), href: '#/evidence/' + encodeURIComponent(r.requirement_id) }, icon('eye'), h('span', null, '開啟證據'))));
+            h('td', { class: 'cell-actions' }, h('a', { class: 'btn sm' + (c ? ' primary' : ''), href: '#/evidence/' + encodeURIComponent(r.requirement_id), title: '開啟證據', 'aria-label': '開啟 ' + r.requirement_id + ' 的證據' }, icon('eye'), h('span', { class: 'act-label' }, '開啟證據'))));
         })));
       tableBox.replaceChildren(h('div', { class: 'row', style: 'padding:12px 16px;border-bottom:1px solid var(--line-soft)' }, seg),
         vis.length ? h('div', { class: 'table-wrap' }, tbl) : h('p', { class: 'faint', style: 'padding:16px' }, '沒有符合篩選的需求。'));
@@ -1109,7 +1169,8 @@
 
   // ---------- 5 evidence viewer
   SCREENS.evidence = async function (params) {
-    const [{ cov, rows }, assets] = await Promise.all([coverageRows(), api('GET', P() + '/assets')]);
+    const [{ cov, rows }, assets, decisions] = await Promise.all([coverageRows(), api('GET', P() + '/assets'),
+      api('GET', P() + '/decisions').catch(() => null)]);
     if (!rows.length) return h('div', null, pageHead('證據檢視器'), panel(null, empty('eye', '還沒有需求', '建立需求並分析後，才能檢視證據。', [btn('需求編輯器', { href: '#/requirements/new', kind: 'primary' })]), { raw: true }));
     let rid = params[0];
     if (!rid) { const withC = rows.find((r) => r.auto && r.auto.candidates && r.auto.candidates.length); rid = (withC || rows[0]).requirement.requirement_id; }
@@ -1167,7 +1228,7 @@
 
     // center: player + timeline + candidates
     const startOff = asset && asset.probe && asset.probe.start_ms ? asset.probe.start_ms : 0;
-    const video = h('video', { preload: 'auto', playsinline: true, muted: true, 'aria-label': '候選片段影片' });
+    const video = h('video', { preload: 'metadata', playsinline: true, muted: true, 'aria-label': '候選片段影片' });
     const overlay = h('div', { class: 'p-overlay' });
     const player = h('div', { class: 'player' }, video, overlay,
       h('div', { class: 'p-badge' }, cand ? chip({ zh: '候選 ' + (ci + 1) + ' / ' + cands.length, icon: 'target', tone: 'violet' }) : null));
@@ -1187,12 +1248,10 @@
         overlay.style.background = 'linear-gradient(transparent 55%, rgba(0,0,0,.7))';
         overlay.style.justifyContent = 'flex-end';
       } else {
-        videoUrl(cand.asset_id).then((u) => { video.src = u; }, (e) => {
-          overlay.replaceChildren(icon('alert'), h('strong', null, '無法載入影片'), h('span', { class: 'small' }, NEXT_STEP[e.code] || e.message));
-        });
+        videoUrl(cand.asset_id).then((u) => { video.src = u; });
       }
       video.addEventListener('loadedmetadata', () => { overlay.remove(); seekMs(cand.start_ms); });
-      video.addEventListener('error', () => { overlay.replaceChildren(icon('alert'), h('strong', null, '瀏覽器無法播放這個檔案'), h('span', { class: 'small' }, '編碼可能不受瀏覽器支援；仍可用縮圖與時間碼複核，或在剪輯軟體中開啟原檔。')); if (!overlay.isConnected) player.append(overlay); });
+      video.addEventListener('error', () => { overlay.replaceChildren(icon('alert'), h('strong', null, '無法播放這個檔案'), h('span', { class: 'small' }, '可能原因：素材離線、編碼不受瀏覽器支援，或工作階段已過期（請重新整理頁面）。仍可用縮圖與時間碼複核，或在剪輯軟體中開啟原檔。')); if (!overlay.isConnected) player.append(overlay); });
       let raf = 0;
       const watch = () => {
         const ms = curMs();
@@ -1260,7 +1319,8 @@
         h('span', null, '快捷鍵：空白鍵 播放／暫停 · J 起點 · L 終點 · [ ] 切換候選')) : null,
       h('section', { class: 'panel', style: 'margin-top:14px', 'aria-label': '這個需求的所有候選' },
         h('div', { class: 'panel-head' }, h('h2', null, icon('target'), '這個需求的候選（' + cands.length + '）')),
-        h('div', { class: 'panel-body' }, candList)));
+        h('div', { class: 'panel-body' }, candList)),
+      h('div', { style: 'margin-top:14px' }, historyPanel(req, decisions, assets)));
 
     // right: conditions + actions
     const conds = cand ? cand.conditions || [] : [];
@@ -1293,36 +1353,79 @@
 
     return h('div', null,
       h('div', { class: 'row', style: 'margin-bottom:12px' }, btn('覆蓋矩陣', { sm: true, kind: 'ghost', icon: 'left', href: '#/coverage' }),
-        h('h1', { class: 'grow', style: 'font-size:18px' }, '證據檢視器'),
+        h('div', { class: 'grow' }, eyebrow(NAME_EN.evidence), h('h1', { style: 'font-size:18px' }, '證據檢視器')),
         cov && cov.outdated && cov.run ? chip(AUTO_STALE, { text: '分析快照已過期' }) : null),
       head,
       h('div', { class: 'ev-grid' }, left, center, right));
   };
+
+  const DECISION = {
+    accepted: { zh: '接受', icon: 'check', tone: 'green' },
+    rejected: { zh: '拒絕', icon: 'x', tone: 'red' },
+    overridden: { zh: '人工接受例外', icon: 'flag', tone: 'amber' },
+  };
+  // One write path for every review decision. On success the screen re-renders so the human chip,
+  // the history and the coverage numbers all come from the service again.
+  async function postReview(req, decision, payload, okText, errBox) {
+    try {
+      const r = await api('POST', P() + '/review', Object.assign({ requirement_id: req.requirement_id, revision: req.revision, decision, reason: '', source: 'model' }, payload));
+      toast({ kind: 'ok', title: '已記錄：' + okText, text: '決策綁定需求第 ' + req.revision + ' 版' + (r && r.decision_id ? '（' + r.decision_id + '）' : '') + '。' });
+      render();
+      return true;
+    } catch (e) {
+      if (e.code === 'STALE_REVISION' && errBox) errBox.replaceChildren(banner('error', '需求已被修改，請重新載入', '這筆決策沒有寫入。', [btn('重新載入', { sm: true, icon: 'refresh', onclick: () => render() })]));
+      else showError(e, '決策沒有寫入');
+      return false;
+    }
+  }
+
+  // Review log for one requirement, newest first. The latest decision on a segment wins; undo = a new
+  // "rejected" decision on the same segment.
+  function historyPanel(req, decisions, assets) {
+    if (decisions == null) return panel('決策紀錄', h('p', { class: 'faint small' }, '無法載入決策紀錄；重新整理後再試。'), { icon: 'clock' });
+    const bySha = Object.fromEntries(assets.map((a) => [a.sha256, a]));
+    const mine = decisions.filter((d) => d.requirement_id === req.requirement_id);
+    const key = (d) => [d.revision, d.asset_sha, d.start_ms, d.end_ms].join('|');
+    const latest = new Map();
+    mine.forEach((d, i) => latest.set(key(d), i));
+    const errBox = h('div');
+    if (!mine.length) return panel('決策紀錄（0）', h('p', { class: 'faint small' }, '這個需求還沒有人工決策。'), { icon: 'clock' });
+    const items = mine.map((d, i) => ({ d, i })).reverse().map(({ d, i }) => {
+      const a = bySha[d.asset_sha];
+      const def = DECISION[d.decision] || { zh: d.decision, icon: 'help', tone: 'slate' };
+      const isLatest = latest.get(key(d)) === i;
+      const oldRev = d.revision !== req.revision;
+      const state = oldRev ? chip({ zh: '第 ' + d.revision + ' 版，不套用目前版本', icon: 'clock', tone: 'slate' }, { outline: true })
+        : isLatest ? chip({ zh: '目前有效', icon: 'checkc', tone: 'cyan' }, { outline: true })
+          : chip({ zh: '已被後續決策取代', icon: 'dashed', tone: 'slate' }, { outline: true });
+      const canUndo = isLatest && !oldRev && d.decision !== 'rejected' && a && a.status !== 'excluded';
+      return h('li', { class: 'hist-item' + (isLatest && !oldRev ? '' : ' superseded') },
+        h('div', { class: 'row', style: 'gap:6px' }, chip(def, { human: true, aria: '決策：' + def.zh }), state, h('span', { class: 'grow' }),
+          canUndo ? btn('撤銷', { sm: true, kind: 'ghost', icon: 'back', aria: '撤銷這筆' + def.zh, onclick: () =>
+            postReview(req, 'rejected', { asset_id: a.asset_id, start_ms: d.start_ms, end_ms: d.end_ms, source: d.source === 'manual' ? 'manual' : 'model', reason: '撤銷先前的「' + def.zh + '」決策' }, '撤銷「' + def.zh + '」', errBox) }) : null),
+        h('div', { class: 'mono small' }, (a ? baseName((a.locations || [])[0] || a.asset_id) : '素材 ' + short(d.asset_sha, 10)) + ' · ' + fmtTime(d.start_ms) + '–' + fmtTime(d.end_ms)),
+        d.reason ? h('div', { class: 'small muted' }, '理由：' + d.reason) : null,
+        h('div', { class: 'faint small' }, [d.source === 'manual' ? '人工片段' : '模型候選', d.actor, fmtDate(d.ts)].filter(Boolean).join(' · ')));
+    });
+    return panel('決策紀錄（' + mine.length + '）', h('div', null, errBox, h('ul', { class: 'hist' }, items),
+      h('p', { class: 'faint small', style: 'margin-top:10px' }, '同一片段以最後一筆決策為準；撤銷會新增一筆「拒絕」，不會刪除紀錄。')), { icon: 'clock' });
+  }
 
   function decisionPanel(row, cand, assets, ctx) {
     const req = row.requirement;
     const box = h('div', { class: 'stack' });
     const sub = h('div');
     const done = h('div', { class: 'decided', 'aria-live': 'polite' });
-    const send = async (decision, payload, okText) => {
-      try {
-        const r = await api('POST', P() + '/review', Object.assign({ requirement_id: req.requirement_id, revision: req.revision, decision, reason: '', source: 'model' }, payload));
-        done.replaceChildren(banner('info', '已記錄：' + okText, '決策綁定需求第 ' + req.revision + ' 版' + (r && r.decision_id ? '（' + r.decision_id + '）' : '') + '。人工狀態已更新。'));
-        sub.replaceChildren();
-        return true;
-      } catch (e) {
-        if (e.code === 'STALE_REVISION') done.replaceChildren(banner('error', '需求已被修改，請重新載入', '這筆決策沒有寫入。', [btn('重新載入', { sm: true, icon: 'refresh', onclick: () => render() })]));
-        else showError(e, '決策沒有寫入');
-        return false;
-      }
-    };
+    const send = (decision, payload, okText) => postReview(req, decision, payload, okText, done);
     const rng = cand ? { asset_id: cand.asset_id, start_ms: cand.start_ms, end_ms: cand.end_ms, source: cand.source === 'manual' ? 'manual' : 'model' } : null;
     const noteIn = h('textarea', { class: 'input', rows: 2, id: 'dc-note', placeholder: '（選填）例：手持晃動太大' });
 
     const openSub = (node) => { sub.replaceChildren(node); const f = node.querySelector('input, textarea, select'); if (f) f.focus(); };
 
     const fixForm = () => {
-      const analyzed = assets.filter((a) => a.status !== 'excluded');
+      // only assets that can hold a segment: analyzed first, then pending; failed/missing/excluded are left out
+      const rank = { analyzed: 0, analyzing: 1, pending: 2 };
+      const analyzed = assets.filter((a) => a.status in rank).sort((x, y) => rank[x.status] - rank[y.status]);
       let aid = cand ? cand.asset_id : (analyzed[0] && analyzed[0].asset_id);
       const sIn = h('input', { class: 'input mono', id: 'fx-s', value: cand ? fmtTime(cand.start_ms) : '00:00.000', inputmode: 'decimal' });
       const eIn = h('input', { class: 'input mono', id: 'fx-e', value: cand ? fmtTime(cand.end_ms) : '00:03.000', inputmode: 'decimal' });
@@ -1446,9 +1549,21 @@
     };
     const yes = (b, y, n) => b ? chip({ zh: y, icon: 'checkc', tone: 'green' }) : chip({ zh: n, icon: 'xc', tone: 'slate' });
     const out = [pageHead('裝置與診斷', '顯示實際執行的後端與模型；無法量測的指標一律顯示 N/A。', [btn('重新偵測', { icon: 'refresh', onclick: () => { refreshStatus(); render(); } })])];
-    if (!dev.available) out.push(banner('info', 'UGen300 未連線', '目前使用明示的 CPU 參考後端執行；所有結果與報告都會標示實際後端。'));
+    const npuTxt = hl.npu_active == null ? 'N/A' : (hl.npu_active ? '是' : '否');
+    out.push(h('section', { class: 'panel hero', 'aria-label': 'UGen300 裝置狀態' },
+      h('div', { class: 'hero-main' },
+        eyebrow('EDGE AI DEVICE'),
+        h('div', { class: 'hero-title' }, 'UGen300'),
+        h('p', { class: 'muted' }, dev.available ? '已偵測到裝置。只有在實機驗證過的模型執行時，才會回報 NPU 結果。'
+          : 'UGen300 未連線；目前由明示的 CPU 參考後端執行，所有結果與報告都會標示實際後端。'),
+        dev.reason ? h('p', { class: 'mono small faint', style: 'margin-top:6px' }, dev.reason) : null),
+      h('div', { class: 'tiles' },
+        tile('連線狀態', dev.available ? chip({ zh: '已連線', icon: 'plug', tone: 'green' }) : chip({ zh: '未連線', icon: 'plugoff', tone: 'orange' }), dev.available ? 'green' : 'orange'),
+        tile('執行後端', h('span', { class: 'mono' }, be === 'not loaded' ? '尚未載入' : be), 'violet'),
+        tile('相容性驗證', yes(dev.compatibility_verified, '已在實機驗證', '未驗證'), dev.compatibility_verified ? 'green' : 'slate'),
+        tile('NPU 執行中', h('span', { class: npuTxt === 'N/A' ? 'faint' : null }, npuTxt), 'cyan'))));
     out.push(h('div', { class: 'grid-2' },
-      panel('UGen300 裝置', kvs([
+      panel('裝置詳細資訊', kvs([
         ['連線狀態', dev.available ? chip({ zh: '已連線', icon: 'plug', tone: 'green' }) : chip({ zh: '未連線', icon: 'plugoff', tone: 'orange' })],
         ['型號', dev.model], ['介面', dev.interface], ['Runtime', dev.runtime], ['驅動程式', dev.driver], ['韌體', dev.firmware],
         ['相容性驗證', yes(dev.compatibility_verified, '已在實機驗證', '未驗證')],
