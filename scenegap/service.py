@@ -178,7 +178,7 @@ class SceneGap:
                 self.db.x("INSERT OR IGNORE INTO asset_locations VALUES(?,?,?,?)", (ex["asset_id"], root_id, rel, "ok"))
                 accepted.append({"path": rel, "asset_id": ex["asset_id"], "duplicate_of": ex["asset_id"]})
                 continue
-            aid = "a_" + sha[:12]
+            aid = "a_" + hashlib.sha256((pid + sha).encode()).hexdigest()[:12]     # unique per project; same file may sit in several projects
             status, code, msg, pr, dur = "pending", None, None, None, 0
             try:
                 pr = probe(full)
@@ -230,7 +230,8 @@ class SceneGap:
         p = self._index_path(sha)
         if not os.path.exists(p):
             return None
-        z = np.load(p, allow_pickle=False)
+        with np.load(p, allow_pickle=False) as f:                # read fully and close: Windows cannot replace an open file
+            z = {k: f[k] for k in f.files}
         meta = json.loads(str(z["meta"]))
         if meta["fingerprint"] != self.backend.manifest.fingerprint:
             return None                                       # never mix model versions in one index (TC-030)

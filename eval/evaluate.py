@@ -27,7 +27,7 @@ from scenegap.domain.coverage import _semantic_queries, candidates_for  # noqa: 
 from scenegap.service import SceneGap, req_from_dict  # noqa: E402
 from split import split  # noqa: E402
 
-RES = os.path.join(HERE, "results")
+RES = os.environ.get("SG_EVAL_RES", os.path.join(HERE, "results"))           # override only for dry runs
 GRID = [round(0.150 + 0.005 * i, 3) for i in range(51)]
 SAMPLE_MS = 1000
 MATCH_MIN_S = 0.5
@@ -46,9 +46,9 @@ def wilson(k: int, n: int, z: float = 1.96):
 
 
 def load_inputs():
-    man = json.load(open(os.path.join(ROOT, "datasets", "manifests", "commons_manifest.json"), encoding="utf8"))
+    man = json.load(open(os.environ.get("SG_EVAL_MANIFEST", os.path.join(ROOT, "datasets", "manifests", "commons_manifest.json")), encoding="utf8"))
     reqs = json.load(open(os.path.join(HERE, "requirements.json"), encoding="utf8"))
-    gold = json.load(open(os.path.join(HERE, "labels", "gold.json"), encoding="utf8"))
+    gold = json.load(open(os.environ.get("SG_EVAL_GOLD", os.path.join(HERE, "labels", "gold.json")), encoding="utf8"))
     clips = man["clips"]
     sp = split(clips)
     return clips, sp, reqs, gold
@@ -266,7 +266,11 @@ def perf(a):
     for dev in devices:
         work = os.path.join(a.work, "perf_" + dev)
         cal = json.load(open(os.path.join(RES, "calibration.json"), encoding="utf8"))
+        t0 = time.perf_counter()
         svc, be = make_service(work, dev, tau=cal["chosen"]["tau"], crop=cal["crop"])
+        cold_s = time.perf_counter() - t0                       # model load (cold start)
+        from PIL import Image
+        be.encode_images([Image.new("RGB", (640, 360))] * 4)    # warm-up, not timed
         pick = names[: a.perf_clips]
         per_clip = []
         for n in pick:
@@ -289,7 +293,7 @@ def perf(a):
             top = np.argpartition(-s, 5)[:5]
             top = top[np.argsort(-s[top])]
             lat.append((time.perf_counter() - t0) * 1000)
-        rows[be.name] = {"per_clip": per_clip, "search_ms": {"n": len(lat), "segments": int(len(E)), "p50": round(float(np.percentile(lat, 50)), 2),
+        rows[be.name] = {"model_load_s": round(cold_s, 2), "per_clip": per_clip, "search_ms": {"n": len(lat), "segments": int(len(E)), "p50": round(float(np.percentile(lat, 50)), 2),
                                                              "p95": round(float(np.percentile(lat, 95)), 2)},
                          "device": torch.cuda.get_device_name(0) if dev == "cuda" else "desktop CPU"}
     out = {"measured_at": time.strftime("%Y-%m-%d %H:%M:%S"), "note": "reference backends on a desktop; UGen300 numbers: not_run", "backends": rows}

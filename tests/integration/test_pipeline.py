@@ -226,3 +226,20 @@ def test_config_change_marks_run_outdated_and_tau_is_per_fingerprint(tmp_path, m
         svc.compute_run(pid)
     svc.cfg["semantic_threshold"] = {be.manifest.fingerprint: 0.95}
     assert svc.compute_run(pid)["outcomes"]["SH-101"]["status"] == "candidate"
+
+
+def test_same_file_in_two_projects_reuses_index(tmp_path, media):
+    svc, be = make(tmp_path)
+    ids = []
+    for name in ("p1", "p2"):
+        pid = svc.create_project(name)
+        rid = svc.add_root(pid, str(media))
+        ids.append(svc.import_assets(pid, rid, ["two_shots.mp4"])["accepted"][0]["asset_id"])
+        svc.analyze_assets(pid)
+        assert svc.assets(pid)[0]["status"] == "analyzed"
+    assert ids[0] != ids[1]
+    calls = be.image_calls
+    pid3 = svc.create_project("p3")
+    svc.import_assets(pid3, svc.add_root(pid3, str(media)), ["two_shots.mp4"])
+    svc.analyze_assets(pid3)
+    assert be.image_calls == calls                       # same content + same model: no re-encoding
