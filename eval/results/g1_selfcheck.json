@@ -1,0 +1,38 @@
+{
+ "run_at": "2026-10-26 19:43:32",
+ "reference": "cpu-reference",
+ "candidate": "cuda-reference",
+ "self_check": true,
+ "frames": 662,
+ "queries": 13,
+ "dev_clips": 18,
+ "metrics": {
+  "G1a_median_cos": 1.0,
+  "G1a_p5_cos": 1.0,
+  "G1b_median_rho": 0.99999,
+  "G1b_min_rho": 0.99999,
+  "G1c_mean_top5": 1.0,
+  "G1c_mean_top10": 0.99231
+ },
+ "bars": {
+  "G1a_median_cos": 0.98,
+  "G1a_p5_cos": 0.95,
+  "G1b_median_rho": 0.95,
+  "G1b_min_rho": 0.85,
+  "G1c_mean_top5": 0.8,
+  "G1c_mean_top10": 0.85
+ },
+ "pass": {
+  "G1a_median_cos": true,
+  "G1a_p5_cos": true,
+  "G1b_median_rho": true,
+  "G1b_min_rho": true,
+  "G1c_mean_top5": true,
+  "G1c_mean_top10": true
+ },
+ "encode_s": {
+  "reference": 10.69,
+  "candidate": 1.67
+ },
+ "note": "harness self-check between two fp32 reference backends; says nothing about the UGen300"
+}
