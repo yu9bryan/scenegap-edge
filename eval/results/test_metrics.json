@@ -1,0 +1,1192 @@
+{
+ "tau": 0.225,
+ "crop": "center-crop",
+ "fingerprint": "14cc0f0204114234",
+ "backend": "cuda-reference",
+ "test_clips": [
+  "001_Vichy_-_Grand_Café__terrasse_sous_la_grêle.ogv.mp4",
+  "004_Rateel_cafe_music2.webm.mp4",
+  "005_Starbucks_en_la_aĉetcentro_Kristall__Tjumeno_.webm.mp4",
+  "007_Café_Lomi__Paris_-_Vimeo.webm.mp4",
+  "009_Coffee_Bean___Tea_Leaf_Process.webm.mp4",
+  "011_Color_sorter_coffeebeans.webm.mp4",
+  "013_Coffee_from_dan_2.webm.mp4",
+  "014_Traditional_Ethiopian_Coffee_Roasting_Ceremony.webm.mp4",
+  "015_Despulpadora.ogg.mp4",
+  "017_Sunday_Morning_Espresso_Routine_-_Grind___distribute___tamp___extraction__15-Sec.mp4",
+  "018_Кофемельница_JURA_43.webm.mp4",
+  "019_MoliendoCafeEnLicuadora_ohs02.webm.mp4",
+  "020_Espresso_video.ogv.mp4",
+  "021_Macro_Espresso_Process.webm.mp4",
+  "023_Pour_Over.ogv.mp4",
+  "025_Schritt_für_Schritt_-_Kaffeezubereitung_mit_der_Chemex.ogv.mp4",
+  "026_Latte_art_flower_-_01.ogv.mp4",
+  "027_Latte_art_leaf_-_01.ogv.mp4",
+  "031_How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.we.mp4",
+  "032_Sugar_falling_into_coffee.webm.mp4",
+  "033_Bosnian_coffee_with_rahat_lokum__Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_a.mp4",
+  "034_A_cup_of_Kenyan_Coffee.webm.mp4",
+  "036_Turkish_tea_2015.webm.mp4",
+  "037_Jane_pouring_beer_fast.webm.mp4",
+  "041_Empty_Streets_of_Paris_COVID19.webm.mp4",
+  "042_IrishTraditionalMusic-IrishPub-Tokyo-2016-2-24.webm.mp4"
+ ],
+ "project_size": 8,
+ "retrieval": {
+  "keyword": {
+   "recall_at_5": {
+    "k": 5,
+    "n": 11,
+    "p": 0.4545,
+    "lo": 0.2127,
+    "hi": 0.7199
+   },
+   "precision_at_5": {
+    "k": 8,
+    "n": 22,
+    "p": 0.3636,
+    "lo": 0.1973,
+    "hi": 0.5705
+   }
+  },
+  "single_frame": {
+   "recall_at_5": {
+    "k": 8,
+    "n": 11,
+    "p": 0.7273,
+    "lo": 0.4343,
+    "hi": 0.9025
+   },
+   "precision_at_5": {
+    "k": 22,
+    "n": 55,
+    "p": 0.4,
+    "lo": 0.2812,
+    "hi": 0.5319
+   }
+  },
+  "full": {
+   "recall_at_5": {
+    "k": 7,
+    "n": 11,
+    "p": 0.6364,
+    "lo": 0.3538,
+    "hi": 0.8483
+   },
+   "precision_at_5": {
+    "k": 18,
+    "n": 55,
+    "p": 0.3273,
+    "lo": 0.2181,
+    "hi": 0.459
+   }
+  }
+ },
+ "per_requirement": [
+  {
+   "requirement_id": "SH-01",
+   "query_en": "a photo of the outside of a cafe seen from the street",
+   "gold_clips": 3,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 2,
+    "correct": 1
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 3
+   },
+   "full": {
+    "returned": 5,
+    "correct": 2
+   }
+  },
+  {
+   "requirement_id": "SH-02",
+   "query_en": "a photo of the inside of a cafe with tables and chairs",
+   "gold_clips": 2,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 4,
+    "correct": 1
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 4
+   },
+   "full": {
+    "returned": 5,
+    "correct": 2
+   }
+  },
+  {
+   "requirement_id": "SH-03",
+   "query_en": "a close-up photo of roasted coffee beans",
+   "gold_clips": 1,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 3,
+    "correct": 0
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 1
+   },
+   "full": {
+    "returned": 5,
+    "correct": 0
+   }
+  },
+  {
+   "requirement_id": "SH-04",
+   "query_en": "a photo of a coffee grinder grinding coffee",
+   "gold_clips": 2,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 1,
+    "correct": 1
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 1
+   },
+   "full": {
+    "returned": 5,
+    "correct": 0
+   }
+  },
+  {
+   "requirement_id": "SH-05",
+   "query_en": "a photo of coffee being poured into a cup",
+   "gold_clips": 6,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 4,
+    "correct": 3
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 2
+   },
+   "full": {
+    "returned": 5,
+    "correct": 3
+   }
+  },
+  {
+   "requirement_id": "SH-06",
+   "query_en": "a close-up photo of a cup of coffee on a table",
+   "gold_clips": 8,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 5,
+    "correct": 0
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 0
+   },
+   "full": {
+    "returned": 5,
+    "correct": 1
+   }
+  },
+  {
+   "requirement_id": "SH-07",
+   "query_en": "a photo of a person drinking coffee from a cup",
+   "gold_clips": 1,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 0,
+    "correct": 0
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 0
+   },
+   "full": {
+    "returned": 5,
+    "correct": 0
+   }
+  },
+  {
+   "requirement_id": "SH-08",
+   "query_en": "two people sitting together in a cafe",
+   "gold_clips": 3,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 0,
+    "correct": 0
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 4
+   },
+   "full": {
+    "returned": 5,
+    "correct": 4
+   }
+  },
+  {
+   "requirement_id": "SH-09",
+   "query_en": "a photo of an espresso machine making espresso",
+   "gold_clips": 2,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 3,
+    "correct": 2
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 2
+   },
+   "full": {
+    "returned": 5,
+    "correct": 1
+   }
+  },
+  {
+   "requirement_id": "SH-10",
+   "query_en": "a photo of a bag of coffee beans",
+   "gold_clips": 2,
+   "status": "partial",
+   "reasons": [
+    "DURATION_UNKNOWN",
+    "NEEDS_MANUAL"
+   ],
+   "keyword": {
+    "returned": 0,
+    "correct": 0
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 0
+   },
+   "full": {
+    "returned": 5,
+    "correct": 0
+   }
+  },
+  {
+   "requirement_id": "SH-11",
+   "query_en": "a photo of a barista making coffee",
+   "gold_clips": 5,
+   "status": "candidate",
+   "reasons": [],
+   "keyword": {
+    "returned": 0,
+    "correct": 0
+   },
+   "single_frame": {
+    "returned": 5,
+    "correct": 5
+   },
+   "full": {
+    "returned": 5,
+    "correct": 5
+   }
+  }
+ ],
+ "simulation": {
+  "keyword": {
+   "gap_recall": {
+    "k": 34,
+    "n": 38,
+    "p": 0.8947,
+    "lo": 0.7587,
+    "hi": 0.9583
+   },
+   "wrong_reshoot_rate": {
+    "k": 22,
+    "n": 50,
+    "p": 0.44,
+    "lo": 0.3116,
+    "hi": 0.5769
+   },
+   "unknown_rate": {
+    "k": 0,
+    "n": 88,
+    "p": 0.0,
+    "lo": 0.0,
+    "hi": 0.0418
+   },
+   "false_candidate_rate": {
+    "k": 4,
+    "n": 38,
+    "p": 0.1053,
+    "lo": 0.0417,
+    "hi": 0.2413
+   },
+   "false_ready_rate": "N/A (no automatic completion; human confirmation required)"
+  },
+  "single_frame": {
+   "gap_recall": {
+    "k": 0,
+    "n": 38,
+    "p": 0.0,
+    "lo": 0.0,
+    "hi": 0.0918
+   },
+   "wrong_reshoot_rate": {
+    "k": 0,
+    "n": 50,
+    "p": 0.0,
+    "lo": 0.0,
+    "hi": 0.0714
+   },
+   "unknown_rate": {
+    "k": 0,
+    "n": 88,
+    "p": 0.0,
+    "lo": 0.0,
+    "hi": 0.0418
+   },
+   "false_candidate_rate": {
+    "k": 38,
+    "n": 38,
+    "p": 1.0,
+    "lo": 0.9082,
+    "hi": 1.0
+   },
+   "false_ready_rate": "N/A (no automatic completion; human confirmation required)"
+  },
+  "full": {
+   "gap_recall": {
+    "k": 0,
+    "n": 38,
+    "p": 0.0,
+    "lo": 0.0,
+    "hi": 0.0918
+   },
+   "wrong_reshoot_rate": {
+    "k": 0,
+    "n": 50,
+    "p": 0.0,
+    "lo": 0.0,
+    "hi": 0.0714
+   },
+   "unknown_rate": {
+    "k": 11,
+    "n": 88,
+    "p": 0.125,
+    "lo": 0.0713,
+    "hi": 0.2101
+   },
+   "false_candidate_rate": {
+    "k": 30,
+    "n": 38,
+    "p": 0.7895,
+    "lo": 0.6365,
+    "hi": 0.8893
+   },
+   "false_ready_rate": "N/A (no automatic completion; human confirmation required)"
+  }
+ },
+ "projects": [
+  {
+   "clips": [
+    "031_How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.we.mp4",
+    "026_Latte_art_flower_-_01.ogv.mp4",
+    "020_Espresso_video.ogv.mp4",
+    "007_Café_Lomi__Paris_-_Vimeo.webm.mp4",
+    "032_Sugar_falling_into_coffee.webm.mp4",
+    "027_Latte_art_leaf_-_01.ogv.mp4",
+    "041_Empty_Streets_of_Paris_COVID19.webm.mp4",
+    "037_Jane_pouring_beer_fast.webm.mp4"
+   ],
+   "requirements": {
+    "SH-01": {
+     "available": false,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-02": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-03": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-04": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-05": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-06": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-07": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-08": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-09": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-10": {
+     "available": false,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-11": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    }
+   }
+  },
+  {
+   "clips": [
+    "020_Espresso_video.ogv.mp4",
+    "015_Despulpadora.ogg.mp4",
+    "036_Turkish_tea_2015.webm.mp4",
+    "007_Café_Lomi__Paris_-_Vimeo.webm.mp4",
+    "018_Кофемельница_JURA_43.webm.mp4",
+    "025_Schritt_für_Schritt_-_Kaffeezubereitung_mit_der_Chemex.ogv.mp4",
+    "031_How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.we.mp4",
+    "026_Latte_art_flower_-_01.ogv.mp4"
+   ],
+   "requirements": {
+    "SH-01": {
+     "available": false,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-02": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-03": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-04": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-05": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-06": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-07": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-08": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-09": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-10": {
+     "available": true,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-11": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    }
+   }
+  },
+  {
+   "clips": [
+    "034_A_cup_of_Kenyan_Coffee.webm.mp4",
+    "041_Empty_Streets_of_Paris_COVID19.webm.mp4",
+    "027_Latte_art_leaf_-_01.ogv.mp4",
+    "005_Starbucks_en_la_aĉetcentro_Kristall__Tjumeno_.webm.mp4",
+    "013_Coffee_from_dan_2.webm.mp4",
+    "007_Café_Lomi__Paris_-_Vimeo.webm.mp4",
+    "036_Turkish_tea_2015.webm.mp4",
+    "004_Rateel_cafe_music2.webm.mp4"
+   ],
+   "requirements": {
+    "SH-01": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-02": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-03": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-04": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-05": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-06": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-07": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-08": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-09": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-10": {
+     "available": false,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-11": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    }
+   }
+  },
+  {
+   "clips": [
+    "036_Turkish_tea_2015.webm.mp4",
+    "033_Bosnian_coffee_with_rahat_lokum__Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_a.mp4",
+    "001_Vichy_-_Grand_Café__terrasse_sous_la_grêle.ogv.mp4",
+    "019_MoliendoCafeEnLicuadora_ohs02.webm.mp4",
+    "005_Starbucks_en_la_aĉetcentro_Kristall__Tjumeno_.webm.mp4",
+    "015_Despulpadora.ogg.mp4",
+    "018_Кофемельница_JURA_43.webm.mp4",
+    "034_A_cup_of_Kenyan_Coffee.webm.mp4"
+   ],
+   "requirements": {
+    "SH-01": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-02": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-03": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-04": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-05": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-06": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-07": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-08": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-09": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-10": {
+     "available": false,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-11": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    }
+   }
+  },
+  {
+   "clips": [
+    "015_Despulpadora.ogg.mp4",
+    "031_How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.we.mp4",
+    "032_Sugar_falling_into_coffee.webm.mp4",
+    "007_Café_Lomi__Paris_-_Vimeo.webm.mp4",
+    "013_Coffee_from_dan_2.webm.mp4",
+    "025_Schritt_für_Schritt_-_Kaffeezubereitung_mit_der_Chemex.ogv.mp4",
+    "005_Starbucks_en_la_aĉetcentro_Kristall__Tjumeno_.webm.mp4",
+    "019_MoliendoCafeEnLicuadora_ohs02.webm.mp4"
+   ],
+   "requirements": {
+    "SH-01": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-02": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-03": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-04": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-05": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-06": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-07": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-08": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-09": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-10": {
+     "available": true,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-11": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    }
+   }
+  },
+  {
+   "clips": [
+    "026_Latte_art_flower_-_01.ogv.mp4",
+    "034_A_cup_of_Kenyan_Coffee.webm.mp4",
+    "033_Bosnian_coffee_with_rahat_lokum__Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_a.mp4",
+    "011_Color_sorter_coffeebeans.webm.mp4",
+    "004_Rateel_cafe_music2.webm.mp4",
+    "007_Café_Lomi__Paris_-_Vimeo.webm.mp4",
+    "037_Jane_pouring_beer_fast.webm.mp4",
+    "018_Кофемельница_JURA_43.webm.mp4"
+   ],
+   "requirements": {
+    "SH-01": {
+     "available": true,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-02": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-03": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-04": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-05": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-06": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-07": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-08": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-09": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-10": {
+     "available": false,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-11": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    }
+   }
+  },
+  {
+   "clips": [
+    "032_Sugar_falling_into_coffee.webm.mp4",
+    "021_Macro_Espresso_Process.webm.mp4",
+    "031_How_to_brew_Coffee_using_the_laws_of_physics_-_with_the_Hario_Syphon_Technica.we.mp4",
+    "018_Кофемельница_JURA_43.webm.mp4",
+    "023_Pour_Over.ogv.mp4",
+    "033_Bosnian_coffee_with_rahat_lokum__Kujundziluk_and_Old_Bridge_in_Mostar_-_Bosnia_a.mp4",
+    "011_Color_sorter_coffeebeans.webm.mp4",
+    "001_Vichy_-_Grand_Café__terrasse_sous_la_grêle.ogv.mp4"
+   ],
+   "requirements": {
+    "SH-01": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-02": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-03": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-04": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-05": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-06": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-07": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-08": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-09": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-10": {
+     "available": false,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-11": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    }
+   }
+  },
+  {
+   "clips": [
+    "034_A_cup_of_Kenyan_Coffee.webm.mp4",
+    "004_Rateel_cafe_music2.webm.mp4",
+    "026_Latte_art_flower_-_01.ogv.mp4",
+    "032_Sugar_falling_into_coffee.webm.mp4",
+    "021_Macro_Espresso_Process.webm.mp4",
+    "005_Starbucks_en_la_aĉetcentro_Kristall__Tjumeno_.webm.mp4",
+    "020_Espresso_video.ogv.mp4",
+    "037_Jane_pouring_beer_fast.webm.mp4"
+   ],
+   "requirements": {
+    "SH-01": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-02": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-03": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-04": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-05": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-06": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-07": {
+     "available": false,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-08": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-09": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "candidate"
+    },
+    "SH-10": {
+     "available": false,
+     "full": "partial",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    },
+    "SH-11": {
+     "available": true,
+     "full": "candidate",
+     "single_frame": "candidate",
+     "keyword": "not_found"
+    }
+   }
+  }
+ ],
+ "review_load": {
+  "library_seconds": 838.9,
+  "requirements": 11,
+  "full_watch_seconds": 838.9,
+  "candidate_seconds_to_review": 317.1,
+  "note": "proxy only: footage seconds a person would play (each candidate counted at its lower-bound length, at least 1 s, at most 10 s) versus watching the library once; not a user-time measurement"
+ },
+ "sensitivity_lenient_gold": {
+  "retrieval": {
+   "keyword": {
+    "recall_at_5": {
+     "k": 6,
+     "n": 11,
+     "p": 0.5455,
+     "lo": 0.2801,
+     "hi": 0.7873
+    },
+    "precision_at_5": {
+     "k": 9,
+     "n": 22,
+     "p": 0.4091,
+     "lo": 0.2326,
+     "hi": 0.6127
+    }
+   },
+   "single_frame": {
+    "recall_at_5": {
+     "k": 8,
+     "n": 11,
+     "p": 0.7273,
+     "lo": 0.4343,
+     "hi": 0.9025
+    },
+    "precision_at_5": {
+     "k": 22,
+     "n": 55,
+     "p": 0.4,
+     "lo": 0.2812,
+     "hi": 0.5319
+    }
+   },
+   "full": {
+    "recall_at_5": {
+     "k": 7,
+     "n": 11,
+     "p": 0.6364,
+     "lo": 0.3538,
+     "hi": 0.8483
+    },
+    "precision_at_5": {
+     "k": 18,
+     "n": 55,
+     "p": 0.3273,
+     "lo": 0.2181,
+     "hi": 0.459
+    }
+   }
+  },
+  "simulation": {
+   "keyword": {
+    "gap_recall": {
+     "k": 33,
+     "n": 37,
+     "p": 0.8919,
+     "lo": 0.7529,
+     "hi": 0.9571
+    },
+    "wrong_reshoot_rate": {
+     "k": 23,
+     "n": 51,
+     "p": 0.451,
+     "lo": 0.3227,
+     "hi": 0.5862
+    },
+    "unknown_rate": {
+     "k": 0,
+     "n": 88,
+     "p": 0.0,
+     "lo": 0.0,
+     "hi": 0.0418
+    },
+    "false_candidate_rate": {
+     "k": 4,
+     "n": 37,
+     "p": 0.1081,
+     "lo": 0.0429,
+     "hi": 0.2471
+    },
+    "false_ready_rate": "N/A (no automatic completion; human confirmation required)"
+   },
+   "single_frame": {
+    "gap_recall": {
+     "k": 0,
+     "n": 37,
+     "p": 0.0,
+     "lo": 0.0,
+     "hi": 0.0941
+    },
+    "wrong_reshoot_rate": {
+     "k": 0,
+     "n": 51,
+     "p": 0.0,
+     "lo": 0.0,
+     "hi": 0.07
+    },
+    "unknown_rate": {
+     "k": 0,
+     "n": 88,
+     "p": 0.0,
+     "lo": 0.0,
+     "hi": 0.0418
+    },
+    "false_candidate_rate": {
+     "k": 37,
+     "n": 37,
+     "p": 1.0,
+     "lo": 0.9059,
+     "hi": 1.0
+    },
+    "false_ready_rate": "N/A (no automatic completion; human confirmation required)"
+   },
+   "full": {
+    "gap_recall": {
+     "k": 0,
+     "n": 37,
+     "p": 0.0,
+     "lo": 0.0,
+     "hi": 0.0941
+    },
+    "wrong_reshoot_rate": {
+     "k": 0,
+     "n": 51,
+     "p": 0.0,
+     "lo": 0.0,
+     "hi": 0.07
+    },
+    "unknown_rate": {
+     "k": 11,
+     "n": 88,
+     "p": 0.125,
+     "lo": 0.0713,
+     "hi": 0.2101
+    },
+    "false_candidate_rate": {
+     "k": 29,
+     "n": 37,
+     "p": 0.7838,
+     "lo": 0.628,
+     "hi": 0.8861
+    },
+    "false_ready_rate": "N/A (no automatic completion; human confirmation required)"
+   }
+  }
+ },
+ "scored_at": "2026-10-26 19:22:51",
+ "note": "CPU/GPU reference backend; no NPU result exists."
+}
