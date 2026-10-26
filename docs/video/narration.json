@@ -9,7 +9,7 @@
  {"id": "08", "text": "Coffee or latte art poured into a cup, three seconds. The first candidate is an espresso stream with no cup in frame, so you reject it and say why. The next one is a latte-art pour. One click, accepted."},
  {"id": "09", "text": "For the grinder, the AI still offers candidates, but they show tamping, not grinding. Nobody drinks coffee in these clips either. Both go on the reshoot list, with the reason, while the crew is still on location."},
  {"id": "10", "text": "Here is the reshot clip. Only the new file is analysed. The grinder shot now has a real match. Accept it, and it comes off the reshoot list."},
- {"id": "11", "text": "We tested on forty-four openly licensed clips, labelled by two separate AI annotators, and scored the held-out set once. The right clip was in the top five for seven of eleven shots; plain frame search got eight. On twelve controlled cases, the rule checks were right ten times. Flagging missing shots without a person doesn't work yet; that is our next fix."},
+ {"id": "11", "text": "We tested on forty-four openly licensed clips, labelled by two separate AI annotators, and scored the held-out set once. The right clip was in the top five for seven of eleven shots; plain frame search got eight. On twelve controlled cases, the rule checks were right ten times. A second check now catches a third of the missing shots on new footage."},
  {"id": "12", "text": "Next, the image half of the model moves onto the ASUS UGen300. Today, analysis takes a little over two seconds per minute of footage on a desktop graphics card."},
  {"id": "13", "text": "SceneGap Edge. Fewer surprises in the edit."}
 ]

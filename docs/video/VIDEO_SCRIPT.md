@@ -1,6 +1,6 @@
 # SceneGap Edge: Stage I demo video script (English)
 
-- Length: 3:00 maximum. As built (v5): 2:58, narration 365 words (`docs/video/narration.json` is the final text).
+- Length: 3:00 maximum. As built (v6): 2:58, narration 365 words (`docs/video/narration.json` is the final text).
 - The shot table below is the plan; times and wording in the final cut follow `narration.json` and `make_video.py`.
 - Everything on screen is real: Wikimedia Commons footage (CC0 / CC BY / CC BY-SA, credited at the end), live
   screen recordings of the SceneGap app running on a desktop, and figures from the repository. No actors.
@@ -81,3 +81,7 @@ Only clips that appear in the video, with author and licence from `datasets/mani
 - Tools card: shot-list rules are "not in their docs" rather than "no"; Premiere finds the moment in a clip.
 - Results: plain frame search 8 vs SceneGap 7; 10 of 12 controlled rule cases right (`eval/rule_check.py`).
 - `make_video.py` retries ffmpeg when this Windows build crashes with 0xC000008F (the same command then succeeds).
+
+## v6 (2026-10-27)
+
+- Scene 11 ends on the new result: "A second check now catches a third of the missing shots on new footage" (test-2, eval/results/test2_metrics.json).
