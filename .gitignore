@@ -9,3 +9,4 @@ workdir/
 *.db-wal
 *.db-shm
 cache/
+eval/results/pytest.xml
