@@ -1,0 +1,62 @@
+# SceneGap Edge: Stage I demo video script (English)
+
+- Length: 3:00 maximum, target about 2:50. English narration, about 400 words.
+- Everything on screen is real: Wikimedia Commons footage (CC0 / CC BY / CC BY-SA, credited at the end), live
+  screen recordings of the SceneGap app running on a desktop, and figures from the repository. No actors.
+- Narration: neural English voice (edge-tts, en-US). Burned-in English captions for every line.
+- The demo project is created on camera in a fresh work folder, so the analysis, decisions and reshoot list are
+  what the app actually produced during the recording.
+- Numbers come from `eval/results/REPORT.md`. Device: desktop CPU/GPU today; UGen300 is the next step.
+
+## Demo setup (recorded live)
+
+| Item | Detail |
+|---|---|
+| Project | "Café promo · 60 s" in a fresh work folder |
+| Shot list | the 11 café shots from `eval/requirements.json` (Chinese wording + English query) |
+| First import | 8 clips: 001 Vichy terrace, 007 Café Lomi, 012 roaster, 016 Lions Almelo, 020 espresso, 026 latte art, 032 sugar into coffee, 041 Paris streets (019, a blender grinding beans, is left out so the grinder shot is genuinely missing) |
+| "Reshoot" import | 022 *Der perfekte Espresso aus dem Siebträger* (shows grounds falling from a grinder), added after the reshoot list is made |
+
+## Shot list, narration and captions
+
+| # | Time | Picture | Narration | On-screen text |
+|---|---|---|---|---|
+| 1 | 0:00–0:11 | Real café footage: Café Lomi interior, a latte-art pour, a Paris terrace (Commons). Slow cross-fades. | A café promo. Eleven must-have shots. Two people, one afternoon on location. | "A café promo · 11 must-have shots" |
+| 2 | 0:11–0:24 | Dark card: a timeline "17:40 wrap → 23:00 edit". The espresso stream clip plays small inside the card. | The crew packs up at five forty. At eleven that night, the editor finds the pour cuts away after two seconds, and nobody filmed a customer drinking. | "17:40 wrap · 23:00 edit: the 3-second pour is missing" |
+| 3 | 0:24–0:36 | Card: three tool names (Premiere Pro, DaVinci Resolve, Final Cut Pro) with "searches footage ✓" and "checks the shot list ✗". | Editing tools can now search footage for a cup. None of them checks the shot list: how long, how many takes, what must be in the same frame. | "Footage search ≠ shot-list check" |
+| 4 | 0:36–0:44 | Title card: SceneGap Edge logo text over a blurred café frame. | This is SceneGap Edge. It checks your shot list against your footage, on your own computer, before you leave. | "SceneGap Edge · local shot coverage" |
+| 5 | 0:44–1:00 | Screen: Shot list screen. Scroll the 11 shots; open SH-05 "咖啡倒入杯中或拉花，連續 3 秒" with the English query and "minimum 3 s". | You write the shot list the way the crew talks. A person confirms the English query the model reads, and adds rules: minimum length, number of takes, what must appear together. | "Shot list: your words + the query the model reads" |
+| 6 | 1:00–1:13 | Screen: Assets → authorise the card folder → import 8 clips → Start analysis; progress bar runs (sped up, labelled). | Point it at the card. It hashes every file, cuts the shots, samples one frame a second on the original timecode, and indexes everything with CLIP. | "Analysis on a desktop GPU · sped up ×N" |
+| 7 | 1:13–1:22 | Screen: Coverage board fills in; pan down the rows with real thumbnails. | Every shot gets an answer from the AI, and a separate answer from you. Only yours counts. | "AI answer · your answer" |
+| 8 | 1:22–1:46 | Screen: evidence view for SH-05. Candidate 1 plays: espresso stream, no cup → Reject with reason "no cup in frame". Candidate 2: latte-art pour → Accept. Human pill turns white. | Coffee poured into a cup, three seconds. The first candidate is an espresso stream with no cup in frame, so you reject it and say why. The next one is a latte-art pour. One click, accepted. | "Reject: no cup in frame" → "Accepted" |
+| 9 | 1:46–2:02 | Screen: SH-04 grinder candidates are tamping, not grinding → "Add to reshoot" with reason; same for SH-07 drinking. Reshoot list shows the cards. | Nobody grinds coffee in these clips, and nobody drinks it. Those go on the reshoot list, with the reason and the minimum length, while the crew is still on location. | "Reshoot list: made before you leave" |
+| 10 | 2:02–2:20 | Screen: import the reshoot clip (022) → re-analyse → SH-04 now shows grounds falling from the grinder → Accept; the card moves to done. | Here is the reshot clip. Only the new file is analysed. The grinder shot is now found. Accept it, and the gap closes. | "Only the new clip is analysed" |
+| 11 | 2:20–2:38 | Results card (from REPORT.md): 44 Commons clips · two independent labellers (κ 0.91) · held-out test scored once: right clip in top 5 for 7 of 11 shots · 317 s to review instead of 839 s · missing-shot detection: Stage II. | We tested on forty-four openly licensed clips, labelled by two independent annotators, and scored the held-out set once. The right clip was in the top five for seven of eleven shots, and checking took about a third of the footage time. Detecting missing shots on its own is our next fix. | "Top-5 hit 7/11 · review 317 s vs 839 s" |
+| 12 | 2:38–2:52 | Architecture figure, push-in on the UGen300 box. | Next, the image encoder moves onto the ASUS UGen300, so the analysis leaves your editing machine free. Today it takes about two seconds per minute of video on a desktop GPU. | "Next: CLIP image encoder on UGen300" |
+| 13 | 2:52–3:00 | End card: SceneGap Edge · team · repo · footage credits. | SceneGap Edge. Fewer surprises in the edit. | Credits list (author, licence) for every clip shown |
+
+Narration total: about 400 words. If the cut runs long, shorten scene 3 first, then scene 9.
+
+## Footage credits shown on the end card
+
+Only clips that appear in the video, with author and licence from `datasets/manifests/commons_manifest.json`.
+
+## Production notes
+
+1. Record the UI with Playwright (1440×900, Edge, video on), driving the real app in a fresh work folder; a visible
+   cursor overlay shows clicks.
+2. Generate one narration file per scene; each scene's length = narration + about 0.6 s, picture trimmed or
+   held to match.
+3. Cards are rendered as 1920×1080 PNGs in the deck's look (Neo: violet/cyan on near-black).
+4. Captions: white text on a dark band, bottom third.
+5. Assemble with ffmpeg: per-scene MP4s → concat → narration mix (−16 LUFS) + soft music bed is **not** used
+   (no licensed track at hand).
+
+## As built (v2, 2026-10-26)
+
+- Final length 2:39, 1920×1080, 30 fps, −16 LUFS. Narration: edge-tts `en-US-AndrewNeural` (`docs/video/narration.json`, `tts.py`).
+- Live recordings made with `record_demo.py` against a fresh work folder; first analysis of the 8 clips took 25.2 s,
+  the reshoot clip 2.5 s (desktop GPU). Sped-up parts are tagged on screen.
+- Recording the demo found two UI bugs, both fixed before the final take: the analyse button stayed disabled after an
+  import, and the job stage label reused the evidence `.stage` class (rendered as a large dark box).
+- Assembled with `make_video.py` (Pillow cards and captions, ffmpeg).
