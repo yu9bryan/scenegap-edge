@@ -49,6 +49,11 @@ def main():
             ev = ", ".join(k.split("::")[-1] for k in hits)
             if n == 18 and st == "pass":                       # only the labelling half is testable without a device
                 st, ev = "partial", ev + " (backend label never claims NPU; the unplug-during-run test needs a UGen300)"
+        elif n == 35 and os.path.exists(os.path.join(ROOT, "eval", "results", "clean_env.json")):
+            import json
+            ce = json.load(open(os.path.join(ROOT, "eval", "results", "clean_env.json"), encoding="utf8"))
+            st = "pass" if ce["pip_exit"] == 0 and ce["pytest_exit"] == 0 else "FAIL"
+            ev = f"fresh venv ({ce['python']}, {ce['os']}) at {ce['run_at']}: {ce['pytest_summary'][0]} (scripts/clean_env.sh)"
         else:
             st, ev = OTHER.get(n, ("not_run", "no automated test yet"))
         total_ok += st == "pass"

@@ -1,6 +1,6 @@
 # PRD 23 acceptance trace
 
-Generated 2026-10-26 18:20 by `scripts/acceptance.py`. 44/44 tests passed; 30/36 TC ids pass by automated test.
+Generated 2026-10-26 18:24 by `scripts/acceptance.py`. 44/44 tests passed; 30/36 TC ids pass by automated test (synthetic fixtures + test-only mock backend for model output).
 
 | TC | Scenario | Status | Evidence |
 |---|---|---|---|
@@ -21,7 +21,7 @@ Generated 2026-10-26 18:20 by `scripts/acceptance.py`. 44/44 tests passed; 30/36
 | TC-015 | Detector boxes mapped back to the frame | not_applicable | no object detector in v1 (MODEL_PLAN: planned for Stage II) |
 | TC-016 | Incompatible model vectors | pass | test_model_mismatch_TC016_and_cache_invalidation_TC030 |
 | TC-017 | Quantization quality comparison | not_run | needs a real UGen300 run (G1 gate) |
-| TC-018 | Device unplugged and fallback | pass | test_device_status_never_claims_npu_TC018 |
+| TC-018 | Device unplugged and fallback | partial | test_device_status_never_claims_npu_TC018 (backend label never claims NPU; the unplug-during-run test needs a UGen300) |
 | TC-019 | Core flow offline | pass | test_core_flow_makes_no_outbound_connection_TC019 |
 | TC-020 | Malicious text and paths | pass | test_token_and_origin_required_TC020, test_html_report_escapes_text_TC020, test_paths_must_stay_inside_root_TC020 |
 | TC-021 | CSV formula injection | pass | test_csv_formula_injection_TC021 |
@@ -38,5 +38,5 @@ Generated 2026-10-26 18:20 by `scripts/acceptance.py`. 44/44 tests passed; 30/36
 | TC-032 | Search latency under load | measured | eval/results/perf.json: p50/p95 over 10,000 segments, text encoded per query (no cached answers) |
 | TC-033 | Editing on the same machine | proxy | eval/results/interference.json: playback proxy, not an NLE; UGen300 not_run |
 | TC-034 | Accessibility and status understanding | manual_check | UI uses icon + text for every status (docs/ui_preview); no user test yet |
-| TC-035 | Clean environment rebuild | ci | GitHub Actions installs from requirements-dev.txt in a clean runner and runs the suite |
+| TC-035 | Clean environment rebuild | pass | fresh venv (3.13.9, Windows-11-10.0.26200-SP0) at 2026-10-26 18:23:34: 44 passed, 1 warning in 11.33s (scripts/clean_env.sh) |
 | TC-036 | Validity version conflict | pass | test_requirement_change_marks_outdated_TC010_and_409_TC036 |

@@ -1,11 +1,11 @@
 {
- "run_at": "2026-10-26 18:21:58",
+ "run_at": "2026-10-26 18:23:34",
  "python": "3.13.9",
  "os": "Windows-11-10.0.26200-SP0",
  "pip_exit": 0,
- "pytest_exit": 1,
+ "pytest_exit": 0,
  "pytest_summary": [
-  "12 failed, 32 passed, 1 warning in 9.27s"
+  "44 passed, 1 warning in 11.33s"
  ],
  "seconds": 35,
  "packages": [
@@ -24,6 +24,7 @@
   "imageio-ffmpeg==0.6.0",
   "iniconfig==2.3.1",
   "numpy==2.5.4",
+  "opencv-python-headless==5.0.0.93",
   "opentelemetry-api==1.45.1",
   "packaging==26.3",
   "pillow==13.0.0",
