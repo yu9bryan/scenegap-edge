@@ -97,7 +97,7 @@
     s.setAttribute('viewBox', '0 0 24 24');
     s.setAttribute('fill', 'none');
     s.setAttribute('stroke', 'currentColor');
-    s.setAttribute('stroke-width', '2');
+    s.setAttribute('stroke-width', '1.5');
     s.setAttribute('stroke-linecap', 'round');
     s.setAttribute('stroke-linejoin', 'round');
     s.setAttribute('aria-hidden', 'true');
@@ -325,7 +325,7 @@
   function chip(def, opts) {
     opts = opts || {};
     const c = h('span', {
-      class: 'chip tone-' + def.tone + (opts.human ? ' human' : '') + (opts.lg ? ' lg' : '') + (opts.outline ? ' outline' : ''),
+      class: 'chip tone-' + def.tone + (opts.prefix === 'AI' ? ' ai' : '') + (opts.human ? ' human' : '') + (opts.lg ? ' lg' : '') + (opts.outline ? ' outline' : ''),
       title: opts.title, 'aria-label': opts.aria,
     },
     opts.prefix ? h('span', { class: 'chip-pfx', 'aria-hidden': 'true' }, opts.prefix) : null,
@@ -379,7 +379,7 @@
   function btn(label, opts) {
     opts = opts || {};
     return h(opts.href ? 'a' : 'button', {
-      class: 'btn ' + (opts.kind || '') + (opts.sm ? ' sm' : '') + (opts.block ? ' block' : ''),
+      class: 'btn ' + (opts.kind || '') + (opts.sm ? ' sm' : '') + (opts.block ? ' block' : '') + (label ? '' : ' icon-only'),
       type: opts.href ? null : (opts.type || 'button'), href: opts.href, onclick: opts.onclick,
       disabled: opts.disabled, title: opts.title, 'aria-label': opts.aria, 'aria-pressed': opts.pressed,
     }, opts.icon ? icon(opts.icon) : null, label ? h('span', null, label) : null);
@@ -394,24 +394,30 @@
       title ? h('div', { class: 'panel-head' }, h(opts.h || 'h2', null, opts.icon ? icon(opts.icon) : null, title), opts.right || null) : null,
       opts.raw ? body : h('div', { class: 'panel-body' }, body));
   }
-  function eyebrow(text) {
-    return h('div', { class: 'eyebrow' }, h('span', { class: 'hatch', 'aria-hidden': 'true' }), h('span', { lang: 'en' }, text));
-  }
   function pageHead(title, sub, actions) {
     return h('div', { class: 'page-head' },
-      h('div', null, eyebrow(NAME_EN[S.route.name] || 'SCENEGAP EDGE'), h('h1', null, title), sub ? h('div', { class: 'sub' }, sub) : null),
+      h('div', null, h('h1', null, title), sub ? h('div', { class: 'sub' }, sub) : null),
       actions && actions.length ? h('div', { class: 'actions' }, actions) : null);
   }
   // Thin gauge ring for a 0..1 ratio; null draws a dashed empty track (N/A). Built with DOM calls only.
-  function ring(ratio) {
+  let ringSeq = 0;
+  function ring(ratio, bronze) {
     const NS = 'http://www.w3.org/2000/svg';
     const el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
-    const r = 22, c = 2 * Math.PI * r;
-    const svg = el('svg', { viewBox: '0 0 56 56', class: 'ring' + (ratio == null ? ' na' : ''), 'aria-hidden': 'true', focusable: 'false' });
-    svg.append(el('circle', { cx: 28, cy: 28, r, class: 'ring-track' }));
+    const r = 26, c = 2 * Math.PI * r;
+    const svg = el('svg', { viewBox: '0 0 64 64', class: 'ring' + (ratio == null ? ' na' : ''), 'aria-hidden': 'true', focusable: 'false' });
+    svg.append(el('circle', { cx: 32, cy: 32, r, class: 'ring-track' }));
     if (ratio != null) {
       const v = Math.max(0, Math.min(1, ratio));
-      svg.append(el('circle', { cx: 28, cy: 28, r, class: 'ring-arc', 'stroke-dasharray': (v * c).toFixed(2) + ' ' + c.toFixed(2), transform: 'rotate(-90 28 28)' }));
+      const arc = el('circle', { cx: 32, cy: 32, r, class: 'ring-arc', 'stroke-dasharray': (v * c).toFixed(2) + ' ' + c.toFixed(2), transform: 'rotate(-90 32 32)' });
+      if (bronze) {
+        const id = 'rg' + (++ringSeq);
+        const g = el('linearGradient', { id, x1: '0', y1: '0', x2: '1', y2: '1' });
+        [['0', '#DFC9A9'], ['0.5078', '#CDAB82'], ['1', '#9A7A59']].forEach(([o, col]) => g.append(el('stop', { offset: o, 'stop-color': col })));
+        const defs = el('defs', {}); defs.append(g); svg.append(defs);
+        arc.style.stroke = 'url(#' + id + ')';
+      }
+      svg.append(arc);
     }
     return svg;
   }
@@ -562,23 +568,19 @@
   ];
   const NAME_ZH = Object.fromEntries(NAV.map((n) => [n[0], n[1]]));
   NAME_ZH.projects = '選擇專案';
-  const NAME_EN = {
-    home: 'PROJECT OVERVIEW', projects: 'PROJECTS', requirements: 'SHOT REQUIREMENTS', assets: 'MEDIA LIBRARY',
-    coverage: 'COVERAGE MATRIX', evidence: 'EVIDENCE VIEWER', board: 'REVIEW & RESHOOT', device: 'DEVICE & DIAGNOSTICS',
-  };
-  const NAV_GROUP = { home: '專案', requirements: '準備', coverage: '檢查', device: '系統' };
+  const NAV_GAP = { requirements: 1, coverage: 1, device: 1 };      // spacing between workflow groups, no labels
 
   function renderNav() {
     const ul = $('#nav');
-    ul.replaceChildren(...NAV.flatMap(([key, label, ic], i) => {
+    ul.replaceChildren(...NAV.flatMap(([key, label, ic]) => {
       const needsProject = !['home', 'device'].includes(key);
       const disabled = needsProject && !S.pid;
       const cur = S.route.name === key || (key === 'home' && S.route.name === 'projects');
-      const group = NAV_GROUP[key] ? h('li', { class: 'nav-group', role: 'presentation' }, NAV_GROUP[key]) : null;
-      return [group, h('li', null, h('a', {
+      const gap = NAV_GAP[key] ? h('li', { class: 'nav-gap', role: 'presentation' }) : null;
+      return [gap, h('li', null, h('a', {
         href: '#/' + key, class: disabled ? 'disabled' : null, 'aria-current': cur ? 'page' : null,
         'aria-disabled': disabled ? 'true' : null, tabindex: disabled ? '-1' : null, title: label,
-      }, icon(ic), h('span', { class: 'nav-label' }, label), h('span', { class: 'nav-step', 'aria-hidden': 'true' }, String(i + 1))))].filter(Boolean);
+      }, h('span', { class: 'nav-ico' }, icon(ic)), h('span', { class: 'nav-label' }, label)))].filter(Boolean);
     }));
     const foot = $('#sidebar-foot');
     foot.replaceChildren(
@@ -587,25 +589,25 @@
   }
 
   function renderTop() {
-    const left = $('#topbar-left');
+    const bar = $('#topbar');
     const name = S.project && S.project.project ? S.project.project.name : (S.pid ? S.pid : '尚未選擇專案');
-    left.replaceChildren(h('div', { class: 'crumb' },
-      h('span', { class: 'proj', title: name }, name), h('span', { class: 'sep', 'aria-hidden': 'true' }, '/'),
-      h('span', { class: 'screen' }, NAME_ZH[S.route.name] || '')));
-    const right = $('#topbar-right');
-    right.replaceChildren();
-    if (PREVIEW) right.append(chip({ zh: '預覽資料（非實測）', icon: 'beaker', tone: 'amber' }));
+    const left = h('div', { class: 'top-left ellipsis' }, NAME_ZH[S.route.name] || '');
+    const center = h('div', { class: 'top-center' },
+      h('div', { class: 'proj-pill', title: name }, icon('film'), h('span', null, name)),
+      h('a', { class: 'rbtn solid sm', href: '#/projects', 'aria-label': '切換或建立專案', title: '切換或建立專案' }, icon('plus')),
+      h('button', { type: 'button', class: 'rbtn sm', 'aria-label': '重新整理資料', title: '重新整理資料', onclick: () => { refreshStatus(); render(); } }, icon('refresh')));
+    const right = h('div', { class: 'top-right' });
     const be = (S.device && S.device.active_backend) || (S.health && S.health.active_backend) || null;
     if (be) {
-      const beDef = { zh: '後端 ' + (be === 'not loaded' ? '尚未載入' : be), icon: 'cpu', tone: be === 'not loaded' ? 'slate' : 'violet' };
-      right.append(h('a', { href: '#/device', class: 'chip-link', title: '目前實際使用的推論後端', style: 'text-decoration:none' }, chip(beDef, { aria: '目前後端：' + be })));
+      right.append(h('a', { href: '#/device', class: 'spill', title: '目前實際使用的推論後端', 'aria-label': '目前後端：' + be },
+        icon('cpu'), h('span', null, '後端 ' + (be === 'not loaded' ? '尚未載入' : be))));
     }
     const dev = (S.device && S.device.device) || (S.health && S.health.device);
     if (dev) {
-      const d = dev.available ? { zh: 'UGen300 已連線', icon: 'plug', tone: 'green' } : { zh: 'UGen300 未連線', icon: 'plugoff', tone: 'orange' };
-      right.append(h('a', { href: '#/device', title: dev.reason || '', style: 'text-decoration:none' }, chip(d, { outline: true })));
+      right.append(h('a', { href: '#/device', class: 'spill ' + (dev.available ? 'ok' : 'warn'), title: dev.reason || '' },
+        icon(dev.available ? 'plug' : 'plugoff'), h('span', null, dev.available ? 'UGen300 已連線' : 'UGen300 未連線')));
     }
-    right.append(btn('', { kind: 'ghost', sm: true, icon: 'refresh', aria: '重新整理資料', title: '重新整理資料', onclick: () => { refreshStatus(); render(); } }));
+    bar.replaceChildren(left, center, right);
   }
 
   async function refreshStatus() {
@@ -730,7 +732,7 @@
     const out = [];
     out.push(pageHead(p.name || S.pid,
       [p.purpose, p.aspect, p.target_len_s ? '目標 ' + p.target_len_s + ' 秒' : null].filter(Boolean).join(' · ') || null,
-      [btn('切換專案', { icon: 'open', href: '#/projects' }), btn('開啟覆蓋矩陣', { kind: 'primary', icon: 'grid', href: '#/coverage' })]));
+      [btn('切換專案', { icon: 'open', href: '#/projects' }), btn('開啟覆蓋矩陣', { kind: 'secondary', icon: 'grid', href: '#/coverage' })]));
 
     if (dev && !dev.available) {
       out.push(banner('info', 'UGen300 未連線', '目前以明示的 CPU 參考後端（' + (be === 'not loaded' ? '尚未載入，首次分析時載入' : be) + '）執行分析；結果與報告都會標示這個後端，不代表 NPU 效能。',
@@ -748,12 +750,13 @@
     // KPI cards
     const kpi = (cls, ic, label, val, ratio, foot) => {
       const na = val == null;
+      const hero = cls === 'human';
       const m = na ? null : /^([\d.]+)\s*(.*)$/.exec(String(val));
-      const value = h('div', { class: 'k-value' + (na ? ' na' : ''), role: 'img', 'aria-label': label + '：' + (na ? 'N/A，無法計算' : val) },
+      const value = h('div', { class: 'k-value' + (na ? ' na' : hero ? ' grad-text' : ''), role: 'img', 'aria-label': label + '：' + (na ? 'N/A，無法計算' : val) },
         na ? 'N/A' : (m ? [h('span', { class: 'k-num' }, m[1]), h('span', { class: 'k-unit' }, m[2])] : val));
       return h('div', { class: 'panel kpi ' + cls },
         h('div', { class: 'k-label' }, icon(ic), label),
-        h('div', { class: 'k-body' }, value, ratio === undefined ? null : ring(na ? null : ratio)),
+        h('div', { class: 'k-body' }, value, ratio === undefined ? null : ring(na ? null : ratio, hero)),
         h('div', { class: 'k-foot' }, foot));
     };
     const noRun = !cov || !cov.run || !c;          // human coverage is still known without a run
@@ -1157,7 +1160,7 @@
             h('td', null, reasonList(row.auto && row.auto.reasons)),
             h('td', null, c ? thumb(c.asset_id, c.start_ms, r.source_text + ' 的最佳候選') : noThumb(row.auto ? '沒有候選' : '—'),
               c ? h('div', { class: 'faint small mono', style: 'margin-top:4px' }, fmtTime(c.start_ms) + '–' + fmtTime(c.end_ms)) : null),
-            h('td', { class: 'cell-actions' }, h('a', { class: 'btn sm' + (c ? ' primary' : ''), href: '#/evidence/' + encodeURIComponent(r.requirement_id), title: '開啟證據', 'aria-label': '開啟 ' + r.requirement_id + ' 的證據' }, icon('eye'), h('span', { class: 'act-label' }, '開啟證據'))));
+            h('td', { class: 'cell-actions' }, h('a', { class: 'btn sm', href: '#/evidence/' + encodeURIComponent(r.requirement_id), title: '開啟證據', 'aria-label': '開啟 ' + r.requirement_id + ' 的證據' }, icon('eye'), h('span', { class: 'act-label' }, '開啟證據'))));
         })));
       tableBox.replaceChildren(h('div', { class: 'row', style: 'padding:12px 16px;border-bottom:1px solid var(--line-soft)' }, seg),
         vis.length ? h('div', { class: 'table-wrap' }, tbl) : h('p', { class: 'faint', style: 'padding:16px' }, '沒有符合篩選的需求。'));
@@ -1168,6 +1171,10 @@
   };
 
   // ---------- 5 evidence viewer
+  // ---------- 5 evidence viewer: dark media stage (R1), filmstrip + range chips + playhead (R5–R8),
+  // action bubble attached to the active chip (R9), round handles in fix-range mode (R6).
+  const fmtShort = (ms) => { if (ms == null || !isFinite(ms)) return '—'; const s = Math.max(0, ms) / 1000; return pad(Math.floor(s / 60), 2) + ':' + (s % 60).toFixed(1).padStart(4, '0'); };
+
   SCREENS.evidence = async function (params) {
     const [{ cov, rows }, assets, decisions] = await Promise.all([coverageRows(), api('GET', P() + '/assets'),
       api('GET', P() + '/decisions').catch(() => null)]);
@@ -1179,184 +1186,356 @@
     const row = rows[idxRow];
     const req = row.requirement;
     const cands = (row.auto && row.auto.candidates) || [];
-    let ci = Math.min(Math.max(0, parseInt(params[1], 10) || 0), Math.max(0, cands.length - 1));
+    const ci = Math.min(Math.max(0, parseInt(params[1], 10) || 0), Math.max(0, cands.length - 1));
     const cand = cands[ci] || null;
     const assetById = Object.fromEntries(assets.map((a) => [a.asset_id, a]));
-    const asset = cand ? assetById[cand.asset_id] : null;
     const run = cov && cov.run;
     const nav = (i) => go('#/evidence/' + encodeURIComponent(rid) + '/' + i);
     const prevReq = rows[idxRow - 1], nextReq = rows[idxRow + 1];
+    const errBox = h('div', { 'aria-live': 'polite' });
+    const send = (decision, payload, okText) => postReview(req, decision, payload, okText, errBox);
+    const rng = cand ? { asset_id: cand.asset_id, start_ms: cand.start_ms, end_ms: cand.end_ms, source: cand.source === 'manual' ? 'manual' : 'model' } : null;
 
-    // header
-    const head = h('section', { class: 'panel ev-head', 'aria-label': '證據資訊' },
-      h('div', { class: 'meta', style: 'min-width:0' }, h('span', { class: 'k' }, '檔案'),
-        h('span', { class: 'ev-file', title: asset ? (asset.locations || [])[0] : '' }, asset ? baseName((asset.locations || [])[0] || asset.asset_id) : (cand ? cand.asset_id : '—'))),
-      h('div', { class: 'meta' }, h('span', { class: 'k' }, '原始時段'),
-        h('span', { class: 'v mono' }, cand ? fmtTime(cand.start_ms) + ' – ' + fmtTime(cand.end_ms) : '—')),
-      h('div', { class: 'meta' }, h('span', { class: 'k' }, '長度'), h('span', { class: 'v mono' }, cand ? ((cand.end_ms - cand.start_ms) / 1000).toFixed(3) + ' s' : '—')),
-      h('div', { class: 'meta' }, h('span', { class: 'k' }, '後端'), h('span', { class: 'v' }, run ? run.backend : '—')),
-      h('div', { class: 'meta' }, h('span', { class: 'k' }, '執行編號'), h('span', { class: 'v mono' }, run ? run.run_id : '—')),
-      h('div', { class: 'meta' }, h('span', { class: 'k' }, 'Take'), h('span', { class: 'v mono' }, cand ? cand.capture_id || '—' : '—')),
-      h('span', { class: 'grow' }),
-      h('div', { class: 'meta' }, h('span', { class: 'k' }, '自動判定'), autoChip(row, cov)),
-      h('div', { class: 'meta' }, h('span', { class: 'k' }, '人工狀態'), row._noRun ? h('span', { class: 'faint small' }, '分析後顯示') : humanChip(row)));
+    // latest decision per segment on the current revision -> reviewed state of each candidate chip
+    const shaOf = (aid) => (assetById[aid] || {}).sha256;
+    const latestDecision = new Map();
+    (decisions || []).filter((d) => d.requirement_id === req.requirement_id && d.revision === req.revision)
+      .forEach((d) => latestDecision.set([d.asset_sha, d.start_ms, d.end_ms].join('|'), d));
+    const reviewOf = (c) => latestDecision.get([shaOf(c.asset_id), c.start_ms, c.end_ms].join('|')) || null;
 
-    // left: requirement
+    // ---- state of the stage
+    const playable = assets.filter((a) => ['analyzed', 'analyzing', 'pending'].includes(a.status))
+      .sort((x, y) => ({ analyzed: 0, analyzing: 1, pending: 2 }[x.status] - { analyzed: 0, analyzing: 1, pending: 2 }[y.status]));
+    const st = {
+      aid: cand ? cand.asset_id : (playable[0] && playable[0].asset_id) || null,
+      fix: null,            // { aid, s, e } while fixing a range
+      loop: true,
+    };
+    const assetOf = () => assetById[st.aid] || null;
+    const startOff = () => { const a = assetOf(); return a && a.probe && a.probe.start_ms ? a.probe.start_ms : 0; };
+    const durOf = () => { const a = assetOf(); return a ? (a.duration_ms || (a.probe && a.probe.duration_ms) || 0) : 0; };
+
+    // ---- media
+    const video = h('video', { class: 'stage-media', preload: 'metadata', playsinline: true, muted: true, 'aria-label': '候選片段影片' });
+    const msg = h('div', { class: 'stage-msg' });
+    const vt = (ms) => Math.max(0, (ms - startOff()) / 1000);
+    const curMs = () => Math.round(video.currentTime * 1000) + startOff();
+    const seekMs = (ms) => { try { video.currentTime = vt(ms); } catch (e) { /* not ready */ } };
+    const range = () => (st.fix ? { s: st.fix.s, e: st.fix.e } : cand ? { s: cand.start_ms, e: cand.end_ms } : null);
+    const loadMedia = (aid) => {
+      st.mediaAid = aid;
+      video.removeAttribute('src'); video.removeAttribute('poster');
+      if (!aid) { msg.replaceChildren(icon('searchx'), h('strong', null, '沒有可播放的素材'), h('span', null, '先在素材庫匯入並分析影片。')); msg.hidden = false; return; }
+      if (PREVIEW) {
+        const f = (PREVIEW.frames || {})[aid];
+        if (f) video.setAttribute('poster', f);
+        msg.hidden = true;                       // the "預覽：不載入影片" pill in the top-left says so
+      } else {
+        msg.replaceChildren(h('span', null, '載入影片中…')); msg.hidden = false; msg.classList.remove('corner');
+        videoUrl(aid).then((u) => { video.src = u; });
+      }
+    };
+    video.addEventListener('loadedmetadata', () => { msg.hidden = true; const r = range(); if (r) seekMs(r.s); });
+    video.addEventListener('error', () => {
+      if (!video.getAttribute('src')) return;
+      msg.classList.remove('corner'); msg.hidden = false;
+      msg.replaceChildren(icon('alert'), h('strong', null, '無法播放這個檔案'),
+        h('span', null, '可能原因：素材離線、編碼不受瀏覽器支援，或工作階段已過期（請重新整理頁面）。仍可用影格與時間碼複核。'));
+    });
+
+    // ---- floating transport column (R2/R3: white = primary, glass = idle, bronze = active)
+    const roundBtn = (ic, label, tier, onclick, extra) => h('button', Object.assign({ type: 'button', class: 'rbtn ' + tier, 'aria-label': label, title: label, onclick }, extra || {}), icon(ic));
+    const playBtn = roundBtn('play', '播放／暫停（空白鍵）', 'solid', () => { if (video.paused) video.play().catch(() => {}); else video.pause(); });
+    const startBtn = roundBtn('back', '回到片段起點（J）', 'glass', () => { const r = range(); if (r) seekMs(r.s); });
+    const loopBtn = roundBtn('repeat', '循環播放片段', 'glass on', () => { st.loop = !st.loop; loopBtn.classList.toggle('on', st.loop); loopBtn.setAttribute('aria-pressed', String(st.loop)); }, { 'aria-pressed': 'true' });
+    const tools = h('div', { class: 'stage-tools', role: 'toolbar', 'aria-label': '播放控制' }, playBtn, startBtn, loopBtn);
+
+    // ---- top pills
+    const a0 = cand ? assetOf() : null;
+    const fileName = a0 ? baseName((a0.locations || [])[0] || a0.asset_id) : '—';
+    const topLeft = h('div', { class: 'stage-top-left' },
+      h('span', { class: 'gpill', title: a0 ? (a0.locations || [])[0] : '' }, icon('film'), h('span', { class: 'ellipsis' }, fileName)),
+      cand ? h('span', { class: 'gpill num' }, icon('clock'), '原始時段 ' + fmtTime(cand.start_ms) + ' – ' + fmtTime(cand.end_ms) + ' · ' + ((cand.end_ms - cand.start_ms) / 1000).toFixed(3) + ' s') : null,
+      cand && cand.capture_id ? h('span', { class: 'gpill' }, 'Take ' + cand.capture_id) : null,
+      PREVIEW ? h('span', { class: 'gpill' }, icon('beaker'), '預覽：不載入影片') : null);
+    const topRight = h('div', { class: 'stage-top-right' },
+      h('div', { class: 'pill-row' },
+        h('span', { class: 'gpill' }, icon('cpu'), '後端 ' + (run ? run.backend : '—')),
+        h('span', { class: 'gpill mono' }, '執行 ' + (run ? run.run_id : '—'))),
+      h('div', { class: 'pill-row' }, autoChip(row, cov, true), row._noRun ? h('span', { class: 'gpill' }, '人工狀態：分析後顯示') : humanChip(row, true)));
+
+    // ---- filmstrip (R5) with candidate segments, playhead (R7) and fix-range handles (R6)
+    const fsWrap = h('div', { class: 'filmstrip' });
+    const tc = h('span', { class: 'gpill num tc-pill', 'aria-live': 'off' }, cand ? fmtTime(cand.start_ms) : '—');
+    const domLabels = h('span', { class: 'fs-dom num' });
+    let dom = { a: 0, b: 1 };
+    let head = null, handles = null;
+    const pctOf = (ms) => Math.max(0, Math.min(100, (ms - dom.a) / Math.max(1, dom.b - dom.a) * 100));
+    const msAt = (clientX, el) => { const r = el.getBoundingClientRect(); return Math.round(dom.a + Math.max(0, Math.min(1, (clientX - r.left) / r.width)) * (dom.b - dom.a)); };
+    const drawStrip = () => {
+      const aid = st.aid;
+      if (!cand && !st.fix) {             // nothing to show yet: no candidate and no manual range being picked
+        domLabels.textContent = '';
+        fsWrap.replaceChildren(h('div', { class: 'fs-track empty' }, h('span', null, '還沒有片段。按「+」選擇素材與時段，影格條會顯示在這裡。')));
+        head = null; handles = null; return;
+      }
+      const same = cands.map((c, i) => [c, i]).filter(([c]) => c.asset_id === aid);
+      const a1 = startOff(), dur = durOf();
+      let lo, hi;
+      const r = range();
+      const ranges = same.map(([c]) => [c.start_ms, c.end_ms]).concat(r ? [[r.s, r.e]] : []);
+      if (ranges.length) {
+        lo = Math.min(...ranges.map((x) => x[0])); hi = Math.max(...ranges.map((x) => x[1]));
+        const padMs = Math.max(2000, (hi - lo) * 0.25);
+        dom = { a: Math.max(a1, lo - padMs), b: dur ? Math.min(a1 + dur, hi + padMs) : hi + padMs };
+      } else dom = { a: a1, b: a1 + (dur || 10000) };
+      if (dom.b - dom.a < 1000) dom.b = dom.a + 1000;
+      domLabels.textContent = fmtShort(dom.a) + ' – ' + fmtShort(dom.b);
+      const N = 12;
+      const frames = h('div', { class: 'fs-frames', 'aria-hidden': 'true' });
+      for (let k = 0; k < N; k++) {
+        const t = dom.a + (k + 0.5) * (dom.b - dom.a) / N;
+        const img = h('img', { alt: '', loading: 'lazy', decoding: 'async' });
+        img.addEventListener('error', () => img.classList.add('broken'));
+        if (aid) frameUrl(aid, t).then((u) => { if (u) img.src = u; else img.classList.add('broken'); });
+        frames.append(h('span', { class: 'fs-frame' }, img));
+      }
+      const track = h('div', { class: 'fs-track', role: 'group', 'aria-label': '影格條：' + fmtTime(dom.a) + ' 至 ' + fmtTime(dom.b) + '（點擊可跳到該時間）' }, frames);
+      track.addEventListener('click', (e) => { if (e.target.closest('.fs-seg, .fs-handle')) return; seekMs(msAt(e.clientX, track)); });
+      // dim outside the active range, so the selected segment reads as the subject
+      const act = r && (st.fix ? st.fix.aid === aid : cand && cand.asset_id === aid) ? r : null;
+      if (act) {
+        track.append(h('span', { class: 'fs-dim', style: 'left:0;width:' + pctOf(act.s) + '%' }),
+          h('span', { class: 'fs-dim', style: 'left:' + pctOf(act.e) + '%;right:0' }));
+      }
+      same.forEach(([c, i]) => {
+        const rv = reviewOf(c);
+        track.append(h('button', {
+          type: 'button', class: 'fs-seg' + (i === ci && !st.fix ? ' active' : '') + (rv ? ' reviewed' : ''),
+          style: 'left:' + pctOf(c.start_ms) + '%;width:max(10px,' + (pctOf(c.end_ms) - pctOf(c.start_ms)) + '%)',
+          'aria-label': '候選 ' + (i + 1) + '：' + fmtTime(c.start_ms) + ' 至 ' + fmtTime(c.end_ms), title: '候選 ' + (i + 1),
+          onclick: () => (i === ci ? seekMs(c.start_ms) : nav(i)),
+        }, h('span', { class: 'fs-mark s', 'aria-hidden': 'true' }), h('span', { class: 'fs-mark e', 'aria-hidden': 'true' })));
+      });
+      handles = null;
+      if (st.fix && st.fix.aid === aid) {
+        const seg = h('span', { class: 'fs-seg fixing', 'aria-hidden': 'true', style: 'left:' + pctOf(st.fix.s) + '%;width:' + (pctOf(st.fix.e) - pctOf(st.fix.s)) + '%' });
+        const mk = (which) => {
+          const el = h('button', { type: 'button', class: 'fs-handle', role: 'slider', 'aria-label': which === 's' ? '片段開始' : '片段結束',
+            'aria-valuemin': Math.round(dom.a), 'aria-valuemax': Math.round(dom.b), 'aria-valuenow': st.fix[which], 'aria-valuetext': fmtTime(st.fix[which]),
+            style: 'left:' + pctOf(st.fix[which]) + '%' });
+          el.addEventListener('pointerdown', (e) => {
+            e.preventDefault(); el.setPointerCapture(e.pointerId);
+            const move = (ev) => setFix(which, msAt(ev.clientX, track));
+            const up = () => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); };
+            el.addEventListener('pointermove', move); el.addEventListener('pointerup', up);
+          });
+          el.addEventListener('keydown', (e) => {
+            const step = e.shiftKey ? 1000 : 100;
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); setFix(which, st.fix[which] - step); }
+            else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); setFix(which, st.fix[which] + step); }
+          });
+          return el;
+        };
+        handles = { seg, s: mk('s'), e: mk('e') };
+        track.append(seg, handles.s, handles.e);
+      }
+      head = h('span', { class: 'fs-head', 'aria-hidden': 'true', style: 'left:' + pctOf(r ? r.s : dom.a) + '%' });
+      track.append(head);
+      fsWrap.replaceChildren(track);
+    };
+    const placeFix = () => {
+      if (!handles || !st.fix) return;
+      handles.seg.style.left = pctOf(st.fix.s) + '%'; handles.seg.style.width = (pctOf(st.fix.e) - pctOf(st.fix.s)) + '%';
+      ['s', 'e'].forEach((w) => { handles[w].style.left = pctOf(st.fix[w]) + '%'; handles[w].setAttribute('aria-valuenow', st.fix[w]); handles[w].setAttribute('aria-valuetext', fmtTime(st.fix[w])); });
+    };
+    let fixInputs = null;
+    const setFix = (which, ms) => {
+      if (!st.fix) return;
+      ms = Math.round(Math.max(dom.a, Math.min(dom.b, ms)));
+      if (which === 's') st.fix.s = Math.min(ms, st.fix.e - 100); else st.fix.e = Math.max(ms, st.fix.s + 100);
+      placeFix();
+      if (fixInputs) { fixInputs.s.value = fmtTime(st.fix.s); fixInputs.e.value = fmtTime(st.fix.e); }
+      seekMs(st.fix[which]);
+    };
+
+    // ---- popover forms (float above the filmstrip, over the media)
+    const pop = h('div', { class: 'pop', hidden: true });
+    const closePop = () => {
+      pop.hidden = true; pop.replaceChildren(); fixInputs = null;
+      if (st.fix) { st.fix = null; drawStrip(); if (!cand) { setTransport(false); video.pause(); msg.hidden = false; } }
+    };
+    const openPop = (title, body, label) => {
+      pop.replaceChildren(h('div', { class: 'pop-head' }, h('strong', null, title), h('span', { class: 'grow' }),
+        h('button', { type: 'button', class: 'rbtn glass sm', 'aria-label': '關閉', title: '關閉（Esc）', onclick: closePop }, icon('x'))), body);
+      pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', label || title);
+      pop.hidden = false;
+      const f = pop.querySelector('input, textarea, select'); if (f) f.focus();
+    };
+    const fixPop = () => {
+      const startAid = cand ? cand.asset_id : st.aid;
+      if (!startAid) { toast({ kind: 'info', title: '沒有可用的素材', text: '先在素材庫匯入影片。' }); return; }
+      if (st.aid !== startAid || st.mediaAid !== startAid) { st.aid = startAid; loadMedia(st.aid); }
+      const r0 = cand && cand.asset_id === startAid ? { s: cand.start_ms, e: cand.end_ms } : { s: startOff(), e: startOff() + Math.min(3000, durOf() || 3000) };
+      st.fix = { aid: startAid, s: r0.s, e: r0.e };
+      if (!cand) { setTransport(true); msg.hidden = true; }
+      drawStrip();
+      const sIn = h('input', { class: 'input mono', id: 'fx-s', value: fmtTime(st.fix.s), inputmode: 'decimal' });
+      const eIn = h('input', { class: 'input mono', id: 'fx-e', value: fmtTime(st.fix.e), inputmode: 'decimal' });
+      fixInputs = { s: sIn, e: eIn };
+      const sync = (which, inp) => inp.addEventListener('change', () => { const v = parseTime(inp.value); if (isFinite(v)) setFix(which, v); else inp.value = fmtTime(st.fix[which]); });
+      sync('s', sIn); sync('e', eIn);
+      const err = h('div', { class: 'err-line', role: 'alert' });
+      const here = (which) => h('button', { type: 'button', class: 'linkish', onclick: () => setFix(which, curMs()) }, '用目前位置');
+      const body = h('div', { class: 'stack-s' },
+        h('p', { class: 'small muted' }, '拖曳影格條上的圓形把手，或直接輸入時間（mm:ss.mmm）。會以「人工片段」記錄為接受。'),
+        h('div', { class: 'field' }, h('label', { for: 'fx-a' }, '素材'),
+          h('select', { id: 'fx-a', class: 'input', onchange: (e) => { st.aid = e.target.value; st.fix = { aid: st.aid, s: startOff(), e: startOff() + Math.min(3000, durOf() || 3000) }; loadMedia(st.aid); drawStrip(); sIn.value = fmtTime(st.fix.s); eIn.value = fmtTime(st.fix.e); } },
+            playable.map((a) => h('option', { value: a.asset_id, selected: a.asset_id === st.aid }, baseName((a.locations || [])[0] || a.asset_id))))),
+        h('div', { class: 'grid-2 tight' },
+          h('div', { class: 'field' }, h('label', { for: 'fx-s' }, '開始'), sIn, here('s')),
+          h('div', { class: 'field' }, h('label', { for: 'fx-e' }, '結束'), eIn, here('e'))),
+        err,
+        h('div', { class: 'row end' }, btn('取消', { kind: 'ghost', onclick: closePop }),
+          btn('以此時段接受', { kind: 'primary', icon: 'check', onclick: () => {
+            const s = parseTime(sIn.value), e = parseTime(eIn.value);
+            if (!isFinite(s) || !isFinite(e)) { err.textContent = '時間格式請用 mm:ss.mmm，例如 01:02.500。'; return; }
+            if (s >= e) { err.textContent = '開始時間要早於結束時間。'; return; }
+            if (!st.aid) { err.textContent = '請選擇素材。'; return; }
+            send('accepted', { asset_id: st.aid, start_ms: s, end_ms: e, source: 'manual', reason: '' }, '人工修正時段 ' + fmtTime(s) + '–' + fmtTime(e));
+          } })));
+      openPop('修正時段', body);
+    };
+    const reasonPop = (title, hint, required, okLabel, okIcon, onOk) => {
+      const rIn = h('textarea', { class: 'input', id: 'dc-reason', rows: 3, placeholder: hint });
+      const ok = btn(okLabel, { kind: 'primary', icon: okIcon, disabled: required });
+      if (required) rIn.addEventListener('input', () => { ok.disabled = !rIn.value.trim(); });
+      ok.addEventListener('click', () => { if (!required || rIn.value.trim()) onOk(rIn.value.trim()); });
+      openPop(title, h('div', { class: 'stack-s' },
+        h('div', { class: 'field' }, h('label', { for: 'dc-reason' }, required ? '理由（必填）' : '理由（選填）'), rIn),
+        h('div', { class: 'row end' }, btn('取消', { kind: 'ghost', onclick: closePop }), ok)));
+    };
+
+    // ---- range chips (R8) with the bronze action bubble (R9) attached to the active chip
+    const bubBtn = (ic, label, onclick, disabled) => h('button', { type: 'button', class: 'bub-btn', 'aria-label': label, title: label, onclick, disabled },
+      h('span', { class: 'bub-ico' }, icon(ic)), h('span', { class: 'bub-lbl' }, label));
+    const bubble = h('div', { class: 'bubble', role: 'toolbar', 'aria-label': cand ? '候選 ' + (ci + 1) + ' 的人工決策' : '人工決策' },
+      cand ? bubBtn('check', '接受', () => send('accepted', Object.assign({}, rng, { reason: '' }), '接受候選 ' + fmtTime(cand.start_ms) + '–' + fmtTime(cand.end_ms))) : null,
+      cand ? bubBtn('x', '拒絕', () => reasonPop('拒絕候選', '（選填）例：手持晃動太大', false, '確認拒絕', 'x', (why) => send('rejected', Object.assign({}, rng, { reason: why }), '拒絕候選'))) : null,
+      bubBtn('scissors', '修正時段', fixPop, !playable.length && !cand),
+      bubBtn('camera', '需要補拍', () => {
+        if (!cand) { go('#/board'); return; }
+        reasonPop('需要補拍', '（選填）補充說明，例：需要更長的連續鏡頭', false, '記錄並前往補拍板', 'camera', async (why) => {
+          if (await send('rejected', Object.assign({}, rng, { reason: '需要補拍' + (why ? '：' + why : '') }), '拒絕（需要補拍）')) go('#/board');
+        });
+      }),
+      cand ? bubBtn('flag', '人工接受例外', () => reasonPop('人工接受例外', '片段不完全符合條件，但人工決定接受。例：客戶同意以 2.4 秒版本使用', true, '確認接受例外', 'flag',
+        (why) => send('overridden', Object.assign({}, rng, { reason: why }), '人工接受例外'))) : null);
+    const chipsRow = h('div', { class: 'rchips', role: 'list', 'aria-label': '這個需求的候選時段' });
+    cands.forEach((c, i) => {
+      const rv = reviewOf(c);
+      const dz = rv ? (DECISION[rv.decision] || { zh: rv.decision }).zh : null;
+      const ov = VERDICT[c.overall] || VERDICT.unknown;
+      const a = assetById[c.asset_id];
+      const stateTxt = i === ci ? '目前檢視' : rv ? '已複核：' + dz : '尚未複核';
+      chipsRow.append(h('div', { role: 'listitem', class: 'rchip-wrap' + (i === ci ? ' current' : '') },
+        h('button', {
+          type: 'button', class: 'rchip' + (i === ci ? ' active' : rv ? ' reviewed' : ''), 'aria-current': i === ci ? 'true' : null,
+          'aria-label': '候選 ' + (i + 1) + '：' + fmtTime(c.start_ms) + ' 至 ' + fmtTime(c.end_ms) + '，' + stateTxt + '，整體' + ov.zh,
+          title: (a ? baseName((a.locations || [])[0]) + '  ' : '') + stateTxt, onclick: () => (i === ci ? seekMs(c.start_ms) : nav(i)),
+        }, icon(i === ci ? 'target' : rv ? 'checkc' : 'dashed'), h('span', { class: 'num' }, fmtShort(c.start_ms)), h('span', { class: 'dots', 'aria-hidden': 'true' }, '· · ·'), h('span', { class: 'num' }, fmtShort(c.end_ms))),
+        i === ci ? bubble : null));
+    });
+    const plus = h('button', { type: 'button', class: 'rbtn solid', 'aria-label': '手動指定一段人工片段', title: '手動指定一段人工片段', onclick: fixPop }, icon('plus'));
+    chipsRow.append(h('div', { role: 'listitem', class: 'rchip-wrap' + (cand ? '' : ' current') }, plus, cand ? null : bubble));
+
+    const stageBottom = h('div', { class: 'stage-bottom' }, pop,
+      h('div', { class: 'fs-meta' }, tc, cand ? h('span', { class: 'gpill num' }, '片段 ' + fmtTime(cand.start_ms) + '–' + fmtTime(cand.end_ms)) : null,
+        h('span', { class: 'grow' }), domLabels),
+      fsWrap, chipsRow);
+    const stage = h('section', { class: 'stage', 'aria-label': '證據影片與時間軸' }, video, msg, h('div', { class: 'stage-shade', 'aria-hidden': 'true' }),
+      topLeft, topRight, tools, stageBottom);
+    if (!cand) { msg.hidden = false; }
+
+    // ---- playback loop
+    let raf = 0;
+    const watch = () => {
+      const ms = curMs();
+      tc.textContent = fmtTime(ms);
+      if (head) head.style.left = pctOf(ms) + '%';
+      const r = range();
+      if (st.loop && r && ms >= r.e) seekMs(r.s);
+      if (!video.paused) raf = requestAnimationFrame(watch);
+    };
+    video.addEventListener('play', () => { playBtn.replaceChildren(icon('pause')); const r = range(); if (r && (curMs() >= r.e || curMs() < r.s - 50)) seekMs(r.s); raf = requestAnimationFrame(watch); });
+    video.addEventListener('pause', () => { playBtn.replaceChildren(icon('play')); cancelAnimationFrame(raf); });
+    video.addEventListener('seeked', watch);
+    cleanup.push(() => { cancelAnimationFrame(raf); video.pause(); video.removeAttribute('src'); });
+    const setTransport = (on) => [playBtn, startBtn, loopBtn].forEach((b) => { b.disabled = !on; });
+    if (!cand) setTransport(false);
+
+    loadMedia(cand ? cand.asset_id : null);
+    if (!cand) msg.replaceChildren(icon('searchx'), h('strong', null, '這個需求沒有自動候選'), h('span', null, '可按下方的「+」或「修正時段」手動指定素材與時段。'));
+    drawStrip();
+
+    // ---- cards under the stage: requirement | conditions | history
     const hard = (req.constraints || []).filter((c) => c.hard !== false);
     const synthDur = req.min_duration_ms && !hard.some((c) => c.kind === 'duration');
     const soft = (req.constraints || []).filter((c) => c.hard === false);
-    const consItem = (c) => h('li', null, h('div', { class: 'row', style: 'gap:6px;justify-content:space-between' },
-      h('strong', null, KIND_ZH[c.kind] || c.kind), capChip(c.capability)),
-    c.note ? h('span', { class: 'small muted' }, c.note) : null,
-    c.params && Object.keys(c.params).length ? h('code', { class: 'faint' }, JSON.stringify(c.params)) : null);
-    const left = panel(req.requirement_id + ' · 第 ' + req.revision + ' 版', h('div', null,
-      h('div', { class: 'stack' },
-        h('div', null, h('div', { class: 'faint small' }, '中文原文'), h('div', { style: 'font-weight:600;font-size:15px' }, req.source_text)),
-        h('div', null, h('div', { class: 'faint small' }, '英文檢索字'), h('div', { class: 'mono small muted', lang: 'en' }, req.query_en)),
-        kvs([['最短連續', fmtSec(req.min_duration_ms)], ['最少 take', String(req.min_takes)], ['權重', String(req.weight)]]),
-        row.auto && row.auto.reasons && row.auto.reasons.length ? reasonList(row.auto.reasons) : null),
-      h('div', { class: 'stack', style: 'margin-top:16px' },
-        h('div', null, h('h3', { style: 'margin-bottom:8px' }, '硬性條件（' + (hard.length + (synthDur ? 1 : 0)) + '）'),
-          h('ul', { class: 'hard-list' },
-            synthDur ? h('li', null, h('div', { class: 'row', style: 'gap:6px;justify-content:space-between' }, h('strong', null, '連續時長 ≥ ' + fmtSec(req.min_duration_ms)), capChip('auto'))) : null,
-            hard.map(consItem)),
-          !hard.length && !req.min_duration_ms ? h('p', { class: 'faint small' }, '只有語意內容條件。') : null),
-        soft.length ? h('div', null, h('h3', { style: 'margin-bottom:8px' }, '參考條件'), h('ul', { class: 'hard-list' }, soft.map(consItem))) : null)),
-    { icon: 'list', h: 'h2', cls: 'ev-left', right: h('div', { class: 'row', style: 'gap:4px' },
-      btn('', { sm: true, kind: 'ghost', icon: 'left', aria: '上一個需求', title: '上一個需求', disabled: !prevReq, onclick: () => prevReq && go('#/evidence/' + encodeURIComponent(prevReq.requirement.requirement_id)) }),
-      btn('', { sm: true, kind: 'ghost', icon: 'right', aria: '下一個需求', title: '下一個需求', disabled: !nextReq, onclick: () => nextReq && go('#/evidence/' + encodeURIComponent(nextReq.requirement.requirement_id)) })) });
+    const consItem = (c) => h('li', null, h('div', { class: 'row between' }, h('strong', null, KIND_ZH[c.kind] || c.kind), capChip(c.capability)),
+      c.note ? h('span', { class: 'small muted' }, c.note) : null,
+      c.params && Object.keys(c.params).length ? h('code', { class: 'faint' }, JSON.stringify(c.params)) : null);
+    const reqCard = panel(req.requirement_id + ' · 第 ' + req.revision + ' 版', h('div', { class: 'stack' },
+      h('div', null, h('div', { class: 'faint small' }, '中文原文'), h('div', { class: 'lead' }, req.source_text)),
+      h('div', null, h('div', { class: 'faint small' }, '英文檢索字'), h('div', { class: 'mono small muted', lang: 'en' }, req.query_en)),
+      kvs([['最短連續', fmtSec(req.min_duration_ms)], ['最少 take', String(req.min_takes)], ['權重', String(req.weight)]]),
+      row.auto && row.auto.reasons && row.auto.reasons.length ? reasonList(row.auto.reasons) : null,
+      h('div', null, h('h3', { class: 'mb8' }, '硬性條件（' + (hard.length + (synthDur ? 1 : 0)) + '）'),
+        h('ul', { class: 'hard-list' },
+          synthDur ? h('li', null, h('div', { class: 'row between' }, h('strong', null, '連續時長 ≥ ' + fmtSec(req.min_duration_ms)), capChip('auto'))) : null,
+          hard.map(consItem)),
+        !hard.length && !req.min_duration_ms ? h('p', { class: 'faint small' }, '只有語意內容條件。') : null),
+      soft.length ? h('div', null, h('h3', { class: 'mb8' }, '參考條件'), h('ul', { class: 'hard-list' }, soft.map(consItem))) : null),
+    { icon: 'list', right: h('div', { class: 'row tight' },
+      h('button', { type: 'button', class: 'rbtn glass', 'aria-label': '上一個需求', title: '上一個需求', disabled: !prevReq, onclick: () => prevReq && go('#/evidence/' + encodeURIComponent(prevReq.requirement.requirement_id)) }, icon('left')),
+      h('button', { type: 'button', class: 'rbtn glass', 'aria-label': '下一個需求', title: '下一個需求', disabled: !nextReq, onclick: () => nextReq && go('#/evidence/' + encodeURIComponent(nextReq.requirement.requirement_id)) }, icon('right'))) });
 
-    // center: player + timeline + candidates
-    const startOff = asset && asset.probe && asset.probe.start_ms ? asset.probe.start_ms : 0;
-    const video = h('video', { preload: 'metadata', playsinline: true, muted: true, 'aria-label': '候選片段影片' });
-    const overlay = h('div', { class: 'p-overlay' });
-    const player = h('div', { class: 'player' }, video, overlay,
-      h('div', { class: 'p-badge' }, cand ? chip({ zh: '候選 ' + (ci + 1) + ' / ' + cands.length, icon: 'target', tone: 'violet' }) : null));
-    let loop = true;
-    const tc = h('span', { class: 'tc', 'aria-live': 'off' }, cand ? fmtTime(cand.start_ms) : '—');
-    const playBtn = btn('播放', { icon: 'play', kind: 'primary', sm: true });
-    const loopBtn = btn('循環片段', { icon: 'repeat', sm: true, pressed: 'true' });
-    const toStart = btn('回到起點', { icon: 'back', sm: true });
-    const vt = (ms) => Math.max(0, (ms - startOff) / 1000);
-    const curMs = () => Math.round(video.currentTime * 1000) + startOff;
-    const seekMs = (ms) => { try { video.currentTime = vt(ms); } catch (e) { /* not ready */ } };
-    if (cand) {
-      overlay.replaceChildren(h('span', null, PREVIEW ? '預覽模式不載入影片' : '載入影片中…'));
-      if (PREVIEW) {
-        const f = (PREVIEW.frames || {})[cand.asset_id];
-        if (f) video.setAttribute('poster', f);
-        overlay.style.background = 'linear-gradient(transparent 55%, rgba(0,0,0,.7))';
-        overlay.style.justifyContent = 'flex-end';
-      } else {
-        videoUrl(cand.asset_id).then((u) => { video.src = u; });
-      }
-      video.addEventListener('loadedmetadata', () => { overlay.remove(); seekMs(cand.start_ms); });
-      video.addEventListener('error', () => { overlay.replaceChildren(icon('alert'), h('strong', null, '無法播放這個檔案'), h('span', { class: 'small' }, '可能原因：素材離線、編碼不受瀏覽器支援，或工作階段已過期（請重新整理頁面）。仍可用縮圖與時間碼複核，或在剪輯軟體中開啟原檔。')); if (!overlay.isConnected) player.append(overlay); });
-      let raf = 0;
-      const watch = () => {
-        const ms = curMs();
-        tc.textContent = fmtTime(ms);
-        if (head_) head_.style.left = pct(ms) + '%';
-        if (loop && ms >= cand.end_ms) seekMs(cand.start_ms);
-        if (!video.paused) raf = requestAnimationFrame(watch);
-      };
-      video.addEventListener('play', () => { playBtn.lastChild.textContent = '暫停'; playBtn.firstChild.replaceWith(icon('pause')); if (curMs() >= cand.end_ms || curMs() < cand.start_ms - 50) seekMs(cand.start_ms); raf = requestAnimationFrame(watch); });
-      video.addEventListener('pause', () => { playBtn.lastChild.textContent = '播放'; playBtn.firstChild.replaceWith(icon('play')); cancelAnimationFrame(raf); });
-      video.addEventListener('seeked', watch);
-      cleanup.push(() => { cancelAnimationFrame(raf); video.pause(); video.removeAttribute('src'); });
-      playBtn.addEventListener('click', () => { if (video.paused) video.play().catch(() => {}); else video.pause(); });
-      loopBtn.addEventListener('click', () => { loop = !loop; loopBtn.setAttribute('aria-pressed', String(loop)); });
-      toStart.addEventListener('click', () => seekMs(cand.start_ms));
-    } else {
-      overlay.replaceChildren(icon('searchx'), h('strong', null, '這個需求沒有自動候選'), h('span', { class: 'small' }, '可在右側用「修正時段」手動指定素材與時段。'));
-      [playBtn, loopBtn, toStart].forEach((b) => { b.disabled = true; });
-    }
-
-    // timeline for the candidate's asset
-    let head_ = null;
-    const durMs = asset ? (asset.duration_ms || (asset.probe && asset.probe.duration_ms) || 0) : 0;
-    const sameAsset = cand ? cands.map((c, i) => [c, i]).filter(([c]) => c.asset_id === cand.asset_id) : [];
-    const domainEnd = Math.max(durMs + startOff, ...sameAsset.map(([c]) => c.end_ms), 1) ;
-    const domainStart = startOff;
-    const pct = (ms) => Math.max(0, Math.min(100, (ms - domainStart) / (domainEnd - domainStart) * 100));
-    let timeline = null;
-    if (cand) {
-      const span = domainEnd - domainStart;
-      const steps = [1000, 2000, 5000, 10000, 15000, 30000, 60000, 120000, 300000, 600000];
-      const step = steps.find((s) => span / s <= 8) || 600000;
-      const ticks = [];
-      for (let t = Math.ceil(domainStart / step) * step; t <= domainEnd; t += step) ticks.push(h('span', { class: 'tl-tick', style: 'left:' + pct(t) + '%' }, fmtTime(t).slice(0, 5)));
-      head_ = h('span', { class: 'tl-head', style: 'left:' + pct(cand.start_ms) + '%' });
-      timeline = h('div', { class: 'timeline', role: 'group', 'aria-label': '素材時間軸：' + fmtTime(domainStart) + ' 至 ' + fmtTime(domainEnd),
-        onclick: (e) => { if (e.target !== timeline && !e.target.classList.contains('tl-ruler')) return; const r = timeline.getBoundingClientRect(); seekMs(domainStart + (e.clientX - r.left) / r.width * span); } },
-      h('div', { class: 'tl-ruler' }, ticks),
-      sameAsset.map(([c, i]) => h('button', {
-        type: 'button', class: 'tl-seg' + (i === ci ? ' active' : '') + (c.source === 'manual' ? ' manual' : ''),
-        style: 'left:' + pct(c.start_ms) + '%;width:max(6px,' + (pct(c.end_ms) - pct(c.start_ms)) + '%)',
-        'aria-label': '候選 ' + (i + 1) + '：' + fmtTime(c.start_ms) + ' 至 ' + fmtTime(c.end_ms), title: '候選 ' + (i + 1) + '  ' + fmtTime(c.start_ms) + '–' + fmtTime(c.end_ms),
-        onclick: () => (i === ci ? seekMs(c.start_ms) : nav(i)),
-      }, String(i + 1))), head_);
-    }
-    const candList = cands.length ? h('div', { class: 'cand-list', role: 'list' }, cands.map((c, i) => {
-      const a = assetById[c.asset_id];
-      const ov = VERDICT[c.overall] || VERDICT.unknown;
-      return h('div', { role: 'listitem' }, h('button', { type: 'button', class: 'cand', 'aria-current': i === ci ? 'true' : null, onclick: () => nav(i) },
-        thumb(c.asset_id, c.start_ms, '候選 ' + (i + 1)),
-        h('span', { class: 'c-meta' },
-          h('span', { class: 'row', style: 'gap:6px' }, h('strong', null, '候選 ' + (i + 1)), chip(ov, { aria: '整體：' + ov.zh })),
-          h('span', { class: 'mono', title: a ? (a.locations || [])[0] : c.asset_id }, a ? baseName((a.locations || [])[0]) : c.asset_id),
-          h('span', { class: 'mono faint' }, fmtTime(c.start_ms) + '–' + fmtTime(c.end_ms) + ' · 排序分數 ' + Number(c.ranking_score).toFixed(3)))));
-    })) : h('p', { class: 'faint small' }, '沒有其他候選。');
-
-    const center = h('div', { class: 'ev-center' },
-      player,
-      h('div', { class: 'transport' }, playBtn, toStart, loopBtn, h('span', { class: 'grow' }), tc,
-        cand ? h('span', { class: 'faint small mono' }, '片段 ' + fmtTime(cand.start_ms) + '–' + fmtTime(cand.end_ms)) : null),
-      timeline,
-      timeline ? h('div', { class: 'tl-legend' }, h('span', null, h('i', { style: 'background:rgba(108,76,245,.6)' }), '目前候選'),
-        h('span', null, h('i', { style: 'background:rgba(108,76,245,.22);border:1px solid rgba(139,114,255,.55)' }), '同一素材的其他候選'),
-        h('span', null, h('i', { style: 'background:var(--cyan)' }), '播放位置'),
-        h('span', null, '快捷鍵：空白鍵 播放／暫停 · J 起點 · L 終點 · [ ] 切換候選')) : null,
-      h('section', { class: 'panel', style: 'margin-top:14px', 'aria-label': '這個需求的所有候選' },
-        h('div', { class: 'panel-head' }, h('h2', null, icon('target'), '這個需求的候選（' + cands.length + '）')),
-        h('div', { class: 'panel-body' }, candList)),
-      h('div', { style: 'margin-top:14px' }, historyPanel(req, decisions, assets)));
-
-    // right: conditions + actions
     const conds = cand ? cand.conditions || [] : [];
-    const condList = conds.length ? h('div', null, conds.map((x) => {
-      const v = VERDICT[x.verdict] || VERDICT.unknown;
-      return h('div', { class: 'cond' }, icon(v.icon, v.cls), h('div', null,
-        h('div', { class: 'c-kind' }, KIND_ZH[x.kind] || x.kind, chip(v, { aria: (KIND_ZH[x.kind] || x.kind) + '：' + v.zh })),
-        x.reason ? h('div', { class: 'c-reason' }, x.reason) : null));
-    })) : h('p', { class: 'faint small' }, cand ? '沒有逐項條件結果。' : '沒有候選可檢查。');
-
-    const right = h('div', { class: 'ev-right stack' },
+    const condCard = panel('條件檢查', h('div', { class: 'stack' },
       cand ? h('div', { class: 'score', title: 'ranking_score 只用於排序，不是機率' },
         h('div', null, h('div', { class: 's-l' }, '排序分數（非機率）'), h('div', { class: 'faint small' }, '只用來排序候選，不代表正確的機率')),
-        h('div', { class: 's-v' }, Number(cand.ranking_score).toFixed(3))) : null,
-      panel('條件檢查', condList, { icon: 'checkc' }),
-      decisionPanel(row, cand, assets, { curMs: () => (cand ? curMs() : null), nav }));
+        h('div', { class: 's-v num' }, Number(cand.ranking_score).toFixed(3))) : null,
+      conds.length ? h('div', null, conds.map((x) => {
+        const v = VERDICT[x.verdict] || VERDICT.unknown;
+        return h('div', { class: 'cond' }, icon(v.icon, v.cls), h('div', null,
+          h('div', { class: 'c-kind' }, KIND_ZH[x.kind] || x.kind, chip(v, { aria: (KIND_ZH[x.kind] || x.kind) + '：' + v.zh })),
+          x.reason ? h('div', { class: 'c-reason' }, x.reason) : null));
+      })) : h('p', { class: 'faint small' }, cand ? '沒有逐項條件結果。' : '沒有候選可檢查。'),
+      errBox,
+      h('p', { class: 'faint small' }, '決策只套用在需求第 ' + req.revision + ' 版；需求修改後需重新確認。快捷鍵：空白鍵 播放／暫停 · J 起點 · L 終點 · [ ] 切換候選 · Esc 關閉表單。')),
+    { icon: 'checkc' });
 
-    // keyboard shortcuts (scoped to this screen)
+    // ---- keyboard shortcuts (scoped to this screen)
     const onKey = (e) => {
-      if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
+      if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); closePop(); return; }
+      if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable], [role=slider]')) return;
       if (e.altKey || e.ctrlKey || e.metaKey) return;
-      if (e.key === ' ' && cand && !(e.target.closest && e.target.closest('button, a'))) { e.preventDefault(); playBtn.click(); }
-      else if ((e.key === 'j' || e.key === 'J') && cand) seekMs(cand.start_ms);
-      else if ((e.key === 'l' || e.key === 'L') && cand) seekMs(Math.max(cand.start_ms, cand.end_ms - 100));
+      const r = range();
+      if (e.key === ' ' && r && !(e.target.closest && e.target.closest('button, a'))) { e.preventDefault(); playBtn.click(); }
+      else if ((e.key === 'j' || e.key === 'J') && r) seekMs(r.s);
+      else if ((e.key === 'l' || e.key === 'L') && r) seekMs(Math.max(r.s, r.e - 100));
       else if (e.key === '[' && ci > 0) nav(ci - 1);
       else if (e.key === ']' && ci < cands.length - 1) nav(ci + 1);
     };
     document.addEventListener('keydown', onKey);
     cleanup.push(() => document.removeEventListener('keydown', onKey));
 
-    return h('div', null,
-      h('div', { class: 'row', style: 'margin-bottom:12px' }, btn('覆蓋矩陣', { sm: true, kind: 'ghost', icon: 'left', href: '#/coverage' }),
-        h('div', { class: 'grow' }, eyebrow(NAME_EN.evidence), h('h1', { style: 'font-size:18px' }, '證據檢視器')),
+    return h('div', { class: 'ev' },
+      h('div', { class: 'ev-bar' }, h('a', { class: 'btn ghost', href: '#/coverage' }, icon('left'), h('span', null, '覆蓋矩陣')),
+        h('h1', { class: 'grow ellipsis' }, '證據檢視器', h('span', { class: 'h1-sub' }, req.requirement_id + ' · ' + req.source_text)),
         cov && cov.outdated && cov.run ? chip(AUTO_STALE, { text: '分析快照已過期' }) : null),
-      head,
-      h('div', { class: 'ev-grid' }, left, center, right));
+      stage,
+      h('div', { class: 'ev-cards' }, reqCard, condCard, h('div', { class: 'ev-hist' }, historyPanel(req, decisions, assets))));
   };
 
   const DECISION = {
@@ -1409,78 +1588,6 @@
     });
     return panel('決策紀錄（' + mine.length + '）', h('div', null, errBox, h('ul', { class: 'hist' }, items),
       h('p', { class: 'faint small', style: 'margin-top:10px' }, '同一片段以最後一筆決策為準；撤銷會新增一筆「拒絕」，不會刪除紀錄。')), { icon: 'clock' });
-  }
-
-  function decisionPanel(row, cand, assets, ctx) {
-    const req = row.requirement;
-    const box = h('div', { class: 'stack' });
-    const sub = h('div');
-    const done = h('div', { class: 'decided', 'aria-live': 'polite' });
-    const send = (decision, payload, okText) => postReview(req, decision, payload, okText, done);
-    const rng = cand ? { asset_id: cand.asset_id, start_ms: cand.start_ms, end_ms: cand.end_ms, source: cand.source === 'manual' ? 'manual' : 'model' } : null;
-    const noteIn = h('textarea', { class: 'input', rows: 2, id: 'dc-note', placeholder: '（選填）例：手持晃動太大' });
-
-    const openSub = (node) => { sub.replaceChildren(node); const f = node.querySelector('input, textarea, select'); if (f) f.focus(); };
-
-    const fixForm = () => {
-      // only assets that can hold a segment: analyzed first, then pending; failed/missing/excluded are left out
-      const rank = { analyzed: 0, analyzing: 1, pending: 2 };
-      const analyzed = assets.filter((a) => a.status in rank).sort((x, y) => rank[x.status] - rank[y.status]);
-      let aid = cand ? cand.asset_id : (analyzed[0] && analyzed[0].asset_id);
-      const sIn = h('input', { class: 'input mono', id: 'fx-s', value: cand ? fmtTime(cand.start_ms) : '00:00.000', inputmode: 'decimal' });
-      const eIn = h('input', { class: 'input mono', id: 'fx-e', value: cand ? fmtTime(cand.end_ms) : '00:03.000', inputmode: 'decimal' });
-      const err = h('div', { class: 'err-line', role: 'alert' });
-      const here = (inp) => btn('目前位置', { sm: true, kind: 'ghost', icon: 'clock', disabled: !cand, onclick: () => { const m = ctx.curMs(); if (m != null) inp.value = fmtTime(m); } });
-      return h('div', { class: 'subform', role: 'group', 'aria-label': '修正時段' },
-        h('strong', null, '修正時段（以人工片段記錄）'),
-        h('div', { class: 'field' }, h('label', { for: 'fx-a' }, '素材'),
-          h('select', { id: 'fx-a', class: 'input', onchange: (e) => { aid = e.target.value; } },
-            analyzed.map((a) => h('option', { value: a.asset_id, selected: a.asset_id === aid }, baseName((a.locations || [])[0] || a.asset_id))))),
-        h('div', { class: 'grid-2', style: 'gap:8px' },
-          h('div', { class: 'field' }, h('label', { for: 'fx-s' }, '開始（mm:ss.mmm）'), sIn, here(sIn)),
-          h('div', { class: 'field' }, h('label', { for: 'fx-e' }, '結束（mm:ss.mmm）'), eIn, here(eIn))),
-        err,
-        h('div', { class: 'row', style: 'justify-content:flex-end' }, btn('取消', { sm: true, kind: 'ghost', onclick: () => sub.replaceChildren() }),
-          btn('以此時段接受', { sm: true, kind: 'primary', icon: 'check', onclick: () => {
-            const s = parseTime(sIn.value), e = parseTime(eIn.value);
-            if (!isFinite(s) || !isFinite(e)) { err.textContent = '時間格式請用 mm:ss.mmm，例如 01:02.500。'; return; }
-            if (s >= e) { err.textContent = '開始時間要早於結束時間。'; return; }
-            if (!aid) { err.textContent = '請選擇素材。'; return; }
-            send('accepted', { asset_id: aid, start_ms: s, end_ms: e, source: 'manual', reason: noteIn.value.trim() }, '人工修正時段 ' + fmtTime(s) + '–' + fmtTime(e));
-          } })));
-    };
-    const excForm = () => {
-      const rIn = h('textarea', { class: 'input', id: 'ex-r', rows: 3, placeholder: '例：客戶同意以 2.4 秒版本使用，剪接時放慢 80%' });
-      const ok = btn('確認接受例外', { sm: true, kind: 'primary', icon: 'flag', disabled: true });
-      rIn.addEventListener('input', () => { ok.disabled = !rIn.value.trim(); });
-      ok.addEventListener('click', () => { if (rIn.value.trim()) send('overridden', Object.assign({}, rng, { source: rng.source, reason: rIn.value.trim() }), '人工接受例外'); });
-      return h('div', { class: 'subform', role: 'group', 'aria-label': '人工接受例外' },
-        h('strong', null, '人工接受例外'),
-        h('p', { class: 'small muted' }, '片段不完全符合條件，但人工決定接受。理由為必填，會寫入報告。'),
-        h('div', { class: 'field' }, h('label', { for: 'ex-r' }, '理由（必填）'), rIn),
-        h('div', { class: 'row', style: 'justify-content:flex-end' }, btn('取消', { sm: true, kind: 'ghost', onclick: () => sub.replaceChildren() }), ok));
-    };
-    const reshootForm = () => h('div', { class: 'subform', role: 'group', 'aria-label': '需要補拍' },
-      h('strong', null, '需要補拍'),
-      h('p', { class: 'small muted' }, cand ? '會把目前候選記錄為「拒絕」（理由：需要補拍），然後前往複核／補拍板。補拍卡片會在下次分析後出現。' : '這個需求沒有候選；前往複核／補拍板查看建議。'),
-      h('div', { class: 'row', style: 'justify-content:flex-end' }, btn('取消', { sm: true, kind: 'ghost', onclick: () => sub.replaceChildren() }),
-        btn(cand ? '記錄並前往補拍板' : '前往補拍板', { sm: true, kind: 'primary', icon: 'camera', onclick: async () => {
-          if (!cand) { go('#/board'); return; }
-          if (await send('rejected', Object.assign({}, rng, { reason: '需要補拍' + (noteIn.value.trim() ? '：' + noteIn.value.trim() : '') }), '拒絕（需要補拍）')) go('#/board');
-        } })));
-
-    box.append(
-      h('div', { class: 'field' }, h('label', { for: 'dc-note' }, '備註／拒絕理由'), noteIn),
-      h('div', { class: 'actions-grid' },
-        btn('接受', { kind: 'success', icon: 'check', disabled: !cand, onclick: () => send('accepted', Object.assign({}, rng, { reason: noteIn.value.trim() }), '接受候選 ' + fmtTime(cand.start_ms) + '–' + fmtTime(cand.end_ms)) }),
-        btn('拒絕', { kind: 'danger', icon: 'x', disabled: !cand, onclick: () => send('rejected', Object.assign({}, rng, { reason: noteIn.value.trim() }), '拒絕候選') }),
-        btn('修正時段', { icon: 'scissors', onclick: () => openSub(fixForm()) }),
-        btn('人工接受例外', { icon: 'flag', disabled: !cand, onclick: () => openSub(excForm()) }),
-        h('div', { class: 'full' }, btn('需要補拍', { icon: 'camera', block: true, onclick: () => openSub(reshootForm()) }))),
-      sub, done,
-      h('p', { class: 'faint small' }, '決策只套用在需求第 ' + req.revision + ' 版；需求修改後需重新確認。'));
-    if (!cand) setTimeout(() => sub.childElementCount || sub.replaceChildren(fixForm()), 0);
-    return panel('人工決策', box, { icon: 'user' });
   }
 
   // ---------- 6 review / reshoot board
@@ -1552,8 +1659,8 @@
     const npuTxt = hl.npu_active == null ? 'N/A' : (hl.npu_active ? '是' : '否');
     out.push(h('section', { class: 'panel hero', 'aria-label': 'UGen300 裝置狀態' },
       h('div', { class: 'hero-main' },
-        eyebrow('EDGE AI DEVICE'),
-        h('div', { class: 'hero-title' }, 'UGen300'),
+        h('div', { class: 'hero-kicker' }, 'Edge AI 裝置'),
+        h('div', { class: 'hero-title grad-text' }, 'UGen300'),
         h('p', { class: 'muted' }, dev.available ? '已偵測到裝置。只有在實機驗證過的模型執行時，才會回報 NPU 結果。'
           : 'UGen300 未連線；目前由明示的 CPU 參考後端執行，所有結果與報告都會標示實際後端。'),
         dev.reason ? h('p', { class: 'mono small faint', style: 'margin-top:6px' }, dev.reason) : null),
@@ -1601,7 +1708,7 @@
   function boot() {
     if (PREVIEW) {
       document.body.classList.add('is-preview');
-      document.body.prepend(h('div', { class: 'preview-ribbon', role: 'note' }, icon('beaker'), '預覽資料（非實測）— 畫面使用範例資料，不是實際分析結果'));
+      document.body.prepend(h('div', { class: 'preview-ribbon', role: 'note' }, icon('beaker'), '預覽資料（非實測）· 畫面使用範例資料，不是實際分析結果'));
     } else if (!TOKEN || TOKEN === '__SG_TOKEN__') {
       toast({ kind: 'error', title: '缺少工作階段權杖', text: '下一步：請從 SceneGap 啟動程式開啟本頁，不要直接開啟 HTML 檔。' });
     }

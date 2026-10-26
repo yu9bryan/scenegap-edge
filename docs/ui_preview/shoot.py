@@ -23,6 +23,8 @@ SHOTS = [
     ("04_coverage", "", "#/coverage"),
     ("05_evidence", "", "#/evidence/R01/0"),
     ("05b_evidence_history", "", "#/evidence/R01/0", 520),
+    ("05c_evidence_fix_range", "", "#/evidence/R01/0", 0, """document.querySelector('.bub-btn[aria-label="修正時段"]').click()"""),
+    ("05d_evidence_no_candidate", "", "#/evidence/R04"),
     ("06_board", "", "#/board"),
     ("07_device", "", "#/device"),
 ]
@@ -40,6 +42,9 @@ with sync_playwright() as p:
         if scroll:
             page.evaluate("y => { document.querySelector('#main').scrollTop = y; }", scroll[0])
             page.wait_for_timeout(300)
+        if len(scroll) > 1:
+            page.evaluate(scroll[1])
+            page.wait_for_timeout(400)
         page.screenshot(path=str(HERE / f"{name}{SUFFIX}.png"))
         # overflow check: anything wider than the viewport?
         over = page.evaluate("""() => { const m = document.querySelector('#main');

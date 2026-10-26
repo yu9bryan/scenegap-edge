@@ -102,3 +102,47 @@ not ProArt's bronze or ROG red.
    Below 1280 px the rail collapses to icons with hairline group dividers.
 7. **Dense tables** with condensed uppercase column headers and right-aligned key/value rows (run info,
    device details, requirement facts).
+
+## v3 (2026-10-26): reference layout + ProArt palette — supersedes the two sections above
+
+The binding spec is `DESIGN_SPEC_v3.md` (sections 1, 2, 2b, 3). The charcoal/violet look, the angled corners,
+the `////` condensed caps eyebrows and Barlow are gone. How the spec was applied:
+
+- **Shell (R2–R4).** Floating rounded rail of 48 px round tools. Idle tools are glass, the active screen is a
+  bronze-gradient circle with a bronze label, and the brand mark is the one solid-white circle. Labels show beside
+  the circles at ≥ 1280 px; below that it is an icon rail with tooltips and aria-labels. The top bar has the
+  screen name on the left and the project name as a glass pill in the centre, with a solid-white round "+"
+  (switch or create project) and a glass refresh. The backend and UGen300 status sit as small outlined pills on
+  the right and always show the real values.
+- **Cards (R10, 2b).** `#141414` cards with a 1 px `#2A2A2A` border and 8 px radius, 14 px white card titles, no
+  icons or slashes in the headers. In-card buttons are 4 px rectangles; floating controls and chips are pills.
+  Nothing uses a radius in between. Line icons are 1.5 px.
+- **Colour budget.** Bronze is used on only five things:
+  - the one primary button per view (bronze fill with black text);
+  - the active rail item;
+  - the hero numeral (人工確認覆蓋, in the gradient text `#CEB497 → #766050`) and its gauge ring;
+  - the playhead and active candidate;
+  - the focus ring.
+
+  Secondary actions such as 開啟覆蓋矩陣 are a 1 px bronze outline. Everything else is greyscale. Status colours
+  (`#F2994A` / `#FF6B6B` / `#9B9B9B`) are used only on icons and 2 px row markers.
+- **States.** The AI state is a bronze-outlined pill with an "AI" prefix. Human-confirmed or exception is a solid
+  white pill with black text; not confirmed is an outlined grey pill. Every state still has its own icon and
+  Chinese text.
+- **Evidence stage (R1, R5–R9).**
+  - A 32 px-radius black stage; the candidate video, or its frame in preview, fills it. Dark scrims sit under the
+    floating pills (file, original range, take, backend, run, AI and human state).
+  - A glass column of round transport tools: play (white), back to start (glass), loop (bronze while on).
+  - A filmstrip of 12 frames sampled from the zoomed time range. Candidates are drawn as rounded segments with
+    round end markers; the area outside the active range is dimmed. The playhead is a bronze line with a dot.
+  - Below it, range chips `00:12.5 · · · 00:17.9`: bronze = current, white = reviewed on this version,
+    dark = not reviewed, each with an icon and a full aria-label. A round "+" adds a manual segment.
+  - A bronze bubble attached to the active chip holds 接受 / 拒絕 / 修正時段 / 需要補拍 / 人工接受例外.
+    Forms open in a glass popover above the filmstrip.
+  - 修正時段 shows dark round handles on the strip. They can be dragged, or moved with the arrow keys
+    (100 ms steps; Shift = 1 s), and they stay in sync with the time inputs.
+  - Cards below the stage: requirement and hard conditions, condition checks with 排序分數（非機率）, and the
+    decision history with undo.
+- **Type and motion.** Roboto + Noto Sans TC. Titles are 34 px weight 400 and KPI numerals 52 px weight 300 with a
+  small unit; body text is `#C7C7C7` with 0.5 px tracking. Views fade in over 180 ms; all motion is off under
+  `prefers-reduced-motion`.
