@@ -34,6 +34,11 @@ def err(status: int, code: str, message: str, recoverable=True, stage=None, asse
                          "asset_id": asset_id, "request_id": uuid.uuid4().hex[:12]}, status_code=status)
 
 
+class RequestIn(BaseModel):
+    revision: int
+    reason: str
+
+
 class ExcludeIn(BaseModel):
     reason: str
 
@@ -275,6 +280,11 @@ def create_app(workdir: str, backend_factory=None, config: dict | None = None, t
     def reshoots(pid: str):
         svc.project(pid)
         return svc.reshoot_cards(pid)
+
+    @app.post("/api/v1/projects/{pid}/reshoots/{rid}/request")
+    def reshoot_request(pid: str, rid: str, body: RequestIn):
+        svc.request_reshoot(pid, rid, body.revision, body.reason)
+        return {"ok": True}
 
     @app.post("/api/v1/projects/{pid}/reshoots/{rid}/status")
     def reshoot_status(pid: str, rid: str, body: StatusIn):

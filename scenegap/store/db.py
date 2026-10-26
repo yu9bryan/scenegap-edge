@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS decisions(id TEXT PRIMARY KEY, project_id TEXT, requi
   start_ms INTEGER, end_ms INTEGER, decision TEXT, reason TEXT, source TEXT, actor TEXT, ts TEXT);
 CREATE TABLE IF NOT EXISTS jobs(job_id TEXT PRIMARY KEY, project_id TEXT, kind TEXT, state TEXT, stage TEXT, done INTEGER,
   total INTEGER, failed INTEGER, error TEXT, payload TEXT, created_at TEXT, updated_at TEXT);
+CREATE TABLE IF NOT EXISTS reshoot_requests(project_id TEXT, requirement_id TEXT, revision INTEGER, reason TEXT, actor TEXT, ts TEXT,
+  PRIMARY KEY(project_id, requirement_id, revision));
 CREATE TABLE IF NOT EXISTS reshoot_status(project_id TEXT, requirement_id TEXT, revision INTEGER, status TEXT,
   PRIMARY KEY(project_id, requirement_id, revision));
 """

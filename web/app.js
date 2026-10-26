@@ -1424,9 +1424,12 @@
       cand ? bubBtn('x', '拒絕', () => reasonPop('拒絕候選', '（選填）例：手持晃動太大', false, '確認拒絕', 'x', (why) => send('rejected', Object.assign({}, rng, { reason: why }), '拒絕候選'))) : null,
       bubBtn('scissors', '修正時段', fixPop, !playable.length && !cand),
       bubBtn('camera', '需要補拍', () => {
-        if (!cand) { go('#/board'); return; }
-        reasonPop('需要補拍', '（選填）補充說明，例：需要更長的連續鏡頭', false, '記錄並前往補拍板', 'camera', async (why) => {
-          if (await send('rejected', Object.assign({}, rng, { reason: '需要補拍' + (why ? '：' + why : '') }), '拒絕（需要補拍）')) go('#/board');
+        reasonPop('要求補拍', '必填：為什麼現有片段不能用，例：倒入只拍到 2 秒、品牌被手擋住', true, '送到補拍板', 'camera', async (why) => {
+          if (cand && !(await send('rejected', Object.assign({}, rng, { reason: '需要補拍：' + why }), '拒絕此候選'))) return;
+          try {
+            await api('POST', P() + '/reshoots/' + encodeURIComponent(req.requirement_id) + '/request', { revision: req.revision, reason: why });
+            go('#/board');
+          } catch (e) { showError(e, '補拍要求沒有寫入'); }
         });
       }),
       cand ? bubBtn('flag', '人工接受例外', () => reasonPop('人工接受例外', '片段不完全符合條件，但人工決定接受。例：客戶同意以 2.4 秒版本使用', true, '確認接受例外', 'flag',

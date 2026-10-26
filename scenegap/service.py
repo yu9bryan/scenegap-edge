@@ -507,8 +507,10 @@ class SceneGap:
                 continue                                      # stale outcome -> no card until re-analysed
             st = o["status"]
             outs.append(RequirementOutcome(r, AutoStatus(st) if st != "draft" else st, [], o["reasons"], o["scope_complete"]))
+        req_rows = self.db.all("SELECT requirement_id, revision, reason FROM reshoot_requests WHERE project_id=?", (pid,))
+        human = {x["requirement_id"]: x["reason"] for x in req_rows if reqs.get(x["requirement_id"]) and reqs[x["requirement_id"]].revision == x["revision"]}
         out = []
-        for c in cards(outs, confirmed):
+        for c in cards(outs, confirmed, human):
             d = c.to_dict()
             best = res["outcomes"][c.requirement_id]["candidates"]
             if best:
@@ -520,6 +522,17 @@ class SceneGap:
             d["status"] = st["status"] if st else "proposed"
             out.append(d)
         return out
+
+    def request_reshoot(self, pid: str, requirement_id: str, revision: int, reason: str, actor: str = "local-user"):
+        """A person reviewed the candidates and decided the shot must be re-taken (bound to the requirement revision)."""
+        r = next((x for x in self.requirements(pid) if x.requirement_id == requirement_id), None)
+        if r is None:
+            raise Invalid("NOT_FOUND", "requirement not found")
+        if r.revision != revision:
+            raise Conflict(f"requirement {requirement_id} is at revision {r.revision}, not {revision}")
+        if not reason.strip():
+            raise Invalid("REASON_REQUIRED", "a reshoot request needs a reason")
+        self.db.x("INSERT OR REPLACE INTO reshoot_requests VALUES(?,?,?,?,?,?)", (pid, requirement_id, revision, reason.strip(), actor, now()))
 
     def set_reshoot_status(self, pid, requirement_id, revision, status):
         if status not in ("proposed", "confirmed", "shooting", "done", "dismissed"):

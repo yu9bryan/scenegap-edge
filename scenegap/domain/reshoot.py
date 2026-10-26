@@ -36,15 +36,18 @@ class ReshootCard:
         return asdict(self)
 
 
-def cards(outcomes: list[RequirementOutcome], confirmed_ids: set[str]) -> list[ReshootCard]:
+def cards(outcomes: list[RequirementOutcome], confirmed_ids: set[str], human_requests: dict[str, str] | None = None) -> list[ReshootCard]:
+    """human_requests: requirement_id -> reason, for requirements a person sent to reshoot after reviewing candidates."""
+    human_requests = human_requests or {}
     out = []
     for o in outcomes:
         r = o.requirement
         if not r.active_required or r.requirement_id in confirmed_ids:
             continue
-        if o.status in ("draft", AutoStatus.CANDIDATE):
-            continue                      # candidates are reviewed in the evidence viewer, not re-shot
-        review_first = o.status != AutoStatus.NOT_FOUND
+        requested = r.requirement_id in human_requests
+        if o.status == "draft" or (o.status == AutoStatus.CANDIDATE and not requested):
+            continue                      # candidates are reviewed in the evidence viewer, not re-shot, unless a person asks
+        review_first = o.status != AutoStatus.NOT_FOUND and not requested
         best = None
         if o.candidates:
             c = o.candidates[0]
@@ -58,8 +61,10 @@ def cards(outcomes: list[RequirementOutcome], confirmed_ids: set[str]) -> list[R
             verify += "；" + "、".join(sorted({c.kind for c in manual})) + " 由人工確認"
         out.append(ReshootCard(
             requirement_id=r.requirement_id, requirement_revision=r.revision, source_text=r.source_text,
-            kind="review_first" if review_first else "reshoot_proposed", review_first=review_first,
-            reasons=list(o.reasons), reasons_zh=[REASON_ZH.get(x, x) for x in o.reasons], best_candidate=best,
+            kind="reshoot_requested" if requested else ("review_first" if review_first else "reshoot_proposed"), review_first=review_first,
+            reasons=list(o.reasons) + (["HUMAN_REQUESTED"] if requested else []),
+            reasons_zh=[REASON_ZH.get(x, x) for x in o.reasons] + ([f"人工複核後要求補拍：{human_requests[r.requirement_id]}"] if requested else []),
+            best_candidate=best,
             min_continuous_s=r.min_duration_ms / 1000,
             handles=next((f"前後各 {c.params['handles_ms']/1000:.1f} 秒" for c in r.constraints if c.params.get("handles_ms")), "未指定"),
             composition=comp, props=props, verify_by=verify))

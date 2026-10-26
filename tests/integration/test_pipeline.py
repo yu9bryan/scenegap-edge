@@ -311,3 +311,24 @@ def test_moved_file_is_missing_then_relocated_by_hash_TC031(tmp_path, media):
     svc.analyze_assets(pid)
     assert svc.assets(pid)[0]["status"] == "analyzed" and be.image_calls == calls   # index reused, not recomputed
     assert svc.compute_run(pid)["outcomes"]["SH-101"]["status"] == "candidate"
+
+
+def test_person_can_request_reshoot_for_a_candidate(tmp_path, media):
+    svc, be = make(tmp_path)
+    pid = svc.create_project("req")
+    rid = svc.add_root(pid, str(media))
+    svc.set_requirement(pid, RED)
+    svc.import_assets(pid, rid, ["two_shots.mp4"])
+    svc.analyze_assets(pid)
+    assert svc.compute_run(pid)["outcomes"]["SH-101"]["status"] == "candidate"
+    assert svc.reshoot_cards(pid) == []                       # a candidate never gets a card on its own
+    with pytest.raises(Invalid):
+        svc.request_reshoot(pid, "SH-101", 1, "  ")           # reason required
+    with pytest.raises(Conflict):
+        svc.request_reshoot(pid, "SH-101", 9, "too dark")     # stale revision
+    svc.request_reshoot(pid, "SH-101", 1, "畫面太暗，品牌看不清")
+    cards = svc.reshoot_cards(pid)
+    assert [c["kind"] for c in cards] == ["reshoot_requested"] and "HUMAN_REQUESTED" in cards[0]["reasons"]
+    svc.set_requirement(pid, {**RED, "min_duration_ms": 2500}, expected_revision=1)
+    svc.compute_run(pid)
+    assert svc.reshoot_cards(pid) == []                       # the request was bound to revision 1
