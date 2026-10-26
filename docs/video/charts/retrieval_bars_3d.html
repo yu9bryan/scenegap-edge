@@ -26,7 +26,7 @@ const cam = new THREE.PerspectiveCamera(20, W/H, 0.1, 300);
 // lights
 scene.add(new THREE.HemisphereLight('#c9c4ff', '#0B0B12', 0.55));
 const key = new THREE.DirectionalLight('#ffffff', 1.6); key.position.set(-6, 14, 9); key.castShadow = true;
-key.shadow.mapSize.set(2048,2048); key.shadow.camera.left=-14; key.shadow.camera.right=14; key.shadow.camera.top=14; key.shadow.camera.bottom=-14; key.shadow.radius=6; key.shadow.bias=-0.0005;
+key.shadow.mapSize.set(2048,2048); key.shadow.camera.left=-14; key.shadow.camera.right=14; key.shadow.camera.top=14; key.shadow.camera.bottom=-14; key.shadow.radius=6; key.shadow.bias=-0.0002; key.shadow.normalBias=0.035;
 scene.add(key);
 const rim = new THREE.DirectionalLight('#22D3EE', 0.5); rim.position.set(8, 5, -8); scene.add(rim);
 // floor + faint grid
@@ -37,7 +37,8 @@ const pc = document.createElement('canvas'); pc.width = pc.height = 512; const p
 const rg = px.createRadialGradient(256, 256, 0, 256, 256, 256); rg.addColorStop(0, 'rgba(120,110,220,0.32)'); rg.addColorStop(0.55, 'rgba(60,60,120,0.12)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
 px.fillStyle = rg; px.fillRect(0, 0, 512, 512);
 const pool = new THREE.Mesh(new THREE.PlaneGeometry(30, 14), new THREE.MeshBasicMaterial({map: new THREE.CanvasTexture(pc), transparent:true, depthWrite:false}));
-pool.rotation.x = -Math.PI/2; pool.position.y = 0.003; scene.add(pool);
+pool.material.polygonOffset = true; pool.material.polygonOffsetFactor = -1; pool.material.polygonOffsetUnits = -4;
+pool.rotation.x = -Math.PI/2; pool.position.y = 0.01; pool.renderOrder = 1; scene.add(pool);
 // bars on plinths
 const COL = ['#22D3EE', '#8B78FF'];
 // vertical gradients: colour (dark bottom -> bright top) and alpha (more see-through at the bottom)
@@ -70,9 +71,12 @@ GROUPS.forEach((g, i) => {
     // BoxGeometry face order: +x, -x, +y (top), -y (bottom), +z, -z; the top gets a solid bright cap
     const cap = new THREE.MeshPhysicalMaterial({color: GRAD[j][2], transparent:true, opacity:0.95, roughness:0.15, clearcoat:0.8,
       emissive: GRAD[j][2], emissiveIntensity:0.45, depthWrite:false});
-    const m = new THREE.Mesh(geo, [mat, mat, cap, mat, mat, mat]); m.castShadow = true;
-    m.position.set(x + (j ? 1 : -1) * (barW + inner)/2, plinthH, 0); m.scale.y = 0.001; scene.add(m);
+    const hidden = new THREE.MeshBasicMaterial({visible:false});          // bottom face sits on the plinth: never drawn
+    const m = new THREE.Mesh(geo, [mat, mat, cap, hidden, mat, mat]); m.castShadow = true;
+    m.renderOrder = 10 + i * 2 + j;                                       // fixed draw order: no swapping while the camera sways
+    m.position.set(x + (j ? 1 : -1) * (barW + inner)/2, plinthH + 0.02, 0); m.scale.y = 0.001; scene.add(m);
     const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({color:'#ffffff', transparent:true, opacity:0.4}));
+    edges.renderOrder = 30;
     m.add(edges);
     bars.push({m, h, delay: 0.25 + i*0.22 + j*0.1});
     const el = document.createElement('div'); el.className = 'v'; el.textContent = v + '%'; el.style.opacity = 0; document.body.appendChild(el);
