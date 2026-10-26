@@ -1,0 +1,16 @@
+{
+ "rules": [
+  "R1 (SH-01, street seating): the guide lists \"terrace\" as an example of a cafe exterior, so outdoor seating counts when cafe furniture (tables/chairs with drinks) set out on the street/pavement is visible from the street. A street or crowd with no cafe furniture, storefront, sign or facade does not count (\"Not any street\"). A logo on glass seen from inside, with interior behind it, is not \"visible from the street\".",
+  "R2 (SH-09, capsule machine): the guide defines extracting as \"coffee flowing from the group head / portafilter\". A capsule machine has neither, so its flow into a cup is not SH-09 (it can still be SH-05). Coffee visibly emerging from a portafilter basket (including a bottomless portafilter before a single stream forms) counts.",
+  "R3 (SH-11, barista/worker): read literally, the person must be identifiable as a barista or worker: a commercial counter, cafe/restaurant service setting or commercial machine in the shot. Home brewers, ceremony performers or hosts with no service context, and hands-only tutorials in domestic or studio settings do not count. The person must also be preparing coffee (grinding, tamping, operating the machine, pouring); rinsing a pitcher or presenting a finished cup does not count. A partly visible worker (hands) counts when the setting is commercial.",
+  "R4 (SH-08): a person counts when a clearly distinct body is visible (face, torso, or a limb that clearly belongs to a second person, e.g. an arm reaching across the counter). The setting must be the inside of a cafe/coffee shop. Frames are judged through glass or dissolves when the people are clearly discernible.",
+  "R5 (SH-06 vs SH-05): SH-06 is negative when anything is visibly being poured or dripped into the cup/glass, applying \"not being poured into\" literally (this includes sugar), and when the cup is held or lifted in the hands rather than standing on a table, saucer or counter. A cup resting on a surface with a hand still touching it counts. Any visible stream or drip of coffee/milk into a cup counts for SH-05, whatever the machine.",
+  "R6 (SH-03): \"fill a clear part of the frame, close up\" means the beans are a close-up, dominant element. Beans that take up a small part of a medium or wide shot (in a bowl, cup or small glass) do not count.",
+  "R7 (dissolves/split screens): judge only what is clearly discernible in the frame; a layer that clearly shows the requirement counts.",
+  "R8 (SH-04): grinding must be evident from the still, with ground coffee visibly coming out of the spout. A finger on the button, an idle grinder, or residue at the spout does not count.",
+  "Brand (SH-10_brand_readable): judged on the coffee packages themselves. \"Douwe Egberts\" is clearly readable on a cardboard collection box for D.E points (t=20-25, 84-86), but that box is not a package of coffee. On the green coffee packs (t=0-4, 20-25, 41-47, 84-86) only a round logo seal is visible and no brand text can be read, so the answer is \"no\"."
+ ],
+ "brand": {
+  "016_Lions_Almelo_zamelt_koffie_in_voor_Voedselbank.webm.mp4": "no"
+ }
+}

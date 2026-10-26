@@ -29,12 +29,14 @@ from scenegap.backends.cpu_clip import ClipReference
 be = ClipReference(device={dev!r})
 print("ready", flush=True)
 n = 0
-while True:
-    work = os.path.join({work!r}, "w%d" % n); n += 1
-    svc = SceneGap(work, lambda: be, {{"stable_wait_s": 0.0}})
-    pid = svc.create_project("load"); rid = svc.add_root(pid, {mp4!r})
-    svc.import_assets(pid, rid, {clips!r}); svc.analyze_assets(pid)
-    print("cycle", n, flush=True)
+while True:                                   # one clip per fresh workdir, so every clip is decoded and embedded again
+    for clip in {clips!r}:
+        work = os.path.join({work!r}, "w%d" % n); n += 1
+        svc = SceneGap(work, lambda: be, {{"stable_wait_s": 0.0}})
+        pid = svc.create_project("load"); rid = svc.add_root(pid, {mp4!r})
+        svc.import_assets(pid, rid, [clip])
+        r = svc.analyze_assets(pid)
+        print("done", r["analyzed"], flush=True)
 """
 
 
@@ -49,13 +51,20 @@ def make_playback_clip(path, seconds):
 
 def playback(path):
     import av
-    late, frames, worst = 0, 0, 0.0
+    late, frames, worst, work = 0, 0, -1e9, []
     with av.open(path) as c:
         st = c.streams.video[0]
         period = 1 / float(st.average_rate)
         t0, first = None, None
-        for f in c.decode(st):
+        it = c.decode(st)
+        while True:
+            w0 = time.perf_counter()
+            try:
+                f = next(it)
+            except StopIteration:
+                break
             f.to_ndarray(format="rgb24")
+            work.append((time.perf_counter() - w0) * 1000)
             pts = float(f.pts * st.time_base)
             now = time.perf_counter()
             if t0 is None:
@@ -68,7 +77,10 @@ def playback(path):
                 late += 1
             elif lag < 0:
                 time.sleep(-lag)
-    return {"frames": frames, "late": late, "late_share": round(late / frames, 4), "worst_lag_ms": round(worst * 1000, 1)}
+    import numpy as np
+    return {"frames": frames, "late": late, "late_share": round(late / frames, 4), "worst_lag_ms": round(worst * 1000, 1),
+            "frame_work_ms_p50": round(float(np.percentile(work, 50)), 2), "frame_work_ms_p95": round(float(np.percentile(work, 95)), 2),
+            "frame_work_ms_max": round(float(max(work)), 2), "budget_ms": round(period * 1000, 1)}
 
 
 def main():
@@ -96,18 +108,26 @@ def main():
                 proc = subprocess.Popen([sys.executable, "-c", code], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
                 while proc.stdout.readline().strip() != "ready":
                     pass
+                done = []
+                import threading
+                threading.Thread(target=lambda: [done.append(l) for l in proc.stdout], daemon=True).start()
                 time.sleep(3)                                     # let the analysis loop get going
+            t0 = time.perf_counter()
             res = playback(clip)
+            dur = time.perf_counter() - t0
             if proc:
                 proc.kill()
                 proc.wait()
-            rows.append({"round": r, "analysis": cond, **res})
+            rows.append({"round": r, "analysis": cond, **res, "playback_s": round(dur, 1),
+                         "load_clips_finished_during_run": sum(int(l.split()[1]) for l in done if l.startswith("done")) if proc else 0})
             print(rows[-1], flush=True)
     summary = {}
     for cond in conds:
         rs = [x for x in rows if x["analysis"] == cond]
         summary[cond] = {"late_share_mean": round(sum(x["late_share"] for x in rs) / len(rs), 4),
-                         "worst_lag_ms_max": max(x["worst_lag_ms"] for x in rs)}
+                         "worst_lag_ms_max": max(x["worst_lag_ms"] for x in rs),
+                         "frame_work_ms_p95_max": max(x["frame_work_ms_p95"] for x in rs),
+                         "load_clips_finished": sum(x["load_clips_finished_during_run"] for x in rs)}
     out = {"measured_at": time.strftime("%Y-%m-%d %H:%M:%S"), "playback": "1080p30 H.264, decode + RGB convert at real-time pace",
            "load": f"SceneGap analyse loop over {len(load)} clips in a separate process", "cpu": os.cpu_count(),
            "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None, "ugen300": "not_run",

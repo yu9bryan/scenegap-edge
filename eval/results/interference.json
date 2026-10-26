@@ -1,0 +1,73 @@
+{
+ "measured_at": "2026-10-26 19:14:23",
+ "playback": "1080p30 H.264, decode + RGB convert at real-time pace",
+ "load": "SceneGap analyse loop over 8 clips in a separate process",
+ "cpu": 24,
+ "gpu": "NVIDIA GeForce RTX 4080",
+ "ugen300": "not_run",
+ "note": "Proxy for PRD 24.3; not an NLE timeline test.",
+ "rows": [
+  {
+   "round": 0,
+   "analysis": "none",
+   "frames": 900,
+   "late": 0,
+   "late_share": 0.0,
+   "worst_lag_ms": 0.0
+  },
+  {
+   "round": 0,
+   "analysis": "cpu",
+   "frames": 900,
+   "late": 0,
+   "late_share": 0.0,
+   "worst_lag_ms": 0.0
+  },
+  {
+   "round": 0,
+   "analysis": "cuda",
+   "frames": 900,
+   "late": 0,
+   "late_share": 0.0,
+   "worst_lag_ms": 0.0
+  },
+  {
+   "round": 1,
+   "analysis": "cuda",
+   "frames": 900,
+   "late": 0,
+   "late_share": 0.0,
+   "worst_lag_ms": 0.0
+  },
+  {
+   "round": 1,
+   "analysis": "cpu",
+   "frames": 900,
+   "late": 0,
+   "late_share": 0.0,
+   "worst_lag_ms": 0.0
+  },
+  {
+   "round": 1,
+   "analysis": "none",
+   "frames": 900,
+   "late": 0,
+   "late_share": 0.0,
+   "worst_lag_ms": 0.0
+  }
+ ],
+ "summary": {
+  "none": {
+   "late_share_mean": 0.0,
+   "worst_lag_ms_max": 0.0
+  },
+  "cpu": {
+   "late_share_mean": 0.0,
+   "worst_lag_ms_max": 0.0
+  },
+  "cuda": {
+   "late_share_mean": 0.0,
+   "worst_lag_ms_max": 0.0
+  }
+ }
+}

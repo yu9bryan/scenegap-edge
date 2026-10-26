@@ -70,8 +70,9 @@ def diff(A, B, index):
     return out
 
 
-def merge(A, B, index, adj, brand=None):
+def merge(A, B, index, adj, brand=None, consistency=None):
     brand = brand or {}
+    drop = {(c["clip"], c["requirement_id"], round(float(c["t"]), 3)) for c in (consistency or []) if not c["keep"]}
     decide = {(d["clip"], d["requirement_id"], round(float(d["t"]), 3)): bool(d["positive"]) for d in adj}
     gold, n, agree_iv, tp = {"clips": {}}, 0, 0, {"a": 0, "b": 0, "ab": 0, "none": 0}
     per_req = {r: {"pairs": 0, "agree": 0} for r in REQS}
@@ -82,7 +83,7 @@ def merge(A, B, index, adj, brand=None):
         gold["clips"][clip] = {}
         for rid in REQS:
             a, b = as_set(A, clip, rid, times), as_set(B, clip, rid, times)
-            pos = set(a & b)
+            pos = set(a & b) - {t for t in a & b if (clip, rid, t) in drop}
             for t in a ^ b:
                 k = (clip, rid, t)
                 if k not in decide:
@@ -109,7 +110,8 @@ def merge(A, B, index, adj, brand=None):
     kappa = (po - pe) / (1 - pe) if pe < 1 else 1.0
     agreement = {"clip_requirement_pairs": n, "pairs_agreeing_iou_ge_0.5_or_both_empty": agree_iv,
                  "pair_agreement": round(agree_iv / n, 4), "sample_level": {**tp, "observed": round(po, 4), "cohen_kappa": round(kappa, 4)},
-                 "per_requirement": per_req, "third_pass_decisions": len(adj)}
+                 "per_requirement": per_req, "third_pass_decisions": len(adj),
+                 "consistency_pass": {"checked": len(consistency or []), "removed": len(drop)}}
     lab = os.path.join(HERE, "labels")
     json.dump(gold, open(os.path.join(lab, "gold.json"), "w", encoding="utf8"), ensure_ascii=False, indent=1)
     json.dump(agreement, open(os.path.join(lab, "agreement.json"), "w", encoding="utf8"), indent=1)
@@ -126,5 +128,7 @@ if __name__ == "__main__":
         print(len(d), "disagreements ->", out)
     else:
         rules = sys.argv[6] if len(sys.argv) > 6 else None
+        cons = sys.argv[7] if len(sys.argv) > 7 else None
         merge(A, B, index, json.load(open(sys.argv[5], encoding="utf8")),
-              json.load(open(rules, encoding="utf8")).get("brand", {}) if rules else None)
+              json.load(open(rules, encoding="utf8")).get("brand", {}) if rules else None,
+              json.load(open(cons, encoding="utf8")) if cons else None)

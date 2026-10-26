@@ -60,3 +60,13 @@ Follows PRD ch. 21–24. Everything here is fixed before labels are produced and
 - Review-load proxy (added before scoring): seconds of footage in the test library versus seconds a person would
   play to check every returned candidate once (each at its lower-bound length, at least 1 s, at most 10 s). This is
   not a user-time measurement; the user study of PRD 22 is not done.
+
+## Label consistency pass (added 2026-10-26 19:2x, after labelling, before any model output was looked at)
+- The third pass resolved disputed frames with written rules for wording the guide left open (R1–R8 in
+  `eval/labels/adjudication_rules.json`: e.g. SH-11 "barista/worker" means a person in a commercial or service
+  setting, SH-09 needs a group head/portafilter, SH-04 needs grounds visibly coming out).
+- Some frames both annotators agreed on break those same rules. So that one rule holds across the gold, the same
+  adjudicator re-checked every agreed-positive frame of SH-03, SH-04, SH-09 and SH-11 under its rules, blind to who
+  labelled what. Frames that clearly fail a rule are removed; all removals are listed in
+  `eval/labels/consistency.json` and counted in `agreement.json`. Raw labels of both annotators stay unchanged in
+  `eval/labels/raw/`. No calibration or test result existed when this was decided.
