@@ -1,0 +1,64 @@
+{
+ "clip_requirement_pairs": 264,
+ "pairs_agreeing_iou_ge_0.5_or_both_empty": 264,
+ "pair_agreement": 1.0,
+ "sample_level": {
+  "a": 8,
+  "b": 3,
+  "ab": 240,
+  "none": 14203,
+  "observed": 0.9992,
+  "cohen_kappa": 0.9772
+ },
+ "per_requirement": {
+  "SH-01": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-02": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-03": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-04": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-05": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-06": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-07": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-08": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-09": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-10": {
+   "pairs": 24,
+   "agree": 24
+  },
+  "SH-11": {
+   "pairs": 24,
+   "agree": 24
+  }
+ },
+ "third_pass_decisions": 11,
+ "consistency_pass": {
+  "checked": 0,
+  "removed": 0
+ }
+}

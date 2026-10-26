@@ -1,0 +1,79 @@
+[
+ {
+  "clip": "001_Machine_à_café_à_l_hôtel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+  "requirement_id": "SH-05",
+  "t": 27.003,
+  "positive": true,
+  "note": "Visible coffee stream from machine spout into the cup standing on the drip tray."
+ },
+ {
+  "clip": "001_Machine_à_café_à_l_hôtel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+  "requirement_id": "SH-05",
+  "t": 28.003,
+  "positive": true,
+  "note": "Coffee stream still clearly flowing into the cup."
+ },
+ {
+  "clip": "005_Folgers_commercial.ogv.mp4",
+  "requirement_id": "SH-10",
+  "t": 40.006,
+  "positive": false,
+  "note": "Only a drawn Folgers jar on an advertising sign; no physical coffee package clearly identifiable (shelf items blurred)."
+ },
+ {
+  "clip": "005_Folgers_commercial.ogv.mp4",
+  "requirement_id": "SH-10",
+  "t": 41.007,
+  "positive": false,
+  "note": "Same sign illustration of a jar; background shelf items too blurred to identify as coffee packages."
+ },
+ {
+  "clip": "005_Folgers_commercial.ogv.mp4",
+  "requirement_id": "SH-10",
+  "t": 52.018,
+  "positive": false,
+  "note": "Motion-blurred jars on a display and an object in hand; cannot clearly tell they are coffee packages from the frame."
+ },
+ {
+  "clip": "010_Tramvia_creuant_la_plaça.ogv.mp4",
+  "requirement_id": "SH-01",
+  "t": 40.0,
+  "positive": false,
+  "note": "Tram on a plaza with empty outdoor tables and a 'Restaurant' sign; nothing identifies a café, no drinks on tables."
+ },
+ {
+  "clip": "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+  "requirement_id": "SH-02",
+  "t": 13.013,
+  "positive": true,
+  "note": "Wide room view of the museum hall café: counter with display cases and many occupied tables and chairs."
+ },
+ {
+  "clip": "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+  "requirement_id": "SH-02",
+  "t": 30.03,
+  "positive": true,
+  "note": "Café tables with red chairs and seated guests clearly visible in the lower part of the hall view."
+ },
+ {
+  "clip": "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+  "requirement_id": "SH-08",
+  "t": 13.013,
+  "positive": true,
+  "note": "Many people seated at café tables inside the hall café."
+ },
+ {
+  "clip": "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+  "requirement_id": "SH-08",
+  "t": 30.03,
+  "positive": true,
+  "note": "Several distinct people seated at café tables at lower left, clearly discernible."
+ },
+ {
+  "clip": "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+  "requirement_id": "SH-05",
+  "t": 39.038,
+  "positive": false,
+  "note": "Bottomless portafilter just starting to drip; no stream or drip into the cup is visible."
+ }
+]

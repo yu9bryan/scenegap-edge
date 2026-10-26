@@ -1,0 +1,79 @@
+[
+{
+"clip": "001_Machine_à_café_à_l_hôtel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+"requirement_id": "SH-05",
+"t": 27.003,
+"A": true,
+"B": false
+},
+{
+"clip": "001_Machine_à_café_à_l_hôtel_de_la_Cloche__Dole__Jura__France_.webm.mp4",
+"requirement_id": "SH-05",
+"t": 28.003,
+"A": true,
+"B": false
+},
+{
+"clip": "005_Folgers_commercial.ogv.mp4",
+"requirement_id": "SH-10",
+"t": 40.006,
+"A": false,
+"B": true
+},
+{
+"clip": "005_Folgers_commercial.ogv.mp4",
+"requirement_id": "SH-10",
+"t": 41.007,
+"A": false,
+"B": true
+},
+{
+"clip": "005_Folgers_commercial.ogv.mp4",
+"requirement_id": "SH-10",
+"t": 52.018,
+"A": false,
+"B": true
+},
+{
+"clip": "010_Tramvia_creuant_la_plaça.ogv.mp4",
+"requirement_id": "SH-01",
+"t": 40.0,
+"A": true,
+"B": false
+},
+{
+"clip": "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+"requirement_id": "SH-02",
+"t": 13.013,
+"A": true,
+"B": false
+},
+{
+"clip": "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+"requirement_id": "SH-02",
+"t": 30.03,
+"A": true,
+"B": false
+},
+{
+"clip": "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+"requirement_id": "SH-08",
+"t": 13.013,
+"A": true,
+"B": false
+},
+{
+"clip": "013_Kunsthistorisches_Museum_-_Kuppelhalle_und_Stiegenhaus.webm.mp4",
+"requirement_id": "SH-08",
+"t": 30.03,
+"A": true,
+"B": false
+},
+{
+"clip": "020_Morning_Espresso_Routine_-_Progress__Results__Observations_and_Miscellany.webm.mp4",
+"requirement_id": "SH-05",
+"t": 39.038,
+"A": true,
+"B": false
+}
+]
