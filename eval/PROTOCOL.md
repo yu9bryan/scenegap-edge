@@ -1,6 +1,7 @@
-# Evaluation protocol (written before any label or score exists)
+# Evaluation protocol (first version written before any label or score existed; dated additions below)
 
-Follows PRD ch. 21–24. Everything here is fixed before labels are produced and before the threshold is chosen.
+Follows PRD ch. 21–24. Everything here was fixed before the threshold was chosen; the one addition made after
+labelling (consistency pass, 19:17) is marked.
 
 ## Data
 - Openly licensed real footage from Wikimedia Commons (CC0 / public domain / CC BY / CC BY-SA), listed with
@@ -13,6 +14,9 @@ Follows PRD ch. 21–24. Everything here is fixed before labels are produced and
   sides. Groups are assigned to **dev** (about 40% of clips) or **test** (about 60%) by a hash of the group name,
   seed fixed in `eval/split.py`.
 - The threshold and any tuning use **dev** only. **test** is scored once with frozen settings.
+- Erratum (found after scoring): the grouping key is the raw author string, so "Max Duchardt, Katrin Engel" (022,
+  dev) and "Max Duchardt , Katrin Engel" (025, test) became two groups. The split is kept as scored; Stage II
+  normalises spaces and punctuation in the key.
 
 ## Labels (ground truth)
 - Unit: for each clip and each requirement, the time intervals `[start_s, end_s)` where the requirement's visual
@@ -30,7 +34,7 @@ Follows PRD ch. 21–24. Everything here is fixed before labels are produced and
 - Precision@5: share of returned candidates (up to 5) that overlap a gold interval.
 - Project simulation: 8 mini-projects, each a seeded random subset of test clips. Per requirement, gold says
   "available" when a gold interval of the required continuous length exists in the subset.
-  - gap recall = share of unavailable requirements the system reports as `not_found` (or with a reshoot card).
+  - gap recall = share of unavailable requirements the system reports as `not_found`.
   - wrong reshoot rate = share of available requirements the system reports as `not_found`.
   - unknown rate = share reported as `partial` or `unverifiable`.
   - false-ready rate: N/A, the system never auto-completes; human confirmation is required.
@@ -61,7 +65,7 @@ Follows PRD ch. 21–24. Everything here is fixed before labels are produced and
   play to check every returned candidate once (each at its lower-bound length, at least 1 s, at most 10 s). This is
   not a user-time measurement; the user study of PRD 22 is not done.
 
-## Label consistency pass (added 2026-10-26 19:2x, after labelling, before any model output was looked at)
+## Label consistency pass (added 2026-10-26 19:17, after labelling, before any calibration or test score was computed)
 - The third pass resolved disputed frames with written rules for wording the guide left open (R1–R8 in
   `eval/labels/adjudication_rules.json`: e.g. SH-11 "barista/worker" means a person in a commercial or service
   setting, SH-09 needs a group head/portafilter, SH-04 needs grounds visibly coming out).

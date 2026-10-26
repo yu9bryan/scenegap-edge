@@ -1,12 +1,12 @@
 # SceneGap Edge
 
-**Know which must-have shots you already have, and which to reshoot, before the crew leaves the location.**
+**Checks your shot list against your footage, on your own computer, before the crew leaves the location.**
 
 SceneGap Edge is a local-first shot-coverage assistant for small video crews and freelance editors. You write the
 shot list ("3 s of latte being poured", "two takes of the barista", "readable brand on the bag"). SceneGap indexes
 the footage on your own computer, finds candidate segments with original timecodes, checks duration, same-frame
 co-occurrence and takes, and tells you, per requirement, what it found and what it could not decide. A person
-confirms every result. Missing shots turn into reshoot cards.
+confirms every result. Shots that are still missing go on a reshoot list.
 
 Built for the ASUS UGen AI League (Creator AI, Lightning track, ASUS UGen300 with Hailo-10H).
 
@@ -18,12 +18,12 @@ CLIP ViT-B/32 on a desktop GPU/CPU; full numbers in [`eval/results/REPORT.md`](e
 
 | | Result |
 |---|---|
-| Retrieval, top 5 per shot | Recall@5 64% (7/11), Precision@5 33%; single-frame search 73% / 40%; title keywords 45% / 36% |
+| Retrieval, top 5 per shot | Right clip in the top 5 for 7 of 11 shots (Recall@5 64%, Precision@5 33%). Plain single-frame search: 8 of 11 (73% / 40%); title keywords 45% / 36%. The length rules cost one hit here and are not what Recall@5 measures |
 | Finding missing shots automatically | **Not achieved yet**: gap recall 0% at the frozen threshold (it was tuned for frame-level F1 and is too permissive). Dev-only analysis of the trade-off is in the report; Stage II fixes the objective |
-| Review load | 317 s of candidate clips to check for 11 shots, versus 839 s of footage |
-| Labels | two independent annotators, κ = 0.91, third pass on 143 disputed frames |
-| Speed (desktop) | 2.3 s (GPU) / 3.1 s (CPU) of analysis per minute of video; text search over 10,000 segments p95 13–14 ms |
-| Playback while analysing | 0 late frames of 1,800 at 1080p30; frame work p95 5.7 → 7.5 ms (CPU) / 6.2 ms (GPU) |
+| Review load (proxy) | Candidate clips add up to 317 s for 11 shots, versus 839 s of footage (footage length, not timed users) |
+| Labels | two independent AI annotators, κ = 0.91, AI third pass on 143 disputed frame labels |
+| Speed (desktop) | 2.3 s (GPU) / 3.1 s (CPU) of decode + embedding per minute of video (six short clips, ≤1280 px); text search over 10,000 segments p95 13–14 ms |
+| Playback while analysing | 0 late frames of 1,800 (synthetic 1080p30 test pattern); frame work p95 5.7 → 7.5 ms (CPU) / 6.2 ms (GPU) |
 | UGen300 | not run yet (G1 gate script ready) |
 | Tests | 46 automated tests; 30 of 36 PRD acceptance cases pass by test; fresh-environment rebuild passes |
 <!-- RESULTS:END -->
@@ -86,12 +86,15 @@ Details with file and line references: `docs/ALGORITHMS.md`. Model and hardware 
 
 ## Validation
 
-- `eval/PROTOCOL.md` was committed before any label or threshold existed; its later additions are dated and also
-  precede the labels (see `git log -- eval/PROTOCOL.md`).
+- `eval/PROTOCOL.md` was committed before any label or threshold existed. Its additions up to 18:22 precede the
+  labels; the consistency-pass section (19:17) was added after labelling and before calibration (19:21) and test
+  scoring (19:22). See `git log -- eval/PROTOCOL.md`.
+- Split: grouped by author. One author pair has a clip on each side (022 dev, 025 test) because the two author
+  strings differ by one space; found after scoring and left as is (the test is scored once).
 - `eval/requirements.json`: 11 café-promo requirements, written before any frame was seen.
 - `datasets/manifests/commons_manifest.json`: every clip with Commons page, author, licence and SHA-256 of the
   original and of the transcode. Rebuild with `scripts/fetch_commons.py`.
-- `eval/LABEL_GUIDE.md`, `eval/adjudicate.py`: two independent annotators on 1 fps contact sheets, a third pass on
+- `eval/LABEL_GUIDE.md`, `eval/adjudicate.py`: two independent AI annotators on 1 fps contact sheets, an AI third pass on
   every disagreement, agreement and Cohen's κ reported.
 - `eval/evaluate.py calibrate | test | perf`: dev-only calibration (τ and crop policy), one scoring of the test
   split (the script refuses a second run), ablation (title keywords → single-frame semantic → full system), Wilson

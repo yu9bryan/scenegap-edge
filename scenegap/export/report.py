@@ -51,13 +51,13 @@ def to_html(view: dict, cards: list[dict], project: dict, thumbs: dict[str, str]
     for row in view.get("requirements", []):
         r, a = row["requirement"], row["auto"] or {}
         st = "已過期，需重新分析" if row["auto_outdated"] else a.get("status_zh", "")
-        human = "人工接受例外" if row["human_exception"] else ("已人工確認" if row["human_confirmed"] else "未確認")
+        human = "人工接受例外" if row["human_exception"] else ("已接受" if row["human_confirmed"] else "未決定")
         c = (a.get("candidates") or [None])[0]
         ev = f"{e(c['asset_id'])} {c['start_ms']/1000:.1f}–{c['end_ms']/1000:.1f}s" if c else "—"
         img = f'<img src="{thumbs[c["asset_id"]]}" alt="">' if c and thumbs and thumbs.get(c["asset_id"]) else ""
         rows.append(f"<tr><td>{e(r['requirement_id'])}<br><small>rev {e(r['revision'])}</small></td><td>{e(r['source_text'])}</td>"
                     f"<td>{e(st)}</td><td>{e(human)}</td><td>{img}{ev}</td><td>{e('、'.join(a.get('reasons', [])))}</td></tr>")
-    crd = "".join(f"<li><b>{e(c['requirement_id'])}</b> {'先複核' if c['review_first'] else '建議補拍（待確認）'}："
+    crd = "".join(f"<li><b>{e(c['requirement_id'])}</b> {'先複核' if c['review_first'] else '建議補拍（待決定）'}："
                   f"{e(c['source_text'])}；原因：{e('、'.join(c['reasons_zh']))}；最短連續 {c['min_continuous_s']:.1f} 秒；驗證方式：{e(c['verify_by'])}</li>"
                   for c in cards)
     return f"""<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>SceneGap 報告 {e(project.get('name'))}</title>

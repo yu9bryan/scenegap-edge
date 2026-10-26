@@ -166,11 +166,11 @@ def seg_sh05(pw):
 def seg_reshoot(pw):
     r = Rec(pw, "09_reshoot")
     r.go("#/evidence/SH-04/0", 3.0)
-    r.click(r.pg.locator(".bub-btn[aria-label='要補拍']"), 1.0)
+    r.click(r.pg.locator(".bub-btn[aria-label='加入補拍']"), 1.0)
     r.type(r.pg.locator("#dc-reason"), "Tamping, not grinding. Need 2 s of grounds coming out")
     r.click(r.pg.get_by_role("button", name="加入補拍清單"), 2.5)
     r.go("#/evidence/SH-07/0", 2.5)
-    r.click(r.pg.locator(".bub-btn[aria-label='要補拍']"), 1.0)
+    r.click(r.pg.locator(".bub-btn[aria-label='加入補拍']"), 1.0)
     r.type(r.pg.locator("#dc-reason"), "Nobody drinks from a cup in these clips")
     r.click(r.pg.get_by_role("button", name="加入補拍清單"), 3.0)
     r.scroll(600, 8, 0.4)
