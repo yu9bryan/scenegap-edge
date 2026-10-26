@@ -1,10 +1,10 @@
 # SceneGap Edge
 
-**Checks your shot list against your footage, on your own computer, before the crew leaves the location.**
+**Helps a crew check the shot list against the footage before leaving the location, with playable evidence and a person's decision on every shot.**
 
 ![Rejecting a candidate with a reason, then accepting the latte-art pour](docs/media/review-reject-accept.gif)
 
-*Evidence view, real time (trimmed). The first candidate for "coffee poured into a cup, 3 s" is an espresso stream
+*Evidence view, real time (trimmed). The first candidate for SH-05 "coffee or latte art poured into a cup, 3 s" is an espresso stream
 with no cup, so it is rejected with the reason "No cup in frame"; the latte-art pour is then accepted.*
 
 [Demo video](site/assets/SceneGapEdge_StageI_Demo.mp4) ·
@@ -13,11 +13,12 @@ with no cup, so it is rejected with the reason "No cup in frame"; the latte-art 
 [Evaluation report](eval/results/REPORT.md) ·
 [中文說明](README.zh-TW.md)
 
-SceneGap Edge is a local-first shot-coverage assistant for small video crews and freelance editors. You write the
-shot list ("3 s of latte being poured", "two takes of the barista", "readable brand on the bag"). SceneGap indexes
-the footage on your own computer, finds candidate segments with original timecodes, checks duration, same-frame
-co-occurrence and takes, and tells you, per shot, what it found and what it could not decide. A person accepts or
-rejects every answer. Shots that are still missing go on a reshoot list.
+SceneGap Edge is a review assistant for small video crews and freelance editors. You write the shot list ("3 s of
+latte being poured", "two takes of the barista", "readable brand on the bag"). SceneGap indexes the footage on your
+own computer, finds candidate clips with original timecodes, checks each rule (length, takes, same frame) and shows
+pass, fail or can't tell with the clip to play. A person decides every shot; shots without a usable clip go on a
+reshoot list. Automatic missing-shot detection is not reliable yet (see results), so today the value is a faster,
+traceable review, not an automatic verdict.
 
 Built by [Team name] for the ASUS UGen AI League (Creator AI, Lightning track, ASUS UGen300 USB AI accelerator with
 Hailo-10H). Not affiliated with or endorsed by ASUS or Hailo.
@@ -47,9 +48,10 @@ Hailo-10H). Not affiliated with or endorsed by ASUS or Hailo.
 A two-person crew shoots a 60-second café promo in one afternoon. They pack up at 17:40. At 23:00 the editor finds
 that the pour cuts away after two seconds and nobody filmed a customer drinking. By then the location is gone.
 
-Editing tools can already search footage by content: Premiere Pro (Media Intelligence, 2025), DaVinci Resolve 21
-(IntelliSearch) and Final Cut Pro 12 (Visual Search) all do. None of the editors we checked claims to check a shot
-list: how long a shot must run, how many takes, what must be in the same frame. The one tool we found that compares
+Editing tools can already search footage by content: Premiere Pro (Media Intelligence, 2025; matches come back as
+In/Out ranges inside a clip), DaVinci Resolve 21 (IntelliSearch) and Final Cut Pro 12 (Visual Search) all do. Their
+official documentation does not describe checking a shot list: how long a shot must run, how many takes, what must
+be in the same frame. The one tool we found that compares
 footage with a shot list (invideo's AI script supervisor) works on uploads and publishes no accuracy figures. Sources
 and dates are in [`docs/research/BUSINESS_FACTS.md`](docs/research/BUSINESS_FACTS.md).
 
@@ -194,8 +196,9 @@ CLIP ViT-B/32 on a desktop GPU/CPU; full numbers in [`eval/results/REPORT.md`](e
 
 | | Result |
 |---|---|
-| Retrieval, top 5 per shot | Right clip in the top 5 for 7 of 11 shots (Recall@5 64%, Precision@5 33%). Plain single-frame search: 8 of 11 (73% / 40%); title keywords 45% / 36%. The length rules cost one hit here and are not what Recall@5 measures |
-| Finding missing shots automatically | **Not achieved yet**: gap recall 0% at the frozen threshold (it was tuned for frame-level F1 and is too permissive). Dev-only analysis of the trade-off is in the report; Stage II fixes the objective |
+| Retrieval, top 5 per shot | Right clip in the top 5 for 7 of 11 shots (Hit@5 64%, Precision@5 33%). Plain single-frame search: 8 of 11 (73% / 40%); title keywords 45% / 36%. The lost hit is a ranking issue (runs ranked by average, not peak similarity), not a rule rejection |
+| Rule checks, controlled cases | 10 of 12 judged right (length, same frame, takes; real footage cut to a known answer). Misses: a finished latte passes as a pour; a re-encoded copy counts as a second take |
+| Finding missing shots automatically | **Not working yet**: 0 of 38 missing shots caught; SceneGap never answered 'not found', so its 0 of 50 wrong reshoots means nothing yet. The threshold was tuned for single frames; Stage II calibrates per shot |
 | Review load (proxy) | Candidate clips add up to 317 s for 11 shots, versus 839 s of footage (footage length, not timed users) |
 | Labels | two independent AI annotators, κ = 0.91, AI third pass on 143 disputed frame labels |
 | Speed (desktop) | 2.3 s (GPU) / 3.1 s (CPU) of decode + embedding per minute of video (six short clips, ≤1280 px); text search over 10,000 segments p95 13–14 ms |
@@ -225,7 +228,9 @@ Details behind the table:
 | Media path: MP4/MOV H.264 8-bit, rotation, VFR, start offsets, corrupt and unsupported files | Implemented, tested on synthetic fixtures |
 | Semantic retrieval | OpenAI CLIP ViT-B/32 on host CPU or CUDA (`cpu-reference` / `cuda-reference`) |
 | Accuracy | Measured once on a held-out split of openly licensed Commons clips (not self-shot), AI-annotated |
-| Automatic missing-shot detection | Not working yet (gap recall 0%); Stage II |
+| Automatic missing-shot detection | Not working yet (0 of 38); Stage II |
+| Rule checks | 10 of 12 controlled cases right (`eval/rule_check.py`); a person still checks the action itself |
+| Platforms | Tested on Windows 11. UGen300 supports Windows, Linux and Android (no macOS listed); on a Mac SceneGap runs on CPU only |
 | UGen300 / Hailo-10H | Not run. Device check only; the Hailo backend refuses to run until the G1 gate passes on a real device |
 | Actions, readable text, composition | Manual: the system ranks where to look, a person decides |
 | Chinese queries | Through a person-confirmed English query; a multilingual encoder is a Stage II experiment |

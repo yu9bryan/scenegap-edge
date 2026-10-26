@@ -76,7 +76,7 @@ img.paste(scan, (0, 0), scan)
 d = ImageDraw.Draw(img, "RGBA")
 d.line((x0, sy, x1, sy), fill=CYAN + (255,), width=4)
 # label on the checked frame
-lab = "SH-05 · pour · 3.0 s"
+lab = "SH-05 · candidate"
 f = font(40, True)
 tw = d.textlength(lab, font=f)
 d.rounded_rectangle((x0 + pad, y0_ + pad + 110, x0 + pad + tw + 110, y0_ + pad + 186), 38, fill=INK + (225,), outline=CYAN + (255,), width=4)

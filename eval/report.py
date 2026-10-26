@@ -57,6 +57,9 @@ def main():
             L += ["", f"Review-load proxy: {rl['candidate_seconds_to_review']} s of candidates to play for {rl['requirements']} requirements, "
                       f"versus {rl['library_seconds']} s to watch the test library once. {rl['note']}."]
         L += ["", f"### Project simulation ({len(test['projects'])} projects × {test['project_size']} test clips)", "",
+              "Unit: one shot in one project. 'Missing' = gold has no qualifying segment in that project's clips. Gap recall = missing shots answered "
+              "`not_found`; wrong reshoot = present shots answered `not_found`; unknown = `partial` or `unverifiable` over all pairs; "
+              "candidate where gold has none = missing shots answered `candidate`. Counts are shown as k/n.", "",
               "| Method | Gap recall | Wrong reshoot rate | Unknown rate | Candidate where gold has none |", "|---|---|---|---|---|"]
         for m in ("keyword", "single_frame", "full"):
             s = test["simulation"][m]
@@ -72,6 +75,25 @@ def main():
         for r in test["per_requirement"]:
             L.append(f"| {r['requirement_id']} | {r['query_en']} | {r['gold_clips']} | {r['status']} | {r['full']['correct']}/{r['full']['returned']} |")
         L.append("")
+    rc = load("rule_check.json")
+    if rc:
+        L += ["## Rule check on controlled cases (separate experiment)", "",
+              f"`eval/rule_check.py`: {rc['cases']} short cases cut from real Commons footage so the right answer is known "
+              f"(a 4 s pour must pass a 3 s rule, a 2 s pour must not, ...). Frozen calibration, one project per case. "
+              f"**{rc['correct']} of {rc['cases']} judged right.**", "",
+              "| Case | Shot | Should | SceneGap | Reasons | Right |", "|---|---|---|---|---|---|"]
+        for r in rc["rows"]:
+            L.append(f"| {r['tests']} | {r['shot']} | {r['expected']} | {'pass' if r['passed'] else 'not pass'} ({r['status']}) | {', '.join(r['reasons'] or []) or '—'} | {'yes' if r['correct'] else '**no**'} |")
+        L += ["", "The two misses are limits of the method, not bugs: CLIP scores a finished latte as close to 'coffee being poured', "
+                  "and takes are told apart by file hash, so a re-encoded copy counts as a second take.", ""]
+    dg = load("drop_diagnosis_019.json")
+    if dg:
+        r4 = dg["SH-04"]["runs"][0]
+        L += ["## Why the full system lost one top-5 hit (diagnosis, no rescoring)", "",
+              "Single-frame search hit SH-03 and SH-04, the full system did not (it gained SH-06). The correct clip for both is 019 (grinding "
+              f"beans in a blender). Run on its own, 019 passes every rule: SH-04 {r4['start_s']:.0f}–{r4['end_s']:.0f} s, "
+              f"run {r4['len_s']:.0f} s, all conditions pass. So the rules did not reject it: in the test library the full system ranks runs "
+              "by their average similarity, while single-frame search uses the peak frame, and other runs averaged higher. Stage II ranks runs by peak.", ""]
     ex = load("explore_dev_gap_tradeoff.json")
     if ex:
         L += ["## After the test: why gap recall is 0 (dev split only, exploratory)", "",

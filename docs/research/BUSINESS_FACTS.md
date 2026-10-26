@@ -42,7 +42,7 @@ Vendor claims (speed, accuracy, "world's first") are the vendor's words, not ind
 
 | Tool | Searches footage by content | Returns time ranges inside a clip | Checks shot-list requirements (duration / takes / co-occurrence) | Runs offline / local | Price (USD) | Verified |
 |---|---|---|---|---|---|---|
-| Adobe Premiere Pro Media Intelligence | yes (visual, speech, metadata) | not stated for visual search | no | yes, on-device analysis | ~$22.99/mo single app, annual plan billed monthly (secondary; Adobe plans page showed only INR to our fetch) | partial (price: no) |
+| Adobe Premiere Pro Media Intelligence | yes (visual, speech, metadata) | yes: visual search returns sections inside a clip with In/Out points (Adobe FAQ, https://helpx.adobe.com/premiere-pro/using/media-intelligence-and-search-panel-faq.html, accessed 2026-10-26) | not described in official docs | yes, on-device analysis | ~$22.99/mo single app, annual plan billed monthly (secondary; Adobe plans page showed only INR to our fetch) | partial (price: no) |
 | DaVinci Resolve 21 IntelliSearch | yes (visual, dialog, faces) | visual: no (whole clips); transcript: yes | no | likely local (model packs downloaded; not stated) | Resolve Studio: $295 one-time (Digital Production); Blackmagic Studio page showed "$236" at access | yes / partial |
 | Final Cut Pro 12 Visual Search | yes (objects, actions) | yes ("locate moments") | no | not stated (Apple silicon required) | $299.99 one-time, or Apple Creator Studio $12.99/mo or $129/yr | yes |
 | Frame.io semantic search | yes (Team/Enterprise, beta) | yes (subclip marks) | no | no (cloud) | Free $0; Pro $15/member/mo; Team $25/member/mo; annual saves 13% | yes |

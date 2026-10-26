@@ -1,6 +1,6 @@
 # SceneGap Edge（繁體中文說明）
 
-**收工前，在自己的電腦上把 Shot list 和素材對一次。**
+**收工前，在自己的電腦上把 Shot list 和素材對一次：每個鏡頭都有可播放的片段，由人做最後決定。**
 
 ![拒絕一個候選並寫下原因，再接受拉花片段](docs/media/review-reject-accept.gif)
 
@@ -13,7 +13,7 @@
 [驗證過程](docs/VALIDATION_zh.md) ·
 [English README](README.md)
 
-SceneGap Edge 給小型拍攝團隊和接案剪輯師用。你先寫好 Shot list（例如「咖啡倒入杯中，連續 3 秒」「咖啡師工作畫面，至少兩個 Take」），SceneGap 在本機建立素材索引，找出候選片段和原始時間碼，檢查長度、Take 數和同框條件，逐一告訴你每個鏡頭找到了什麼、哪些判斷不了。每個答案都由人接受或拒絕；還缺的鏡頭進補拍清單。素材不會上傳。
+SceneGap Edge 給小型拍攝團隊和接案剪輯師用。你先寫好 Shot list（例如「咖啡倒入杯中，連續 3 秒」「咖啡師工作畫面，至少兩個 Take」），SceneGap 在本機建立素材索引，找出候選片段和原始時間碼，檢查長度、Take 數和同框條件，逐一告訴你每個鏡頭找到了什麼、哪些判斷不了。每個答案都由人接受或拒絕；找不到可用片段的鏡頭進補拍清單。素材不會上傳。目前「自動判斷缺鏡頭」還不可靠（test 上 38 個缺的鏡頭一個都沒抓到），所以現在的價值是讓核對更快、可追溯，而不是自動下結論。
 
 參賽：ASUS UGen AI League（Creator AI，Lightning 組，ASUS UGen300 USB AI 加速器，Hailo-10H）。團隊：[Team name]。本專案與 ASUS、Hailo 沒有合作或背書關係。
 
@@ -21,7 +21,7 @@ SceneGap Edge 給小型拍攝團隊和接案剪輯師用。你先寫好 Shot lis
 
 兩個人一個下午拍一支 60 秒的咖啡店短片，17:40 收工；晚上 11 點剪輯時才發現倒咖啡的鏡頭兩秒就切走，也沒人拍客人喝咖啡。這時場地已經還回去了。
 
-Premiere Pro、DaVinci Resolve、Final Cut Pro 都已經能用內容搜尋素材，但我們查到的剪輯軟體都沒有宣稱會檢查 Shot list：一個鏡頭要多長、要幾個 Take、哪些東西要同框。資料來源見 [`docs/research/BUSINESS_FACTS.md`](docs/research/BUSINESS_FACTS.md)。
+Premiere Pro、DaVinci Resolve、Final Cut Pro 都已經能用內容搜尋素材（Premiere 會回傳片段內的 In/Out 範圍），但它們的官方文件沒有描述檢查 Shot list 的功能：一個鏡頭要多長、要幾個 Take、哪些東西要同框。資料來源見 [`docs/research/BUSINESS_FACTS.md`](docs/research/BUSINESS_FACTS.md)。
 
 ## 運作方式
 

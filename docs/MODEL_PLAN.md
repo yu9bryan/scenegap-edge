@@ -140,7 +140,7 @@ samples (≥ 2,000 frames). The queries are all dev requirements (≥ 40).
 | G1a | Cosine between fp32 and HEF embeddings, per frame | median ≥ 0.98, 5th percentile ≥ 0.95 |
 | G1b | Ranking agreement per query: Spearman ρ between the fp32 and HEF similarity columns over all dev frames | median ρ ≥ 0.95, worst query ≥ 0.85 |
 | G1c | Top-K overlap per query: \|TopK_fp32 ∩ TopK_hef\| / K for K = 5, 10, at segment level after per-shot de-duplication | mean ≥ 0.80 (K=5), ≥ 0.85 (K=10) |
-| G1d | Task: dev Recall@5 and Precision@5 (PROTOCOL definitions), each backend with **its own τ calibrated on dev** | Recall@5 ≥ fp32 − 3 points (absolute); Precision@5 ≥ fp32 − 5 points |
+| G1d | Task: dev Recall@5 and Precision@5 (PROTOCOL definitions), each backend with **its own τ calibrated on dev** | No dev shot lost from the top 5 compared with fp32 (with 11 dev shots, one shot is 9 points, so a 3-point bar could not be measured); Precision@5 ≥ fp32 − 5 points. Changed 2026-10-26 before any device run |
 | G1e | Status agreement on the project simulation (dev) | ≥ 90 % same status; zero cases of `candidate` on HEF where fp32 says `not_found` *and* gold says unavailable |
 | G1f | Throughput: measured frames/s at b=1 and b=8 over USB, and end-to-end time for a 60 s clip | reported, no pass bar; never replaced by vendor figures |
 

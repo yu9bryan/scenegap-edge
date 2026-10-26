@@ -1,0 +1,280 @@
+{
+ "run_at": "2026-10-26 22:54:39",
+ "base": "frozen calibration (eval/results/calibration.json)",
+ "correct": 10,
+ "cases": 12,
+ "rows": [
+  {
+   "case": "pour_4s",
+   "shot": "SH-05",
+   "tests": "continuous 4 s latte-art pour",
+   "expected": "pass",
+   "status": "candidate",
+   "passed": true,
+   "correct": true,
+   "reasons": [],
+   "best_candidate_s": 3.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "pass"
+    ]
+   ],
+   "files": 1,
+   "takes_seen": 1
+  },
+  {
+   "case": "pour_6s_other",
+   "shot": "SH-05",
+   "tests": "6 s pour from a different shoot",
+   "expected": "pass",
+   "status": "candidate",
+   "passed": true,
+   "correct": true,
+   "reasons": [],
+   "best_candidate_s": 5.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "pass"
+    ]
+   ],
+   "files": 1,
+   "takes_seen": 1
+  },
+  {
+   "case": "pour_2s",
+   "shot": "SH-05",
+   "tests": "pour lasts only 2 s (rule: 3 s)",
+   "expected": "not pass",
+   "status": "partial",
+   "passed": false,
+   "correct": true,
+   "reasons": [
+    "DURATION_SHORT"
+   ],
+   "best_candidate_s": 1.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "fail"
+    ]
+   ],
+   "files": 1,
+   "takes_seen": 0
+  },
+  {
+   "case": "pour_2s_2s",
+   "shot": "SH-05",
+   "tests": "two 2 s pours split by another shot",
+   "expected": "not pass",
+   "status": "partial",
+   "passed": false,
+   "correct": true,
+   "reasons": [
+    "DURATION_SHORT"
+   ],
+   "best_candidate_s": 1.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "fail"
+    ]
+   ],
+   "files": 1,
+   "takes_seen": 0
+  },
+  {
+   "case": "cup_no_pour",
+   "shot": "SH-05",
+   "tests": "finished latte, nothing is poured (5 s)",
+   "expected": "not pass",
+   "status": "candidate",
+   "passed": true,
+   "correct": false,
+   "reasons": [],
+   "best_candidate_s": 4.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "pass"
+    ]
+   ],
+   "files": 1,
+   "takes_seen": 1
+  },
+  {
+   "case": "two_in_cafe",
+   "shot": "SH-08",
+   "tests": "two people at a café table, same frame",
+   "expected": "pass",
+   "status": "candidate",
+   "passed": true,
+   "correct": true,
+   "reasons": [],
+   "best_candidate_s": 3.0,
+   "conditions": [
+    [
+     "co_occur",
+     "pass"
+    ],
+    [
+     "duration",
+     "pass"
+    ]
+   ],
+   "files": 1,
+   "takes_seen": 1
+  },
+  {
+   "case": "two_outdoors",
+   "shot": "SH-08",
+   "tests": "two people, but outdoors (not in a café)",
+   "expected": "not pass",
+   "status": "not_found",
+   "passed": false,
+   "correct": true,
+   "reasons": [
+    "NO_CANDIDATE"
+   ],
+   "best_candidate_s": null,
+   "conditions": null,
+   "files": 1,
+   "takes_seen": 0
+  },
+  {
+   "case": "split_shots",
+   "shot": "SH-08",
+   "tests": "two people, then a café interior: separate shots",
+   "expected": "not pass",
+   "status": "not_found",
+   "passed": false,
+   "correct": true,
+   "reasons": [
+    "NO_CANDIDATE"
+   ],
+   "best_candidate_s": null,
+   "conditions": null,
+   "files": 1,
+   "takes_seen": 0
+  },
+  {
+   "case": "takes_one",
+   "shot": "SH-11",
+   "tests": "one barista clip (rule: 2 takes)",
+   "expected": "not pass",
+   "status": "partial",
+   "passed": false,
+   "correct": true,
+   "reasons": [
+    "DURATION_SHORT",
+    "TAKES_SHORT"
+   ],
+   "best_candidate_s": 4.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "pass"
+    ]
+   ],
+   "files": 1,
+   "takes_seen": 1
+  },
+  {
+   "case": "takes_copy",
+   "shot": "SH-11",
+   "tests": "the same clip copied byte for byte",
+   "expected": "not pass",
+   "status": "partial",
+   "passed": false,
+   "correct": true,
+   "reasons": [
+    "DURATION_SHORT",
+    "TAKES_SHORT"
+   ],
+   "best_candidate_s": 4.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "pass"
+    ]
+   ],
+   "files": 2,
+   "takes_seen": 1
+  },
+  {
+   "case": "takes_reencode",
+   "shot": "SH-11",
+   "tests": "the same clip re-encoded (still one take)",
+   "expected": "not pass",
+   "status": "candidate",
+   "passed": true,
+   "correct": false,
+   "reasons": [],
+   "best_candidate_s": 4.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "pass"
+    ]
+   ],
+   "files": 2,
+   "takes_seen": 2
+  },
+  {
+   "case": "takes_two",
+   "shot": "SH-11",
+   "tests": "two different barista clips",
+   "expected": "pass",
+   "status": "candidate",
+   "passed": true,
+   "correct": true,
+   "reasons": [],
+   "best_candidate_s": 4.0,
+   "conditions": [
+    [
+     "semantic",
+     "pass"
+    ],
+    [
+     "duration",
+     "pass"
+    ]
+   ],
+   "files": 2,
+   "takes_seen": 2
+  }
+ ]
+}

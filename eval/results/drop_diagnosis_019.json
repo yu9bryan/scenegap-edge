@@ -1,0 +1,52 @@
+{
+ "SH-03": {
+  "status": "candidate",
+  "reasons": [],
+  "runs": [
+   {
+    "start_s": 0.0,
+    "end_s": 5.033,
+    "len_s": 5.03,
+    "score": 0.2542,
+    "overall": "pass",
+    "conditions": [
+     {
+      "kind": "semantic",
+      "reason": "\u8a9e\u610f\u5019\u9078",
+      "verdict": "pass"
+     },
+     {
+      "kind": "duration",
+      "reason": "\u9023\u7e8c 5.0 \u79d2 \u2265 2.0 \u79d2",
+      "verdict": "pass"
+     }
+    ]
+   }
+  ]
+ },
+ "SH-04": {
+  "status": "candidate",
+  "reasons": [],
+  "runs": [
+   {
+    "start_s": 0.0,
+    "end_s": 19.006,
+    "len_s": 19.01,
+    "score": 0.2982,
+    "overall": "pass",
+    "conditions": [
+     {
+      "kind": "semantic",
+      "reason": "\u8a9e\u610f\u5019\u9078",
+      "verdict": "pass"
+     },
+     {
+      "kind": "duration",
+      "reason": "\u9023\u7e8c 19.0 \u79d2 \u2265 2.0 \u79d2",
+      "verdict": "pass"
+     }
+    ]
+   }
+  ]
+ }
+}

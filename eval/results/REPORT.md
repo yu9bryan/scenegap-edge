@@ -37,6 +37,8 @@ Review-load proxy: 317.1 s of candidates to play for 11 requirements, versus 838
 
 ### Project simulation (8 projects × 8 test clips)
 
+Unit: one shot in one project. 'Missing' = gold has no qualifying segment in that project's clips. Gap recall = missing shots answered `not_found`; wrong reshoot = present shots answered `not_found`; unknown = `partial` or `unverifiable` over all pairs; candidate where gold has none = missing shots answered `candidate`. Counts are shown as k/n.
+
 | Method | Gap recall | Wrong reshoot rate | Unknown rate | Candidate where gold has none |
 |---|---|---|---|---|
 | Title keyword match | 89% (34/38; 95% CI 76–96%) | 44% (22/50; 95% CI 31–58%) | 0% (0/88; 95% CI 0–4%) | 11% (4/38; 95% CI 4–24%) |
@@ -68,6 +70,31 @@ False-ready rate: N/A. The system never marks a requirement done; a person confi
 | SH-09 | a photo of an espresso machine making espresso | 2 | candidate | 1/5 |
 | SH-10 | a photo of a bag of coffee beans | 2 | partial | 0/5 |
 | SH-11 | a photo of a barista making coffee | 5 | candidate | 5/5 |
+
+## Rule check on controlled cases (separate experiment)
+
+`eval/rule_check.py`: 12 short cases cut from real Commons footage so the right answer is known (a 4 s pour must pass a 3 s rule, a 2 s pour must not, ...). Frozen calibration, one project per case. **10 of 12 judged right.**
+
+| Case | Shot | Should | SceneGap | Reasons | Right |
+|---|---|---|---|---|---|
+| continuous 4 s latte-art pour | SH-05 | pass | pass (candidate) | — | yes |
+| 6 s pour from a different shoot | SH-05 | pass | pass (candidate) | — | yes |
+| pour lasts only 2 s (rule: 3 s) | SH-05 | not pass | not pass (partial) | DURATION_SHORT | yes |
+| two 2 s pours split by another shot | SH-05 | not pass | not pass (partial) | DURATION_SHORT | yes |
+| finished latte, nothing is poured (5 s) | SH-05 | not pass | pass (candidate) | — | **no** |
+| two people at a café table, same frame | SH-08 | pass | pass (candidate) | — | yes |
+| two people, but outdoors (not in a café) | SH-08 | not pass | not pass (not_found) | NO_CANDIDATE | yes |
+| two people, then a café interior: separate shots | SH-08 | not pass | not pass (not_found) | NO_CANDIDATE | yes |
+| one barista clip (rule: 2 takes) | SH-11 | not pass | not pass (partial) | DURATION_SHORT, TAKES_SHORT | yes |
+| the same clip copied byte for byte | SH-11 | not pass | not pass (partial) | DURATION_SHORT, TAKES_SHORT | yes |
+| the same clip re-encoded (still one take) | SH-11 | not pass | pass (candidate) | — | **no** |
+| two different barista clips | SH-11 | pass | pass (candidate) | — | yes |
+
+The two misses are limits of the method, not bugs: CLIP scores a finished latte as close to 'coffee being poured', and takes are told apart by file hash, so a re-encoded copy counts as a second take.
+
+## Why the full system lost one top-5 hit (diagnosis, no rescoring)
+
+Single-frame search hit SH-03 and SH-04, the full system did not (it gained SH-06). The correct clip for both is 019 (grinding beans in a blender). Run on its own, 019 passes every rule: SH-04 0–19 s, run 19 s, all conditions pass. So the rules did not reject it: in the test library the full system ranks runs by their average similarity, while single-frame search uses the peak frame, and other runs averaged higher. Stage II ranks runs by peak.
 
 ## After the test: why gap recall is 0 (dev split only, exploratory)
 

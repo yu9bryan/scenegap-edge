@@ -7,7 +7,7 @@
 <meta name="description" content="SceneGap Edge checks a video shot list against the footage on your own computer, before the crew leaves the location. Local-first, a person confirms every answer.">
 <meta name="theme-color" content="#000000">
 <meta property="og:title" content="SceneGap Edge">
-<meta property="og:description" content="Checks your shot list against your footage, on your own computer, before the crew leaves the location.">
+<meta property="og:description" content="Helps a crew check the shot list against the footage before leaving the location, with playable evidence and a person's decision on every shot.">
 <meta property="og:image" content="assets/05_evidence.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23F5F5F5'/%3E%3Cpath d='M21.5 10.5a8 8 0 1 0 0 11' fill='none' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,10 +42,10 @@
     <div>
       <p class="eyebrow">ASUS UGen AI League · Creator AI · Lightning track · [Team name]</p>
       <h1>Check the shot list before the crew leaves.</h1>
-      <p class="lead">SceneGap Edge compares a video shot list with the footage on your own computer. It finds candidate
-        segments with their original timecodes, checks length, takes and what must be in the same frame, and says per
-        shot what it found and what it could not decide. A person accepts or rejects every answer; missing shots go on
-        a reshoot list. Nothing is uploaded.</p>
+      <p class="lead">SceneGap Edge helps a crew review the shot list against the footage on their own computer. It finds
+        candidate clips with their original timecodes, checks each rule (length, takes, same frame) and shows pass, fail or
+        can't tell with the clip to play. A person decides every shot; shots without a usable clip go on a reshoot list.
+        Nothing is uploaded. Automatic missing-shot detection is the next step, not a claim.</p>
       <div class="hero-actions">
         <a class="btn primary" href="#demo">Watch the demo</a>
         <a class="btn" href="assets/SceneGapEdge_StageI_Proposal.pdf">Proposal deck (PDF)</a>
@@ -90,19 +90,19 @@
         <p class="note">The scenario from the demo video. The shot list asked for 3 s of coffee being poured and a person drinking.</p>
       </div>
       <div class="card reveal">
-        <h3>Search exists. Checking length, takes and same-frame rules does not.</h3>
+        <h3>Existing tools find footage. SceneGap adds shot-list rules, evidence and reshoot tracking.</h3>
         <table class="compare">
-          <thead><tr><th scope="col">Tool</th><th scope="col">Searches footage</th><th scope="col">Checks length, takes, same frame</th></tr></thead>
+          <thead><tr><th scope="col">Tool</th><th scope="col">Finds the moment in a clip</th><th scope="col">Shot-list rules (length, takes, same frame)</th></tr></thead>
           <tbody>
-            <tr><td>Premiere Pro (Media Intelligence)</td><td class="yes">yes</td><td class="no">no</td></tr>
-            <tr><td>DaVinci Resolve 21 (IntelliSearch)</td><td class="yes">yes</td><td class="no">no</td></tr>
-            <tr><td>Final Cut Pro 12 (Visual Search)</td><td class="yes">yes</td><td class="no">no</td></tr>
-            <tr><td>SceneGap Edge</td><td class="yes">yes, local</td><td class="yes">yes, a person confirms</td></tr>
+            <tr><td>Premiere Pro (Media Intelligence)</td><td class="yes">yes (In/Out range)</td><td>not in official docs</td></tr>
+            <tr><td>DaVinci Resolve 21 (IntelliSearch)</td><td>visual: whole clips</td><td>not in official docs</td></tr>
+            <tr><td>Final Cut Pro 12 (Visual Search)</td><td class="yes">yes</td><td>not in official docs</td></tr>
+            <tr><td>SceneGap Edge</td><td class="yes">yes, local</td><td class="yes">checked per rule; a person decides</td></tr>
           </tbody>
         </table>
         <p class="note" style="margin-top:12px">Based on the vendors' own pages, accessed 2026-10-26
-          (<a href="https://github.com/[team]/scenegap-edge/blob/main/docs/research/BUSINESS_FACTS.md">sources</a>). None of them claims a
-          shot-list check; that does not prove no such tool exists.</p>
+          (<a href="https://github.com/[team]/scenegap-edge/blob/main/docs/research/BUSINESS_FACTS.md">sources</a>). Their documentation does not
+          describe a shot-list check; that does not prove no such feature exists.</p>
       </div>
     </div>
   </div>
@@ -224,8 +224,9 @@
           <p class="step-n">Step 3</p>
           <h3>Reject with a reason, accept the right take</h3>
           <span class="tag">Real time, trimmed</span>
-          <p>Shot SH-05 asks for coffee poured into a cup, 3 s continuous. The first candidate is an espresso stream with no
-            cup, so it is rejected with the reason "No cup in frame". The latte-art pour is played and accepted.</p>
+          <p>Shot SH-05 asks for coffee or latte art poured into a cup, 3 s. The first candidate is an espresso stream with no
+            cup, so it is rejected with the reason "No cup in frame". The latte-art pour is played and accepted. The range
+            shown is how long the frames stay close to the query; the person checks the action itself.</p>
           <ul class="glossary">
             <li><span class="zh" lang="zh-Hant">片段檢視</span><span>Evidence view</span></li>
             <li><span class="zh" lang="zh-Hant">接受 / 拒絕</span><span>Accept / reject</span></li>
@@ -326,17 +327,17 @@
       <div class="card kpi reveal">
         <p class="k-label">Right clip in the top 5</p>
         <p class="k-num grad">7<small>of 11 shots</small></p>
-        <p class="k-sub">Recall@5 64%, Precision@5 33%. Plain single-frame search: 8 of 11.</p>
+        <p class="k-sub">Hit@5 64%, Precision@5 33%. Plain single-frame search: 8 of 11 (a ranking issue, not a rule rejection).</p>
       </div>
       <div class="card kpi reveal">
         <p class="k-label">Missing shots found automatically</p>
         <p class="k-num">0<small>%</small></p>
-        <p class="k-sub">Not working yet: the frozen threshold is too permissive. The main Stage II target.</p>
+        <p class="k-sub">0 of 38 caught. SceneGap never answered "not found" on test. The main Stage II target.</p>
       </div>
       <div class="card kpi reveal">
-        <p class="k-label">Footage to review (proxy)</p>
-        <p class="k-num">317<small>s vs 839 s</small></p>
-        <p class="k-sub">Candidate segments for 11 shots versus the whole test library. Footage length, not timed users.</p>
+        <p class="k-label">Rule checks, controlled cases</p>
+        <p class="k-num grad">10<small>of 12 right</small></p>
+        <p class="k-sub">Real footage cut to a known answer. Misses: a finished latte passes as a pour; a re-encoded copy counts as a second take.</p>
       </div>
       <div class="card kpi reveal">
         <p class="k-label">Label agreement</p>
@@ -363,8 +364,9 @@
           <div class="bar-row" role="listitem"><span class="name">Single-frame semantic</span><span class="bar" aria-hidden="true"><span style="width:73%"></span></span><span class="val">73% · 8/11</span></div>
           <div class="bar-row" role="listitem"><span class="name">SceneGap (+ length rules)</span><span class="bar main" aria-hidden="true"><span style="width:64%"></span></span><span class="val">64% · 7/11</span></div>
         </div>
-        <p class="note" style="margin-top:16px">The length rules cost one hit on this test (the 95% intervals overlap). What they add,
-          rejecting runs that are too short, is not what Recall@5 measures.</p>
+        <p class="note" style="margin-top:16px">SceneGap lost SH-03 and SH-04 and gained SH-06. The lost grinder clip passes every
+          rule on its own, so the rules did not reject it: runs are ranked by average similarity, and other runs averaged higher.
+          Stage II ranks by peak. A hit needs only 0.5 s of overlap, so this metric does not test the length rule.</p>
       </div>
       <div class="card reveal">
         <h3>Why missing-shot detection fails (dev only, after the test)</h3>
