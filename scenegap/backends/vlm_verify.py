@@ -23,6 +23,14 @@ def question_for(query_en: str) -> str:
     return f"Does this image show {q}? Answer yes or no."
 
 
+def check_questions(req) -> list[str]:
+    """The person-confirmed check questions of a requirement (main first, then conditions), or one built from query_en."""
+    qs = [q.strip() for q in (getattr(req, "check_questions", None) or []) if q and q.strip()]
+    if not qs:
+        return [question_for(req.query_en)]
+    return [q if q.lower().endswith("answer yes or no.") else q.rstrip() + " Answer yes or no." for q in qs]
+
+
 class VlmVerifier:
     name = "qwen2-vl-2b"
 
@@ -81,14 +89,17 @@ def frame_at(path: str, t_ms: int):
 
 
 class MockVerifier:
-    """Test double: the same P(yes) for every frame."""
+    """Test double: the same P(yes) for every frame, or p(image, question) when p is a function."""
     name = "mock-verifier"
     fingerprint = "mock"
 
-    def __init__(self, p: float = 0.0):
+    def __init__(self, p=0.0):
         self.p = p
         self.calls = 0
 
     def p_yes(self, image, question: str) -> float:
         self.calls += 1
-        return self.p
+        return self.p(image, question) if callable(self.p) else self.p
+
+    def p_yes_many(self, image, questions: list[str]) -> list[float]:
+        return [self.p_yes(image, q) for q in questions]

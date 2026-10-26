@@ -368,3 +368,32 @@ def test_verifier_turns_unconfirmed_candidates_into_not_found(tmp_path, media):
         assert o["status"] == want and o["verify_p"] and len(o["verify_p"]) <= 3
         if want == "not_found":
             assert o["reasons"] == ["VERIFIER_NO"] and o["candidates"]      # candidates stay visible for a person
+
+
+def test_check_mode_needs_a_run_of_confirmed_samples(tmp_path, media):
+    """Stage 1.6: the check questions decide presence; one confirmed sample is not enough when run = 2."""
+    from scenegap.backends.vlm_verify import MockVerifier
+    asked = []
+
+    def p(image, q):
+        asked.append(q)
+        return 0.9 if "red" in q else 0.0
+
+    for run, cq, want in ((1, ["Is something red visible?"], "candidate"), (1, ["Is something blue visible?"], "not_found"),
+                          (99, ["Is something red visible?"], "not_found")):
+        be = MockColorBackend()
+        svc = SceneGap(str(tmp_path / f"c{run}{cq[0][13]}"), lambda: be, {"semantic_threshold": {be.manifest.fingerprint: 0.5},
+                                                                        "verifier": {"enabled": True, "mode": "check", "topn": 64, "theta": 0.5, "run": run}},
+                       verifier_factory=lambda: MockVerifier(p))
+        pid = svc.create_project("check")
+        rid = svc.add_root(pid, str(media))
+        svc.set_requirement(pid, {**RED, "check_questions": cq})
+        svc.import_assets(pid, rid, ["two_shots.mp4"])
+        svc.analyze_assets(pid)
+        o = svc.compute_run(pid)["outcomes"]["SH-101"]
+        assert o["status"] == want, (run, cq, o["status"])
+        assert all(q.endswith("Answer yes or no.") for q in asked)
+        if want == "candidate":
+            assert o["verify_found"] and o["verify_found"]["end_ms"] > o["verify_found"]["start_ms"]
+        else:
+            assert o["reasons"] == ["VERIFIER_NO"] and o["verify_found"] is None

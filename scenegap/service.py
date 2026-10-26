@@ -32,8 +32,10 @@ DEFAULTS = {
     "top_k": 5,
     "semantic_threshold": None,   # must be calibrated on the dev split; None refuses to run (PRD 13.4)
     "stable_wait_s": 0.5,
-    # second-stage check of the top candidates (eval/PROTOCOL.md, Stage 1.5); off unless enabled
-    "verifier": {"enabled": False, "k": 3, "theta": 0.35, "frames": 3},
+    # AI check layer, off unless enabled (eval/PROTOCOL.md). mode "candidates" (Stage 1.5): P(yes) on the top-k
+    # candidates. mode "check" (Stage 1.6): the check questions on the CLIP top-n 1 s samples of the project; the
+    # shot is present only when `run` consecutive samples of one shot reach theta.
+    "verifier": {"enabled": False, "mode": "candidates", "k": 3, "theta": 0.35, "frames": 3, "topn": 16, "run": 1},
 }
 
 
@@ -119,6 +121,50 @@ class SceneGap:
         if o.status in (AutoStatus.CANDIDATE, AutoStatus.PARTIAL) and ps and max(ps) < vc["theta"]:
             o = RequirementOutcome(r, AutoStatus.NOT_FOUND, o.candidates, ["VERIFIER_NO"], o.scope_complete)
             o.verify_p = [round(x, 4) for x in ps]
+        return o
+
+    def _verify_check(self, r, o, assets):
+        """Stage 1.6: the check questions on the CLIP top-n samples; no run of `run` confirmed samples -> not_found."""
+        from .backends.vlm_verify import check_questions, frame_at
+        v, vc = self.verifier, self.cfg["verifier"]
+        qs, keys = check_questions(r), self._queries(r)
+        step = self.cfg["sample_every_ms"]
+        pool = []                                                # the 1 s grid; densified samples are skipped
+        for a in assets:
+            last = None
+            for x in a.samples:
+                if last is None or x.t_ms - last >= 0.9 * step:
+                    pool.append((a, x))
+                    last = x.t_ms
+        look = sorted(pool, key=lambda ax: -min(ax[1].sims.get(k, 0.0) for k in keys))[:vc["topn"]]
+        cache = self.__dict__.setdefault("_check_cache", {})
+        ok, best = {}, (0.0, None)
+        for a, x in look:
+            key = (a.sha256, x.t_ms, tuple(qs))
+            if key not in cache:
+                path = self.asset_path(a.asset_id)
+                cache[key] = min(v.p_yes_many(frame_at(path, x.t_ms) if path else (a.asset_id, x.t_ms), qs))
+            ok[(a.asset_id, x.t_ms)] = cache[key] >= vc["theta"]
+            best = max(best, (cache[key], (a.asset_id, x.t_ms)), key=lambda b: b[0])
+        found = None
+        for a in assets:                                         # runs of confirmed, consecutive looked-at samples in one shot
+            grid = [x for aa, x in pool if aa is a]
+            run = []
+            for x in grid:
+                if ok.get((a.asset_id, x.t_ms)) and run and run[-1].shot_index == x.shot_index:
+                    run.append(x)
+                elif ok.get((a.asset_id, x.t_ms)):
+                    run = [x]
+                else:
+                    run = []
+                if len(run) >= vc["run"] and found is None:
+                    found = {"asset_id": a.asset_id, "start_ms": run[0].t_ms, "end_ms": x.t_ms + step}
+        o.verify_p = [round(best[0], 4)]
+        o.verify_found = found
+        if found is None and o.status != AutoStatus.NOT_FOUND:
+            n = RequirementOutcome(r, AutoStatus.NOT_FOUND, o.candidates, ["VERIFIER_NO"], o.scope_complete)
+            n.verify_p, n.verify_found = o.verify_p, None
+            return n
         return o
 
     def config_hash(self) -> str:
@@ -424,8 +470,11 @@ class SceneGap:
             assets, _ = self._asset_indexes(pid, queries)
         outcomes = {r.requirement_id: requirement_status(r, assets, candidates_for(r, assets, tau, self.cfg["top_k"])) for r in reqs}
         if self.verifier is not None:
-            outcomes = {rid: (self._verify(next(r for r in reqs if r.requirement_id == rid), o, assets) if o.candidates else o)
-                        for rid, o in outcomes.items()}
+            byid = {r.requirement_id: r for r in reqs}
+            if self.cfg["verifier"].get("mode") == "check":
+                outcomes = {rid: (self._verify_check(byid[rid], o, assets) if byid[rid].confirmed else o) for rid, o in outcomes.items()}
+            else:
+                outcomes = {rid: (self._verify(byid[rid], o, assets) if o.candidates else o) for rid, o in outcomes.items()}
         decisions = self.decisions(pid)
         cov = coverage(reqs, outcomes, decisions, assets)
         result = {"outcomes": {k: self._outcome_dict(o) for k, o in outcomes.items()},
@@ -452,6 +501,7 @@ class SceneGap:
         st = o.status.value if hasattr(o.status, "value") else o.status
         vp = getattr(o, "verify_p", None)
         return {"status": st, "status_zh": STATUS_TEXT_ZH.get(st, st), "reasons": o.reasons, "scope_complete": o.scope_complete, "verify_p": vp,
+                "verify_found": getattr(o, "verify_found", None),
                 "revision": o.requirement.revision,
                 "candidates": [{"asset_id": c.segment.asset_id, "asset_sha256": c.segment.asset_sha256, "shot": c.segment.shot_index,
                                 "start_ms": c.segment.interval.start_ms, "end_ms": c.segment.interval.end_ms,

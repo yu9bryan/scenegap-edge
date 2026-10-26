@@ -128,7 +128,7 @@
     NO_CANDIDATE: '已分析的素材裡沒找到', DURATION_SHORT: '長度不夠', DURATION_UNKNOWN: '長度無法確認',
     QUALITY_WARNING: '品質警示', NEEDS_MANUAL: '有條件要人工確認', EVIDENCE_UNKNOWN: '證據不足',
     TAKES_SHORT: 'Take 數不夠', SCOPE_INCOMPLETE: '還有素材沒分析完', UNSUPPORTED_CORE: '目前版本還不支援這個條件',
-    ANALYSIS_FAILED: '分析失敗', NOT_ANALYZED: '尚未分析', NO_ASSETS: '尚未加入素材', CONSTRAINT_FAILED: '條件不符', VERIFIER_NO: '前幾名候選都沒被確認（AI 確認層），可能沒拍到',
+    ANALYSIS_FAILED: '分析失敗', NOT_ANALYZED: '尚未分析', NO_ASSETS: '尚未加入素材', CONSTRAINT_FAILED: '條件不符', VERIFIER_NO: 'AI 確認層沒有確認到這個畫面，可能沒拍到',
   };
   const ASSET_ST = {
     pending: { zh: '待分析', icon: 'dashed', tone: 'slate' },

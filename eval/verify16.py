@@ -12,7 +12,8 @@ Rule family (eval/PROTOCOL.md, Stage 1.6). For each shot in a project:
      question and its extra conditions).
   3. The shot counts as present when some run of consecutive looked-at samples in one clip and one detected shot
      has P(yes) >= theta for at least m samples (m = 1, 2, or the shot's own minimum length in seconds).
-     Otherwise it is reported missing ('not_found').
+     Otherwise it is reported missing ('not_found'). When the verifier finds the shot, the system's own status
+     stays (so a shot CLIP already reports missing stays missing).
 Data for 'dev' is every split already scored before: dev (20 projects), test (8 projects) and test-2 (12 projects),
 with their original project seeds. 'test3' scores the frozen rule once on new footage and refuses a second run.
 """
@@ -46,7 +47,7 @@ def load(p):
 
 
 def sources():
-    """name -> (mp4 dir, dense file, gold file, projects as clip lists)."""
+    """name -> (mp4 dir, dense file, gold file, projects as clip lists, system status per project and shot)."""
     from split import split
     man = load(os.path.join(MAN, "commons_manifest.json"))
     sp = split(man["clips"])
@@ -54,14 +55,37 @@ def sources():
     test = sorted(c["clip"] for c in man["clips"] if sp[c["clip"]] == "test")
     t2 = sorted(c["clip"] for c in load(os.path.join(MAN, "test2_manifest.json"))["clips"])
     kd, kt = max(3, min(8, len(dev) // 2)), max(3, min(8, len(test) // 2))
+    pd = [random.Random(f"dev-explore-{i}").sample(dev, kd) for i in range(20)]
+    pt = [random.Random(f"{PROJECT_SEED}-{i}").sample(test, kt) for i in range(8)]
+    p2 = [random.Random(f"test2-{i}").sample(t2, 8) for i in range(12)]
+    vd, tm, t2m = load(os.path.join(RES, "verify_dev.json"))["raw"], load(os.path.join(RES, "test_metrics.json"))["projects"], load(os.path.join(RES, "test2_metrics.json"))["raw"]
+    for projs, recs in ((pd, vd), (pt, tm), (p2, t2m)):
+        assert [sorted(x) for x in projs] == [sorted(r["clips"]) for r in recs], "project seeds do not match the stored runs"
+    sd = [{rid: row["status"] for rid, row in r["rows"].items()} for r in vd]
+    st = [{rid: row["full"] for rid, row in r["requirements"].items()} for r in tm]
+    s2 = [{rid: row["status"] for rid, row in r["rows"].items()} for r in t2m]
     return {
-        "dev": ("F:/sg_data/commons/mp4", "commons.json", os.path.join(HERE, "labels", "gold.json"),
-                [random.Random(f"dev-explore-{i}").sample(dev, kd) for i in range(20)]),
-        "test1": ("F:/sg_data/commons/mp4", "commons.json", os.path.join(HERE, "labels", "gold.json"),
-                  [random.Random(f"{PROJECT_SEED}-{i}").sample(test, kt) for i in range(8)]),
-        "test2": ("F:/sg_data/commons2/mp4", "test2.json", os.path.join(HERE, "labels", "test2", "gold.json"),
-                  [random.Random(f"test2-{i}").sample(t2, 8) for i in range(12)]),
+        "dev": ("F:/sg_data/commons/mp4", "commons.json", os.path.join(HERE, "labels", "gold.json"), pd, sd),
+        "test1": ("F:/sg_data/commons/mp4", "commons.json", os.path.join(HERE, "labels", "gold.json"), pt, st),
+        "test2": ("F:/sg_data/commons2/mp4", "test2.json", os.path.join(HERE, "labels", "test2", "gold.json"), p2, s2),
     }
+
+
+def system_status(work, mp4_dir, projects, device="cuda"):
+    """The full system's status per project and shot (same settings as every earlier test)."""
+    from evaluate import build_project, make_service, set_requirements
+    cal = load(os.path.join(RES, "calibration.json"))
+    svc, be = make_service(os.path.join(work, device), device, crop=cal["crop"])
+    if be.manifest.fingerprint != cal["fingerprint"]:
+        sys.exit("model fingerprint differs from the calibrated one")
+    svc.cfg["semantic_threshold"] = {be.manifest.fingerprint: cal["chosen"]["tau"]}
+    out = []
+    for i, clips in enumerate(projects):
+        pid, _, _ = build_project(svc, mp4_dir, clips, f"v16-{i}")
+        set_requirements(svc, pid, REQS)
+        run = svc.compute_run(pid)
+        out.append({rid: o["status"] for rid, o in run["outcomes"].items()})
+    return out
 
 
 def clip_sims(work, mp4_dir, clips, device="cuda"):
@@ -137,14 +161,15 @@ def m_for(rule, r):
     return int(rule)
 
 
-def score_source(dense, sims, gold, projects, qset, topn, theta, mrule):
+def score_source(dense, sims, gold, projects, status, qset, topn, theta, mrule):
     gh = gaps = wr = av_n = calls = 0
     nq = {"q0": 1, "main": 1}
-    for clips in projects:
+    for clips, sts in zip(projects, status):
         for r in REQS:
             rid = r["requirement_id"]
             fr = project_frames(dense, sims, clips, rid)
             pres, looked = present(dense, fr, rid, qset, topn, theta, m_for(mrule, r))
+            pres = pres and sts[rid] != "not_found"
             parts = sum(1 for k in dense[clips[0]]["p"] if k.startswith(f"{rid}:part"))
             calls += looked * nq.get(qset, 1 + parts)
             av = available(gold, clips, rid, (r.get("min_duration_ms") or 0) / 1000)
@@ -193,13 +218,13 @@ def main():
     if a.mode == "dev":
         rows = []
         src = sources()
-        data = {n: (load(os.path.join(a.dense, d)), load(os.path.join(a.dense, "sims_" + ("test2" if n == "test2" else "commons") + ".json")), load(g), pr)
-                for n, (_, d, g, pr) in src.items()}
+        data = {n: (load(os.path.join(a.dense, d)), load(os.path.join(a.dense, "sims_" + ("test2" if n == "test2" else "commons") + ".json")), load(g), pr, st)
+                for n, (_, d, g, pr, st) in src.items()}
         for qset in QSETS:
             for topn in TOPN:
                 for mrule in MRULE:
                     for th in THETAS:
-                        by = {n: score_source(dn, sm, g, pr, qset, topn, th, mrule) for n, (dn, sm, g, pr) in data.items()}
+                        by = {n: score_source(dn, sm, g, pr, st, qset, topn, th, mrule) for n, (dn, sm, g, pr, st) in data.items()}
                         rows.append({"qset": qset, "topn": topn, "m": mrule, "theta": th, "by_source": by, "pooled": pooled(list(by.values()))})
             print(qset, "done", round(time.time() - t0), "s", flush=True)
         pick = choose(rows)
@@ -224,9 +249,11 @@ def main():
     dense = load(os.path.join(a.dense, "test3.json"))
     sims = load(os.path.join(a.dense, "sims_test3.json"))
     gold = load(os.path.join(HERE, "labels", "test3", "gold.json"))
-    res = score_source(dense, sims, gold, projects, fz["qset"], fz["topn"], fz["theta"], fz["m"])
+    status = system_status(a.work, "F:/sg_data/commons3/mp4", projects, a.device)
+    res = score_source(dense, sims, gold, projects, status, fz["qset"], fz["topn"], fz["theta"], fz["m"])
+    base = score_source(dense, sims, gold, projects, status, "q0", "none", 0.0, "1")      # theta 0: the system alone
     out = {"split": "test3 (new held-out footage)", "clips": len(clips), "projects": len(projects), "project_size": 8,
-           "frozen": {k: fz[k] for k in ("qset", "topn", "m", "theta")}, "result": res,
+           "frozen": {k: fz[k] for k in ("qset", "topn", "m", "theta")}, "result": res, "system_only": base,
            "targets": {"wrong_reshoot_max": 0.05, "gap_recall_min": 0.30},
            "met": res["wrong_reshoot"]["p"] <= 0.05 and res["gap_recall"]["p"] >= 0.30,
            "scored_at": time.strftime("%Y-%m-%d %H:%M:%S"), "projects_clips": projects}

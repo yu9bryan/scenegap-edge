@@ -88,6 +88,9 @@ class Requirement:
     constraints: list[Constraint] = field(default_factory=list)
     confirmed: bool = False
     excluded_reason: str | None = None
+    # yes/no questions for the AI check layer, confirmed by a person like query_en: the main question first, then
+    # extra conditions that must also hold (eval/verify_questions.json). Empty -> a question built from query_en.
+    check_questions: list[str] = field(default_factory=list)
 
     @property
     def active_required(self) -> bool:
