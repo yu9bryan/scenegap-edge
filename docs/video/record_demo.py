@@ -2,7 +2,9 @@
 
   python record_demo.py <out_dir> [segment ...]      # server on http://127.0.0.1:8766, project id in F:/sg_data/_rec/project.json
 
-Every action goes through the real UI. A drawn cursor shows where the clicks land.
+Every action goes through the real UI. A drawn cursor shows where the clicks land. Each recording also gets marks
+(seconds from the start of the recording, plus the clicked element's box) in <out_dir>/marks.json, so the edit can put
+each narration sentence on the action it describes.
 """
 import json
 import os
@@ -51,7 +53,12 @@ class Rec:
         self.ctx.add_init_script(CURSOR)
         self.ctx.add_init_script(f"localStorage.setItem('sg.pid', JSON.stringify('{PID}'))")
         self.pg = self.ctx.new_page()
+        self.t0 = time.time()                       # the recording starts with the page
+        self.marks = {}
         self.x, self.y = W / 2, H / 2
+
+    def mark(self, name, box=None):
+        self.marks[name] = {"t": round(time.time() - self.t0, 2), "box": box}
 
     def go(self, route, wait=2.5):
         self.pg.goto(BASE + route)
@@ -67,13 +74,15 @@ class Rec:
         self.x, self.y = tx, ty
         time.sleep(0.25)
 
-    def click(self, loc, wait=1.2):
+    def click(self, loc, wait=1.2, mark=None):
         self.move_to(loc)
+        if mark:
+            self.mark(mark, loc.bounding_box())
         self.pg.mouse.down(); time.sleep(0.08); self.pg.mouse.up()
         time.sleep(wait)
 
-    def type(self, loc, text, wait=0.6):
-        self.click(loc, 0.3)
+    def type(self, loc, text, wait=0.6, mark=None):
+        self.click(loc, 0.3, mark)
         self.pg.keyboard.type(text, delay=45)
         time.sleep(wait)
 
@@ -90,6 +99,10 @@ class Rec:
         video.save_as(dst)                              # waits until the file is completely written
         video.delete()
         self.browser.close()
+        mp = os.path.join(OUT, "marks.json")
+        allm = json.load(open(mp, encoding="utf8")) if os.path.exists(mp) else {}
+        allm[self.name] = self.marks
+        json.dump(allm, open(mp, "w", encoding="utf8"), indent=1)
         print("saved", dst)
 
 
@@ -120,7 +133,7 @@ def seg_shotlist(pw):
     r = Rec(pw, "05_shotlist")
     r.go("#/requirements", 2.0)
     r.scroll(500, 8, 0.3)
-    r.click(r.pg.get_by_text("SH-05", exact=False).first, 3.5)
+    r.click(r.pg.get_by_text("SH-05", exact=False).first, 3.5, "open_sh05")
     r.scroll(300, 6, 0.4)
     time.sleep(1.5)
     r.close()
@@ -129,13 +142,15 @@ def seg_shotlist(pw):
 def seg_import(pw):
     r = Rec(pw, "06_import")
     r.go("#/assets", 2.0)
-    r.type(r.pg.locator("#root-path"), "F:\\sg_data\\demo_card1")
+    r.type(r.pg.locator("#root-path"), "F:\\sg_data\\demo_card1", mark="path")
     r.click(r.pg.get_by_role("button", name="授權資料夾"), 1.5)
-    r.click(r.pg.get_by_role("button", name="匯入整個資料夾").last, 1.0)
+    r.click(r.pg.get_by_role("button", name="匯入整個資料夾").last, 1.0, "import")
     wait_assets(8)
+    r.mark("imported")
     time.sleep(2.0)
-    r.click(r.pg.get_by_role("button", name="開始分析").first, 0.5)
+    r.click(r.pg.get_by_role("button", name="開始分析").first, 0.5, "analyse")
     took = wait_job_done()
+    r.mark("analysed")
     time.sleep(3.0)
     print("analysis took", round(took, 1), "s")
     r.close()
@@ -153,51 +168,55 @@ def seg_coverage(pw):
 def seg_sh05(pw):
     r = Rec(pw, "08_sh05")
     r.go("#/evidence/SH-05/0", 3.0)
-    r.click(r.pg.get_by_role("button", name=re.compile("播放")).first, 3.5)
-    r.click(r.pg.locator(".bub-btn[aria-label='拒絕']"), 1.0)
-    r.type(r.pg.locator("#dc-reason"), "No cup in frame")
-    r.click(r.pg.get_by_role("button", name="確認拒絕"), 2.5)
-    r.click(r.pg.locator("button.rchip").nth(1), 2.5)
-    r.click(r.pg.get_by_role("button", name=re.compile("播放")).first, 3.0)
-    r.click(r.pg.locator(".bub-btn[aria-label='接受']"), 3.0)
+    r.click(r.pg.get_by_role("button", name=re.compile("播放")).first, 3.5, "play1")
+    r.click(r.pg.locator(".bub-btn[aria-label='拒絕']"), 1.0, "reject")
+    r.type(r.pg.locator("#dc-reason"), "No cup in frame", mark="reason")
+    r.click(r.pg.get_by_role("button", name="確認拒絕"), 2.5, "confirm_reject")
+    r.click(r.pg.locator("button.rchip").nth(1), 2.5, "chip2")
+    r.click(r.pg.get_by_role("button", name=re.compile("播放")).first, 3.0, "play2")
+    r.click(r.pg.locator(".bub-btn[aria-label='接受']"), 3.0, "accept")
     r.close()
 
 
 def seg_reshoot(pw):
     r = Rec(pw, "09_reshoot")
     r.go("#/evidence/SH-04/0", 3.0)
-    r.click(r.pg.locator(".bub-btn[aria-label='加入補拍']"), 1.0)
-    r.type(r.pg.locator("#dc-reason"), "Tamping, not grinding. Need 2 s of grounds coming out")
-    r.click(r.pg.get_by_role("button", name="加入補拍清單"), 2.5)
+    r.click(r.pg.locator(".bub-btn[aria-label='加入補拍']"), 1.0, "add1")
+    r.type(r.pg.locator("#dc-reason"), "Tamping, not grinding. Need 2 s of grounds coming out", mark="reason1")
+    r.click(r.pg.get_by_role("button", name="加入補拍清單"), 2.5, "confirm1")
+    r.mark("sh07")
     r.go("#/evidence/SH-07/0", 2.5)
-    r.click(r.pg.locator(".bub-btn[aria-label='加入補拍']"), 1.0)
-    r.type(r.pg.locator("#dc-reason"), "Nobody drinks from a cup in these clips")
-    r.click(r.pg.get_by_role("button", name="加入補拍清單"), 3.0)
-    r.scroll(600, 8, 0.4)
-    time.sleep(1.5)
+    r.click(r.pg.locator(".bub-btn[aria-label='加入補拍']"), 1.0, "add2")
+    r.type(r.pg.locator("#dc-reason"), "Nobody drinks from a cup in these clips", mark="reason2")
+    r.click(r.pg.get_by_role("button", name="加入補拍清單"), 2.0, "confirm2")
+    r.mark("board")
+    r.go("#/board", 4.0)
     r.close()
 
 
 def seg_fix(pw):
     r = Rec(pw, "10_new_clip")
     r.go("#/assets", 2.0)
-    r.type(r.pg.locator("#root-path"), "F:\\sg_data\\demo_card2")
+    r.type(r.pg.locator("#root-path"), "F:\\sg_data\\demo_card2", mark="path")
     r.click(r.pg.get_by_role("button", name="授權資料夾"), 1.5)
-    r.click(r.pg.get_by_role("button", name="匯入整個資料夾").last, 1.0)
+    r.click(r.pg.get_by_role("button", name="匯入整個資料夾").last, 1.0, "import")
     wait_assets(9)
     time.sleep(2.0)
-    r.click(r.pg.get_by_role("button", name="開始分析").first, 0.5)
+    r.click(r.pg.get_by_role("button", name="開始分析").first, 0.5, "analyse")
     took = wait_job_done()
+    r.mark("analysed")
     print("re-analysis took", round(took, 1), "s")
     time.sleep(2.0)
     cov = api(f"/projects/{PID}/coverage")
     row = next(x for x in cov["requirements"] if x["requirement"]["requirement_id"] == "SH-04")
     assets = {a["asset_id"]: a["locations"][0] for a in api(f"/projects/{PID}/assets")}
     idx = next(i for i, c in enumerate(row["auto"]["candidates"]) if assets[c["asset_id"]].startswith("022_"))
+    r.mark("evidence")
     r.go(f"#/evidence/SH-04/{idx}", 3.0)
-    r.click(r.pg.get_by_role("button", name=re.compile("播放")).first, 4.0)
-    r.click(r.pg.locator(".bub-btn[aria-label='接受']"), 2.5)
-    r.go("#/board", 3.5)
+    r.click(r.pg.get_by_role("button", name=re.compile("播放")).first, 4.0, "play")
+    r.click(r.pg.locator(".bub-btn[aria-label='接受']"), 2.5, "accept")
+    r.mark("board")
+    r.go("#/board", 4.0)
     r.close()
 
 

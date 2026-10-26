@@ -36,7 +36,7 @@ S = []
 S.append({"type": "title", "tagline": "Creator AI · Lightning track · ASUS UGen300", "title": "SceneGap Edge",
           "subtitle": "Checks your shot list against your footage, on your own computer, before the crew leaves the location.",
           "chips": ["Local-first", "Evidence for every answer", "A person confirms", "UGen300 port planned"],
-          "footer": "Stage I proposal · [Team name] · github.com/[team]/scenegap-edge",
+          "footer": "Stage I proposal · [Team name] · github.com/[team]/scenegap-edge", "art": img("cover_art.png"),
           "notes": "One line: a shot-list checker, not another footage search. Everything measured is on a desktop CPU/GPU reference; UGen300 numbers are not run yet."})
 # 2 story
 lib_min = round(sum(c.get("duration_s_metadata") or 0 for c in man["clips"]) / 60) if man else None
