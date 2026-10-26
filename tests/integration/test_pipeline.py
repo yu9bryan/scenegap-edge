@@ -243,3 +243,71 @@ def test_same_file_in_two_projects_reuses_index(tmp_path, media):
     svc.import_assets(pid3, svc.add_root(pid3, str(media)), ["two_shots.mp4"])
     svc.analyze_assets(pid3)
     assert be.image_calls == calls                       # same content + same model: no re-encoding
+
+
+def test_core_flow_makes_no_outbound_connection_TC019(tmp_path, media, monkeypatch):
+    import socket
+    real = socket.socket.connect
+
+    def guard(self, addr):
+        host = addr[0] if isinstance(addr, tuple) else str(addr)
+        if host not in ("127.0.0.1", "::1", "localhost"):
+            raise AssertionError(f"outbound connection to {addr}")
+        return real(self, addr)
+    monkeypatch.setattr(socket.socket, "connect", guard)
+    svc, be = make(tmp_path)
+    pid = svc.create_project("offline")
+    rid = svc.add_root(pid, str(media))
+    svc.set_requirement(pid, RED)
+    svc.import_assets(pid, rid)
+    svc.analyze_assets(pid)
+    svc.compute_run(pid)
+    view = svc.coverage_view(pid)
+    assert view["run"] is not None
+
+
+def test_disk_full_stops_safely_and_recovers_TC023(tmp_path, media, monkeypatch):
+    import errno as _errno
+    import scenegap.service as service_mod
+    before = sha(media / "two_shots.mp4")
+    svc, be = make(tmp_path)
+    pid = svc.create_project("disk")
+    rid = svc.add_root(pid, str(media))
+    svc.import_assets(pid, rid, ["two_shots.mp4"])
+    real = service_mod.atomic_write_bytes
+
+    def full(path, data):
+        raise OSError(_errno.ENOSPC, "No space left on device")
+    monkeypatch.setattr(service_mod, "atomic_write_bytes", full)
+    with pytest.raises(Invalid) as e:
+        svc.analyze_assets(pid)
+    assert e.value.code == "DISK_FULL"
+    a = svc.assets(pid)[0]
+    assert a["status"] == "pending" and a["error_code"] == "DISK_FULL"
+    assert not [f for _, _, fs in os.walk(str(tmp_path / "work")) for f in fs if f.endswith(".npz")]   # no half-written index
+    monkeypatch.setattr(service_mod, "atomic_write_bytes", real)
+    svc.analyze_assets(pid)
+    assert svc.assets(pid)[0]["status"] == "analyzed"
+    assert sha(media / "two_shots.mp4") == before
+
+
+def test_moved_file_is_missing_then_relocated_by_hash_TC031(tmp_path, media):
+    svc, be = make(tmp_path)
+    pid = svc.create_project("move")
+    rid = svc.add_root(pid, str(media))
+    svc.set_requirement(pid, RED)
+    aid = svc.import_assets(pid, rid, ["two_shots.mp4"])["accepted"][0]["asset_id"]
+    svc.analyze_assets(pid)
+    new_dir = tmp_path / "moved"
+    new_dir.mkdir()
+    shutil.move(str(media / "two_shots.mp4"), str(new_dir / "renamed.mp4"))
+    run = svc.compute_run(pid)
+    assert svc.assets(pid)[0]["status"] == "missing"
+    assert run["outcomes"]["SH-101"]["status"] != "candidate"        # no evidence from a file we cannot open
+    rid2 = svc.add_root(pid, str(new_dir))
+    imp = svc.import_assets(pid, rid2, ["renamed.mp4"])
+    assert imp["accepted"][0]["asset_id"] == aid                       # same hash: same asset, new location
+    calls = be.image_calls
+    svc.analyze_assets(pid)
+    assert svc.assets(pid)[0]["status"] == "analyzed" and be.image_calls == calls   # index reused, not recomputed
+    assert svc.compute_run(pid)["outcomes"]["SH-101"]["status"] == "candidate"

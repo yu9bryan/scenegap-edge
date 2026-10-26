@@ -6,6 +6,7 @@ green light. Original media are only read (FR-PRJ-05).
 """
 from __future__ import annotations
 
+import errno
 import hashlib
 import io
 import json
@@ -176,6 +177,8 @@ class SceneGap:
             ex = self.db.one("SELECT asset_id FROM assets WHERE project_id=? AND sha256=?", (pid, sha))
             if ex:                                              # same content: one logical asset, another location
                 self.db.x("INSERT OR IGNORE INTO asset_locations VALUES(?,?,?,?)", (ex["asset_id"], root_id, rel, "ok"))
+                self.db.x("UPDATE assets SET status='pending', error_code=NULL, error_msg=NULL WHERE asset_id=? AND status='missing'",
+                          (ex["asset_id"],))                    # relocated: the new file was hashed above, so it is the same content
                 accepted.append({"path": rel, "asset_id": ex["asset_id"], "duplicate_of": ex["asset_id"]})
                 continue
             aid = "a_" + hashlib.sha256((pid + sha).encode()).hexdigest()[:12]     # unique per project; same file may sit in several projects
@@ -239,6 +242,7 @@ class SceneGap:
 
     def analyze_assets(self, pid: str, job_id: str | None = None) -> dict:
         from .shots.analyze import analyze
+        self.verify_locations(pid)
         todo = [a for a in self.assets(pid) if a["status"] in ("pending", "analyzing") or
                 (a["status"] == "analyzed" and self._load_index(a["sha256"]) is None)]
         done, failed = 0, 0
@@ -266,6 +270,16 @@ class SceneGap:
                                                                    "embed_s": round(t2 - t1, 3), "backend_at_index": self.backend.name})
                 self.db.x("UPDATE assets SET status='analyzed', error_code=NULL, error_msg=NULL WHERE asset_id=?", (a["asset_id"],))
                 done += 1
+            except OSError as e:
+                if e.errno == errno.ENOSPC:                      # disk full: stop safely, keep the asset retryable (TC-023)
+                    self.db.x("UPDATE assets SET status='pending', error_code='DISK_FULL', error_msg=? WHERE asset_id=?",
+                              ("disk full while writing the index; free space and run analysis again", a["asset_id"]))
+                    failed += 1
+                    if job_id:
+                        self.db.x("UPDATE jobs SET done=?, failed=?, updated_at=? WHERE job_id=?", (done, failed, now(), job_id))
+                    raise Invalid("DISK_FULL", "disk full while writing the index; nothing was half-written")
+                self.db.x("UPDATE assets SET status='failed', error_code='DECODE_FAILED', error_msg=? WHERE asset_id=?", (str(e)[:300], a["asset_id"]))
+                failed += 1
             except Exception as e:                               # one bad file never sinks the project (FR-ING-06)
                 self.db.x("UPDATE assets SET status='failed', error_code='DECODE_FAILED', error_msg=? WHERE asset_id=?", (str(e)[:300], a["asset_id"]))
                 failed += 1
@@ -334,8 +348,28 @@ class SceneGap:
             changed = True
         return changed
 
+    def verify_locations(self, pid: str) -> dict:
+        """Mark assets whose every location is gone as missing, and bring back ones that reappeared with the same hash."""
+        changed = {"missing": 0, "restored": 0}
+        for a in self.assets(pid):
+            if a["status"] == "excluded":
+                continue
+            path = self.asset_path(a["asset_id"])
+            if path is None and a["status"] != "missing":
+                self.db.x("UPDATE assets SET status='missing', error_code='ASSET_MISSING' WHERE asset_id=?", (a["asset_id"],))
+                changed["missing"] += 1
+            elif path and a["status"] == "missing":
+                if sha256_file(path) == a["sha256"]:
+                    self.db.x("UPDATE assets SET status='pending', error_code=NULL, error_msg=NULL WHERE asset_id=?", (a["asset_id"],))
+                    changed["restored"] += 1
+                else:
+                    self.db.x("UPDATE assets SET error_code='HASH_MISMATCH', error_msg='a different file is at the old path' WHERE asset_id=?",
+                              (a["asset_id"],))
+        return changed
+
     def compute_run(self, pid: str) -> dict:
         tau = self.tau()
+        self.verify_locations(pid)
         if tau is None:
             raise Invalid("UNCALIBRATED", "semantic_threshold is not set; calibrate on the dev split first")
         reqs = self.requirements(pid)
