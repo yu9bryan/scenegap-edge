@@ -210,6 +210,13 @@ def test(a):
                 retr[m]["hit"] += int(any(ok))
             row[m] = {"returned": len(ok), "correct": sum(ok)}
         per_req.append(row)
+    lib_s = sum(a["duration_ms"] for a in svc.assets(pid)) / 1000
+    shown_s = sum(min(c["end_ms"] - c["start_ms"], 10000) / 1000 if c["end_ms"] - c["start_ms"] >= 1000 else 1.0
+                  for r in R for c in run["outcomes"][r.requirement_id]["candidates"])
+    review_load = {"library_seconds": round(lib_s, 1), "requirements": len(R), "full_watch_seconds": round(lib_s, 1),
+                   "candidate_seconds_to_review": round(shown_s, 1),
+                   "note": "proxy only: footage seconds a person would play (each candidate counted at its lower-bound length, "
+                           "at least 1 s, at most 10 s) versus watching the library once; not a user-time measurement"}
     retrieval = {m: {"recall_at_5": wilson(v["hit"], v["den"]), "precision_at_5": wilson(v["good"], v["ret"])} for m, v in retr.items()}
 
     # project simulation
@@ -248,7 +255,7 @@ def test(a):
                       "unknown_rate": wilson(v["unknown"], v["total"]), "false_candidate_rate": wilson(v["false_candidate"], v["gaps"]),
                       "false_ready_rate": "N/A (no automatic completion; human confirmation required)"} for m, v in sim.items()}
     out = {"tau": tau, "crop": cal["crop"], "fingerprint": cal["fingerprint"], "backend": be.name, "test_clips": test_clips, "project_size": k,
-           "retrieval": retrieval, "per_requirement": per_req, "simulation": simulation, "projects": projects,
+           "retrieval": retrieval, "review_load": review_load, "per_requirement": per_req, "simulation": simulation, "projects": projects,
            "scored_at": time.strftime("%Y-%m-%d %H:%M:%S"), "note": "CPU/GPU reference backend; no NPU result exists."}
     json.dump(out, open(out_p, "w", encoding="utf8"), ensure_ascii=False, indent=1)
     for m in ("keyword", "single_frame", "full"):

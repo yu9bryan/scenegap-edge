@@ -43,6 +43,10 @@ def main():
         names = {"keyword": "Title keyword match", "single_frame": "Single-frame semantic", "full": "SceneGap (semantic + duration + densify)"}
         for m in ("keyword", "single_frame", "full"):
             L.append(f"| {names[m]} | {pct(test['retrieval'][m]['recall_at_5'])} | {pct(test['retrieval'][m]['precision_at_5'])} |")
+        rl = test.get("review_load")
+        if rl:
+            L += ["", f"Review-load proxy: {rl['candidate_seconds_to_review']} s of candidates to play for {rl['requirements']} requirements, "
+                      f"versus {rl['library_seconds']} s to watch the test library once. {rl['note']}."]
         L += ["", f"### Project simulation ({len(test['projects'])} projects × {test['project_size']} test clips)", "",
               "| Method | Gap recall | Wrong reshoot rate | Unknown rate | Candidate where gold has none |", "|---|---|---|---|---|"]
         for m in ("keyword", "single_frame", "full"):

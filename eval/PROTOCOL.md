@@ -57,3 +57,6 @@ Follows PRD ch. 21–24. Everything here is fixed before labels are produced and
 - Crop policy (added the same day, before labels): CLIP's default centre crop drops about 44% of a 16:9 frame's
   width. Both `center-crop` and `pad-square` (letterbox) are calibrated on dev; the one with the higher dev F1 is
   frozen (ties keep `center-crop`). The choice is part of `preprocess_id` and therefore of the model fingerprint.
+- Review-load proxy (added before scoring): seconds of footage in the test library versus seconds a person would
+  play to check every returned candidate once (each at its lower-bound length, at least 1 s, at most 10 s). This is
+  not a user-time measurement; the user study of PRD 22 is not done.
