@@ -207,6 +207,19 @@ CLIP ViT-B/32 on a desktop GPU/CPU; full numbers in [`eval/results/REPORT.md`](e
 | Tests | 46 automated tests; 30 of 36 PRD acceptance cases pass by test; fresh-environment rebuild passes |
 <!-- RESULTS:END -->
 
+### What the model returns
+
+![Top 5 the model returns for four shots, with right/wrong against the labels](docs/deck/img/fig_top5.png)
+
+*Demo project (9 Commons clips). SH-05: the right clips are in the list but #1 is an espresso stream with no cup.
+SH-04: the right clip is ranked 4th. SH-07 is not in the footage, yet five clips pass the rules, which is why
+missing shots go undetected today.*
+
+![CLIP similarity over time for three rule-check cases](docs/deck/img/fig_curves.png)
+
+*How the length rule reads the scores: a 4 s pour gives four samples above τ (lower bound 3.0 s, passes the 3 s
+rule); a 2 s pour gives 1.0 s (too short); a finished latte scores as high as a pour, so a person checks the action.*
+
 Details behind the table:
 
 - **Retrieval** was scored on the test split (26 clips, 14 min) with frozen settings. The 95% intervals are wide:
