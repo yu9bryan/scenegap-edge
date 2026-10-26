@@ -36,7 +36,13 @@ def clip(name_prefix):
 
 
 def ff(*args):
-    subprocess.run([FF, "-hide_banner", "-loglevel", "error", "-y", *args], check=True)
+    # this ffmpeg build sometimes dies with 0xC000008F on Windows; the same command succeeds when run again
+    for attempt in range(3):
+        r = subprocess.run([FF, "-hide_banner", "-loglevel", "error", "-y", *args])
+        if r.returncode == 0:
+            return
+        print("ffmpeg exit", r.returncode, "- retrying" if attempt < 2 else "- giving up", flush=True)
+    raise subprocess.CalledProcessError(r.returncode, FF)
 
 
 def dur(path):
@@ -110,13 +116,13 @@ def card_problem():
 def card_tools():
     im = BGIMG.copy(); d = ImageDraw.Draw(im)
     overline(d, "What exists", 120, 120)
-    d.text((120, 170), "Search finds a cup. None checks length, takes or frame.", font=font(56, True), fill=TEXT)
-    cols = [(120, "Tool"), (900, "Searches footage"), (1400, "Checks length · takes")]
+    d.text((120, 170), "Search finds a cup. Shot-list rules are not in their docs.", font=font(56, True), fill=TEXT)
+    cols = [(120, "Tool"), (900, "Finds the moment"), (1400, "Length · takes · frame")]
     y0 = 300
     for x, h_ in cols:
         d.text((x, y0), h_.upper(), font=font(24, True), fill=MUTED)
     d.line((120, y0 + 44, 1800, y0 + 44), fill=VIOLET, width=3)
-    rows = [("Adobe Premiere Pro", "Yes", "No"), ("DaVinci Resolve", "Yes", "No"), ("Final Cut Pro", "Yes", "No"), ("SceneGap Edge", "Yes", "Length · takes · same frame")]
+    rows = [("Adobe Premiere Pro", "Yes", "Not in docs"), ("DaVinci Resolve", "Whole clips", "Not in docs"), ("Final Cut Pro", "Yes", "Not in docs"), ("SceneGap Edge", "Yes", "Checked; a person decides")]
     for i, (a, b, c) in enumerate(rows):
         y = y0 + 76 + i * 100
         last = i == len(rows) - 1
@@ -124,7 +130,7 @@ def card_tools():
             d.rounded_rectangle((100, y - 22, 1820, y + 70), 16, fill=(40, 30, 90))
         d.text((120, y), a, font=font(40, last), fill=TEXT)
         d.text((900, y), b, font=font(40, last), fill=(120, 230, 160))
-        d.text((1400, y), c, font=font(40 if not last else 34, last), fill=(255, 120, 130) if c == "No" else CYAN)
+        d.text((1400, y), c, font=font(40 if not last else 34, last), fill=MUTED if c == "Not in docs" else CYAN)
         if not last:
             d.line((120, y + 82, 1800, y + 82), fill=(45, 45, 60), width=1)
     d.text((120, 800), "Vendor pages, accessed 2026-10-26 (docs/research/BUSINESS_FACTS.md)", font=font(22), fill=MUTED)
@@ -147,14 +153,14 @@ def card_results():
     agr = json.load(open(os.path.join(REPO, "eval", "labels", "agreement.json"), encoding="utf8"))
     man = json.load(open(os.path.join(REPO, "datasets", "manifests", "commons_manifest.json"), encoding="utf8"))
     r5 = rep["retrieval"]["full"]["recall_at_5"]
-    rl = rep["review_load"]
+    rc = json.load(open(os.path.join(REPO, "eval", "results", "rule_check.json"), encoding="utf8"))
     mins = sum(c.get("duration_s_metadata") or 0 for c in man["clips"]) / 60
     overline(d, "Evidence", 120, 110)
     d.text((120, 160), "Tested on real, openly licensed footage", font=font(60, True), fill=TEXT)
     stats = [(f"{len(man['clips'])}", f"Wikimedia Commons clips · {mins:.0f} min"),
              (f"κ {agr['sample_level']['cohen_kappa']:.2f}", "agreement between two AI annotators (1 = perfect)"),
              (f"{r5['k']} / {r5['n']}", "shots with the right clip in the top 5 (held-out test, scored once)"),
-             (f"{rl['candidate_seconds_to_review']:.0f} s", f"of candidate clips, out of {rl['library_seconds']:.0f} s of footage ({rl['candidate_seconds_to_review'] / rl['library_seconds'] * 100:.0f}%)")]
+             (f"{rc['correct']} / {rc['cases']}", "controlled rule cases judged right (length, same frame, takes)")]
     for i, (big, lab) in enumerate(stats):
         x, y = 120 + (i % 2) * 860, 270 + (i // 2) * 270
         d.rounded_rectangle((x, y, x + 820, y + 240), 24, fill=(21, 21, 31), outline=(42, 42, 58), width=2)
@@ -423,7 +429,7 @@ def main():
            "pieces": [(0, m("09_reshoot", "add1") - 0.3, 1.5), (m("09_reshoot", "add1") - 0.3, m("09_reshoot", "confirm1") + 1.0, 2.0, zoom_on("09_reshoot", "reason1", 1.5, 120)),
                       (m("09_reshoot", "confirm1") + 1.0, m("09_reshoot", "add2") - 0.3, 2.0),
                       (m("09_reshoot", "add2") - 0.3, m("09_reshoot", "confirm2") + 1.0, 2.0, zoom_on("09_reshoot", "reason2", 1.5, 120)),
-                      (m("09_reshoot", "confirm2") + 1.0, 32.5, 1.0)],
+                      (m("09_reshoot", "confirm2") + 1.0, 31.5, 1.0)],
            "tags": ["Live app · ×1.5", "Live app · ×2 · zoom", "Live app · ×2", "Live app · ×2 · zoom", "Live app · real time"]}
     s09["cues"] = [None, at(s09, "09_reshoot", "sh07"), at(s09, "09_reshoot", "board", -0.6)]
     s10 = {"id": "10", "kind": "rec", "rec": "10_new_clip.mp4",
@@ -431,7 +437,7 @@ def main():
                       (m("10_new_clip", "analysed") + 0.3, m("10_new_clip", "play") - 0.3, 3.0),
                       (m("10_new_clip", "play") - 0.3, m("10_new_clip", "accept") - 0.6, 1.0),
                       (m("10_new_clip", "accept") - 0.6, m("10_new_clip", "board") - 0.2, 1.0, zoom_on("10_new_clip", "accept", 1.5)),
-                      (m("10_new_clip", "board") - 0.2, m("10_new_clip", "board") + 3.0, 1.0)],
+                      (m("10_new_clip", "board") - 0.2, m("10_new_clip", "board") + 2.2, 1.0)],
            "tags": ["Live app · ×3", "Live app · real time", "Live app · ×3", "Reshoot stand-in: another Commons clip (022)", "Live app · real time · zoom", "Live app · real time"]}
     s10["cues"] = [at(s10, "10_new_clip", "import"), at(s10, "10_new_clip", "analyse"), at(s10, "10_new_clip", "play"), at(s10, "10_new_clip", "accept", 0.5)]
     S = [
@@ -439,15 +445,15 @@ def main():
         {"id": "02", "kind": "still", "png": card_problem(), "inset": ("020_", 36.0, 0, (1080, 360, 720, 405))},
         {"id": "03", "kind": "still", "png": card_tools()},
         {"id": "04", "kind": "still", "png": card_title(frame), "zoom": 0.04},
-        {"id": "05", "kind": "rec", "rec": "05_shotlist.mp4", "pieces": [(0, 14.1, 1.15)], "tag": "Live app · ×1.15"},
+        {"id": "05", "kind": "rec", "rec": "05_shotlist.mp4", "pieces": [(0, 14.1, 1.25)], "tag": "Live app · ×1.25"},
         s06,
-        {"id": "07", "kind": "rec", "rec": "07_coverage.mp4", "pieces": [(0, 15.3, 2.0)], "tag": "Live app · ×2"},
+        {"id": "07", "kind": "rec", "rec": "07_coverage.mp4", "pieces": [(0, 15.3, 2.5)], "tag": "Live app · ×2.5"},
         s08, s09, s10,
         {"id": "11", "kind": "seq", "png": card_results(), "card_s": round(LEAD + TIMING["11"][1]["start"] - 0.25, 2), "clip": "11_chart.mp4"},
         {"id": "12", "kind": "still", "png": card_arch(), "zoom": 0.06, "zoom_to": (0.86, 0.3)},
         {"id": "13", "kind": "still", "png": card_end(credits)},
     ]
-    S[4]["cues"] = [None, round(m("05_shotlist", "open_sh05") / 1.15 - 1.2, 2)]
+    S[4]["cues"] = [None, round(m("05_shotlist", "open_sh05") / 1.25 - 1.2, 2)]
     files = []
     for i, s in enumerate(S):
         s["placed"] = place_sentences(s, vo_len[s["id"]])

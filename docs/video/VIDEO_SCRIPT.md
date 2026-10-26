@@ -1,6 +1,6 @@
 # SceneGap Edge: Stage I demo video script (English)
 
-- Length: 3:00 maximum. As built (v4): 2:57, narration 359 words (`docs/video/narration.json` is the final text).
+- Length: 3:00 maximum. As built (v5): 2:58, narration 365 words (`docs/video/narration.json` is the final text).
 - The shot table below is the plan; times and wording in the final cut follow `narration.json` and `make_video.py`.
 - Everything on screen is real: Wikimedia Commons footage (CC0 / CC BY / CC BY-SA, credited at the end), live
   screen recordings of the SceneGap app running on a desktop, and figures from the repository. No actors.
@@ -73,3 +73,11 @@ Only clips that appear in the video, with author and licence from `datasets/mani
   machine.
 - End card: full attribution for every clip shown, voice and GPU named, and the licence: the video adapts CC BY-SA
   footage, so it is released under CC BY-SA 4.0.
+
+## v5 (2026-10-26, after an external review)
+
+- Positioning: "helps you check" the shot list; SceneGap is a review assistant, missing-shot detection is next.
+- SH-05 is said as written in the shot list: coffee or latte art poured into a cup.
+- Tools card: shot-list rules are "not in their docs" rather than "no"; Premiere finds the moment in a clip.
+- Results: plain frame search 8 vs SceneGap 7; 10 of 12 controlled rule cases right (`eval/rule_check.py`).
+- `make_video.py` retries ffmpeg when this Windows build crashes with 0xC000008F (the same command then succeeds).
