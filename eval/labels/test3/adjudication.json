@@ -1,0 +1,247 @@
+[
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 72.0,
+  "positive": false,
+  "note": "Mug of coffee sits under the Keurig spout, lid closed and frame partly glitched; brewing may be ongoing and the machine dominates, so unclear."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 73.0,
+  "positive": false,
+  "note": "Lid being opened; the shot is about operating the Keurig, mug under the spout is not clearly the main subject."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 74.0,
+  "positive": false,
+  "note": "Arm reaching to the machine lid; mug sits under the spout in a machine-operation shot, not the main subject."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 75.0,
+  "positive": false,
+  "note": "Hand removing the K-cup from the open lid; the action, not the mug, is the subject."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 76.0,
+  "positive": false,
+  "note": "Open lid with pod and a hand at the edge; mug under the brewer spout in a machine shot, cup not clearly the main subject."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 77.0,
+  "positive": false,
+  "note": "Hand on the pod holder; mug is secondary to the machine operation."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 78.0,
+  "positive": false,
+  "note": "Hand pulling the pod out of the holder; mug under the spout is not the main subject."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 79.0,
+  "positive": false,
+  "note": "Hand at the open lid removing the pod; mug secondary."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 80.0,
+  "positive": false,
+  "note": "Mug stands under the open brewer with the machine filling much of the frame; cup is not clearly the main subject."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-10",
+  "t": 11.0,
+  "positive": true,
+  "note": "Hand holds a K-cup coffee pod with a printed lid next to the open brewer; the pod package is clearly visible."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-10",
+  "t": 12.0,
+  "positive": true,
+  "note": "K-cup pod held over the holder, printed lid clearly visible."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-10",
+  "t": 13.0,
+  "positive": true,
+  "note": "K-cup pod being inserted, blue printed lid visible."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-10",
+  "t": 14.0,
+  "positive": true,
+  "note": "Hand closing the lid over the pod, blue K-cup lid still visible."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-10",
+  "t": 16.0,
+  "positive": true,
+  "note": "K-cup pod sits in the open holder, printed lid clearly visible."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-10",
+  "t": 17.0,
+  "positive": true,
+  "note": "K-cup pod in the open holder, clearly visible."
+ },
+ {
+  "clip": "002_Ariel_Dickinson_Keurig_Wiki_video_VP8.webm.mp4",
+  "requirement_id": "SH-10",
+  "t": 18.0,
+  "positive": true,
+  "note": "K-cup pod in the open holder, clearly visible."
+ },
+ {
+  "clip": "009_Приготовление_макиато.webm.mp4",
+  "requirement_id": "SH-05",
+  "t": 35.04,
+  "positive": true,
+  "note": "Coffee stream visible from the right spout into the glass of milk."
+ },
+ {
+  "clip": "009_Приготовление_макиато.webm.mp4",
+  "requirement_id": "SH-05",
+  "t": 42.04,
+  "positive": true,
+  "note": "Both spouts show coffee streams running into the foam."
+ },
+ {
+  "clip": "009_Приготовление_макиато.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 42.04,
+  "positive": false,
+  "note": "Coffee is still streaming from both spouts into the glass."
+ },
+ {
+  "clip": "009_Приготовление_макиато.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 43.04,
+  "positive": false,
+  "note": "Coffee streams still reach the foam from both spouts."
+ },
+ {
+  "clip": "009_Приготовление_макиато.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 44.04,
+  "positive": false,
+  "note": "Coffee still visibly flowing from the left spout (and a short stream right) into the glass."
+ },
+ {
+  "clip": "009_Приготовление_макиато.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 45.04,
+  "positive": false,
+  "note": "A trace of coffee remains at the left spout tip touching the foam; a final drip cannot be ruled out."
+ },
+ {
+  "clip": "009_Приготовление_макиато.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 46.04,
+  "positive": true,
+  "note": "Tall latte glass stands centred on the drip tray, no stream visible from the spouts."
+ },
+ {
+  "clip": "009_Приготовление_макиато.webm.mp4",
+  "requirement_id": "SH-06",
+  "t": 47.04,
+  "positive": true,
+  "note": "Tall latte glass stands centred on the drip tray, flow has stopped."
+ },
+ {
+  "clip": "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+  "requirement_id": "SH-05",
+  "t": 24.0,
+  "positive": true,
+  "note": "Dark but a thin coffee stream runs from the vending spout into the lit cup."
+ },
+ {
+  "clip": "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+  "requirement_id": "SH-05",
+  "t": 37.0,
+  "positive": true,
+  "note": "Thin stream from the spout into the cup is visible below the selecta screen."
+ },
+ {
+  "clip": "011_Plastic_Industry__8__-_Coffee_machine.webm.mp4",
+  "requirement_id": "SH-05",
+  "t": 38.0,
+  "positive": true,
+  "note": "Thin stream from the spout into the cup is visible."
+ },
+ {
+  "clip": "017_Café_aan_de_rol-515898.ogv.mp4",
+  "requirement_id": "SH-01",
+  "t": 25.0,
+  "positive": false,
+  "note": "Side of a building with windows being towed past a man on the street; nothing identifies it as a cafe."
+ },
+ {
+  "clip": "017_Café_aan_de_rol-515898.ogv.mp4",
+  "requirement_id": "SH-01",
+  "t": 41.0,
+  "positive": false,
+  "note": "Small building with shop window and an unreadable sign on a truck; not identifiable as a cafe from the frame."
+ },
+ {
+  "clip": "025_Nespresso_coffeemake.ogv.mp4",
+  "requirement_id": "SH-05",
+  "t": 49.0,
+  "positive": true,
+  "note": "Coffee stream runs from the machine spout into the glass."
+ },
+ {
+  "clip": "025_Nespresso_coffeemake.ogv.mp4",
+  "requirement_id": "SH-05",
+  "t": 50.0,
+  "positive": true,
+  "note": "Coffee stream runs from the spout into the glass."
+ },
+ {
+  "clip": "025_Nespresso_coffeemake.ogv.mp4",
+  "requirement_id": "SH-06",
+  "t": 44.0,
+  "positive": false,
+  "note": "Hand grips the glass handle under the spout with a drop hanging at the nozzle; possibly being lifted, and the machine dominates, so unclear."
+ },
+ {
+  "clip": "030_COFFEE_and_SHAURMA_г._Трёхгорный.webm.mp4",
+  "requirement_id": "SH-01",
+  "t": 14.0,
+  "positive": true,
+  "note": "Street view of the shop entrance with yellow awning and the C&S (coffee and shaurma) diamond sign."
+ },
+ {
+  "clip": "030_COFFEE_and_SHAURMA_г._Трёхгорный.webm.mp4",
+  "requirement_id": "SH-01",
+  "t": 15.0,
+  "positive": true,
+  "note": "Closer street view of the entrance awning and C&S shop sign on the facade."
+ },
+ {
+  "clip": "034__Cannon__Wilkins_Coffee_commercial__1957_.webm.mp4",
+  "requirement_id": "SH-10",
+  "t": 5.0,
+  "positive": true,
+  "note": "Animated puppet sits on a box labelled Wilkins coffee, readable."
+ }
+]
