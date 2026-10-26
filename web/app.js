@@ -532,7 +532,7 @@
       const st = JOB_ST[j.state] || JOB_ST.queued;
       const running = j.state === 'queued' || j.state === 'running';
       const stage = STAGE_ZH[j.stage] || j.stage || '';
-      el.append(h('div', { class: 'job-head' }, chip(st, { aria: '工作狀態：' + st.zh }), h('span', { class: 'stage' }, stage),
+      el.append(h('div', { class: 'job-head' }, chip(st, { aria: '工作狀態：' + st.zh }), h('span', { class: 'job-stage' }, stage),
         h('span', { class: 'grow' }),
         running ? btn('取消分析', { kind: 'danger', icon: 'stop', sm: true, onclick: cancelJob })
           : btn('重新分析', { kind: 'primary', icon: 'refresh', sm: true, onclick: startAnalyze })));
