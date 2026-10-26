@@ -130,7 +130,7 @@ S.append({"type": "twocol", "section": "Problem", "title": "What works today, an
               "A person accepts, rejects, or adds the shot to the reshoot list",
               "Demo: 9 Commons clips (5.9 min) analysed in 22 s on a desktop GPU; new footage re-checked file by file"]},
           "right": {"head": "Not shown yet", "bullets": [
-              "Missing shots at ≤ 5% wrong reshoots: the new verifier catches 35% on new footage at 7.3% (slide 15)",
+              "Missing shots at ≤ 5% wrong reshoots: on new footage the check layer catches 50%, but 12% of its reshoot calls are wrong; a 3-frame look brings that to 3% (post hoc, slide 15)",
               f"Time saved: no user study yet. Proxy: {rl['candidate_seconds_to_review']:.0f} s of candidate clips to play vs {rl['library_seconds']:.0f} s of footage ({rl['candidate_seconds_to_review'] / rl['library_seconds'] * 100:.0f}%)",
               "UGen300 speed and quality: not run on the device yet",
               "Human-checked labels: current labels are AI-assisted"]},
@@ -250,41 +250,38 @@ S.append({"type": "blocks", "section": "Evidence", "title": "Right clip in the t
                           {"name": "SceneGap", "values": [r["full"]["correct"] for r in per]}],
                "colors": ["A78BFA", "6C4CF5"]}],
           "source": f"{test_n} held-out clips, {test_min:.1f} min, scored once at τ {test['tau']}; Wilson 95% intervals. SH-03 and SH-07 each rest on one 3 s gold clip. Per shot: A5."})
-# 14 missing shots: verifier on the top candidates (Stage 1.5)
+# 14 missing shots: the AI check layer (Stage 1.5 on test-2, Stage 1.6 on test-3)
 sm = test["simulation"]
-vd, t2 = load("eval/results/verify_dev.json"), load("eval/results/test2_metrics.json")
+t2, t3, ev = load("eval/results/test2_metrics.json"), load("eval/results/test3_metrics.json"), load("eval/results/verify16_evidence.json")
 
 
 def kk(w):
-    return "pending" if not w else f"{w['k']}/{w['n']} ({w['p'] * 100:.0f}%)"
+    return "pending" if not w else f"{w['k']}/{w['n']} ({w['p'] * 100:.0f}%)" if w["p"] >= 0.1 or w["k"] == 0 else f"{w['k']}/{w['n']} ({w['p'] * 100:.1f}%)"
 
 
-rows15 = [["Test 1 (scored once, Oct 26)", "system", kk(sm["full"]["gap_recall"]), kk(sm["full"]["wrong_reshoot_rate"]), kk(sm["full"]["false_candidate_rate"])]]
-if vd:
-    rows15 += [["Dev (20 projects)", "system", kk(vd["baseline"]["gap_recall"]), kk(vd["baseline"]["wrong_reshoot"]), kk(vd["baseline"]["false_candidate"])],
-               ["Dev (20 projects)", f"+ verifier (K {vd['chosen']['k']}, θ {vd['chosen']['theta']})", kk(vd["chosen"]["gap_recall"]), kk(vd["chosen"]["wrong_reshoot"]), kk(vd["chosen"]["false_candidate"])]]
-if t2:
-    rows15 += [["Test 2: new footage, scored once", "system", kk(t2["system_only"]["gap_recall"]), kk(t2["system_only"]["wrong_reshoot"]), kk(t2["system_only"]["false_candidate"])],
-               ["Test 2: new footage, scored once", "+ verifier (frozen)", kk(t2["with_verifier"]["gap_recall"]), kk(t2["with_verifier"]["wrong_reshoot"]), kk(t2["with_verifier"]["false_candidate"])]]
-else:
-    rows15 += [["Test 2: new footage, scored once", "+ verifier (frozen)", "pending", "pending", "pending"]]
-ok2 = bool(t2) and t2["with_verifier"]["wrong_reshoot"]["p"] <= 0.05 and t2["with_verifier"]["gap_recall"]["p"] >= 0.30
-title15 = ("Missing shots: the verifier catches " + (f"{t2['with_verifier']['gap_recall']['p'] * 100:.0f}% on new footage at {t2['with_verifier']['wrong_reshoot']['p'] * 100:.1f}% wrong reshoots" if t2 else "them on dev; new footage pending"))
+rows15 = [["Test 1 (Oct 26)", "system alone", kk(sm["full"]["gap_recall"]), kk(sm["full"]["wrong_reshoot_rate"])],
+          ["Test 2: 24 new clips", "check of the top 3 candidates", kk(t2["with_verifier"]["gap_recall"]), kk(t2["with_verifier"]["wrong_reshoot"])]]
+if t3:
+    after = ev["by_set"]["test3"]["3"]["after_check"] if ev else None
+    rows15 += [["Test 3: 39 new clips", "check of every second (frozen)", kk(t3["result"]["gap_recall"]), kk(t3["result"]["wrong_reshoot"])],
+               ["Test 3, post hoc", "+ a person looks at 3 frames", kk(t3["result"]["gap_recall"]), kk(after)]]
+title15 = ("Missing shots: on new footage the check layer catches " + (f"{t3['result']['gap_recall']['p'] * 100:.0f}%; wrong reshoots {t3['result']['wrong_reshoot']['p'] * 100:.0f}%, under 5% only after a 3-frame look" if t3 else "35% (test 2)"))
 S.append({"type": "blocks", "section": "Evidence", "title": title15,
           "blocks": [
-              {"kind": "table", "x": 0, "y": 0, "w": 7.6, "h": 3.0, "colW": [2.6, 1.9, 1.1, 1.2, 1.2], "fontSize": 9.5, "maxRowH": 0.45,
-               "highlightRow": len(rows15) - 1, "head": "Missing shots caught, wrong reshoots, 'found' when absent",
-               "header": ["Data", "Method", "Missing caught", "Wrong reshoot", "'Found' when absent"], "rows": rows15},
-              {"kind": "text", "x": 0, "y": 3.15, "w": 7.6, "h": 1.25, "fontSize": 10,
-               "bullets": ["Preregistered before test-2 labels: missing shots caught ≥ 30% (met) and wrong reshoot ≤ 5% (not met: all 3 are the package shot, whose query says 'bag' while the clip shows a jar).",
-                           "Why it works: the model answers 'is coffee being poured here?' per frame, so a finished latte or an empty street no longer counts as the shot."]},
-              {"kind": "chart", "x": 7.9, "y": 0, "w": 4.0, "h": 4.25, "head": "Missing shots caught (%)", "chartType": "BAR", "barDir": "col",
-               "labels": ["Dev"] + (["Test 2 (new)"] if t2 else []), "max": 60,
-               "series": [{"name": "system", "values": ([round(vd["baseline"]["gap_recall"]["p"] * 100)] if vd else [0]) + ([round(t2["system_only"]["gap_recall"]["p"] * 100)] if t2 else [])},
-                          {"name": "+ verifier", "values": ([round(vd["chosen"]["gap_recall"]["p"] * 100)] if vd else [0]) + ([round(t2["with_verifier"]["gap_recall"]["p"] * 100)] if t2 else [])}],
-               "colors": ["A78BFA", "6C4CF5"]}],
-          "note": "Test 1 was scored before the verifier existed and stays as it is. Test 2: 24 new Commons clips, chosen by metadata, AI-labelled (κ 0.98).",
-          "source": "Unit: one shot in one simulated 8-clip project; missing = no qualifying clip in it. Missing is reported when none of the top 3 is confirmed by Qwen2-VL-2B. eval/verify_eval.py; A8."})
+              {"kind": "table", "x": 0, "y": 0, "w": 7.6, "h": 2.6, "colW": [2.2, 2.8, 1.3, 1.3], "fontSize": 10, "maxRowH": 0.5,
+               "highlightRow": 2, "head": "Each test set scored once; targets: caught ≥ 30%, wrong reshoot ≤ 5%",
+               "header": ["Data", "Method", "Missing caught", "Wrong reshoot"], "rows": rows15},
+              {"kind": "text", "x": 0, "y": 2.75, "w": 7.6, "h": 1.65, "fontSize": 10,
+               "bullets": ["How: Qwen2-VL-2B answers each shot's check question ('Is ground coffee coming out of a grinder?') for every 1 s frame; 2 confirmed seconds in a row = present.",
+                           "The 8 wrong reshoots are borderline frames: café interiors in an old film and a cat café, a coffee pod as a 'package', a mug on a drip tray.",
+                           "So each missing-shot alert shows the 3 most likely frames; the 3-frame row was defined after test 3 and still needs new footage."]},
+              {"kind": "chart", "x": 7.9, "y": 0, "w": 4.0, "h": 4.25, "head": "New footage, % of shots", "chartType": "BAR", "barDir": "col",
+               "labels": ["Test 2", "Test 3"] if t3 else ["Test 2"], "max": 60,
+               "series": [{"name": "missing caught", "values": [round(t2["with_verifier"]["gap_recall"]["p"] * 100)] + ([round(t3["result"]["gap_recall"]["p"] * 100)] if t3 else [])},
+                          {"name": "wrong reshoot", "values": [round(t2["with_verifier"]["wrong_reshoot"]["p"] * 100)] + ([round(t3["result"]["wrong_reshoot"]["p"] * 100)] if t3 else [])}],
+               "colors": ["6C4CF5", "F97316"]}],
+          "note": "Commons has no more coffee footage, so the next check needs a real shoot. Labels: two AI passes and a third (κ 0.94–0.98), not yet checked by people.",
+          "source": "Unit: one shot in one simulated 8-clip project. eval/PROTOCOL.md (Stage 1.5, 1.6); eval/verify16.py; eval/verify16_evidence.py; A8."})
 # 15 hardware
 S.append({"type": "blocks", "section": "Hardware", "title": "Plan: the image half of CLIP on the UGen300; the PC keeps the rest",
           "blocks": [
@@ -356,7 +353,7 @@ S.append({"type": "blocks", "section": "Plan", "title": "Shown today, proven nex
           "blocks": [
               {"kind": "table", "x": 0, "y": 0, "w": 11.9, "h": 3.9, "colW": [1.6, 3.9, 4.3, 2.1], "fontSize": 10.5, "maxRowH": 0.62,
                "header": ["Proof", "Today", "Stage II target", "Source"],
-               "rows": [["1 · Rules", f"{n_rule} controlled cases; top 5 right for 7/11; missing shots caught 35% on new footage at 7.3% wrong reshoots",
+               "rows": [["1 · Rules", f"{n_rule} controlled cases; top 5 right for 7/11; missing shots caught 50% on new footage at 12% wrong reshoots (3% after a 3-frame look, post hoc)",
                          "Recall@5 ≥ 90% and wrong reshoot ≤ 5% in the supported scope; ranking by peak; per-shot thresholds", "PRD 21.5"],
                         ["2 · Labels", f"AI-assisted, κ {s['cohen_kappa']:.2f}", "a person labels sampled pairs on the original video", "Protocol"],
                         ["3 · People", "no study; proxy 38% of footage to play", "3–5 interviews, then 8–12 crews; median task time −30%", "PRD 22.1"],

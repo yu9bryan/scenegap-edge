@@ -136,7 +136,7 @@ class SceneGap:
                 if last is None or x.t_ms - last >= 0.9 * step:
                     pool.append((a, x))
                     last = x.t_ms
-        look = sorted(pool, key=lambda ax: -min(ax[1].sims.get(k, 0.0) for k in keys))[:vc["topn"]]
+        look = sorted(pool, key=lambda ax: -min(ax[1].sims.get(k, 0.0) for k in keys))[:vc["topn"]]   # topn None = every sample
         cache = self.__dict__.setdefault("_check_cache", {})
         ok, best = {}, (0.0, None)
         for a, x in look:

@@ -23,6 +23,9 @@
    "street",
    "boulevard",
    "outside"
+  ],
+  "check_questions": [
+   "Is the outside of a café or coffee shop visible from the street, such as its storefront, sign, façade or café tables set out on the pavement?"
   ]
  },
  {
@@ -48,6 +51,9 @@
    "inside",
    "café",
    "cafe"
+  ],
+  "check_questions": [
+   "Is this a view of the inside of a café or coffee shop, with tables or chairs visible?"
   ]
  },
  {
@@ -72,6 +78,9 @@
    "bean",
    "beans",
    "roast"
+  ],
+  "check_questions": [
+   "Is this a close-up in which coffee beans fill a large part of the image?"
   ]
  },
  {
@@ -96,6 +105,9 @@
    "grind",
    "grinder",
    "mill"
+  ],
+  "check_questions": [
+   "Is ground coffee coming out of a coffee grinder?"
   ]
  },
  {
@@ -121,6 +133,9 @@
    "pouring",
    "latte",
    "art"
+  ],
+  "check_questions": [
+   "Is coffee or milk being poured or dripping into a cup or glass?"
   ]
  },
  {
@@ -144,6 +159,9 @@
   "keywords": [
    "cup",
    "coffee"
+  ],
+  "check_questions": [
+   "Is a cup or glass of coffee the main subject, standing on a table, saucer or counter, with nothing being poured into it?"
   ]
  },
  {
@@ -168,6 +186,9 @@
    "drink",
    "drinking",
    "sip"
+  ],
+  "check_questions": [
+   "Is a person drinking from a coffee cup or holding a coffee cup up to drink?"
   ]
  },
  {
@@ -195,6 +216,10 @@
    "two",
    "people",
    "friends"
+  ],
+  "check_questions": [
+   "Are at least two people visible?",
+   "Is this the inside of a café or coffee shop?"
   ]
  },
  {
@@ -218,6 +243,9 @@
   "keywords": [
    "espresso",
    "machine"
+  ],
+  "check_questions": [
+   "Is coffee flowing out of the portafilter of an espresso machine?"
   ]
  },
  {
@@ -251,6 +279,9 @@
    "bag",
    "package",
    "pack"
+  ],
+  "check_questions": [
+   "Is a bag, box or other package of coffee visible?"
   ]
  },
  {
@@ -273,6 +304,10 @@
   ],
   "keywords": [
    "barista"
+  ],
+  "check_questions": [
+   "Is a person preparing coffee, for example grinding, tamping, operating a coffee machine or pouring?",
+   "Is this a café, bar, restaurant or other commercial setting?"
   ]
  }
 ]

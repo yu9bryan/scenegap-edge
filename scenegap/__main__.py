@@ -19,7 +19,7 @@ def main():
     ap.add_argument("--port", type=int, default=int(os.environ.get("SG_PORT", "8765")))
     ap.add_argument("--device", default=os.environ.get("SG_DEVICE"), help="cpu or cuda (default: cuda when available)")
     ap.add_argument("--calibration", default=os.environ.get("SG_CALIBRATION", "eval/results/calibration.json"))
-    ap.add_argument("--verifier", action="store_true", help="check the top 3 candidates with Qwen2-VL-2B; a shot none of them shows is reported missing")
+    ap.add_argument("--verifier", action="store_true", help="AI check layer (Qwen2-VL-2B): a shot whose check questions are not confirmed for 2 seconds in a row is reported missing")
     ap.add_argument("--host", default="127.0.0.1", help="keep the default; the service is meant for this computer only")
     a = ap.parse_args()
     os.environ["SG_PORT"] = str(a.port)
@@ -31,7 +31,7 @@ def main():
 
     cfg, crop = {}, None
     if a.verifier:
-        cfg["verifier"] = {"enabled": True, "k": 3, "theta": 0.35, "frames": 3}   # frozen on dev (eval/PROTOCOL.md, Stage 1.5)
+        cfg["verifier"] = {"enabled": True, "mode": "check", "topn": None, "theta": 0.5, "run": 2}   # frozen (eval/PROTOCOL.md, Stage 1.6)
     if os.path.exists(a.calibration):
         cal = json.load(open(a.calibration, encoding="utf8"))
         cfg["semantic_threshold"] = {cal["fingerprint"]: cal["chosen"]["tau"]}

@@ -151,7 +151,7 @@ Test-3 (new held-out footage):
   target met; wrong reshoot **8/68 (11.8%, 95% CI 6.1–21.5%)**, target **not met**. The 8 are borderline frames
   (P(yes) 0.3–0.6): café interiors in an old black-and-white film and a cat café (SH-02 ×5), a K-cup pod as a
   coffee package (SH-10 ×2), a mug on a drip tray (SH-06 ×1).
-- Leave-one-set-out over the four scored sets (`eval/verify_loso.json` via `eval/verify16.py loso`; selection on
+- Leave-one-set-out over the four scored sets (`eval/results/verify_loso.json` via `eval/verify16.py loso`; selection on
   three, report on the fourth, same rule): held-out pooled 110/370 caught, 12/290 wrong reshoots (4.1%), but the
   test-3 fold alone is 8/68. The choice does not transfer reliably from set to set.
 - Post hoc, defined after test-3 was scored (`eval/verify16_evidence.py`): each missing-shot alert now shows the 3
