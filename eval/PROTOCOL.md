@@ -162,7 +162,7 @@ Test-3 (new held-out footage):
   clips), so a test-4 needs footage from elsewhere (a real shoot, or another openly licensed source used within its
   terms). Test-3 is not re-scored.
 
-## Stage 1.7: test-4 on a real café shoot, and the 3-frame look as a metric (added 2026-10-27 11:30, before any test-4 footage exists)
+## Stage 1.7: test-4 on a real café shoot, and the 3-frame look as a metric (added 2026-10-27 11:18, before any test-4 footage exists)
 
 Why: Stage 1.6 met the missing-shot target on test-3 but not the wrong-reshoot cap; the 3-frame look was defined
 after test-3 was scored, so it needs a prospective test.
