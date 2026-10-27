@@ -48,7 +48,7 @@ def cards(outcomes: list[RequirementOutcome], confirmed_ids: set[str], human_req
         requested = r.requirement_id in human_requests
         if o.status == "draft" or (o.status == AutoStatus.CANDIDATE and not requested):
             continue                      # candidates are reviewed in the evidence viewer, not re-shot, unless a person asks
-        review_first = o.status != AutoStatus.NOT_FOUND and not requested
+        review_first = (o.status != AutoStatus.NOT_FOUND or not o.scope_complete) and not requested   # no reshoot from a partial scope
         best = None
         if o.candidates:
             c = o.candidates[0]

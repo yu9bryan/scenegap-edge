@@ -39,6 +39,12 @@ DEFAULTS = {
 }
 
 
+def ok_state(path: str) -> str:
+    """Location state after a hash check: size and mtime, so only a changed file is hashed again."""
+    st = os.stat(path)
+    return f"ok {st.st_size} {st.st_mtime_ns}"
+
+
 class Conflict(Exception):
     code = "STALE_REVISION"
 
@@ -119,9 +125,18 @@ class SceneGap:
             ps.append(max((v.p_yes(frame_at(path, x.t_ms) if path else (seg.asset_id, x.t_ms), q) for x in best), default=0.0))
         o.verify_p = [round(x, 4) for x in ps]
         if o.status in (AutoStatus.CANDIDATE, AutoStatus.PARTIAL) and ps and max(ps) < vc["theta"]:
-            o = RequirementOutcome(r, AutoStatus.NOT_FOUND, o.candidates, ["VERIFIER_NO"], o.scope_complete)
+            o = RequirementOutcome(r, *self._verifier_no(o, o.candidates))
             o.verify_p = [round(x, 4) for x in ps]
         return o
+
+    @staticmethod
+    def _verifier_no(o, cands):
+        """Status and reasons when the verifier confirms none of CLIP's candidates. Only a shot CLIP did find is demoted
+        (not analysed, failed or unverifiable stay as they are), and "not found" needs every clip analysed: with clips
+        still missing or failed it is unverifiable, so an unplugged drive never reads as a missing shot."""
+        if o.scope_complete:
+            return AutoStatus.NOT_FOUND, cands, ["VERIFIER_NO"], True
+        return AutoStatus.UNVERIFIABLE, cands, ["VERIFIER_NO", "SCOPE_INCOMPLETE"], False
 
     def _verify_check(self, r, o, assets):
         """Stage 1.6: the check questions on the CLIP top-n samples; no run of `run` confirmed samples -> not_found."""
@@ -169,8 +184,8 @@ class SceneGap:
         evidence = sorted(top.values(), key=lambda e: -e["p"])[:3]
         o.verify_p = [round(best[0], 4)]
         o.verify_found, o.verify_evidence = found, evidence
-        if found is None and o.status != AutoStatus.NOT_FOUND:
-            n = RequirementOutcome(r, AutoStatus.NOT_FOUND, o.candidates, ["VERIFIER_NO"], o.scope_complete)
+        if found is None and o.status in (AutoStatus.CANDIDATE, AutoStatus.PARTIAL):
+            n = RequirementOutcome(r, *self._verifier_no(o, o.candidates))
             n.verify_p, n.verify_found, n.verify_evidence = o.verify_p, None, evidence
             return n
         return o
@@ -269,7 +284,7 @@ class SceneGap:
             sha = sha256_file(full)
             ex = self.db.one("SELECT asset_id FROM assets WHERE project_id=? AND sha256=?", (pid, sha))
             if ex:                                              # same content: one logical asset, another location
-                self.db.x("INSERT OR IGNORE INTO asset_locations VALUES(?,?,?,?)", (ex["asset_id"], root_id, rel, "ok"))
+                self.db.x("INSERT OR IGNORE INTO asset_locations VALUES(?,?,?,?)", (ex["asset_id"], root_id, rel, ok_state(full)))
                 self.db.x("UPDATE assets SET status='pending', error_code=NULL, error_msg=NULL WHERE asset_id=? AND status='missing'",
                           (ex["asset_id"],))                    # relocated: the new file was hashed above, so it is the same content
                 accepted.append({"path": rel, "asset_id": ex["asset_id"], "duplicate_of": ex["asset_id"]})
@@ -285,7 +300,7 @@ class SceneGap:
                 status, code, msg = "failed", e.code, str(e)
             self.db.tx([("INSERT INTO assets VALUES(?,?,?,?,?,?,?,?,?,?)",
                          (aid, pid, sha, sha[:12], dumps(pr.to_dict()) if pr else None, status, code, msg, dur, now())),
-                        ("INSERT OR IGNORE INTO asset_locations VALUES(?,?,?,?)", (aid, root_id, rel, "ok"))])
+                        ("INSERT OR IGNORE INTO asset_locations VALUES(?,?,?,?)", (aid, root_id, rel, ok_state(full)))])
             accepted.append({"path": rel, "asset_id": aid, "status": status, "error_code": code})
         return {"accepted": accepted, "rejected": rejected}
 
@@ -295,7 +310,7 @@ class SceneGap:
     def asset_path(self, asset_id: str) -> str | None:
         for loc in self.db.all("SELECT l.*, r.path root FROM asset_locations l JOIN source_roots r ON r.id=l.root_id WHERE asset_id=?", (asset_id,)):
             p = os.path.join(loc["root"], loc["rel_path"])
-            if os.path.isfile(p):
+            if os.path.isfile(p) and not (loc["state"] or "").startswith("bad"):     # "bad": another file now sits there
                 return p
         return None
 
@@ -441,23 +456,44 @@ class SceneGap:
             changed = True
         return changed
 
+    def _same_content(self, asset_id: str, sha: str) -> bool | None:
+        """Is a file at one of the asset's locations still the hashed one? None = no location left.
+        Size and mtime are kept per location after each check, so only a file that changed is hashed again."""
+        found = None
+        for loc in self.db.all("SELECT l.*, r.path root FROM asset_locations l JOIN source_roots r ON r.id=l.root_id WHERE asset_id=?", (asset_id,)):
+            p = os.path.join(loc["root"], loc["rel_path"])
+            if not os.path.isfile(p):
+                continue
+            ok = ok_state(p)
+            if loc["state"] in (ok, "bad" + ok[2:]):
+                same = loc["state"] == ok
+            else:
+                same = sha256_file(p) == sha
+                self.db.x("UPDATE asset_locations SET state=? WHERE asset_id=? AND root_id=? AND rel_path=?",
+                          (ok if same else "bad" + ok[2:], asset_id, loc["root_id"], loc["rel_path"]))
+            if same:
+                return True
+            found = False
+        return None if found is None else False
+
     def verify_locations(self, pid: str) -> dict:
-        """Mark assets whose every location is gone as missing, and bring back ones that reappeared with the same hash."""
-        changed = {"missing": 0, "restored": 0}
+        """Mark assets whose every location is gone as missing, bring back ones that reappeared with the same hash, and
+        take out of scope an asset whose file was replaced at the same path (its index belongs to the old content)."""
+        changed = {"missing": 0, "restored": 0, "replaced": 0}
         for a in self.assets(pid):
             if a["status"] == "excluded":
                 continue
-            path = self.asset_path(a["asset_id"])
-            if path is None and a["status"] != "missing":
+            same = self._same_content(a["asset_id"], a["sha256"])
+            if same is None and a["status"] != "missing":
                 self.db.x("UPDATE assets SET status='missing', error_code='ASSET_MISSING' WHERE asset_id=?", (a["asset_id"],))
                 changed["missing"] += 1
-            elif path and a["status"] == "missing":
-                if sha256_file(path) == a["sha256"]:
-                    self.db.x("UPDATE assets SET status='pending', error_code=NULL, error_msg=NULL WHERE asset_id=?", (a["asset_id"],))
-                    changed["restored"] += 1
-                else:
-                    self.db.x("UPDATE assets SET error_code='HASH_MISMATCH', error_msg='a different file is at the old path' WHERE asset_id=?",
-                              (a["asset_id"],))
+            elif same and a["status"] == "missing":
+                self.db.x("UPDATE assets SET status='pending', error_code=NULL, error_msg=NULL WHERE asset_id=?", (a["asset_id"],))
+                changed["restored"] += 1
+            elif same is False and not (a["status"] == "missing" and a["error_code"] == "HASH_MISMATCH"):
+                self.db.x("UPDATE assets SET status='missing', error_code='HASH_MISMATCH', error_msg='a different file is at the old path' "
+                          "WHERE asset_id=?", (a["asset_id"],))
+                changed["replaced"] += 1
         return changed
 
     def compute_run(self, pid: str) -> dict:
@@ -541,11 +577,8 @@ class SceneGap:
                    "denominator_weight": denom, "unknown_count": None}
             return {"run": None, "outdated": True, "requirements": rows, "coverage": cov}
         res = json.loads(run["result"])
-        revs = json.loads(run["requirement_revisions"])
         scope = json.loads(run["scope"])
-        cur_scope = {a["asset_id"]: a["status"] for a in self.assets(pid)}
-        outdated = revs != cur_revs or scope != cur_scope or run["model_fingerprint"] != self.backend.manifest.fingerprint \
-            or run["config_hash"] != self.config_hash()
+        outdated = self._run_outdated(pid, run)
         decisions = self.decisions(pid)
         shas = {a["sha256"]: a["capture_id"] for a in self.assets(pid) if a["status"] != "excluded"}
         rows = []
@@ -553,7 +586,8 @@ class SceneGap:
             o = res["outcomes"].get(r.requirement_id)
             stale = (o is None) or o["revision"] != r.revision
             hc, exc = human_confirmed(r, decisions, shas)
-            rows.append({"requirement": req_to_dict(r), "auto": None if stale else o, "auto_outdated": stale,
+            # an unchanged row of an outdated snapshot keeps its old result for tracing, flagged outdated (board, CSV, HTML)
+            rows.append({"requirement": req_to_dict(r), "auto": None if stale else o, "auto_outdated": stale or outdated,
                          "human_confirmed": hc, "human_exception": exc})
         # human coverage is live (decisions bound to current revisions); AI coverage only from a current snapshot
         active = [r for r in reqs if r.active_required]
@@ -565,6 +599,13 @@ class SceneGap:
             cov["ai_candidate"] = None
         return {"run": {k: run[k] for k in ("run_id", "created_at", "backend", "model_fingerprint", "config_hash", "code_version")},
                 "outdated": outdated, "requirements": rows, "coverage": cov, "scope": scope}
+
+    def _run_outdated(self, pid: str, run: dict) -> bool:
+        """A snapshot is current only if requirements, asset scope, model and settings all still match."""
+        cur_revs = {r.requirement_id: r.revision for r in self.requirements(pid)}
+        cur_scope = {a["asset_id"]: a["status"] for a in self.assets(pid)}
+        return json.loads(run["requirement_revisions"]) != cur_revs or json.loads(run["scope"]) != cur_scope \
+            or run["model_fingerprint"] != self.backend.manifest.fingerprint or run["config_hash"] != self.config_hash()
 
     # ---------- review ----------
     def decisions(self, pid: str) -> list[ReviewDecision]:
@@ -598,6 +639,7 @@ class SceneGap:
             return []
         reqs = {r.requirement_id: r for r in self.requirements(pid)}
         res = json.loads(run["result"])
+        outdated = self._run_outdated(pid, run)
         shas = {a["sha256"]: a["capture_id"] for a in self.assets(pid) if a["status"] != "excluded"}
         confirmed = {rid for rid, r in reqs.items() if human_confirmed(r, self.decisions(pid), shas)[0]}
         from .domain.coverage import RequirementOutcome
@@ -613,6 +655,8 @@ class SceneGap:
         decs = self.decisions(pid)
         out = []
         for c in cards(outs, confirmed, human):
+            if outdated and c.kind != "reshoot_requested":
+                continue                                      # AI suggestions from an outdated snapshot are not shown as current
             d = c.to_dict()
             best = res["outcomes"][c.requirement_id]["candidates"]
             # how many candidates a person has looked at: a reshoot asked for before all are checked may be premature

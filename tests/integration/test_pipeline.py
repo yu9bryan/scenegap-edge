@@ -401,3 +401,66 @@ def test_check_mode_needs_a_run_of_confirmed_samples(tmp_path, media):
             assert 1 <= len(ev) <= 3 and len({e["asset_id"] for e in ev}) == len(ev)     # at most one frame per clip
             card = next(c for c in svc.reshoot_cards(pid) if c["requirement_id"] == "SH-101")
             assert card["check_evidence"] == ev
+
+
+def _check_svc(tmp_path, name, p):
+    from scenegap.backends.vlm_verify import MockVerifier
+    be = MockColorBackend()
+    return SceneGap(str(tmp_path / name), lambda: be, {"semantic_threshold": {be.manifest.fingerprint: 0.5}, "stable_wait_s": 0.05,
+                                                       "verifier": {"enabled": True, "mode": "check", "topn": 64, "theta": 0.5, "run": 1}},
+                    verifier_factory=lambda: MockVerifier(p))
+
+
+def test_check_mode_never_turns_unanalysed_or_failed_into_missing(tmp_path, media):
+    """No analysis, a failed file or an incomplete scope is not "not filmed": no not_found, no reshoot proposal."""
+    svc = _check_svc(tmp_path, "w1", lambda image, q: 0.0)          # the verifier confirms nothing
+    pid = svc.create_project("scope")
+    rid = svc.add_root(pid, str(media))
+    svc.set_requirement(pid, {**RED, "check_questions": ["Is something red visible?"]})
+    svc.import_assets(pid, rid, ["two_shots.mp4"])                  # imported, never analysed
+    o = svc.compute_run(pid)["outcomes"]["SH-101"]
+    assert o["status"] == "not_analyzed" and o["reasons"] == ["NOT_ANALYZED"]
+    assert all(c["kind"] != "reshoot_proposed" for c in svc.reshoot_cards(pid))
+    svc.import_assets(pid, rid, ["corrupt.mp4"])                    # one clip analysed, one failed: scope incomplete
+    svc.analyze_assets(pid)
+    o = svc.compute_run(pid)["outcomes"]["SH-101"]
+    assert o["status"] == "unverifiable" and "SCOPE_INCOMPLETE" in o["reasons"] and "VERIFIER_NO" in o["reasons"]
+    card = next(c for c in svc.reshoot_cards(pid) if c["requirement_id"] == "SH-101")
+    assert card["kind"] == "review_first"
+
+
+def test_outdated_snapshot_is_flagged_in_rows_cards_and_csv(tmp_path, media):
+    from scenegap.export.report import to_csv
+    svc, _ = make(tmp_path)
+    pid = svc.create_project("stale")
+    rid = svc.add_root(pid, str(media))
+    svc.set_requirement(pid, RED)
+    svc.set_requirement(pid, BLUE)
+    svc.import_assets(pid, rid, ["two_shots.mp4"])
+    svc.analyze_assets(pid)
+    svc.compute_run(pid)
+    assert [c["kind"] for c in svc.reshoot_cards(pid)] == ["reshoot_proposed"]
+    svc.cfg["semantic_threshold"] = 0.9                             # settings change, requirement revisions unchanged
+    v = svc.coverage_view(pid)
+    assert v["outdated"] and all(r["auto_outdated"] for r in v["requirements"])
+    assert all(r["auto"] is not None for r in v["requirements"])   # old result kept for tracing
+    assert ",candidate," not in to_csv(v) and ",not_found," not in to_csv(v) and ",outdated," in to_csv(v)
+    assert svc.reshoot_cards(pid) == []                             # no AI reshoot proposal from an outdated snapshot
+
+
+def test_file_replaced_at_same_path_leaves_scope(tmp_path, media):
+    """Same path, different content: the old index must not be used for the new file."""
+    svc, _ = make(tmp_path)
+    pid = svc.create_project("swap")
+    rid = svc.add_root(pid, str(media))
+    svc.set_requirement(pid, RED)
+    svc.import_assets(pid, rid, ["two_shots.mp4"])
+    svc.analyze_assets(pid)
+    assert svc.compute_run(pid)["outcomes"]["SH-101"]["status"] == "candidate"
+    assert svc.verify_locations(pid) == {"missing": 0, "restored": 0, "replaced": 0}
+    shutil.copy(media / "plain.mp4", media / "two_shots.mp4")      # overwritten in place
+    run = svc.compute_run(pid)
+    a = svc.assets(pid)[0]
+    assert a["status"] == "missing" and a["error_code"] == "HASH_MISMATCH"
+    assert run["outcomes"]["SH-101"]["status"] != "candidate"
+    assert svc.asset_path(a["asset_id"]) is None
