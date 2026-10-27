@@ -183,3 +183,19 @@ after test-3 was scored, so it needs a prospective test.
   reshoot card) lies inside a gold segment of that shot, ±0.5 s. This assumes the person judges the frame as the gold
   labels do; under the same assumption a correct alert is never cleared, so missing shots caught is unchanged.
 - All three numbers are reported with Wilson 95% CIs whatever the outcome. Test-4 is never re-scored.
+
+### Stage 1.7 amendment: test-4 footage source (added 2026-10-27 21:22, before any test-4 file is selected or seen)
+- The team decided not to shoot footage, so the café shoot above is dropped (`docs/TEST4_SHOOTING_zh.md` removed).
+  Pexels' terms forbid automated collection for machine-learning purposes and bulk copying without permission, and
+  a walk of the Commons coffee video categories finds only 10 videos not used before, so test-4 uses openly
+  licensed **photos** from Wikimedia Commons, each turned into a 4 s clip with a slow 1.00→1.08 zoom
+  (`scripts/fetch_commons_photos.py`). This tests the check layer on fresh, varied café imagery; it does not test
+  motion, shot cuts or the run-of-2 rule over changing content, and a still frame makes runs easier to hold.
+- Selection, from metadata only: for each Commons category below, the files directly in it (JPEG/PNG, width ≥ 800,
+  licence CC0 / public domain / CC BY / CC BY-SA), sorted by title, then `random.Random("test4-<category>")` picks N:
+  Sidewalk cafés 12, Interiors of cafés 14, Coffee beans 12, Coffee grinders 10, Latte art 12, Coffee preparation 14,
+  Cups of coffee 12, People drinking coffee 14, Baristas 12, Espresso 10, Espresso machines 10, Coffee bags 10,
+  Potted plants 8 (150 in all; a file drawn twice is kept once). Clips are named `t4_000` … in a shuffled order
+  so names carry no category; the manifest keeps title, URL, licence, author and hashes.
+- Labels, scoring (30 projects × 8 clips, seeds `test4-0` … `test4-29`, run once), system and criteria are as
+  written above. The 3-frame look counts a gold segment of the shot in the frame's clip at the frame's time.
