@@ -199,3 +199,16 @@ after test-3 was scored, so it needs a prospective test.
   so names carry no category; the manifest keeps title, URL, licence, author and hashes.
 - Labels, scoring (30 projects × 8 clips, seeds `test4-0` … `test4-29`, run once), system and criteria are as
   written above. The 3-frame look counts a gold segment of the shot in the frame's clip at the frame's time.
+
+### Stage 1.7 results (test-4 scored once, 2026-10-27 22:02)
+- Footage: 150 clips, none failed (`datasets/manifests/test4_manifest.json`). Labels: κ 0.926, 44 disputed samples
+  decided blind (`eval/labels/test4/`, committed before scoring). Contact sheets crashed twice in the video decoder
+  and were resumed; nothing else was rerun.
+- Result (`eval/results/test4_metrics.json`, 30 projects × 8 of 150 clips): missing shots caught **146/226 (64.6%,
+  95% CI 58.2–70.5%)**, target met; wrong reshoot **4/104 (3.8%, 95% CI 1.5–9.5%)**, target met on the point
+  estimate as preregistered; after the 3-frame look **0/104 (0%, CI 0–3.6%)**. The CLIP system alone: 34/226
+  caught, 3/104 wrong.
+- Of the 4 wrong reshoots, 3 come from the CLIP stage already reporting the shot missing (the check layer cannot
+  overturn that); 1 is a verifier miss (P(yes) around 0.5 without two seconds in a row at ≥ 0.5).
+- Limits: still photos have no motion or cuts and make a run of 2 seconds easy to hold, so this is more favourable
+  than video; the CI upper bound on wrong reshoots is 9.5%. Real café video remains the next check.

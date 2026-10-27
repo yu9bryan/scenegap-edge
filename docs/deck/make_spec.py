@@ -130,7 +130,7 @@ S.append({"type": "twocol", "section": "Problem", "title": "What works today, an
               "A person accepts, rejects, or adds the shot to the reshoot list",
               "Demo: 9 Commons clips (5.9 min) analysed in 22 s on a desktop GPU; new footage re-checked file by file"]},
           "right": {"head": "Not shown yet", "bullets": [
-              "Missing shots at ≤ 5% wrong reshoots: on new footage the check layer catches 50%, but 12% of its reshoot calls are wrong; a 3-frame look brings that to 3% (post hoc, slide 15)",
+              "Missing shots on real café video: test 4 met both targets (65% caught, 3.8% wrong reshoots), but on still photos; test 3 video had 12% wrong (slide 15)",
               f"Time saved: no user study yet. Proxy: {rl['candidate_seconds_to_review']:.0f} s of candidate clips to play vs {rl['library_seconds']:.0f} s of footage ({rl['candidate_seconds_to_review'] / rl['library_seconds'] * 100:.0f}%)",
               "UGen300 speed and quality: not run on the device yet",
               "Human-checked labels: current labels are AI-assisted"]},
@@ -253,10 +253,11 @@ S.append({"type": "blocks", "section": "Evidence", "title": "Right clip in the t
 # 14 missing shots: the AI check layer (Stage 1.5 on test-2, Stage 1.6 on test-3)
 sm = test["simulation"]
 t2, t3, ev = load("eval/results/test2_metrics.json"), load("eval/results/test3_metrics.json"), load("eval/results/verify16_evidence.json")
+t4 = load("eval/results/test4_metrics.json")
 
 
 def kk(w):
-    return "pending" if not w else f"{w['k']}/{w['n']} ({w['p'] * 100:.0f}%)" if w["p"] >= 0.1 or w["k"] == 0 else f"{w['k']}/{w['n']} ({w['p'] * 100:.1f}%)"
+    return "pending" if not w else f"{w['k']}/{w['n']} ({w['k'] / w['n'] * 100:.0f}%)" if w["p"] >= 0.1 or w["k"] == 0 else f"{w['k']}/{w['n']} ({w['k'] / w['n'] * 100:.1f}%)"
 
 
 rows15 = [["Test 1 (Oct 26)", "system alone", kk(sm["full"]["gap_recall"]), kk(sm["full"]["wrong_reshoot_rate"])],
@@ -265,23 +266,26 @@ if t3:
     after = ev["by_set"]["test3"]["3"]["after_check"] if ev else None
     rows15 += [["Test 3: 39 new clips", "check of every second (frozen)", kk(t3["result"]["gap_recall"]), kk(t3["result"]["wrong_reshoot"])],
                ["Test 3, post hoc", "+ a person looks at 3 frames", kk(t3["result"]["gap_recall"]), kk(after)]]
-title15 = ("Missing shots: on new footage the check layer catches " + (f"{t3['result']['gap_recall']['p'] * 100:.0f}%; wrong reshoots {t3['result']['wrong_reshoot']['p'] * 100:.0f}%, under 5% only after a 3-frame look" if t3 else "35% (test 2)"))
+if t4:
+    rows15 += [["Test 4: 150 new photo clips", "same check, frozen", kk(t4["result"]["gap_recall"]), kk(t4["result"]["wrong_reshoot"])],
+               ["Test 4, preregistered", "+ a person looks at 3 frames", kk(t4["result"]["gap_recall"]), kk(t4["three_frame_look"]["after_look"])]]
+title15 = (f"Missing shots: on test 4 the check layer catches {t4['result']['gap_recall']['p'] * 100:.0f}% at {t4['result']['wrong_reshoot']['k'] / t4['result']['wrong_reshoot']['n'] * 100:.1f}% wrong reshoots; both targets met" if t4 else "Missing shots: on new footage the check layer catches " + (f"{t3['result']['gap_recall']['p'] * 100:.0f}%; wrong reshoots {t3['result']['wrong_reshoot']['p'] * 100:.0f}%, under 5% only after a 3-frame look" if t3 else "35% (test 2)"))
 S.append({"type": "blocks", "section": "Evidence", "title": title15,
           "blocks": [
-              {"kind": "table", "x": 0, "y": 0, "w": 7.6, "h": 2.6, "colW": [2.2, 2.8, 1.3, 1.3], "fontSize": 10, "maxRowH": 0.5,
-               "highlightRow": 2, "head": "Each test set scored once; targets: caught ≥ 30%, wrong reshoot ≤ 5%",
+              {"kind": "table", "x": 0, "y": 0, "w": 7.6, "h": 2.9, "colW": [2.2, 2.8, 1.3, 1.3], "fontSize": 9.5, "maxRowH": 0.42,
+               "highlightRow": 4 if t4 else 2, "head": "Each test set scored once; targets: caught ≥ 30%, wrong reshoot ≤ 5%",
                "header": ["Data", "Method", "Missing caught", "Wrong reshoot"], "rows": rows15},
-              {"kind": "text", "x": 0, "y": 2.75, "w": 7.6, "h": 1.65, "fontSize": 10,
+              {"kind": "text", "x": 0, "y": 3.0, "w": 7.6, "h": 1.4, "fontSize": 9.5,
                "bullets": ["How: Qwen2-VL-2B answers each shot's check question ('Is ground coffee coming out of a grinder?') for every 1 s frame; 2 confirmed seconds in a row = present.",
-                           "The 8 wrong reshoots are borderline frames: café interiors in an old film and a cat café, a coffee pod as a 'package', a mug on a drip tray.",
-                           "So each missing-shot alert shows the 3 most likely frames; the 3-frame row was defined after test 3 and still needs new footage."]},
+                           "Test 3's 8 wrong reshoots were borderline frames, so each alert shows the 3 most likely frames; test 4 then scored that look as a preregistered metric.",
+                           "Test 4 is Commons photos as 4 s clips: fresh images, but no motion or cuts. Upper 95% bound on wrong reshoots: 9.5%."]},
               {"kind": "chart", "x": 7.9, "y": 0, "w": 4.0, "h": 4.25, "head": "New footage, % of shots", "chartType": "BAR", "barDir": "col",
-               "labels": ["Test 2", "Test 3"] if t3 else ["Test 2"], "max": 60,
-               "series": [{"name": "missing caught", "values": [round(t2["with_verifier"]["gap_recall"]["p"] * 100)] + ([round(t3["result"]["gap_recall"]["p"] * 100)] if t3 else [])},
-                          {"name": "wrong reshoot", "values": [round(t2["with_verifier"]["wrong_reshoot"]["p"] * 100)] + ([round(t3["result"]["wrong_reshoot"]["p"] * 100)] if t3 else [])}],
+               "labels": ["Test 2", "Test 3", "Test 4"], "max": 70,
+               "series": [{"name": "missing caught", "values": [round(t2["with_verifier"]["gap_recall"]["p"] * 100)] + [round(t3["result"]["gap_recall"]["p"] * 100), round(t4["result"]["gap_recall"]["p"] * 100)]},
+                          {"name": "wrong reshoot", "values": [round(t2["with_verifier"]["wrong_reshoot"]["p"] * 100)] + [round(t3["result"]["wrong_reshoot"]["p"] * 100), round(t4["result"]["wrong_reshoot"]["p"] * 100)]}],
                "colors": ["6C4CF5", "F97316"]}],
-          "note": "Commons has no more coffee footage, so the next check needs a real shoot. Labels: two AI passes and a third (κ 0.94–0.98), not yet checked by people.",
-          "source": "Unit: one shot in one simulated 8-clip project. eval/PROTOCOL.md (Stage 1.5, 1.6); eval/verify16.py; eval/verify16_evidence.py; A8."})
+          "note": "Labels: two AI passes and a blind third (κ 0.93–0.98), not yet checked by people. Next: real café video and a timed user test.",
+          "source": "Unit: one shot in one simulated 8-clip project. eval/PROTOCOL.md (Stage 1.5–1.7); eval/verify16.py; eval/verify16_evidence.py; A8."})
 # 15 hardware
 S.append({"type": "blocks", "section": "Hardware", "title": "Plan: the image half of CLIP on the UGen300; the PC keeps the rest",
           "blocks": [
@@ -353,7 +357,7 @@ S.append({"type": "blocks", "section": "Plan", "title": "Shown today, proven nex
           "blocks": [
               {"kind": "table", "x": 0, "y": 0, "w": 11.9, "h": 3.9, "colW": [1.6, 3.9, 4.3, 2.1], "fontSize": 10.5, "maxRowH": 0.62,
                "header": ["Proof", "Today", "Stage II target", "Source"],
-               "rows": [["1 · Rules", f"{n_rule} controlled cases; top 5 right for 7/11; missing shots caught 50% on new footage at 12% wrong reshoots (3% after a 3-frame look, post hoc)",
+               "rows": [["1 · Rules", f"{n_rule} controlled cases; top 5 right for 7/11; missing shots: test 4 caught 65% at 3.8% wrong reshoots (0% after a 3-frame look; photo clips)",
                          "Recall@5 ≥ 90% and wrong reshoot ≤ 5% in the supported scope; ranking by peak; per-shot thresholds", "PRD 21.5"],
                         ["2 · Labels", f"AI-assisted, κ {s['cohen_kappa']:.2f}", "a person labels sampled pairs on the original video", "Protocol"],
                         ["3 · People", "no study; proxy 38% of footage to play", "3–5 interviews, then 8–12 crews; median task time −30%", "PRD 22.1"],
