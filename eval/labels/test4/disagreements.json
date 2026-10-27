@@ -1,0 +1,310 @@
+[
+{
+"clip": "t4_030.mp4",
+"requirement_id": "SH-10",
+"t": 0.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_030.mp4",
+"requirement_id": "SH-10",
+"t": 1.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_030.mp4",
+"requirement_id": "SH-10",
+"t": 2.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_030.mp4",
+"requirement_id": "SH-10",
+"t": 3.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_056.mp4",
+"requirement_id": "SH-06",
+"t": 0.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_056.mp4",
+"requirement_id": "SH-06",
+"t": 1.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_056.mp4",
+"requirement_id": "SH-06",
+"t": 2.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_056.mp4",
+"requirement_id": "SH-06",
+"t": 3.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_073.mp4",
+"requirement_id": "SH-11",
+"t": 0.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_073.mp4",
+"requirement_id": "SH-11",
+"t": 1.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_073.mp4",
+"requirement_id": "SH-11",
+"t": 2.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_073.mp4",
+"requirement_id": "SH-11",
+"t": 3.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_080.mp4",
+"requirement_id": "SH-02",
+"t": 0.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_080.mp4",
+"requirement_id": "SH-02",
+"t": 1.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_080.mp4",
+"requirement_id": "SH-02",
+"t": 2.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_080.mp4",
+"requirement_id": "SH-02",
+"t": 3.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_095.mp4",
+"requirement_id": "SH-02",
+"t": 0.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_095.mp4",
+"requirement_id": "SH-02",
+"t": 1.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_095.mp4",
+"requirement_id": "SH-02",
+"t": 2.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_095.mp4",
+"requirement_id": "SH-02",
+"t": 3.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_103.mp4",
+"requirement_id": "SH-11",
+"t": 0.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_103.mp4",
+"requirement_id": "SH-11",
+"t": 1.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_103.mp4",
+"requirement_id": "SH-11",
+"t": 2.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_103.mp4",
+"requirement_id": "SH-11",
+"t": 3.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_117.mp4",
+"requirement_id": "SH-07",
+"t": 0.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_117.mp4",
+"requirement_id": "SH-07",
+"t": 1.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_117.mp4",
+"requirement_id": "SH-07",
+"t": 2.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_117.mp4",
+"requirement_id": "SH-07",
+"t": 3.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_127.mp4",
+"requirement_id": "SH-10",
+"t": 0.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_127.mp4",
+"requirement_id": "SH-10",
+"t": 1.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_127.mp4",
+"requirement_id": "SH-10",
+"t": 2.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_127.mp4",
+"requirement_id": "SH-10",
+"t": 3.0,
+"A": true,
+"B": false
+},
+{
+"clip": "t4_134.mp4",
+"requirement_id": "SH-07",
+"t": 0.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_134.mp4",
+"requirement_id": "SH-07",
+"t": 1.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_134.mp4",
+"requirement_id": "SH-07",
+"t": 2.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_134.mp4",
+"requirement_id": "SH-07",
+"t": 3.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_145.mp4",
+"requirement_id": "SH-07",
+"t": 0.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_145.mp4",
+"requirement_id": "SH-07",
+"t": 1.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_145.mp4",
+"requirement_id": "SH-07",
+"t": 2.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_145.mp4",
+"requirement_id": "SH-07",
+"t": 3.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_146.mp4",
+"requirement_id": "SH-02",
+"t": 0.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_146.mp4",
+"requirement_id": "SH-02",
+"t": 1.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_146.mp4",
+"requirement_id": "SH-02",
+"t": 2.0,
+"A": false,
+"B": true
+},
+{
+"clip": "t4_146.mp4",
+"requirement_id": "SH-02",
+"t": 3.0,
+"A": false,
+"B": true
+}
+]

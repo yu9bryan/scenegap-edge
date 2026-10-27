@@ -1,0 +1,64 @@
+{
+ "clip_requirement_pairs": 1650,
+ "pairs_agreeing_iou_ge_0.5_or_both_empty": 1639,
+ "pair_agreement": 0.9933,
+ "sample_level": {
+  "a": 16,
+  "b": 28,
+  "ab": 288,
+  "none": 6268,
+  "observed": 0.9933,
+  "cohen_kappa": 0.9255
+ },
+ "per_requirement": {
+  "SH-01": {
+   "pairs": 150,
+   "agree": 150
+  },
+  "SH-02": {
+   "pairs": 150,
+   "agree": 147
+  },
+  "SH-03": {
+   "pairs": 150,
+   "agree": 150
+  },
+  "SH-04": {
+   "pairs": 150,
+   "agree": 150
+  },
+  "SH-05": {
+   "pairs": 150,
+   "agree": 150
+  },
+  "SH-06": {
+   "pairs": 150,
+   "agree": 149
+  },
+  "SH-07": {
+   "pairs": 150,
+   "agree": 147
+  },
+  "SH-08": {
+   "pairs": 150,
+   "agree": 150
+  },
+  "SH-09": {
+   "pairs": 150,
+   "agree": 150
+  },
+  "SH-10": {
+   "pairs": 150,
+   "agree": 148
+  },
+  "SH-11": {
+   "pairs": 150,
+   "agree": 148
+  }
+ },
+ "third_pass_decisions": 44,
+ "consistency_pass": {
+  "checked": 0,
+  "removed": 0
+ }
+}

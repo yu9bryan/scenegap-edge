@@ -1,0 +1,310 @@
+[
+ {
+  "clip": "t4_030.mp4",
+  "requirement_id": "SH-10",
+  "t": 0.0,
+  "positive": false,
+  "note": "Beans in focus but the bag is only a blurred cropped corner in the background; not clearly a coffee package."
+ },
+ {
+  "clip": "t4_030.mp4",
+  "requirement_id": "SH-10",
+  "t": 1.0,
+  "positive": false,
+  "note": "Beans in focus but the bag is only a blurred cropped corner in the background; not clearly a coffee package."
+ },
+ {
+  "clip": "t4_030.mp4",
+  "requirement_id": "SH-10",
+  "t": 2.0,
+  "positive": false,
+  "note": "Beans in focus but the bag is only a blurred cropped corner in the background; not clearly a coffee package."
+ },
+ {
+  "clip": "t4_030.mp4",
+  "requirement_id": "SH-10",
+  "t": 3.0,
+  "positive": false,
+  "note": "Beans in focus but the bag is only a blurred cropped corner in the background; not clearly a coffee package."
+ },
+ {
+  "clip": "t4_056.mp4",
+  "requirement_id": "SH-06",
+  "t": 0.0,
+  "positive": false,
+  "note": "Girl is the main subject and the cup is a small item on the table; R5 cup is not the main subject."
+ },
+ {
+  "clip": "t4_056.mp4",
+  "requirement_id": "SH-06",
+  "t": 1.0,
+  "positive": false,
+  "note": "Girl is the main subject and the cup is a small item on the table; R5 cup is not the main subject."
+ },
+ {
+  "clip": "t4_056.mp4",
+  "requirement_id": "SH-06",
+  "t": 2.0,
+  "positive": false,
+  "note": "Girl is the main subject and the cup is a small item on the table; R5 cup is not the main subject."
+ },
+ {
+  "clip": "t4_056.mp4",
+  "requirement_id": "SH-06",
+  "t": 3.0,
+  "positive": false,
+  "note": "Girl is the main subject and the cup is a small item on the table; R5 cup is not the main subject."
+ },
+ {
+  "clip": "t4_073.mp4",
+  "requirement_id": "SH-11",
+  "t": 0.0,
+  "positive": true,
+  "note": "Hands pour milk from a pitcher at a cafe bar with espresso machine behind; R3 commercial setting, preparing coffee."
+ },
+ {
+  "clip": "t4_073.mp4",
+  "requirement_id": "SH-11",
+  "t": 1.0,
+  "positive": true,
+  "note": "Hands pour milk from a pitcher at a cafe bar with espresso machine behind; R3 commercial setting, preparing coffee."
+ },
+ {
+  "clip": "t4_073.mp4",
+  "requirement_id": "SH-11",
+  "t": 2.0,
+  "positive": true,
+  "note": "Hands pour milk from a pitcher at a cafe bar with espresso machine behind; R3 commercial setting, preparing coffee."
+ },
+ {
+  "clip": "t4_073.mp4",
+  "requirement_id": "SH-11",
+  "t": 3.0,
+  "positive": true,
+  "note": "Hands pour milk from a pitcher at a cafe bar with espresso machine behind; R3 commercial setting, preparing coffee."
+ },
+ {
+  "clip": "t4_080.mp4",
+  "requirement_id": "SH-02",
+  "t": 0.0,
+  "positive": true,
+  "note": "Cafe interior with bar counter, stools and staff member; room view with seating."
+ },
+ {
+  "clip": "t4_080.mp4",
+  "requirement_id": "SH-02",
+  "t": 1.0,
+  "positive": true,
+  "note": "Cafe interior with bar counter, stools and staff member; room view with seating."
+ },
+ {
+  "clip": "t4_080.mp4",
+  "requirement_id": "SH-02",
+  "t": 2.0,
+  "positive": true,
+  "note": "Cafe interior with bar counter, stools and staff member; room view with seating."
+ },
+ {
+  "clip": "t4_080.mp4",
+  "requirement_id": "SH-02",
+  "t": 3.0,
+  "positive": true,
+  "note": "Cafe interior with bar counter, stools and staff member; room view with seating."
+ },
+ {
+  "clip": "t4_095.mp4",
+  "requirement_id": "SH-02",
+  "t": 0.0,
+  "positive": true,
+  "note": "Man seated at a table with a mug in a diner/cafe with menu board and window; interior with table."
+ },
+ {
+  "clip": "t4_095.mp4",
+  "requirement_id": "SH-02",
+  "t": 1.0,
+  "positive": true,
+  "note": "Man seated at a table with a mug in a diner/cafe with menu board and window; interior with table."
+ },
+ {
+  "clip": "t4_095.mp4",
+  "requirement_id": "SH-02",
+  "t": 2.0,
+  "positive": true,
+  "note": "Man seated at a table with a mug in a diner/cafe with menu board and window; interior with table."
+ },
+ {
+  "clip": "t4_095.mp4",
+  "requirement_id": "SH-02",
+  "t": 3.0,
+  "positive": true,
+  "note": "Man seated at a table with a mug in a diner/cafe with menu board and window; interior with table."
+ },
+ {
+  "clip": "t4_103.mp4",
+  "requirement_id": "SH-11",
+  "t": 0.0,
+  "positive": true,
+  "note": "Apron-wearing barista behind a counter at a commercial espresso machine with a customer; R3 commercial setting."
+ },
+ {
+  "clip": "t4_103.mp4",
+  "requirement_id": "SH-11",
+  "t": 1.0,
+  "positive": true,
+  "note": "Apron-wearing barista behind a counter at a commercial espresso machine with a customer; R3 commercial setting."
+ },
+ {
+  "clip": "t4_103.mp4",
+  "requirement_id": "SH-11",
+  "t": 2.0,
+  "positive": true,
+  "note": "Apron-wearing barista behind a counter at a commercial espresso machine with a customer; R3 commercial setting."
+ },
+ {
+  "clip": "t4_103.mp4",
+  "requirement_id": "SH-11",
+  "t": 3.0,
+  "positive": true,
+  "note": "Apron-wearing barista behind a counter at a commercial espresso machine with a customer; R3 commercial setting."
+ },
+ {
+  "clip": "t4_117.mp4",
+  "requirement_id": "SH-07",
+  "t": 0.0,
+  "positive": true,
+  "note": "Man holds a small espresso cup and saucer in his hand, in a drinking posture."
+ },
+ {
+  "clip": "t4_117.mp4",
+  "requirement_id": "SH-07",
+  "t": 1.0,
+  "positive": true,
+  "note": "Man holds a small espresso cup and saucer in his hand, in a drinking posture."
+ },
+ {
+  "clip": "t4_117.mp4",
+  "requirement_id": "SH-07",
+  "t": 2.0,
+  "positive": true,
+  "note": "Man holds a small espresso cup and saucer in his hand, in a drinking posture."
+ },
+ {
+  "clip": "t4_117.mp4",
+  "requirement_id": "SH-07",
+  "t": 3.0,
+  "positive": true,
+  "note": "Man holds a small espresso cup and saucer in his hand, in a drinking posture."
+ },
+ {
+  "clip": "t4_127.mp4",
+  "requirement_id": "SH-10",
+  "t": 0.0,
+  "positive": true,
+  "note": "Stacked burlap sacks of coffee beans in a container are clearly visible."
+ },
+ {
+  "clip": "t4_127.mp4",
+  "requirement_id": "SH-10",
+  "t": 1.0,
+  "positive": true,
+  "note": "Stacked burlap sacks of coffee beans in a container are clearly visible."
+ },
+ {
+  "clip": "t4_127.mp4",
+  "requirement_id": "SH-10",
+  "t": 2.0,
+  "positive": true,
+  "note": "Stacked burlap sacks of coffee beans in a container are clearly visible."
+ },
+ {
+  "clip": "t4_127.mp4",
+  "requirement_id": "SH-10",
+  "t": 3.0,
+  "positive": true,
+  "note": "Stacked burlap sacks of coffee beans in a container are clearly visible."
+ },
+ {
+  "clip": "t4_134.mp4",
+  "requirement_id": "SH-07",
+  "t": 0.0,
+  "positive": true,
+  "note": "Woman holds a small espresso cup raised in her hand."
+ },
+ {
+  "clip": "t4_134.mp4",
+  "requirement_id": "SH-07",
+  "t": 1.0,
+  "positive": true,
+  "note": "Woman holds a small espresso cup raised in her hand."
+ },
+ {
+  "clip": "t4_134.mp4",
+  "requirement_id": "SH-07",
+  "t": 2.0,
+  "positive": true,
+  "note": "Woman holds a small espresso cup raised in her hand."
+ },
+ {
+  "clip": "t4_134.mp4",
+  "requirement_id": "SH-07",
+  "t": 3.0,
+  "positive": true,
+  "note": "Woman holds a small espresso cup raised in her hand."
+ },
+ {
+  "clip": "t4_145.mp4",
+  "requirement_id": "SH-07",
+  "t": 0.0,
+  "positive": true,
+  "note": "Man holds a cup and saucer in his hands about to drink."
+ },
+ {
+  "clip": "t4_145.mp4",
+  "requirement_id": "SH-07",
+  "t": 1.0,
+  "positive": true,
+  "note": "Man holds a cup and saucer in his hands about to drink."
+ },
+ {
+  "clip": "t4_145.mp4",
+  "requirement_id": "SH-07",
+  "t": 2.0,
+  "positive": true,
+  "note": "Man holds a cup and saucer in his hands about to drink."
+ },
+ {
+  "clip": "t4_145.mp4",
+  "requirement_id": "SH-07",
+  "t": 3.0,
+  "positive": true,
+  "note": "Man holds a cup and saucer in his hands about to drink."
+ },
+ {
+  "clip": "t4_146.mp4",
+  "requirement_id": "SH-02",
+  "t": 0.0,
+  "positive": true,
+  "note": "Wooden room with tables, chairs and a counter, cafe-like interior view."
+ },
+ {
+  "clip": "t4_146.mp4",
+  "requirement_id": "SH-02",
+  "t": 1.0,
+  "positive": true,
+  "note": "Wooden room with tables, chairs and a counter, cafe-like interior view."
+ },
+ {
+  "clip": "t4_146.mp4",
+  "requirement_id": "SH-02",
+  "t": 2.0,
+  "positive": true,
+  "note": "Wooden room with tables, chairs and a counter, cafe-like interior view."
+ },
+ {
+  "clip": "t4_146.mp4",
+  "requirement_id": "SH-02",
+  "t": 3.0,
+  "positive": true,
+  "note": "Wooden room with tables, chairs and a counter, cafe-like interior view."
+ }
+]
