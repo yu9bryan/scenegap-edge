@@ -41,9 +41,10 @@ def sheet(path, out_png):
 if __name__ == "__main__":
     src, out = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
-    index = {}
+    ip = os.path.join(out, "index.json")
+    index = json.load(open(ip, encoding="utf8")) if os.path.exists(ip) else {}   # resume: decoding has crashed mid-run
     for fn in sorted(os.listdir(src)):
-        if fn.endswith(".mp4"):
+        if fn.endswith(".mp4") and fn not in index:
             index[fn] = sheet(os.path.join(src, fn), os.path.join(out, fn.replace(".mp4", ".png")))
-            print(fn, index[fn]["duration_s"], len(index[fn]["samples_s"]))
-    json.dump(index, open(os.path.join(out, "index.json"), "w", encoding="utf8"), indent=1)
+            print(fn, index[fn]["duration_s"], len(index[fn]["samples_s"]), flush=True)
+            json.dump(index, open(ip, "w", encoding="utf8"), indent=1)
