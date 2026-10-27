@@ -184,7 +184,7 @@ after test-3 was scored, so it needs a prospective test.
   labels do; under the same assumption a correct alert is never cleared, so missing shots caught is unchanged.
 - All three numbers are reported with Wilson 95% CIs whatever the outcome. Test-4 is never re-scored.
 
-### Stage 1.7 amendment: test-4 footage source (added 2026-10-27 21:22, before any test-4 file is selected or seen)
+### Stage 1.7 amendment: test-4 footage source (added 2026-10-27 21:12, before any test-4 file is selected or seen)
 - The team decided not to shoot footage, so the café shoot above is dropped (`docs/TEST4_SHOOTING_zh.md` removed).
   Pexels' terms forbid automated collection for machine-learning purposes and bulk copying without permission, and
   a walk of the Commons coffee video categories finds only 10 videos not used before, so test-4 uses openly
