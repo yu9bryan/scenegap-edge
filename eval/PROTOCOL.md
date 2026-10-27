@@ -161,3 +161,25 @@ Test-3 (new held-out footage):
 - Next: Wikimedia Commons has no further coffee footage (a search with 12 more terms returned mostly unrelated
   clips), so a test-4 needs footage from elsewhere (a real shoot, or another openly licensed source used within its
   terms). Test-3 is not re-scored.
+
+## Stage 1.7: test-4 on a real café shoot, and the 3-frame look as a metric (added 2026-10-27 11:30, before any test-4 footage exists)
+
+Why: Stage 1.6 met the missing-shot target on test-3 but not the wrong-reshoot cap; the 3-frame look was defined
+after test-3 was scored, so it needs a prospective test.
+
+- System: Stage 1.6 exactly as frozen (`--verifier`: check question + conditions, every 1 s sample, run of 2, θ 0.5,
+  same verifier fingerprint and `eval/verify_questions.json`). Nothing is tuned on test-4.
+- Footage: a team member shoots about 45 clips in a café from the shot list `docs/TEST4_SHOOTING_zh.md` (written now):
+  each of the 11 shots × 3 varied clips, 6 near-misses that the shot definitions exclude, 6 unrelated clips. Every
+  clip received is used, except one the transcoder cannot read (reason recorded). Original files are hashed and
+  renamed in shuffled order before labelling; manifest `datasets/manifests/test4_manifest.json`.
+- Labels: same guide and rules R1–R8, two independent AI annotator passes on 1 fps contact sheets, a blind third pass
+  on every disagreement, no access to the shot list's intent, filenames, or any system or verifier output; stored in
+  `eval/labels/test4/` and committed before scoring.
+- Scoring: 30 simulated projects × 8 clips (seeds `test4-0` … `test4-29`), run once; the scorer refuses a second run.
+- Primary criteria (unchanged): wrong reshoot ≤ 5% **and** missing shots caught ≥ 30%.
+- Secondary criterion (Stage 1.7): wrong reshoot after the 3-frame look ≤ 5%. A wrong reshoot is cleared when at
+  least one of its 3 evidence frames (the verifier's most likely sample per clip, top 3 clips, as shown on the
+  reshoot card) lies inside a gold segment of that shot, ±0.5 s. This assumes the person judges the frame as the gold
+  labels do; under the same assumption a correct alert is never cleared, so missing shots caught is unchanged.
+- All three numbers are reported with Wilson 95% CIs whatever the outcome. Test-4 is never re-scored.
