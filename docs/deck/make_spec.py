@@ -265,10 +265,10 @@ rows15 = [["Test 1 (Oct 26)", "system alone", kk(sm["full"]["gap_recall"]), kk(s
 if t3:
     after = ev["by_set"]["test3"]["3"]["after_check"] if ev else None
     rows15 += [["Test 3: 39 new clips", "check of every second (frozen)", kk(t3["result"]["gap_recall"]), kk(t3["result"]["wrong_reshoot"])],
-               ["Test 3, post hoc", "+ a person looks at 3 frames", kk(t3["result"]["gap_recall"]), kk(after)]]
+               ["Test 3, post hoc", "+ 3-frame look (simulated)", kk(t3["result"]["gap_recall"]), kk(after)]]
 if t4:
     rows15 += [["Test 4: 150 new photo clips", "same check, frozen", kk(t4["result"]["gap_recall"]), kk(t4["result"]["wrong_reshoot"])],
-               ["Test 4, preregistered", "+ a person looks at 3 frames", kk(t4["result"]["gap_recall"]), kk(t4["three_frame_look"]["after_look"])]]
+               ["Test 4, preregistered", "+ 3-frame look (simulated)", kk(t4["result"]["gap_recall"]), kk(t4["three_frame_look"]["after_look"])]]
 title15 = (f"Missing shots: on test 4 the check layer catches {t4['result']['gap_recall']['p'] * 100:.0f}% at {t4['result']['wrong_reshoot']['k'] / t4['result']['wrong_reshoot']['n'] * 100:.1f}% wrong reshoots; both targets met" if t4 else "Missing shots: on new footage the check layer catches " + (f"{t3['result']['gap_recall']['p'] * 100:.0f}%; wrong reshoots {t3['result']['wrong_reshoot']['p'] * 100:.0f}%, under 5% only after a 3-frame look" if t3 else "35% (test 2)"))
 S.append({"type": "blocks", "section": "Evidence", "title": title15,
           "blocks": [
@@ -277,7 +277,7 @@ S.append({"type": "blocks", "section": "Evidence", "title": title15,
                "header": ["Data", "Method", "Missing caught", "Wrong reshoot"], "rows": rows15},
               {"kind": "text", "x": 0, "y": 3.0, "w": 7.6, "h": 1.4, "fontSize": 9.5,
                "bullets": ["How: Qwen2-VL-2B answers each shot's check question ('Is ground coffee coming out of a grinder?') for every 1 s frame; 2 confirmed seconds in a row = present.",
-                           "Test 3's 8 wrong reshoots were borderline frames, so each alert shows the 3 most likely frames; test 4 then scored that look as a preregistered metric.",
+                           "Test 3's 8 wrong reshoots were borderline frames, so each alert shows the 3 most likely frames; test 4 then scored that look as a preregistered metric, simulated from the labels (assumes the person recognises the shot; not a user test).",
                            "Test 4 is Commons photos as 4 s clips: fresh images, but no motion or cuts. Upper 95% bound on wrong reshoots: 9.5%."]},
               {"kind": "chart", "x": 7.9, "y": 0, "w": 4.0, "h": 4.25, "head": "New footage, % of shots", "chartType": "BAR", "barDir": "col",
                "labels": ["Test 2", "Test 3", "Test 4"], "max": 70,
@@ -300,7 +300,7 @@ dg, mg, tg, fg, bg = P_GPU
 si = inter["summary"]
 S.append({"type": "blocks", "section": "Hardware", "title": f"Measured: decoding is {dg:.1f} of the {tg:.1f} s per minute; a UGen300 would free the GPU or a laptop CPU",
           "blocks": [
-              {"kind": "chart", "x": 0, "y": 0, "w": 5.2, "h": 4.3, "head": "Seconds per minute of video (desktop)", "chartType": "BAR", "barDir": "col", "grouping": "stacked",
+              {"kind": "chart", "x": 0, "y": 0, "w": 5.2, "h": 4.3, "head": "CLIP index, s per minute of video (check layer not timed)", "chartType": "BAR", "barDir": "col", "grouping": "stacked",
                "labels": ["CPU", "RTX 4080 GPU"], "series": [{"name": "Decode + sample", "values": [round(dc, 2), round(dg, 2)]}, {"name": "Model (CLIP image)", "values": [round(mc, 2), round(mg, 2)]}],
                "format": "0.00", "colors": ["A78BFA", "6C4CF5"]},
               {"kind": "table", "x": 5.5, "y": 0, "w": 6.4, "h": 2.25, "head": "Model and search", "colW": [1.6, 1.6, 1.2, 2.0], "fontSize": 9.5, "maxRowH": 0.42,
@@ -357,13 +357,13 @@ S.append({"type": "blocks", "section": "Plan", "title": "Shown today, proven nex
           "blocks": [
               {"kind": "table", "x": 0, "y": 0, "w": 11.9, "h": 3.9, "colW": [1.6, 3.9, 4.3, 2.1], "fontSize": 10.5, "maxRowH": 0.62,
                "header": ["Proof", "Today", "Stage II target", "Source"],
-               "rows": [["1 · Rules", f"{n_rule} controlled cases; top 5 right for 7/11; missing shots: test 4 caught 65% at 3.8% wrong reshoots (0% after a 3-frame look; photo clips)",
+               "rows": [["1 · Rules", f"{n_rule} controlled cases; top 5 right for 7/11; missing shots: test 4 caught 65% at 3.8% wrong reshoots (0% with a simulated 3-frame look; photo clips)",
                          "Recall@5 ≥ 90% and wrong reshoot ≤ 5% in the supported scope; ranking by peak; per-shot thresholds", "PRD 21.5"],
                         ["2 · Labels", f"AI-assisted, κ {s['cohen_kappa']:.2f}", "a person labels sampled pairs on the original video", "Protocol"],
                         ["3 · People", "no study; proxy 38% of footage to play", "3–5 interviews, then 8–12 crews; median task time −30%", "PRD 22.1"],
                         ["4 · UGen300", f"not run; PC harness cos {g1m.get('G1a_median_cos', 0):.4f}, ρ {g1m.get('G1b_median_rho', 0):.5f}",
                          "G1a cos ≥ 0.98, G1b ρ ≥ 0.95, G1e status ≥ 90%; USB speed, power, editing-app load", "MODEL_PLAN §4"],
-                        ["5 · Speed", "search p95 13–14 ms; 2.3 s per minute (GPU)", "first result for a 60 s clip ≤ 45 s, timed end to end", "PRD NFR-05"],
+                        ["5 · Speed", "search p95 13–14 ms; CLIP index 2.3 s per minute (GPU); check layer not timed", "first result for a 60 s clip ≤ 45 s, timed end to end", "PRD NFR-05"],
                         ["6 · Software", f"{n_tests} automated tests; {tc_status.get('pass', 0)} of {len(tc_rows)} acceptance cases pass; clean rebuild passes", "the device and user cases (TC-017, 018, 033, 034)", "A9, A12"]]}],
           "note": "Fewer surprises in the edit: a reshoot list made before the crew leaves, with the evidence a person checked."})
 # ---------- appendix ----------
