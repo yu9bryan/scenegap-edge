@@ -3,6 +3,7 @@
   python eval/verify16.py sims  --work F:/sg_data/_eval2                       # CLIP similarity of every 1 s sample
   python eval/verify16.py dev   --dense F:/sg_data/_dense                      # sweep on all earlier data, freeze
   python eval/verify16.py test3 --dense F:/sg_data/_dense --work F:/sg_data/_eval2   # scored once
+  python eval/verify16.py test4 --dense F:/sg_data/_dense --work F:/sg_data/_eval2   # Stage 1.7, scored once
 
 Rule family (eval/PROTOCOL.md, Stage 1.6). For each shot in a project:
   1. CLIP ranks every 1 s sample of the project's clips by its similarity to the shot (the system's own score);
@@ -256,9 +257,64 @@ def loso(a, caps=(0.03, 0.02, 0.01, 0.0)):
     json.dump(out, open(os.path.join(RES, "verify_loso.json"), "w", encoding="utf8"), indent=1)
 
 
+def look3(dense, sims, gold, projects, status, fz, k=3, tol_s=0.5):
+    """Stage 1.7 secondary metric: a wrong reshoot is cleared when one of the k evidence frames (the most likely
+    sample per clip, top k clips, as on the reshoot card) lies inside a gold segment of the shot, +-tol_s."""
+    q, tn, th, m = fz["qset"], fz["topn"], fz["theta"], fz["m"]
+    av_n = wrong = left = 0
+    for clips, sts in zip(projects, status):
+        for r in REQS:
+            rid = r["requirement_id"]
+            fr = project_frames(dense, sims, clips, rid)
+            pres, _ = present(dense, fr, rid, q, tn, th, m_for(m, r))
+            pres = pres and sts[rid] != "not_found"
+            av = available(gold, clips, rid, (r.get("min_duration_ms") or 0) / 1000)
+            av_n += av
+            if pres or not av:
+                continue
+            best = {}
+            for c, i, sh, t, s in fr:
+                p = frame_p(dense[c], i, rid, q)
+                if c not in best or p > best[c][0]:
+                    best[c] = (p, t)
+            top = sorted(best.items(), key=lambda kv: -kv[1][0])[:k]
+            hit = any(any(g0 - tol_s <= t / 1000 < g1 + tol_s for g0, g1 in gold["clips"].get(c, {}).get(rid, [])) for c, (p, t) in top)
+            wrong += 1
+            left += not hit
+    return {"wrong_reshoot": wilson(wrong, av_n), "after_look": wilson(left, av_n)}
+
+
+def test4(a):
+    """Stage 1.7 (eval/PROTOCOL.md): the frozen Stage 1.6 rule on test-4, 30 projects x 8 clips, scored once."""
+    out_p = os.path.join(RES, "test4_metrics.json")
+    if os.path.exists(out_p):
+        sys.exit("test4 already scored once; results are frozen")
+    fz = load(os.path.join(RES, "verify16_dev.json"))["chosen"]
+    mp4 = "F:/sg_data/commons4/mp4"
+    clips = sorted(c["clip"] for c in load(os.path.join(MAN, "test4_manifest.json"))["clips"])
+    projects = [random.Random(f"test4-{i}").sample(clips, 8) for i in range(30)]
+    dense = load(os.path.join(a.dense, "test4.json"))
+    sims = int_keys(load(os.path.join(a.dense, "sims_test4.json")))
+    gold = load(os.path.join(HERE, "labels", "test4", "gold.json"))
+    assert set(clips) <= set(dense) and set(clips) <= set(gold["clips"]), "dense scores or labels missing for some clips"
+    status = system_status(a.work, mp4, projects, a.device)
+    res = score_source(dense, sims, gold, projects, status, fz["qset"], fz["topn"], fz["theta"], fz["m"])
+    base = score_source(dense, sims, gold, projects, status, "q0", "none", 0.0, "1")      # theta 0: the system alone
+    look = look3(dense, sims, gold, projects, status, fz)
+    out = {"split": "test4 (Commons photos as 4 s clips, new held-out)", "clips": len(clips), "projects": len(projects),
+           "project_size": 8, "frozen": {k: fz[k] for k in ("qset", "topn", "m", "theta")}, "result": res,
+           "three_frame_look": look, "system_only": base,
+           "targets": {"wrong_reshoot_max": 0.05, "gap_recall_min": 0.30, "after_look_max": 0.05},
+           "met_primary": res["wrong_reshoot"]["p"] <= 0.05 and res["gap_recall"]["p"] >= 0.30,
+           "met_after_look": look["after_look"]["p"] <= 0.05,
+           "scored_at": time.strftime("%Y-%m-%d %H:%M:%S"), "projects_clips": projects, "system_status": status}
+    json.dump(out, open(out_p, "w", encoding="utf8"), indent=1)
+    print(json.dumps({k: out[k] for k in ("frozen", "result", "three_frame_look", "met_primary", "met_after_look")}, indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["sims", "dev", "test3", "loso"])
+    ap.add_argument("mode", choices=["sims", "dev", "test3", "loso", "test4"])
     ap.add_argument("--dense", default="F:/sg_data/_dense")
     ap.add_argument("--work", default="F:/sg_data/_eval2")
     ap.add_argument("--device", default="cuda")
@@ -266,7 +322,8 @@ def main():
     t0 = time.time()
     if a.mode == "sims":
         out = {}
-        for name, mp4 in [("commons", "F:/sg_data/commons/mp4"), ("test2", "F:/sg_data/commons2/mp4"), ("test3", "F:/sg_data/commons3/mp4")]:
+        for name, mp4 in [("commons", "F:/sg_data/commons/mp4"), ("test2", "F:/sg_data/commons2/mp4"), ("test3", "F:/sg_data/commons3/mp4"),
+                         ("test4", "F:/sg_data/commons4/mp4")]:
             if not os.path.isdir(mp4) or os.path.exists(os.path.join(a.dense, f"sims_{name}.json")):
                 continue
             clips = sorted(f for f in os.listdir(mp4) if f.endswith(".mp4"))
@@ -301,6 +358,9 @@ def main():
         return
     if a.mode == "loso":
         loso(a)
+        return
+    if a.mode == "test4":
+        test4(a)
         return
     out_p = os.path.join(RES, "test3_metrics.json")
     if os.path.exists(out_p):
