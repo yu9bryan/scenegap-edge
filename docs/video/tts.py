@@ -1,4 +1,4 @@
-import asyncio, json, sys
+import asyncio, json, os, sys
 import aiohttp.resolver, aiohttp.connector
 aiohttp.resolver.DefaultResolver = aiohttp.resolver.ThreadedResolver   # aiodns cannot reach DNS here
 aiohttp.connector.DefaultResolver = aiohttp.resolver.ThreadedResolver
@@ -15,7 +15,7 @@ async def one(item):
                 sents.append({"start": ch["offset"] / 1e7, "end": (ch["offset"] + ch["duration"]) / 1e7, "text": ch["text"]})
     return {"id": item["id"], "sentences": sents}
 async def main():
-    items = json.load(open("C:/Users/yu9br/AppData/Local/Temp/cgw/narration.json", encoding="utf8"))
+    items = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "narration.json"), encoding="utf8"))
     out = [await one(i) for i in items]
     json.dump(out, open("F:/sg_data/video/vo/timing.json", "w", encoding="utf8"), indent=1)
     print(sum(len(i["text"].split()) for i in items), "words")

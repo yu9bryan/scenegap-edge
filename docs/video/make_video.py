@@ -184,7 +184,7 @@ def card_end(credits):
     im = BGIMG.copy(); d = ImageDraw.Draw(im)
     d.text((120, 170), "SceneGap Edge", font=font(110, True), fill=(255, 255, 255))
     d.text((126, 310), "Fewer surprises in the edit.", font=font(44), fill=CYAN)
-    d.text((126, 380), "[Team name] · github.com/[team]/scenegap-edge", font=font(30), fill=TEXT)
+    d.text((126, 380), "rm-rf-1 · github.com/yu9bryan/scenegap-edge", font=font(30), fill=TEXT)
     d.text((126, 450), "FOOTAGE · Wikimedia Commons, used under each licence; cropped, scaled and sped up for this video", font=font(24, True), fill=MUTED)
     y = 494
     for title, author, lic in credits:

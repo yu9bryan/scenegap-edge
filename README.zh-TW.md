@@ -7,7 +7,7 @@
 *片段檢視，實際速度（有剪接）。SH-05「咖啡倒入杯中或拉花，連續 3 秒」的第一個候選只拍到萃取流、畫面沒有杯子，所以拒絕並寫下原因；接著接受拉花的片段。*
 
 [示範影片](site/assets/SceneGapEdge_StageI_Demo.mp4) ·
-[專案網頁](https://[team].github.io/scenegap-edge/) ·
+[專案網頁](https://yu9bryan.github.io/scenegap-edge/) ·
 [提案簡報 PDF](docs/deck/SceneGapEdge_StageI_Proposal.pdf) ·
 [評測報告（英文）](eval/results/REPORT.md) ·
 [驗證過程](docs/VALIDATION_zh.md) ·
@@ -15,7 +15,7 @@
 
 SceneGap Edge 給小型拍攝團隊和接案剪輯師用。你先寫好 Shot list（例如「咖啡倒入杯中，連續 3 秒」「咖啡師工作畫面，至少兩個 Take」），SceneGap 在本機建立素材索引，找出候選片段和原始時間碼，檢查長度、Take 數和同框條件，逐一告訴你每個鏡頭找到了什麼、哪些判斷不了。每個答案都由人接受或拒絕；找不到可用片段的鏡頭進補拍清單。素材不會上傳。目前「自動判斷缺鏡頭」還不可靠（test 上 38 個缺的鏡頭一個都沒抓到），所以現在的價值是讓核對更快、可追溯，而不是自動下結論。
 
-參賽：ASUS UGen AI League（Creator AI，Lightning 組，ASUS UGen300 USB AI 加速器，Hailo-10H）。團隊：[Team name]。本專案與 ASUS、Hailo 沒有合作或背書關係。
+參賽：ASUS UGen AI League（Creator AI，Lightning 組，ASUS UGen300 USB AI 加速器，Hailo-10H）。團隊：rm-rf-1。本專案與 ASUS、Hailo 沒有合作或背書關係。
 
 ## 要解決的問題
 

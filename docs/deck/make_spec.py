@@ -98,7 +98,7 @@ S = []
 S.append({"type": "title", "tagline": "Creator AI · Lightning track · ASUS UGen300", "title": "SceneGap Edge",
           "subtitle": "Helps a crew check the shot list against the footage before leaving the location, with playable evidence and a person's decision on every shot.",
           "chips": ["Runs on your own computer", "Evidence for every answer", "A person decides", "UGen300 port planned"],
-          "footer": "Stage I proposal · [Team name] · github.com/[team]/scenegap-edge", "art": img("cover_art.png")})
+          "footer": "Stage I proposal · rm-rf-1 · github.com/yu9bryan/scenegap-edge", "art": img("cover_art.png")})
 # 2 problem
 S.append({"type": "story", "section": "Problem", "title": "The missing shot is found at 23:00, after the café has closed",
           "persona": "Illustrative scenario · two-person crew, café promo, 11 must-have shots", "icon": "FaVideo",
@@ -529,6 +529,6 @@ S.append({"type": "cards", "section": "Appendix", "title": f"A12 · Engineering:
               {"icon": "FaBoxOpen", "head": "Rebuild", "body": "A fresh venv from the public index passes the test suite; Dockerfile and CI included; Apache-2.0."}],
           "source": "eval/results/ACCEPTANCE.md lists all 36 cases with the test that covers each (A9)."})
 
-spec = {"title": "SceneGap Edge – Stage I proposal", "short": "SceneGap Edge · Stage I", "team": "[Team name]", "slides": S}
+spec = {"title": "SceneGap Edge – Stage I proposal", "short": "SceneGap Edge · Stage I", "team": "rm-rf-1", "slides": S}
 json.dump(spec, open(OUT, "w", encoding="utf8"), ensure_ascii=False, indent=1)
 print(len(S), "slides;", sum(1 for x in S if x.get("section") != "Appendix"), "main")

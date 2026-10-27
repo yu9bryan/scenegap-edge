@@ -8,7 +8,7 @@
 with no cup, so it is rejected with the reason "No cup in frame"; the latte-art pour is then accepted.*
 
 [Demo video](site/assets/SceneGapEdge_StageI_Demo.mp4) ·
-[Project page](https://[team].github.io/scenegap-edge/) ·
+[Project page](https://yu9bryan.github.io/scenegap-edge/) ·
 [Proposal deck (PDF)](docs/deck/SceneGapEdge_StageI_Proposal.pdf) ·
 [Evaluation report](eval/results/REPORT.md) ·
 [中文說明](README.zh-TW.md)
@@ -20,7 +20,7 @@ pass, fail or can't tell with the clip to play. A person decides every shot; sho
 reshoot list. Automatic missing-shot detection is not reliable yet (see results), so today the value is a faster,
 traceable review, not an automatic verdict.
 
-Built by [Team name] for the ASUS UGen AI League (Creator AI, Lightning track, ASUS UGen300 USB AI accelerator with
+Built by rm-rf-1 for the ASUS UGen AI League (Creator AI, Lightning track, ASUS UGen300 USB AI accelerator with
 Hailo-10H). Not affiliated with or endorsed by ASUS or Hailo.
 
 ## Contents
