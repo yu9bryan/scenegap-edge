@@ -1,4 +1,4 @@
-# SceneGap Edge UI — design notes
+# SceneGap Edge UI: design notes
 
 Short research pass (layout patterns only; no assets, logos or trademarks copied) over public material about
 Frame.io review panels, Premiere Pro Media Intelligence / Search panel, DaVinci Resolve 21 IntelliSearch,
@@ -66,23 +66,23 @@ the device screen names the hardware ("UGen300"). Our accents stay violet `#6C4C
 not ProArt's bronze or ROG red.
 
 ### What we looked at (described, not copied; screenshots kept outside the repo)
-- **ProArt Creator Hub product page** — https://www.asus.com/uk/ProArt/ProArt-Creator-Hub/ (we looked at the
+- **ProArt Creator Hub product page**: https://www.asus.com/uk/ProArt/ProArt-Creator-Hub/ (we looked at the
   hero section and the dashboard screenshots). The app is a near-black, neutral (not blue-tinted) charcoal
   window. A slim left rail has icon + label items and a filled active item. Device tabs run across the top
   (laptop, monitor). Square cards have a small title at top-left, a hairline under the header and a tiny
   action glyph at top-right. Big *light-weight* numerals ("7 %") sit next to a thin ring gauge. Key/value rows
   put the label left in grey and the value right in the accent colour. Thin progress lines everywhere.
-- **ProArt Creator Hub FAQ** — https://www.asus.com/support/faq/1045995/ (structure: Dashboard with
+- **ProArt Creator Hub FAQ**: https://www.asus.com/support/faq/1045995/ (structure: Dashboard with
   draggable info cards, operating-mode quick switches, a 2026 refresh that moves system info to the top-left).
-- **Armoury Crate 6 article** — https://rog.asus.com/uk/articles/guides/armoury-crate-version-6-is-here-optimizing-your-gaming-pc-easier-than-ever/
+- **Armoury Crate 6 article**: https://rog.asus.com/uk/articles/guides/armoury-crate-version-6-is-here-optimizing-your-gaming-pc-easier-than-ever/
   (dashboard and feature-library screenshots, plus the article page itself). It describes a "less visually busy"
   redesign. Panels have **chamfered (angled) corners**, condensed uppercase headings, a slash `/` before
   section titles, a `/////` hatch motif next to dates, and dense metric tables with right-aligned values and
   thin coloured lines. The left nav is split into small grey **group labels**.
-- **MyASUS introduction / FAQ** — https://www.asus.com/us/support/faq/1050467/ (home page screenshot). A device
+- **MyASUS introduction / FAQ**: https://www.asus.com/us/support/faq/1050467/ (home page screenshot). A device
   hero shows the product name large, serial and quick links, with a **2×2 grid of status tiles**: each has a
   thin coloured top line, icon, label and a big number with a small unit (Battery 79 %, CPU load 6 % | 77 °C).
-- ASUS ProArt home page — https://www.asus.com/proart/ (overall tone: black canvas, light display type,
+- ASUS ProArt home page: https://www.asus.com/proart/ (overall tone: black canvas, light display type,
   generous spacing, thin rules).
 
 ### What we adopted, and where

@@ -15,7 +15,7 @@
 |---|---|
 | Project | "Café promo · 60 s" in a fresh work folder |
 | Shot list | the 11 café shots from `eval/requirements.json` (Chinese wording + English query) |
-| First import | 8 clips: 001 Vichy terrace, 007 Café Lomi, 012 roaster, 016 Lions Almelo, 020 espresso, 026 latte art, 032 sugar into coffee, 041 Paris streets (019, a blender grinding beans, is left out so the grinder shot is genuinely missing) |
+| First import | 8 clips: 001 Vichy terrace, 007 Café Lomi, 012 roaster, 016 Lions Almelo, 020 espresso, 026 latte art, 032 sugar into coffee, 041 Paris streets (019, a blender grinding beans, is left out so the grinder shot is missing) |
 | "Reshoot" import | 022 *Der perfekte Espresso aus dem Siebträger* (shows grounds falling from a grinder), added after the reshoot list is made |
 
 ## Shot list, narration and captions
