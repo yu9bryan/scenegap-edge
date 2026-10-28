@@ -74,7 +74,7 @@ Image encoders (zero-shot classification page; accuracy is zero-shot top-1 on CI
   ourselves (unverified effort).
 - A community report on the Hailo-8L found compiled CLIP RN50 embeddings far from the OpenAI reference
   (unresolved). Staff pointed to the zoo model script (normalisation on chip, uint8 input, optimisation
-  settings) [S12]. **This is why G1 exists.**
+  settings) [S12]. This is why G1 exists.
 
 **Answer to "does the text encoder run on the host CPU?"** It can run either way. A HEF exists. The
 reference hailo-apps pipeline precomputes text on the CPU. We recommend **host CPU with the same HF fp32

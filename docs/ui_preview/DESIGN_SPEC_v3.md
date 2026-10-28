@@ -52,9 +52,9 @@ backgrounds and kept away from the bronze hue: partial `#F2994A`, not found `#FF
 
 ## 2b. ProArt style in detail (measured 2026-10-26 on asus.com/proart and the ProArt Creator Hub page)
 
-**Mood.** Studio-at-night: product and footage glow out of black, the brand speaks in one warm metal colour
+**Mood.** Studio-at-night: product and footage glow out of black, the brand uses one warm metal colour
 (champagne bronze), everything else is greyscale. Calm, premium, low saturation; no playful colours, no heavy
-shadows, very little decoration. Confidence comes from large light type and space, not from boxes.
+shadows, very little decoration. Large light type and space do the work that boxes would do elsewhere.
 
 **Typography.**
 

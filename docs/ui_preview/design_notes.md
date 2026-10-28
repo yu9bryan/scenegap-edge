@@ -17,7 +17,7 @@ Linear's 2024 UI refresh, Vercel's 2026 sidebar navigation and Final Cut Pro's b
 4. **Search scope is explicit** (IntelliSearch only knows imported media; Premiere waits for analysis before
    search). Every coverage number says what it covers: "已分析範圍", analysis progress, failed-file banner.
    "Not found" is always worded as "在已分析範圍未找到", never as "missing".
-5. **Local-first is a feature to state, not hide** (both Adobe and Blackmagic stress on-device analysis). The
+5. **Show that analysis runs locally** (both Adobe and Blackmagic stress on-device analysis). The
    top bar always shows the real active backend (`cpu-reference`, `cuda-reference`, `not loaded`) and the
    UGen300 connection state, so nobody mistakes a CPU run for an NPU run.
 6. **Near-black canvas, hierarchy from lightness steps, not many hues** (Linear's refresh: fewer theme
@@ -37,7 +37,7 @@ Linear's 2024 UI refresh, Vercel's 2026 sidebar navigation and Final Cut Pro's b
 11. **Dense tables with tabular numerals** (Resolve media pool list view, Linear lists). Asset and coverage
     tables use `font-variant-numeric: tabular-nums`, monospace time codes `mm:ss.mmm`, sticky headers, and
     failure rows are styled, not filtered away.
-12. **KPI cards that refuse to lie** (dashboard pattern from Vercel usage cards): a null metric prints "N/A"
+12. **KPI cards with honest empty states** (dashboard pattern from Vercel usage cards): a null metric prints "N/A"
     with a one-line reason, never 0 % or 100 %, and the bar is drawn hatched instead of empty.
 13. **Never a fake progress bar.** Job progress is determinate only when `total > 0`; otherwise an
     indeterminate stripe plus the stage text. Cancel is always next to the bar.
@@ -59,8 +59,8 @@ Linear's 2024 UI refresh, Vercel's 2026 sidebar navigation and Final Cut Pro's b
 
 ## ASUS design references (restyle, 2026-10-26)
 
-The user asked for the feel of ASUS's own software. SceneGap Edge runs on the ASUS UGen300 and is an entry in
-ASUS's UGen AI League, so the UI now borrows that hardware-utility feel. **We take the feel, not the brand:**
+The user asked for the feel of ASUS's own software. SceneGap Edge is built for the ASUS UGen300 and is an entry in
+ASUS's UGen AI League, so the UI now borrows that hardware-utility feel. **We use the feel and leave the brand alone:**
 no ASUS / ProArt / ROG logos, wordmarks, icons or images are used; the app is still "SceneGap Edge", and only
 the device screen names the hardware ("UGen300"). Our accents stay violet `#6C4CF5`/`#8B72FF` and cyan `#22D3EE`,
 not ProArt's bronze or ROG red.
@@ -103,7 +103,7 @@ not ProArt's bronze or ROG red.
 7. **Dense tables** with condensed uppercase column headers and right-aligned key/value rows (run info,
    device details, requirement facts).
 
-## v3 (2026-10-26): reference layout + ProArt palette — supersedes the two sections above
+## v3 (2026-10-26): reference layout + ProArt palette (supersedes the two sections above)
 
 The binding spec is `DESIGN_SPEC_v3.md` (sections 1, 2, 2b, 3). The charcoal/violet look, the angled corners,
 the `////` condensed caps eyebrows and Barlow are gone. How the spec was applied:

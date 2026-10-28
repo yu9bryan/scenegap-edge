@@ -36,7 +36,7 @@ kinds also return UNKNOWN).
 - A VLM, if used, is a re-checker on the top candidates, never the indexer. It is never required.
 
 ## Consequences
-- Honest and conservative: the reviewer, not the model, decides these conditions, and reshoot cards list
+- The reviewer, not the model, decides these conditions, and reshoot cards list
   them under "confirmed by a person".
 - Lower automation for action-heavy scripts. The ranking aid and the evidence viewer have to make manual
   checks fast (jump to the window, loop playback).

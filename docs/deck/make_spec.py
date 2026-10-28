@@ -178,7 +178,7 @@ S.append({"type": "blocks", "section": "Evidence", "title": "What the model retu
           "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 9.35, "h": 4.75, "path": img("fig_top5.png")},
                      {"kind": "text", "x": 9.6, "y": 0, "w": 2.3, "h": 4.8, "head": "Read it as", "fontSize": 10.5,
                       "bullets": ["SH-05: right clips are in the list, but #1 is wrong", "SH-08: same-frame rule works here (4 of 5)",
-                                  "SH-04: the right clip is 4th; ranking by peak is the fix", "SH-07: nothing to find, yet 5 clips pass: why missing shots go undetected"]}],
+                                  "SH-04: the right clip is 4th; ranking by peak is the fix", "SH-07: nothing to find, yet 5 clips pass, so missing shots go undetected"]}],
           "source": "Demo project (9 clips); candidates and scores from the live app; right / wrong from eval/labels/gold.json (≥ 0.5 s overlap). decks/scenegap/fig_top5.py."})
 S.append({"type": "blocks", "section": "Evidence", "title": "How the length rule reads the model's scores",
           "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 7.1, "h": 4.75, "path": img("fig_curves.png")},
@@ -191,7 +191,7 @@ S.append({"type": "blocks", "section": "Evidence", "title": "How the length rule
           "source": "Rule-check cases cut from real Commons footage (eval/rule_check.py); similarity from the same CLIP model at 4 frames/s. decks/scenegap/fig_curves.py."})
 # 10 what each rule checks
 p4 = by_rc.get("pour_4s", {}).get("best_candidate_s")
-S.append({"type": "table", "section": "Evidence", "title": "What each rule actually measures, and what it cannot tell",
+S.append({"type": "table", "section": "Evidence", "title": "What each rule measures, and what it cannot tell",
           "header": ["Rule", "What SceneGap measures", "What it cannot tell", "Today"],
           "rows": [["Length", "How long frames stay close to the query inside one camera cut (lower and upper bound; re-check every 0.25 s)",
                     f"Whether the action itself lasts that long; the lower bound runs about 1 s short (4 s pour → {p4} s)", "auto, a person checks"],
@@ -365,7 +365,7 @@ S.append({"type": "blocks", "section": "Plan", "title": "Shown today, proven nex
                          "G1a cos ≥ 0.98, G1b ρ ≥ 0.95, G1e status ≥ 90%; USB speed, power, editing-app load", "MODEL_PLAN §4"],
                         ["5 · Speed", "search p95 13–14 ms; CLIP index 2.3 s per minute (GPU); check layer not timed", "first result for a 60 s clip ≤ 45 s, timed end to end", "PRD NFR-05"],
                         ["6 · Software", f"{n_tests} automated tests; {tc_status.get('pass', 0)} of {len(tc_rows)} acceptance cases pass; clean rebuild passes", "the device and user cases (TC-017, 018, 033, 034)", "A9, A12"]]}],
-          "note": "Fewer surprises in the edit: a reshoot list made before the crew leaves, with the evidence a person checked."})
+          "note": "The crew leaves the location with a reshoot list and the evidence a person checked."})
 # ---------- appendix ----------
 S.append({"type": "table", "section": "Appendix", "title": "A1 · G1: six checks before the UGen300 replaces the PC model",
           "header": ["Check", "Measure (dev frames, same preprocessing)", "Pass bar", "Status"],
@@ -386,7 +386,7 @@ S.append({"type": "table", "section": "Appendix", "title": "A1b · After G1: pro
                    ["USB end-to-end analysis time for a 60 s clip", "a device that is fast in the zoo but slow over USB", "not run yet"],
                    ["Editing-app playback and scrubbing with analysis on the device", "claiming host relief without measuring it", "not run yet"],
                    ["Whole-system extra power (meter at the wall)", "quoting 2.5 W as the system's cost", "not run yet"],
-                   ["Missing shots caught and wrong reshoots on new footage, verifier on the device", "the product effect, not just matching vectors", "not run yet"]],
+                   ["Missing shots caught and wrong reshoots on new footage, verifier on the device", "judging the device by matching vectors alone", "not run yet"]],
           "colW": [4.6, 4.9, 2.6], "fontSize": 12,
           "note": "Model agreement (G1) is necessary, not sufficient: the product effect is measured on new footage."})
 S.append({"type": "table", "section": "Appendix", "title": "A2 · What could break, and what we do then",
