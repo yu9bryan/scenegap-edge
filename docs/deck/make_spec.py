@@ -110,13 +110,13 @@ S.append({"type": "story", "section": "Problem", "title": "The missing shot is f
           "source": "Day rates: PRO360 quote statistics (TW), Film Lifestyle mid-level rates (US); docs/research/BUSINESS_FACTS.md."})
 # 3 existing tools
 S.append({"type": "table", "section": "Problem", "title": "Existing tools find footage; SceneGap adds shot-list rules, evidence and reshoot tracking",
-          "header": ["Tool", "Finds the moment in a clip", "Shot-list rules (length, takes, same frame)", "Runs locally"],
-          "rows": [["Premiere Pro media intelligence", "yes, In/Out range", "not in official docs", "yes, on device"],
-                   ["DaVinci Resolve 21 IntelliSearch", "visual search: whole clips", "not in official docs", "not stated"],
-                   ["Final Cut Pro 12 visual search", "yes", "not in official docs", "not stated"],
-                   ["invideo AI script supervisor", "not stated", "done / pending only", "no (upload)"],
-                   ["SceneGap Edge", "yes, original timecode", "checked per rule; a person decides", "yes"]],
-          "colW": [3.4, 2.6, 3.6, 2.5], "highlightRow": 4, "fontSize": 13,
+          "header": ["Tool", "Finds the moment in a clip", "Shot-list rules (length, takes, same frame)"],
+          "rows": [["Premiere Pro media intelligence", "yes, In/Out range", "not in official docs"],
+                   ["DaVinci Resolve 21 IntelliSearch", "visual search: whole clips", "not in official docs"],
+                   ["Final Cut Pro 12 visual search", "yes", "not in official docs"],
+                   ["invideo AI script supervisor", "not stated", "done / pending only"],
+                   ["SceneGap Edge", "yes, original timecode", "checked per rule; a person decides"]],
+          "colW": [4.0, 3.6, 4.5], "highlightRow": 4, "fontSize": 13,
           "note": "The difference is the workflow around search: shot list → rules → evidence → a person's decision → reshoot list → re-check.",
           "source": "Vendor documentation, accessed 2026-10-26 (Adobe media intelligence FAQ and others). More tools and prices: A11."})
 # 4 status
@@ -159,7 +159,7 @@ S.append({"type": "blocks", "section": "Solution", "title": "Before leaving, the
 S.append({"type": "blocks", "section": "Solution", "title": "Every answer plays its clip, and a person decides",
           "blocks": [{"kind": "image", "x": 0, "y": 0.05, "w": 8.4, "h": 4.65, "path": img("shot_evi.png")},
                      {"kind": "text", "x": 8.65, "y": 0, "w": 3.25, "h": 4.75, "dark": True, "head": "SH-05 on this screen", "fontSize": 11,
-                      "bullets": ["Shot 「咖啡倒入杯中或拉花，連續 3 秒」 as committed before any frame was seen (eval/requirements.json, 10/26 18:09)", "Filmstrip and clip ranges on the original timecode",
+                      "bullets": ["Shot 「咖啡倒入杯中或拉花，連續 3 秒」 as fixed before any frame was seen (eval/requirements.json, 10/26 18:09)", "Filmstrip and clip ranges on the original timecode",
                                   "Ranking score 0.314: orders clips, not a probability", "Length check 24.0 s ≥ 3 s: how long frames stay close to the query",
                                   "Log: espresso stream with no cup rejected with a reason; latte-art pour accepted; each can be undone"]}],
           "source": "Live app (clip view, cropped). Original files are never touched."})
@@ -211,7 +211,7 @@ if rule:
               "source": "Open: an action check (a finished latte passes as 'pouring') and re-encoded-take dedup. Such passes stay 'candidate, a person confirms', never done. eval/rule_check.py, frozen threshold."})
 # 12 method, data and labels
 S.append({"type": "blocks", "section": "Evidence", "title": "How we tested: fixed protocol, open footage, AI-assisted labels",
-          "lead": "Protocol and the 11 shots committed before any label; threshold set on dev only; test scored once. Every file below is in the repo.",
+          "lead": "Protocol and the 11 shots fixed before any label; threshold set on dev only; test scored once. Every file below is in the repo.",
           "blocks": [
               {"kind": "table", "x": 0, "y": 0, "w": 5.8, "h": 3.85, "head": "Footage", "colW": [1.5, 4.3], "fontSize": 10.5, "header": ["Item", "Value"],
                "rows": [["Source", f"{len(man['clips'])} Wikimedia Commons clips, {tot_min:.1f} min, H.264 ≤ 1280 px"],
