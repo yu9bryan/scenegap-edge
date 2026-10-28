@@ -20,8 +20,8 @@ pass, fail or can't tell with the clip to play. A person decides every shot; sho
 reshoot list. Automatic missing-shot detection is not reliable yet (see results), so today the value is a faster,
 traceable review, not an automatic verdict.
 
-Built by rm-rf-1 for the ASUS UGen AI League (Creator AI, Lightning track, ASUS UGen300 USB AI accelerator with
-Hailo-10H). Not affiliated with or endorsed by ASUS or Hailo.
+Built by rm-rf-1 for the ASUS UGen AI League (Creator AI, Lightning track), intended for the ASUS UGen300 USB AI
+accelerator with Hailo-10H.
 
 ## Contents
 
@@ -490,7 +490,7 @@ Wikimedia Commons clips. The full table with title, author, licence and Commons 
 
 Code: Apache-2.0 ([`LICENSE`](LICENSE), [`NOTICE`](NOTICE)). Footage is not included in the repository; each clip
 keeps its own Commons licence (CC0, public domain, CC BY, CC BY-SA). The CLIP weights are downloaded at run time
-under their own MIT licence. Not affiliated with or endorsed by ASUS or Hailo; product names belong to their owners.
+under their own MIT licence. Product names belong to their owners.
 
 ## 中文摘要
 

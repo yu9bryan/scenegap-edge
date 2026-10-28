@@ -66,4 +66,4 @@ The page uses only relative paths, so it also works opened from disk (`site/inde
 - The `git grep` from step 1 returns nothing (binary matches in the deck PDF mean it still needs regenerating).
 - `python -m pytest -q` passes.
 - The page loads on a phone and a desktop, the video plays, and every link opens.
-- Footage credits are in `docs/CREDITS.md` and on the page; the "not affiliated with ASUS or Hailo" note is present.
+- Footage credits are in `docs/CREDITS.md` and on the page.
