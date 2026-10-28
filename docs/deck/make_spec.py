@@ -98,7 +98,7 @@ S = []
 S.append({"type": "title", "tagline": "Creator AI · Lightning track · ASUS UGen300", "title": "SceneGap Edge",
           "subtitle": "Helps a crew check the shot list against the footage before leaving the location, with playable evidence and a person's decision on every shot.",
           "chips": ["Runs on your own computer", "Evidence for every answer", "A person decides", "UGen300 port planned"],
-          "footer": "Stage I proposal · rm-rf-1 · github.com/yu9bryan/scenegap-edge", "art": img("cover_art.png")})
+          "footer": "Stage I proposal · rm-rf-1 · github.com/yu9bryan/scenegap-edge · demo: youtu.be/CFYIqu2dkiM", "art": img("cover_art.png")})
 # 2 problem
 S.append({"type": "story", "section": "Problem", "title": "The missing shot is found at 23:00, after the café has closed",
           "persona": "Illustrative scenario · two-person crew, café promo, 11 must-have shots", "icon": "FaVideo",
@@ -366,7 +366,7 @@ S.append({"type": "blocks", "section": "Plan", "title": "Shown today, proven nex
                         ["5 · Speed", "search p95 13–14 ms; CLIP index 2.3 s per minute (GPU); check layer not timed", "first result for a 60 s clip ≤ 45 s, timed end to end", "PRD NFR-05"],
                         ["6 · Software", f"{n_tests} automated tests; {tc_status.get('pass', 0)} of {len(tc_rows)} acceptance cases pass; clean rebuild passes", "the device and user cases (TC-017, 018, 033, 034)", "A9, A12"]]}],
           "note": "The crew leaves the location with a reshoot list and the evidence a person checked.",
-          "source": "Code, data and results: github.com/yu9bryan/scenegap-edge (Apache-2.0). References: A13."})
+          "source": "Code, data and results: github.com/yu9bryan/scenegap-edge (Apache-2.0). Demo video: youtu.be/CFYIqu2dkiM. References: A13."})
 # ---------- appendix ----------
 S.append({"type": "table", "section": "Appendix", "title": "A1 · G1: six checks before the UGen300 replaces the PC model",
           "header": ["Check", "Measure (dev frames, same preprocessing)", "Pass bar", "Status"],
@@ -534,6 +534,7 @@ S.append({"type": "table", "section": "Appendix", "title": "A13 · References an
           "header": ["Item", "Reference", "Link"],
           "rows": [["Source code (Apache-2.0)", "SceneGap Edge repository; release v0.1.0 has this deck and the video", "github.com/yu9bryan/scenegap-edge"],
                    ["Project page", "Summary, results and footage credits", "yu9bryan.github.io/scenegap-edge"],
+                   ["Demo video", "Stage I demo, 2:58, English narration", "youtu.be/CFYIqu2dkiM"],
                    ["CLIP ViT-B/32", "Radford et al., Learning Transferable Visual Models From Natural Language Supervision, ICML 2021", "huggingface.co/openai/clip-vit-base-patch32"],
                    ["Qwen2-VL-2B-Instruct", "Wang et al., Qwen2-VL, arXiv:2409.12191, 2024", "huggingface.co/Qwen/Qwen2-VL-2B-Instruct"],
                    ["ASUS UGen300", "ASUS UGen300 USB 8 GB tech spec", "asus.com (UGen300 USB 8G tech spec)"],

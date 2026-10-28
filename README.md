@@ -7,7 +7,7 @@
 *Evidence view, real time (trimmed). The first candidate for SH-05 "coffee or latte art poured into a cup, 3 s" is an espresso stream
 with no cup, so it is rejected with the reason "No cup in frame"; the latte-art pour is then accepted.*
 
-[Demo video](site/assets/SceneGapEdge_StageI_Demo.mp4) ·
+[Demo video (YouTube)](https://youtu.be/CFYIqu2dkiM) ·
 [Project page](https://yu9bryan.github.io/scenegap-edge/) ·
 [Proposal deck (PDF)](docs/deck/SceneGapEdge_StageI_Proposal.pdf) ·
 [Evaluation report](eval/results/REPORT.md) ·

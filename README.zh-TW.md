@@ -6,7 +6,7 @@
 
 *片段檢視，實際速度（有剪接）。SH-05「咖啡倒入杯中或拉花，連續 3 秒」的第一個候選只拍到萃取流、畫面沒有杯子，所以拒絕並寫下原因；接著接受拉花的片段。*
 
-[示範影片](site/assets/SceneGapEdge_StageI_Demo.mp4) ·
+[示範影片（YouTube）](https://youtu.be/CFYIqu2dkiM) ·
 [專案網頁](https://yu9bryan.github.io/scenegap-edge/) ·
 [提案簡報 PDF](docs/deck/SceneGapEdge_StageI_Proposal.pdf) ·
 [評測報告（英文）](eval/results/REPORT.md) ·
