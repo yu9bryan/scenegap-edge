@@ -4,7 +4,7 @@ docs/research/BUSINESS_FACTS.md and docs/MODEL_PLAN.md (quoted with their verifi
 
   python make_spec.py <repo> spec.json
 
-Main deck: 20 pages including cover and closing. Detailed tables follow as an appendix (A1–A11).
+Main deck: 20 pages including cover and closing. Detailed tables follow as an appendix (A1–A13).
 """
 import json
 import os
@@ -365,7 +365,8 @@ S.append({"type": "blocks", "section": "Plan", "title": "Shown today, proven nex
                          "G1a cos ≥ 0.98, G1b ρ ≥ 0.95, G1e status ≥ 90%; USB speed, power, editing-app load", "MODEL_PLAN §4"],
                         ["5 · Speed", "search p95 13–14 ms; CLIP index 2.3 s per minute (GPU); check layer not timed", "first result for a 60 s clip ≤ 45 s, timed end to end", "PRD NFR-05"],
                         ["6 · Software", f"{n_tests} automated tests; {tc_status.get('pass', 0)} of {len(tc_rows)} acceptance cases pass; clean rebuild passes", "the device and user cases (TC-017, 018, 033, 034)", "A9, A12"]]}],
-          "note": "The crew leaves the location with a reshoot list and the evidence a person checked."})
+          "note": "The crew leaves the location with a reshoot list and the evidence a person checked.",
+          "source": "Code, data and results: github.com/yu9bryan/scenegap-edge (Apache-2.0). References: A13."})
 # ---------- appendix ----------
 S.append({"type": "table", "section": "Appendix", "title": "A1 · G1: six checks before the UGen300 replaces the PC model",
           "header": ["Check", "Measure (dev frames, same preprocessing)", "Pass bar", "Status"],
@@ -528,6 +529,21 @@ S.append({"type": "cards", "section": "Appendix", "title": f"A12 · Engineering:
               {"icon": "FaHdd", "head": "Failure", "body": "Disk full stops safely and resumes; interrupted jobs resume; originals' hashes unchanged."},
               {"icon": "FaBoxOpen", "head": "Rebuild", "body": "A fresh venv from the public index passes the test suite; Dockerfile and CI included; Apache-2.0."}],
           "source": "eval/results/ACCEPTANCE.md lists all 36 cases with the test that covers each (A9)."})
+
+S.append({"type": "table", "section": "Appendix", "title": "A13 · References and source code",
+          "header": ["Item", "Reference", "Link"],
+          "rows": [["Source code (Apache-2.0)", "SceneGap Edge repository; release v0.1.0 has this deck and the video", "github.com/yu9bryan/scenegap-edge"],
+                   ["Project page", "Summary, results and footage credits", "yu9bryan.github.io/scenegap-edge"],
+                   ["CLIP ViT-B/32", "Radford et al., Learning Transferable Visual Models From Natural Language Supervision, ICML 2021", "huggingface.co/openai/clip-vit-base-patch32"],
+                   ["Qwen2-VL-2B-Instruct", "Wang et al., Qwen2-VL, arXiv:2409.12191, 2024", "huggingface.co/Qwen/Qwen2-VL-2B-Instruct"],
+                   ["ASUS UGen300", "ASUS UGen300 USB 8 GB tech spec", "asus.com (UGen300 USB 8G tech spec)"],
+                   ["Hailo-10H models", "Hailo Model Zoo, HAILO10H zero-shot classification; GenAI model list", "github.com/hailo-ai/hailo_model_zoo; hailo_model_zoo_genai"],
+                   ["Footage", "Wikimedia Commons clips and photos, CC0 / PD / CC BY / CC BY-SA", "datasets/manifests/*.json in the repo"],
+                   ["Statistics", "Wilson score interval (Wilson 1927, JASA); Cohen's kappa (Cohen 1960)", "eval/PROTOCOL.md"],
+                   ["Market and competitors", "US BLS OOH; vendor documentation and price pages (A11)", "docs/research/BUSINESS_FACTS.md"],
+                   ["Device plan sources", "[S1]–[S20]: Hailo zoo configs, hailo-apps, community threads", "docs/MODEL_PLAN.md, Sources"]],
+          "colW": [2.4, 5.6, 4.1], "fontSize": 10,
+          "source": "Full URLs and access dates are in the files named in the last column."})
 
 spec = {"title": "SceneGap Edge – Stage I proposal", "short": "SceneGap Edge · Stage I", "team": "rm-rf-1", "slides": S}
 json.dump(spec, open(OUT, "w", encoding="utf8"), ensure_ascii=False, indent=1)
