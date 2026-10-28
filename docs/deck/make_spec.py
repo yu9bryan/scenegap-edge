@@ -104,7 +104,7 @@ S.append({"type": "story", "section": "Problem", "title": "The missing shot is f
           "persona": "Illustrative scenario · two-person crew, café promo, 11 must-have shots", "icon": "FaVideo",
           "quote": "We had pours. None of them was three seconds long. We found out in the edit.",
           "beats": [{"time": "09:00", "text": "Shot list agreed with the client: storefront, interior, beans, grinder, 3 s pour, two barista takes, bag with readable brand."},
-                    {"time": "17:40", "text": "Wrap. Several cards of footage; nobody has time to watch it all on site."},
+                    {"time": "17:40", "text": "Wrap. Several cards of footage; the laptop is busy backing up cards and making proxies, so nobody watches it all on site."},
                     {"time": "23:00", "text": "The editor scrubs for the pour: every take cuts away after 2 s, and nobody filmed a customer drinking."},
                     {"time": "Next week", "text": "Reshoot day: NT$12,000–28,000 per crew-day in Taiwan, US$800–1,500 per videographer-day in the US, plus café and client again."}],
           "source": "Day rates: PRO360 quote statistics (TW), Film Lifestyle mid-level rates (US); docs/research/BUSINESS_FACTS.md."})
@@ -287,18 +287,18 @@ S.append({"type": "blocks", "section": "Evidence", "title": title15,
           "note": "Labels: two AI passes and a blind third (κ 0.93–0.98), not yet checked by people. Next: real café video and a timed user test.",
           "source": "Unit: one shot in one simulated 8-clip project. eval/PROTOCOL.md (Stage 1.5–1.7); eval/verify16.py; eval/verify16_evidence.py; A8."})
 # 15 hardware
-S.append({"type": "blocks", "section": "Hardware", "title": "Plan: the image half of CLIP on the UGen300; the PC keeps the rest",
+S.append({"type": "blocks", "section": "Hardware", "title": "The editing PC is already busy; the AI models move to the UGen300",
           "blocks": [
               {"kind": "image", "x": 0, "y": 0.05, "w": 7.0, "h": 3.6, "path": img("architecture.png")},
               {"kind": "table", "x": 7.3, "y": 0, "w": 4.6, "h": 4.3, "head": "ASUS UGen300", "colW": [1.5, 3.1], "fontSize": 9.5, "header": ["Item", "Value"], "rows": ugen_spec},
               {"kind": "text", "x": 0, "y": 3.85, "w": 7.0, "h": 0.95, "fontSize": 10.5,
-               "text": "Second device job: the missing-shot verifier, Qwen2-VL-2B, which Hailo lists for Hailo-10H (slide 15). Frames over USB: about 9 MB per minute (estimate). Both models must pass G1-style checks against the PC first (A1). Demo PC: Windows 11, RTX 4080; Mac: CPU only."}],
+               "text": "Why a plug-in device: the PC is already decoding, playing back and exporting, so it keeps only decoding and the app. First job: the CLIP image encoder. Second: the missing-shot verifier, Qwen2-VL-2B, which Hailo lists for Hailo-10H (slide 15). Frames over USB: about 9 MB per minute (estimate). Both models must pass G1-style checks against the PC first (A1)."}],
           "source": "BUSINESS_FACTS.md §2 (ASUS spec; price reported by CNX Software), MODEL_PLAN.md §2, §6; Hailo Model Zoo measures over PCIe, not USB."})
 # 16 performance
 dc, mc, tc, fc, bc = P_CPU
 dg, mg, tg, fg, bg = P_GPU
 si = inter["summary"]
-S.append({"type": "blocks", "section": "Hardware", "title": f"Measured: decoding is {dg:.1f} of the {tg:.1f} s per minute; a UGen300 would free the GPU or a laptop CPU",
+S.append({"type": "blocks", "section": "Hardware", "title": f"On a busy laptop the model takes {mc / tc * 100:.0f}% of the CPU run; the UGen300 would take that load off the PC",
           "blocks": [
               {"kind": "chart", "x": 0, "y": 0, "w": 5.2, "h": 4.3, "head": "CLIP index, s per minute of video (check layer not timed)", "chartType": "BAR", "barDir": "col", "grouping": "stacked",
                "labels": ["CPU", "RTX 4080 GPU"], "series": [{"name": "Decode + sample", "values": [round(dc, 2), round(dg, 2)]}, {"name": "Model (CLIP image)", "values": [round(mc, 2), round(mg, 2)]}],
@@ -313,7 +313,7 @@ S.append({"type": "blocks", "section": "Hardware", "title": f"Measured: decoding
                "rows": [["none", "0 / 1,800", f"{si['none']['frame_work_ms_p95_max']:.1f} ms", "0"],
                         ["CPU", "0 / 1,800", f"{si['cpu']['frame_work_ms_p95_max']:.1f} ms", str(si['cpu']['load_clips_finished'])],
                         ["GPU", "0 / 1,800", f"{si['cuda']['frame_work_ms_p95_max']:.1f} ms", str(si['cuda']['load_clips_finished'])]]}],
-          "note": f"The model is {mc / tc * 100:.0f}% of the CPU run and {mg / tg * 100:.0f}% of the GPU run. Stage II measures an editing app alone vs with CPU, GPU or UGen300 analysis.",
+          "note": f"Model share: {mc / tc * 100:.0f}% of the CPU run, {mg / tg * 100:.0f}% of the GPU run; decoding ({dg:.1f} s per minute) stays on the PC. The check layer (Qwen2-VL-2B) is heavier and not timed yet. Stage II: an editing app alone vs with CPU, GPU or UGen300 analysis.",
           "source": "eval/results/perf.json (six short clips, 85 s, ≤ 1280 px, warm model; import and hashing not timed), interference.json (synthetic test pattern, not an editing app)."})
 # 18 market
 S.append({"type": "blocks", "section": "Business", "title": "Sourced: who pays first is 1–3 person crews and freelance editors",
